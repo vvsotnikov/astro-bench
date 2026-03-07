@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Data (downloaded from S3, not tracked)
+data/
+
+# Internal docs (not public)
+docs/internal/
+
+# Large prediction files (submit via PR with metrics only, or link externally)
+submissions/*/predictions.npz
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# uv
+uv.lock

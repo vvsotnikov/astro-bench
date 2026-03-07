@@ -1,0 +1,29 @@
+[project]
+name = "astro-agents"
+version = "0.1.0"
+description = "Can AI agents build better cosmic ray classifiers than humans?"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "scikit-learn>=1.5",
+    "boto3>=1.35",
+    "tqdm>=4.66",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.5.0",
+    "ty>=0.0.10",
+    "pytest>=8.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
