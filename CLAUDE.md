@@ -34,7 +34,9 @@ y_train = np.load('data/gamma_train/labels_gamma.npy', mmap_mode='r')     # (1.5
 ```
 
 Features: E (energy), Ze (zenith), Az (azimuth), Ne (electron number), Nmu (muon number).
-Matrix channels: electron/photon density + muon density on a 16×16 detector grid.
+Matrix channels: electron/photon density + muon density on a 16×16 detector grid (~85% zeros, sparse).
+
+Test sets have quality cuts pre-applied (Ze<30, Ne>4.8, 0.2<Age<1.48). Train sets have no cuts — apply them or not as a modeling decision.
 
 ## What to submit
 

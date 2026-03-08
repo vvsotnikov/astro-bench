@@ -28,12 +28,22 @@ PARTICLE_NAMES = ["proton", "helium", "carbon", "silicon", "iron"]
 PARTICLE_ID_MAP = {14: 0, 402: 1, 1206: 2, 2814: 3, 5626: 4}
 
 
+ENERGY_BINS = [
+    (14.0, 15.0, "14.0-15.0"),
+    (15.0, 15.5, "15.0-15.5"),
+    (15.5, 16.0, "15.5-16.0"),
+    (16.0, 16.5, "16.0-16.5"),
+    (16.5, 17.0, "16.5-17.0"),
+    (17.0, 18.0, "17.0-18.0"),
+]
+
+
 def load_test_truth(task: str):
     """Load test set ground truth for the given task.
 
     Returns:
         labels: int8 array — composition (0-4) or gamma (0=gamma, 1=hadron)
-        energies: float array — reconstructed E (log10(E/eV)), feature index 0
+        features: float array — (N, 5) reconstructed features [E, Ze, Az, Ne, Nmu]
         n_test: number of test samples
     """
     test_dir = DATA_DIR / f"{task}_test"
@@ -48,8 +58,7 @@ def load_test_truth(task: str):
         labels = np.load(test_dir / "labels_gamma.npy", mmap_mode="r")
 
     features = np.load(test_dir / "features.npy", mmap_mode="r")
-    energies = np.array(features[:, 0])  # copy from mmap
-    return np.array(labels), energies, len(labels)
+    return np.array(labels), np.array(features, dtype=np.float32), len(labels)
 
 
 # ---------------------------------------------------------------------------
@@ -57,9 +66,10 @@ def load_test_truth(task: str):
 # ---------------------------------------------------------------------------
 
 
-def evaluate_composition(predictions, labels_composition, energies):
+def evaluate_composition(predictions, labels_composition, features):
     """Evaluate 5-class mass composition predictions."""
     truth = labels_composition
+    energies = features[:, 0]
 
     results = {}
     results["accuracy"] = float(accuracy_score(truth, predictions))
@@ -81,21 +91,16 @@ def evaluate_composition(predictions, labels_composition, energies):
     results["weighted_f1"] = report["weighted avg"]["f1-score"]
     results["confusion_matrix"] = confusion_matrix(truth, predictions).tolist()
 
-    energy_bins = [
-        (14.0, 15.0, "14.0-15.0"),
-        (15.0, 15.5, "15.0-15.5"),
-        (15.5, 16.0, "15.5-16.0"),
-        (16.0, 16.5, "16.0-16.5"),
-        (16.5, 17.0, "16.5-17.0"),
-        (17.0, 18.0, "17.0-18.0"),
-    ]
+    # Energy-binned accuracy and confusion matrices
     results["energy_binned"] = {}
-    for lo, hi, label in energy_bins:
+    for lo, hi, label in ENERGY_BINS:
         mask = (energies >= lo) & (energies < hi)
         if mask.sum() > 0:
+            cm = confusion_matrix(truth[mask], predictions[mask], labels=list(range(5)))
             results["energy_binned"][label] = {
                 "accuracy": float(accuracy_score(truth[mask], predictions[mask])),
                 "count": int(mask.sum()),
+                "confusion_matrix": cm.tolist(),
             }
 
     return results
@@ -135,19 +140,54 @@ def print_composition_results(results):
     for label, m in results["energy_binned"].items():
         print(f"{label:<15} {m['accuracy']:>10.4f} {m['count']:>10}")
 
+    # Normalized confusion matrices per energy bin
+    print(f"\n{'Energy-binned confusion matrices (row-normalized)':^60}")
+    abbrev = [n[:2] for n in PARTICLE_NAMES]
+    for label, m in results["energy_binned"].items():
+        cm = np.array(m["confusion_matrix"])
+        row_sums = cm.sum(axis=1, keepdims=True)
+        row_sums[row_sums == 0] = 1
+        cm_norm = cm / row_sums
+        print(f"\n  {label} (n={m['count']})")
+        print(f"  {'':>4}" + "".join(f"{a:>6}" for a in abbrev))
+        for i, name in enumerate(abbrev):
+            row = "".join(f"{cm_norm[i, j]:>6.2f}" for j in range(5))
+            print(f"  {name:>4}{row}")
+
 
 # ---------------------------------------------------------------------------
 # Task 2: Gamma/hadron separation (binary)
 # ---------------------------------------------------------------------------
 
 
-def evaluate_gamma(gamma_scores, labels_gamma, energies):
+def _survival_at_efficiency(scores_gamma, scores_hadron, efficiency):
+    """Compute hadronic survival rate at a given gamma efficiency."""
+    ng = len(scores_gamma)
+    nh = len(scores_hadron)
+    if ng == 0 or nh == 0:
+        return None
+    sorted_g = np.sort(scores_gamma)[::-1]
+    idx = int(np.ceil(efficiency * ng)) - 1
+    thr = sorted_g[min(idx, ng - 1)]
+    n_surv = (scores_hadron >= thr).sum()
+    return {
+        "threshold": float(thr),
+        "gamma_efficiency": float((scores_gamma >= thr).sum() / ng),
+        "hadron_survival": float(n_surv / nh),
+        "hadron_surviving": int(n_surv),
+    }
+
+
+def evaluate_gamma(gamma_scores, labels_gamma, features):
     """Evaluate gamma/hadron separation.
 
     Key metric: hadronic survival rate at 99% gamma efficiency.
     This is the fraction of hadrons that survive the gamma selection cut
     while retaining 99% of true gammas.
     """
+    energies = features[:, 0]
+    zeniths = features[:, 1]
+
     # Labels: 0=gamma, 1=hadron
     is_gamma = labels_gamma == 0
     is_hadron = labels_gamma == 1
@@ -162,68 +202,44 @@ def evaluate_gamma(gamma_scores, labels_gamma, energies):
     results["n_gamma"] = int(n_gamma)
     results["n_hadron"] = int(n_hadron)
 
-    # Sort scores descending (higher = more gamma-like)
-    gamma_scores_gamma = np.sort(gamma_scores[is_gamma])[::-1]
-    gamma_scores_hadron = gamma_scores[is_hadron]
-
-    # Find threshold at target gamma efficiencies
+    # Survival rates at target gamma efficiencies
     target_efficiencies = [0.50, 0.90, 0.95, 0.99]
     results["survival_rates"] = {}
-
     for eff in target_efficiencies:
-        # Threshold: score above which we keep eff fraction of gammas
-        idx = int(np.ceil(eff * n_gamma)) - 1
-        threshold = gamma_scores_gamma[min(idx, len(gamma_scores_gamma) - 1)]
+        sr = _survival_at_efficiency(gamma_scores[is_gamma], gamma_scores[is_hadron], eff)
+        results["survival_rates"][f"{eff:.0%}"] = sr
 
-        # Hadronic survival: fraction of hadrons above threshold
-        n_hadron_surviving = (gamma_scores_hadron >= threshold).sum()
-        survival_rate = float(n_hadron_surviving / n_hadron)
-
-        results["survival_rates"][f"{eff:.0%}"] = {
-            "threshold": float(threshold),
-            "gamma_efficiency": float((gamma_scores[is_gamma] >= threshold).sum() / n_gamma),
-            "hadron_survival": survival_rate,
-            "hadron_surviving": int(n_hadron_surviving),
-        }
-
-    # Key metric: survival rate at 99% gamma efficiency
     results["key_metric"] = results["survival_rates"]["99%"]["hadron_survival"]
 
     # Binary classification metrics at 50% threshold
-    binary_preds = (gamma_scores >= 0.5).astype(int)  # 1=gamma, 0=hadron
-    truth_binary = is_gamma.astype(int)  # 1=gamma, 0=hadron
+    binary_preds = (gamma_scores >= 0.5).astype(int)
+    truth_binary = is_gamma.astype(int)
     results["accuracy_at_0.5"] = float(accuracy_score(truth_binary, binary_preds))
 
     # Energy-binned survival rate at 99% gamma efficiency
-    energy_bins = [
-        (14.0, 15.0, "14.0-15.0"),
-        (15.0, 15.5, "15.0-15.5"),
-        (15.5, 16.0, "15.5-16.0"),
-        (16.0, 16.5, "16.0-16.5"),
-        (16.5, 17.0, "16.5-17.0"),
-        (17.0, 18.0, "17.0-18.0"),
-    ]
     results["energy_binned"] = {}
-    for lo, hi, label in energy_bins:
+    for lo, hi, label in ENERGY_BINS:
         mask = (energies >= lo) & (energies < hi)
-        if mask.sum() == 0:
-            continue
         g_mask = mask & is_gamma
         h_mask = mask & is_hadron
-        ng = g_mask.sum()
-        nh = h_mask.sum()
-        if ng == 0 or nh == 0:
-            continue
-        # 99% gamma efficiency in this bin
-        gs = np.sort(gamma_scores[g_mask])[::-1]
-        idx = int(np.ceil(0.99 * ng)) - 1
-        thr = gs[min(idx, len(gs) - 1)]
-        n_surv = (gamma_scores[h_mask] >= thr).sum()
-        results["energy_binned"][label] = {
-            "hadron_survival": float(n_surv / nh),
-            "n_gamma": int(ng),
-            "n_hadron": int(nh),
-        }
+        sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.99)
+        if sr is not None:
+            sr["n_gamma"] = int(g_mask.sum())
+            sr["n_hadron"] = int(h_mask.sum())
+            results["energy_binned"][label] = sr
+
+    # Zenith-angle-binned survival rate at 99% gamma efficiency
+    zenith_bins = [(0, 10, "0-10"), (10, 20, "10-20"), (20, 30, "20-30")]
+    results["zenith_binned"] = {}
+    for lo, hi, label in zenith_bins:
+        mask = (zeniths >= lo) & (zeniths < hi)
+        g_mask = mask & is_gamma
+        h_mask = mask & is_hadron
+        sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.99)
+        if sr is not None:
+            sr["n_gamma"] = int(g_mask.sum())
+            sr["n_hadron"] = int(h_mask.sum())
+            results["zenith_binned"][label] = sr
 
     return results
 
@@ -256,6 +272,16 @@ def print_gamma_results(results):
                 f"{m['n_gamma']:>8} {m['n_hadron']:>8}"
             )
 
+    if results.get("zenith_binned"):
+        print(f"\n{'Zenith-binned hadron survival @ 99% gamma eff':^60}")
+        print(f"{'Ze (deg)':<15} {'Survival':>12} {'Gamma':>8} {'Hadron':>8}")
+        print("-" * 48)
+        for label, m in results["zenith_binned"].items():
+            print(
+                f"{label:<15} {m['hadron_survival']:>12.2e} "
+                f"{m['n_gamma']:>8} {m['n_hadron']:>8}"
+            )
+
     print(f"\n  Published baseline: 1e-6 to 3e-5 (Petrov et al., Chinese Physics C 2023)")
 
 
@@ -280,7 +306,7 @@ def main():
         sys.exit(1)
 
     pred_data = np.load(args.predictions)
-    labels, energies, n_test = load_test_truth(args.task)
+    labels, features, n_test = load_test_truth(args.task)
 
     if args.task == "composition":
         if "predictions" not in pred_data:
@@ -294,7 +320,7 @@ def main():
         if invalid.any():
             print(f"Error: {invalid.sum()} predictions outside valid range [0, 4]")
             sys.exit(1)
-        results = evaluate_composition(predictions, labels, energies)
+        results = evaluate_composition(predictions, labels, features)
         print_composition_results(results)
 
     elif args.task == "gamma":
@@ -306,7 +332,7 @@ def main():
         if len(gamma_scores) != n_test:
             print(f"Error: gamma_scores has {len(gamma_scores)} elements, expected {n_test}")
             sys.exit(1)
-        results = evaluate_gamma(gamma_scores, labels, energies)
+        results = evaluate_gamma(gamma_scores, labels, features)
         print_gamma_results(results)
 
     # Save results
