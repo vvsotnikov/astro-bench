@@ -87,12 +87,21 @@ def main():
     n_params = sum(p.numel() for p in model.parameters())
     print(f"Model params: {n_params:,}")
 
+    # Class weights: inverse frequency (gamma is ~5% of training data)
+    labels_all = raw_train.labels[:]
+    n_gamma = (labels_all == 0).sum()
+    n_hadron = (labels_all == 1).sum()
+    w_gamma = len(labels_all) / (2 * n_gamma)
+    w_hadron = len(labels_all) / (2 * n_hadron)
+    class_weights = torch.tensor([w_gamma, w_hadron], dtype=torch.float32).to(device)
+    print(f"Class weights: gamma={w_gamma:.2f}, hadron={w_hadron:.2f}")
+
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(weight=class_weights)
 
     n_epochs = 30
-    best_test_acc = 0
+    best_survival = 1.0  # lower is better
     for epoch in range(n_epochs):
         model.train()
         correct = total = 0
@@ -116,6 +125,7 @@ def main():
         model.eval()
         test_correct = test_total = 0
         all_scores = []
+        all_labels = []
         with torch.no_grad():
             for x, y in test_loader:
                 x, y = x.to(device), y.to(device)
@@ -125,20 +135,33 @@ def main():
                 test_correct += (logits.argmax(1) == y).sum().item()
                 test_total += len(y)
                 all_scores.append(gamma_scores.cpu().numpy())
+                all_labels.append(y.cpu().numpy())
 
         test_acc = test_correct / test_total
+        scores = np.concatenate(all_scores)
+        labels = np.concatenate(all_labels)
+
+        # Compute survival at 99% gamma efficiency
+        is_gamma = labels == 0
+        is_hadron = labels == 1
+        sg = np.sort(scores[is_gamma])
+        ng = len(sg)
+        thr_99 = sg[max(0, int(np.floor(ng * (1 - 0.99))))]
+        n_hadron_surviving = (scores[is_hadron] >= thr_99).sum()
+        survival_99 = n_hadron_surviving / is_hadron.sum()
+
         print(
             f"Epoch {epoch+1:2d}/{n_epochs}: "
             f"train_loss={total_loss/total:.4f} train_acc={train_acc:.4f} "
-            f"test_acc={test_acc:.4f} lr={lr:.6f}"
+            f"test_acc={test_acc:.4f} survival@99={survival_99:.2e} lr={lr:.6f}"
         )
 
-        if test_acc > best_test_acc:
-            best_test_acc = test_acc
-            best_scores = np.concatenate(all_scores)
+        if survival_99 < best_survival:
+            best_survival = survival_99
+            best_scores = scores
             torch.save(model.state_dict(), "submissions/baselines/best_gamma_dnn.pt")
 
-    print(f"\nBest test accuracy: {best_test_acc:.4f}")
+    print(f"\nBest survival @ 99% gamma eff: {best_survival:.2e}")
     np.savez(
         "submissions/baselines/predictions_gamma_dnn.npz",
         gamma_scores=best_scores,
