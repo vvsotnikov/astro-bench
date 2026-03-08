@@ -42,15 +42,18 @@ The remaining ~1% gap likely comes from:
 
 The 98.97% accuracy is a trap. The test set is 96% hadrons — predicting "hadron" for everything gives 95.8%. The model learned to identify easy gammas (the 50% efficiency point is excellent at 1.5×10⁻⁴ survival), but cannot push gamma efficiency to 99% without the decision boundary collapsing. At 99% gamma efficiency, the threshold drops to ~0 and 90% of hadrons survive.
 
+### What we tried
+
+**v2: class weights + metric-based model selection.** Training set is 1:20 imbalanced (73K gamma vs 1.46M hadron). We added inverse-frequency class weights (gamma=10.45, hadron=0.53) to CrossEntropyLoss and selected the best epoch by survival@99% instead of accuracy. Result: **7.84×10⁻¹** — barely improved from 9.0×10⁻¹. The model now classifies more events as gamma (accuracy drops to ~93%), but the score distribution still lacks dynamic range in the tail. Class weighting alone cannot fix this.
+
 ### Why it fails
 
-The fundamental issue: gamma rays are rare and their feature distributions overlap heavily with hadrons at the tails. A simple MLP with cross-entropy loss optimizes for average accuracy, not for the extreme tail of the score distribution where the 99% gamma efficiency operating point lives.
+The fundamental issue: gamma rays are rare and their feature distributions overlap heavily with hadrons at the tails. A simple MLP with cross-entropy loss — even with class weights — optimizes for average classification, not for the extreme tail of the score distribution where the 99% gamma efficiency operating point lives. The score distribution simply doesn't have enough dynamic range to separate the last few percent of gammas from hadrons.
 
-To achieve good performance at 99% gamma efficiency, a model likely needs:
+To achieve good performance at 99% gamma efficiency, a model likely needs a fundamentally different approach:
 - **Regression output** (continuous score) rather than classification, as in the ICRC 2021 RF regressor approach
-- **Focal loss or class weighting** to focus on hard examples near the decision boundary
 - **CNN architecture** to leverage spatial muon patterns (gammas produce almost no muons — this is a spatial signature)
-- **Much more training data** for gammas (~91K gamma vs ~1.8M proton in training set)
+- **Loss functions designed for ranking** (e.g., focal loss, AUC optimization) rather than classification
 
 ### The instructive contrast
 
