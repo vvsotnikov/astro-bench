@@ -48,8 +48,8 @@ X = np.load('data/composition_train/matrices.npy', mmap_mode='r')  # instant, ze
 
 | File | Shape | Dtype | Description |
 |------|-------|-------|-------------|
-| `matrices.npy` | `(N, 16, 16, 2)` | float32 | Detector grid images |
-| `features.npy` | `(N, 5)` | float32 | Reconstructed scalar features |
+| `matrices.npy` | `(N, 16, 16, 2)` | float16 | Detector grid images |
+| `features.npy` | `(N, 5)` | float16 | Reconstructed scalar features |
 | `labels_composition.npy` | `(N,)` | int8 | Mass class (0-4) |
 
 **Task 2 — Gamma/hadron:** `data/gamma_train/` and `data/gamma_test/`
@@ -57,8 +57,8 @@ X = np.load('data/composition_train/matrices.npy', mmap_mode='r')  # instant, ze
 
 | File | Shape | Dtype | Description |
 |------|-------|-------|-------------|
-| `matrices.npy` | `(N, 16, 16, 2)` | float32 | Detector grid images |
-| `features.npy` | `(N, 5)` | float32 | Reconstructed scalar features |
+| `matrices.npy` | `(N, 16, 16, 2)` | float16 | Detector grid images |
+| `features.npy` | `(N, 5)` | float16 | Reconstructed scalar features |
 | `labels_gamma.npy` | `(N,)` | int8 | 0=gamma, 1=hadron |
 
 **Detector matrix channels:**
@@ -153,7 +153,7 @@ Your submission directory must contain:
 # Task 1: Mass composition
 python verify.py submissions/your_submission/predictions.npz
 
-# Task 2: Gamma/hadron (TBD)
+# Task 2: Gamma/hadron
 python verify.py --task gamma submissions/your_submission/predictions.npz
 ```
 
