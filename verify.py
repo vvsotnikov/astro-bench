@@ -241,6 +241,27 @@ def evaluate_gamma(gamma_scores, labels_gamma, features):
             sr["n_hadron"] = int(h_mask.sum())
             results["zenith_binned"][label] = sr
 
+    # 2D grid: energy × zenith (matches published analysis format)
+    # Uses 8 energy bins from 14-18 and 3 zenith bands
+    grid_energy_bins = [(14 + i * 0.5, 14 + (i + 1) * 0.5) for i in range(8)]
+    results["energy_zenith_grid"] = {}
+    for ze_lo, ze_hi, ze_label in zenith_bins:
+        ze_mask = (zeniths >= ze_lo) & (zeniths < ze_hi)
+        grid_row = {}
+        for e_lo, e_hi in grid_energy_bins:
+            e_label = f"{e_lo:.1f}-{e_hi:.1f}"
+            mask = ze_mask & (energies >= e_lo) & (energies < e_hi)
+            g_mask = mask & is_gamma
+            h_mask = mask & is_hadron
+            ng, nh = int(g_mask.sum()), int(h_mask.sum())
+            sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.99)
+            if sr is not None:
+                sr["n_gamma"] = ng
+                sr["n_hadron"] = nh
+                grid_row[e_label] = sr
+        if grid_row:
+            results["energy_zenith_grid"][ze_label] = grid_row
+
     return results
 
 
@@ -281,6 +302,31 @@ def print_gamma_results(results):
                 f"{label:<15} {m['hadron_survival']:>12.2e} "
                 f"{m['n_gamma']:>8} {m['n_hadron']:>8}"
             )
+
+    if results.get("energy_zenith_grid"):
+        print(f"\n{'Energy x Zenith grid — hadron survival @ 99% gamma eff':^72}")
+        # Collect all energy bin labels
+        all_e_labels = []
+        for ze_label, row in results["energy_zenith_grid"].items():
+            for e_label in row:
+                if e_label not in all_e_labels:
+                    all_e_labels.append(e_label)
+        header = f"{'Ze (deg)':<10}" + "".join(f"{e:>10}" for e in all_e_labels)
+        print(header)
+        print("-" * len(header))
+        for ze_label, row in results["energy_zenith_grid"].items():
+            vals = []
+            for e_label in all_e_labels:
+                if e_label in row:
+                    sr = row[e_label]["hadron_survival"]
+                    ng = row[e_label]["n_gamma"]
+                    if ng < 5:
+                        vals.append(f"{'—':>10}")
+                    else:
+                        vals.append(f"{sr:>10.2e}")
+                else:
+                    vals.append(f"{'—':>10}")
+            print(f"{ze_label:<10}" + "".join(vals))
 
     print(f"\n  Published baseline: 1e-6 to 3e-5 (Petrov et al., Chinese Physics C 2023)")
 
