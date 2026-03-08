@@ -29,7 +29,7 @@ Distinguish gamma-ray primaries from hadronic cosmic rays (protons in simulation
 
 In real data, the gamma-to-hadron ratio is ~1:1,000,000. In the simulation test set, it's ~1:23. Evaluation must account for extreme class imbalance in deployment.
 
-**Key metric: hadronic survival rate at 99% gamma efficiency** (i.e., what fraction of hadrons survive your cut while keeping 99% of gammas). Lower is better. Published baseline: 10⁻⁶ to 3×10⁻⁵ (Petrov et al., Chinese Physics C 2023).
+**Key metric: hadronic survival rate at 99% gamma efficiency** (i.e., what fraction of hadrons survive your cut while keeping 99% of gammas). Lower is better. Published baseline: suppression power 10²–10³ using RF regressor (Kostunin et al., [ICRC 2021](https://arxiv.org/abs/2108.03407)).
 
 ## The Data
 
@@ -192,11 +192,11 @@ python verify.py --task gamma submissions/your_submission/predictions.npz
 **Mass composition (Task 1):**
 - Random: ~20% accuracy
 - RandomForest (5 features only): ~30% accuracy
-- Dense NN (ELU + BatchNorm, 512 flattened matrix + Ze, Az, 798K params): ~47% accuracy (published, QGS-only)
-- Published (JCAP 2024, years of expert iteration): the target to beat
+- CNN (LeNet-5 inspired, 16×16×2 + Ne, Nmu, θ, s, ~36K params): ~51% accuracy ([JINST 2024](https://arxiv.org/abs/2311.06893), QGS-only)
+- Published (JINST 2024 + JCAP 2024, years of expert iteration): the target to beat
 
 **Gamma/hadron (Task 2):**
-- Published (Chinese Physics C 2023): hadronic survival rate 10⁻⁶ to 3×10⁻⁵ at 0.3-10 PeV
+- Published ([ICRC 2021](https://arxiv.org/abs/2108.03407)): hadron suppression power 10²–10³ using RF regressor on scalar features
 
 ## Physics Background
 

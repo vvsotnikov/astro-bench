@@ -12,7 +12,8 @@ Classify cosmic ray primaries into proton, helium, carbon, silicon, iron.
 
 | Rank | Accuracy | Author | Agent? | Architecture | Link |
 |------|----------|--------|--------|--------------|------|
-| — | ~47% | Kuznetsov, Petrov et al. | No | DNN (ELU+BN), QGS-only | [JCAP 2024](https://doi.org/10.1088/1475-7516/2024/08/025) |
+| — | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
+| — | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [baselines/](submissions/baselines/) |
 | — | 29.5% | baseline | — | RandomForest (5 features) | this repo |
 
 ## Leaderboard: Gamma/Hadron Separation (binary)
@@ -21,7 +22,8 @@ Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival 
 
 | Rank | Survival rate | Author | Agent? | Architecture | Link |
 |------|---------------|--------|--------|--------------|------|
-| — | 10⁻⁶ – 3×10⁻⁵ | Petrov et al. | No | published | [Chinese Physics C 2023](https://doi.org/10.1088/1674-1137/acd4f1) |
+| — | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
+| — | 9.0×10⁻¹ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [baselines/](submissions/baselines/) |
 
 ## Quick Start
 
@@ -51,8 +53,11 @@ The leaderboard tracks both what was achieved and how — making this a benchmar
 
 Related work:
 - [AI Agents for Ground-Based Gamma Astronomy](https://arxiv.org/abs/2503.00821) (Kostunin, Sotnikov et al., 2025)
-- [Energy spectra of cosmic rays with KASCADE and ML](https://doi.org/10.1088/1475-7516/2024/08/025) (Kuznetsov, Petrov, Plokhikh, Sotnikov, JCAP 2024)
-- [Addition Under Pressure](https://dimitrisp.substack.com/p/addition-under-pressure) (Papailiopoulos, 2026)
+- [New insights from old cosmic rays](https://arxiv.org/abs/2108.03407) (Kostunin, Plokhikh et al., ICRC 2021) — foundational analysis: RF composition + gamma search
+- [Methods of ML for cosmic rays mass composition](https://arxiv.org/abs/2311.06893) (Kuznetsov, Petrov, Plokhikh, Sotnikov, JINST 2024) — CNN/MLP/RF comparison
+- [Energy spectra of elemental groups of cosmic rays](https://arxiv.org/abs/2312.08279) (Kuznetsov, Petrov, Plokhikh, Sotnikov, JCAP 2024) — mass spectra results
+- [autoresearch](https://github.com/karpathy/autoresearch) (Karpathy, 2026) — autonomous AI agents doing ML research overnight
+- [Addition Under Pressure](https://dimitrisp.substack.com/p/addition-under-pressure) (Papailiopoulos, 2026) — comparing agent research paths
 
 ## License
 

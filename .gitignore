@@ -9,9 +9,11 @@ data/
 
 # Internal docs (not public)
 docs/internal/
+internal/
 
-# Large prediction files (submit via PR with metrics only, or link externally)
-submissions/*/predictions.npz
+# Large prediction/model files
+submissions/*/predictions*.npz
+submissions/*/*.pt
 
 # IDE
 .idea/
