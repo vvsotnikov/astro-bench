@@ -70,7 +70,7 @@ These are suggestions, not requirements. You decide the approach.
 - **The physics**: Ne/Nmu ratio is the strongest single discriminant. Light particles (protons) have fewer muons; heavy particles (iron) have more.
 - **Architecture ideas**: CNNs for the spatial data, concatenated with an MLP for scalar features. Or flatten everything into a single MLP. Or try something creative.
 - **Scale matters**: With 5.5M training events, you can train large models. But start small and scale up.
-- **Known baselines**: Dense NN on flattened matrices + 2 features → ~44-47% accuracy. You should aim to match or beat this.
+- **Known baselines**: CNN on 16×16×2 matrices + scalar features → ~51% accuracy (JINST 2024). You should aim to match or beat this.
 
 ## Rules
 

@@ -1,0 +1,38 @@
+Device: cuda:0
+Computing normalization stats...
+  mean range: [0.00, 180.08]
+  std range:  [0.47, 593.54]
+Model params: 530,946
+Epoch  1/30: train_loss=0.1212 train_acc=0.9639 test_acc=0.9870 lr=0.000997
+Epoch  2/30: train_loss=0.1009 train_acc=0.9678 test_acc=0.9873 lr=0.000989
+Epoch  3/30: train_loss=0.0976 train_acc=0.9687 test_acc=0.9857 lr=0.000976
+Epoch  4/30: train_loss=0.0958 train_acc=0.9695 test_acc=0.9879 lr=0.000957
+Epoch  5/30: train_loss=0.0946 train_acc=0.9698 test_acc=0.9882 lr=0.000933
+Epoch  6/30: train_loss=0.0931 train_acc=0.9704 test_acc=0.9873 lr=0.000905
+Epoch  7/30: train_loss=0.0921 train_acc=0.9707 test_acc=0.9881 lr=0.000872
+Epoch  8/30: train_loss=0.0910 train_acc=0.9710 test_acc=0.9885 lr=0.000835
+Epoch  9/30: train_loss=0.0905 train_acc=0.9712 test_acc=0.9884 lr=0.000794
+Epoch 10/30: train_loss=0.0902 train_acc=0.9714 test_acc=0.9883 lr=0.000750
+Epoch 11/30: train_loss=0.0891 train_acc=0.9717 test_acc=0.9883 lr=0.000703
+Epoch 12/30: train_loss=0.0883 train_acc=0.9720 test_acc=0.9891 lr=0.000655
+Epoch 13/30: train_loss=0.0878 train_acc=0.9723 test_acc=0.9884 lr=0.000604
+Epoch 14/30: train_loss=0.0873 train_acc=0.9724 test_acc=0.9878 lr=0.000552
+Epoch 15/30: train_loss=0.0866 train_acc=0.9726 test_acc=0.9889 lr=0.000500
+Epoch 16/30: train_loss=0.0861 train_acc=0.9727 test_acc=0.9887 lr=0.000448
+Epoch 17/30: train_loss=0.0855 train_acc=0.9729 test_acc=0.9892 lr=0.000396
+Epoch 18/30: train_loss=0.0851 train_acc=0.9732 test_acc=0.9891 lr=0.000345
+Epoch 19/30: train_loss=0.0848 train_acc=0.9732 test_acc=0.9877 lr=0.000297
+Epoch 20/30: train_loss=0.0842 train_acc=0.9733 test_acc=0.9895 lr=0.000250
+Epoch 21/30: train_loss=0.0837 train_acc=0.9735 test_acc=0.9892 lr=0.000206
+Epoch 22/30: train_loss=0.0834 train_acc=0.9735 test_acc=0.9886 lr=0.000165
+Epoch 23/30: train_loss=0.0832 train_acc=0.9737 test_acc=0.9896 lr=0.000128
+Epoch 24/30: train_loss=0.0828 train_acc=0.9737 test_acc=0.9897 lr=0.000095
+Epoch 25/30: train_loss=0.0826 train_acc=0.9738 test_acc=0.9895 lr=0.000067
+Epoch 26/30: train_loss=0.0822 train_acc=0.9739 test_acc=0.9895 lr=0.000043
+Epoch 27/30: train_loss=0.0821 train_acc=0.9739 test_acc=0.9895 lr=0.000024
+Epoch 28/30: train_loss=0.0821 train_acc=0.9740 test_acc=0.9894 lr=0.000011
+Epoch 29/30: train_loss=0.0818 train_acc=0.9740 test_acc=0.9895 lr=0.000003
+Epoch 30/30: train_loss=0.0818 train_acc=0.9741 test_acc=0.9897 lr=0.000000
+
+Best test accuracy: 0.9897
+Saved (35751 scores)

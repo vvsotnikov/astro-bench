@@ -328,7 +328,7 @@ def print_gamma_results(results):
                     vals.append(f"{'—':>10}")
             print(f"{ze_label:<10}" + "".join(vals))
 
-    print(f"\n  Published baseline: 1e-6 to 3e-5 (Petrov et al., Chinese Physics C 2023)")
+    print(f"\n  Published baseline: suppression 1e2-1e3 (Kostunin et al., ICRC 2021)")
 
 
 # ---------------------------------------------------------------------------
