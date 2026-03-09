@@ -1,0 +1,88 @@
+Device: cuda:0
+================================================================================
+GAMMA/HADRON CLASSIFIER - CNN REGRESSOR V3
+================================================================================
+
+Computing feature statistics...
+  Feature mean: [ 14.592427   25.79063   179.82536     4.136828    3.5147216]
+  Feature std:  [  0.48798844  10.223826   103.53936      0.67662346   0.4707927 ]
+
+Loading datasets...
+  Train: 1530715 samples
+  Test:  35751 samples
+
+Model parameters: 127,201
+
+Training for 60 epochs...
+----------------------------------------------------------------------------------------------------
+Epoch  1/60 | loss=0.0007 | survival@99=1.00e+00 thr=0.0000 | lr=9.99e-04
+Epoch  2/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.97e-04
+Epoch  3/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.94e-04
+Epoch  4/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.89e-04
+Epoch  5/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.83e-04
+Epoch  6/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.76e-04
+Epoch  7/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.67e-04
+Epoch  8/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.57e-04
+Epoch  9/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.46e-04
+Epoch 10/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.33e-04
+Epoch 11/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.19e-04
+Epoch 12/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.05e-04
+Epoch 13/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=8.89e-04
+Epoch 14/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=8.72e-04
+Epoch 15/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=8.54e-04
+Epoch 16/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=8.35e-04
+Epoch 17/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=8.15e-04
+Epoch 18/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=7.94e-04
+Epoch 19/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=7.72e-04
+Epoch 20/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=7.50e-04
+Epoch 21/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=7.27e-04
+Epoch 22/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=7.03e-04
+Epoch 23/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.79e-04
+Epoch 24/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.55e-04
+Epoch 25/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.29e-04
+Epoch 26/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.04e-04
+Epoch 27/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=5.78e-04
+Epoch 28/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=5.52e-04
+Epoch 29/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=5.26e-04
+Epoch 30/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=5.00e-04
+Epoch 31/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=4.74e-04
+Epoch 32/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=4.48e-04
+Epoch 33/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=4.22e-04
+Epoch 34/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=3.96e-04
+Epoch 35/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=3.71e-04
+Epoch 36/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=3.45e-04
+Epoch 37/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=3.21e-04
+Epoch 38/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.97e-04
+Epoch 39/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.73e-04
+Epoch 40/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.50e-04
+Epoch 41/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.28e-04
+Epoch 42/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.06e-04
+Epoch 43/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.85e-04
+Epoch 44/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.65e-04
+Epoch 45/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.46e-04
+Epoch 46/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.28e-04
+Epoch 47/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.11e-04
+Epoch 48/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=9.55e-05
+Epoch 49/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=8.07e-05
+Epoch 50/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.70e-05
+Epoch 51/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=5.45e-05
+Epoch 52/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=4.32e-05
+Epoch 53/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=3.32e-05
+Epoch 54/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.45e-05
+Epoch 55/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.70e-05
+Epoch 56/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=1.09e-05
+Epoch 57/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.16e-06
+Epoch 58/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=2.74e-06
+Epoch 59/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=6.85e-07
+Epoch 60/60 | loss=0.0000 | survival@99=1.00e+00 thr=0.0000 | lr=0.00e+00
+----------------------------------------------------------------------------------------------------
+
+Best survival @ 99% gamma efficiency: 1.00e+00
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_cnn_v3.py", line 300, in <module>
+    main()
+    ~~~~^^
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_cnn_v3.py", line 296, in main
+    print(f"Saved predictions ({len(best_scores)} scores)")
+                                ~~~^^^^^^^^^^^^^
+TypeError: object of type 'NoneType' has no len()

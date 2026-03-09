@@ -1,0 +1,48 @@
+Device: cuda:0
+================================================================================
+GAMMA/HADRON CLASSIFIER - CNN V4 (BINARY CLASSIFICATION)
+================================================================================
+
+Computing feature statistics...
+
+Loading datasets...
+  Train: 1530715 samples
+  Test:  35751 samples
+Model parameters: 127,201
+Class weights: gamma=10.45, hadron=0.53
+
+Training for 80 epochs...
+----------------------------------------------------------------------------------------------------
+Epoch  1/80 | loss=0.3039 | survival@99=1.00e+00 thr=0.0353 | lr=1.00e-03
+Epoch  2/80 | loss=0.1802 | survival@99=1.00e+00 thr=0.0169 | lr=9.98e-04
+Epoch  3/80 | loss=0.1745 | survival@99=1.00e+00 thr=0.0037 | lr=9.97e-04
+Epoch  4/80 | loss=0.1701 | survival@99=1.00e+00 thr=0.0026 | lr=9.94e-04
+Epoch  5/80 | loss=0.1674 | survival@99=1.00e+00 thr=0.0031 | lr=9.90e-04
+Epoch  6/80 | loss=0.1653 | survival@99=1.00e+00 thr=0.0009 | lr=9.86e-04
+Epoch  7/80 | loss=0.1633 | survival@99=1.00e+00 thr=0.0012 | lr=9.81e-04
+Epoch  8/80 | loss=0.1620 | survival@99=1.00e+00 thr=0.0012 | lr=9.76e-04
+Epoch  9/80 | loss=0.1613 | survival@99=1.00e+00 thr=0.0006 | lr=9.69e-04
+Epoch 10/80 | loss=0.1605 | survival@99=1.00e+00 thr=0.0008 | lr=9.62e-04
+Epoch 11/80 | loss=0.1597 | survival@99=1.00e+00 thr=0.0008 | lr=9.54e-04
+Epoch 12/80 | loss=0.1589 | survival@99=1.00e+00 thr=0.0006 | lr=9.46e-04
+Epoch 13/80 | loss=0.1585 | survival@99=1.00e+00 thr=0.0003 | lr=9.36e-04
+Epoch 14/80 | loss=0.1578 | survival@99=1.00e+00 thr=0.0008 | lr=9.26e-04
+Epoch 15/80 | loss=0.1572 | survival@99=1.00e+00 thr=0.0000 | lr=9.16e-04
+Epoch 16/80 | loss=0.1564 | survival@99=1.00e+00 thr=0.0001 | lr=9.05e-04
+Epoch 17/80 | loss=0.1558 | survival@99=1.00e+00 thr=0.0001 | lr=8.93e-04
+Epoch 18/80 | loss=0.1552 | survival@99=1.00e+00 thr=0.0000 | lr=8.80e-04
+Epoch 19/80 | loss=0.1551 | survival@99=1.00e+00 thr=0.0008 | lr=8.67e-04
+Epoch 20/80 | loss=0.1542 | survival@99=1.00e+00 thr=0.0002 | lr=8.54e-04
+Epoch 21/80 | loss=0.1537 | survival@99=1.00e+00 thr=0.0002 | lr=8.39e-04
+Epoch 22/80 | loss=0.1533 | survival@99=1.00e+00 thr=0.0002 | lr=8.25e-04
+Epoch 23/80 | loss=0.1531 | survival@99=1.00e+00 thr=0.0000 | lr=8.10e-04
+Epoch 24/80 | loss=0.1523 | survival@99=1.00e+00 thr=0.0000 | lr=7.94e-04
+Epoch 25/80 | loss=0.1520 | survival@99=1.00e+00 thr=0.0001 | lr=7.78e-04
+Epoch 26/80 | loss=0.1514 | survival@99=1.00e+00 thr=0.0000 | lr=7.61e-04
+Epoch 27/80 | loss=0.1508 | survival@99=1.00e+00 thr=0.0002 | lr=7.44e-04
+Epoch 28/80 | loss=0.1503 | survival@99=1.00e+00 thr=0.0000 | lr=7.27e-04
+Epoch 29/80 | loss=0.1501 | survival@99=1.00e+00 thr=0.0000 | lr=7.09e-04
+Epoch 30/80 | loss=0.1493 | survival@99=1.00e+00 thr=0.0000 | lr=6.91e-04
+Epoch 31/80 | loss=0.1491 | survival@99=1.00e+00 thr=0.0000 | lr=6.73e-04
+Epoch 32/80 | loss=0.1483 | survival@99=1.00e+00 thr=0.0000 | lr=6.55e-04
+Epoch 33/80 | loss=0.1482 | survival@99=1.00e+00 thr=0.0000 | lr=6.36e-04

@@ -1,0 +1,18 @@
+Device: cuda:0
+================================================================================
+GAMMA/HADRON CLASSIFIER - SIMPLE MLP (NO CLASS WEIGHTS)
+================================================================================
+
+Computing normalization statistics...
+Loading datasets...
+  Train: 1530715 samples
+  Test:  35751 samples
+Model parameters: 662,017
+
+Training for 50 epochs...
+----------------------------------------------------------------------------------------------------
+Epoch  1/50 | loss=0.1068 | survival@99=1.00e+00 | lr=9.99e-04
+Epoch  2/50 | loss=0.0888 | survival@99=1.00e+00 | lr=9.96e-04
+Epoch  3/50 | loss=0.0864 | survival@99=1.00e+00 | lr=9.91e-04
+Epoch  4/50 | loss=0.0847 | survival@99=1.00e+00 | lr=9.84e-04
+Epoch  5/50 | loss=0.0833 | survival@99=1.00e+00 | lr=9.76e-04

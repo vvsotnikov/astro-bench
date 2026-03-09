@@ -1,0 +1,64 @@
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:49: RuntimeWarning: overflow encountered in reduce
+  return umr_sum(a, axis, dtype, out, keepdims, initial, where)
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:168: RuntimeWarning: overflow encountered in reduce
+  arrmean = umr_sum(arr, axis, dtype, keepdims=True, where=where)
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:190: RuntimeWarning: overflow encountered in square
+  x = um.square(x, out=x)
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:201: RuntimeWarning: overflow encountered in reduce
+  ret = umr_sum(x, axis, dtype, out, keepdims=keepdims, where=where)
+/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_rf.py:55: RuntimeWarning: invalid value encountered in divide
+  e_mu_ratio = np.divide(e_sum, mu_sum + 1e-6)
+/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_rf.py:58: RuntimeWarning: overflow encountered in add
+  total_sum = e_sum + mu_sum
+/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_rf.py:61: RuntimeWarning: invalid value encountered in divide
+  mu_frac = np.divide(mu_sum, total_sum + 1e-6)
+================================================================================
+GAMMA/HADRON CLASSIFIER - RANDOM FOREST
+================================================================================
+
+Loading training data...
+  Train: 1530715 samples
+Loading test data...
+  Test: 35751 samples
+
+Extracting engineered features...
+  Feature dimension: 15
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_rf.py", line 163, in <module>
+    main()
+    ~~~~^^
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_rf.py", line 96, in main
+    X_test = scaler.transform(X_test)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 316, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/preprocessing/_data.py", line 1094, in transform
+    X = validate_data(
+        self,
+    ...<6 lines>...
+        ensure_all_finite="allow-nan",
+    )
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 2902, in validate_data
+    out = check_array(X, input_name="X", **check_params)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1074, in check_array
+    _assert_all_finite(
+    ~~~~~~~~~~~~~~~~~~^
+        array,
+        ^^^^^^
+    ...<2 lines>...
+        allow_nan=ensure_all_finite == "allow-nan",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 133, in _assert_all_finite
+    _assert_all_finite_element_wise(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        X,
+        ^^
+    ...<4 lines>...
+        input_name=input_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 182, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input X contains infinity or a value too large for dtype('float64').

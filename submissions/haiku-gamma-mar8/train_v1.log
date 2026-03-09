@@ -1,0 +1,47 @@
+Device: cuda:0
+================================================================================
+GAMMA/HADRON CLASSIFIER - CNN + Features
+================================================================================
+
+Loading training data...
+  1530715 training samples
+Loading test data...
+  35751 test samples
+
+Model parameters: 659,714
+Class weights: gamma=10.45, hadron=0.53
+
+Training for 50 epochs...
+----------------------------------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train.py", line 264, in <module>
+    train_model(device, output_dir)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train.py", line 169, in train_model
+    loss = criterion(logits, y)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/loss.py", line 1362, in forward
+    return F.cross_entropy(
+           ~~~~~~~~~~~~~~~^
+        input,
+        ^^^^^^
+    ...<4 lines>...
+        label_smoothing=self.label_smoothing,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/functional.py", line 3504, in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        input,
+        ^^^^^^
+    ...<5 lines>...
+        label_smoothing,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: Expected target size [2048, 2], got [2048]

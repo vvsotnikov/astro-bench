@@ -1,0 +1,10 @@
+Device: cuda:0
+Loading data...
+  Train: 1530715 samples
+  Test:  35751 samples
+Model params: 659,714
+Class weights: gamma=10.45, hadron=0.53
+
+Training...
+E 1 | loss=0.6151 acc=0.7920 | survival@99=8.87e-01 | lr=9.99e-04
+E 2 | loss=0.3903 acc=0.8762 | survival@99=8.69e-01 | lr=9.96e-04
