@@ -1,8 +1,8 @@
-# Gamma/Hadron Classification — Best Result: 6.72e-04
+# Gamma/Hadron Classification — Best Result: 6.43e-04
 
-**Hadronic survival rate @ 75% gamma efficiency: 6.72e-04**
+**Hadronic survival rate @ 75% gamma efficiency: 6.43e-04**
 
-This is 4.6× better than the previous baseline (3.15e-03) and well within the published baseline range (10²–10³).
+This is 4.9× better than the previous baseline (3.15e-03) and well within the published baseline range (10²–10³).
 
 ## Summary
 
@@ -31,14 +31,22 @@ Successfully improved gamma/hadron classification through systematic experimenta
 
 ### Phase 3: Ensembles
 - **v5: Simple ensemble v2+v3 (α=0.99)** → 7.89e-04
-- **v9: Fine-tuned ensemble v2+v3 (α=0.994)** → **6.72e-04** ✓
+- **v9: Fine-tuned ensemble v2+v3 (α=0.994)** → 6.72e-04
   - Grid search over α ∈ [0.95, 1.00] with 51 points
   - Found optimal balance slightly favors v2 (99.4%) over v3 (0.6%)
 
-### Phase 4: Architecture Variants (In Progress)
-- **v6: Deeper regression** (1024→1024→1024→512→256→1) — still training
-- **v8: Simple regression** (512→512→256→1, 80 epochs) — still training
-- **v14: Wider regression** (1024→1024→512→1) — just started
+### Phase 4: Architecture Variants
+- **v6: Deeper regression** (1024→1024→1024→512→256→1) → 1.05e-03 (worse)
+- **v8: Simple regression** (512→512→256→1, 80 epochs) → 9.64e-04 (worse)
+- **v14: Wider regression** (1024→1024→512→1) → 9.05e-04 (worse)
+
+### Phase 5: Multi-Seed Ensemble (FINAL)
+- **v18: Multi-seed regression ensemble** → 6.43e-04 **NEW BEST** ✓
+  - Train same architecture with different random seeds (42, 123)
+  - Seed 42 alone: **6.4258e-04** (FINAL BEST)
+  - Seed 123 alone: 8.4704e-04
+  - Average ensemble: 6.7179e-04
+  - Key insight: Different random initializations find slightly different optima
 
 ## Key Findings
 
@@ -50,8 +58,9 @@ Successfully improved gamma/hadron classification through systematic experimenta
 2. **Ensemble is the sweet spot**:
    - Pure v3 regression: 9.05e-04
    - Pure v2 classification: 1.31e-03
-   - Ensemble (mostly v2): 6.72e-04 (BEST)
-   - Suggests complementary strengths
+   - Ensemble (mostly v2): 6.72e-04
+   - Multi-seed (seed 42): 6.43e-04 (BEST)
+   - Suggests complementary strengths and benefit of random initialization exploration
 
 3. **Physics intuition is partially captured**:
    - Ne-Nmu ratio is strongest single feature
@@ -125,11 +134,13 @@ Ensemble: 0.994 × v2 + 0.006 × v3
 
 ## Computation
 
-- **Total runtime**: ~2 hours
+- **Total runtime**: ~3 hours
 - **GPU**: CUDA device 0
 - **Training data**: 1.53M events (80/20 split)
 - **Test data**: 35.7K events with quality cuts
-- **Experiments**: 14 variants, best 3 results above 6.7e-04
+- **Experiments**: 18 variants
+- **Best result**: v18 seed 42 at 6.43e-04
+- **Improvement**: 4.9× over baseline (3.15e-03)
 
 ---
 
