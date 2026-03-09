@@ -1,0 +1,169 @@
+Device: cuda:0
+Loading training data...
+  Dataset size: 5561523
+Model parameters: 375,151
+  Epoch 1, batch 0/1357, loss=1.6228, running_acc=0.1899
+  Epoch 1, batch 100/1357, loss=1.5385, running_acc=0.2481
+  Epoch 1, batch 200/1357, loss=1.4385, running_acc=0.2796
+  Epoch 1, batch 300/1357, loss=1.4199, running_acc=0.2977
+  Epoch 1, batch 400/1357, loss=1.4164, running_acc=0.3088
+  Epoch 1, batch 500/1357, loss=1.4215, running_acc=0.3163
+  Epoch 1, batch 600/1357, loss=1.3880, running_acc=0.3216
+  Epoch 1, batch 700/1357, loss=1.4164, running_acc=0.3259
+  Epoch 1, batch 800/1357, loss=1.3980, running_acc=0.3294
+  Epoch 1, batch 900/1357, loss=1.3981, running_acc=0.3320
+  Epoch 1, batch 1000/1357, loss=1.3966, running_acc=0.3343
+  Epoch 1, batch 1100/1357, loss=1.3935, running_acc=0.3363
+  Epoch 1, batch 1200/1357, loss=1.3924, running_acc=0.3379
+  Epoch 1, batch 1300/1357, loss=1.3765, running_acc=0.3394
+Epoch 1/10: loss=1.4201, acc=0.3402, time=25.3s
+  -> New best model saved (acc=0.3402)
+  Epoch 2, batch 0/1357, loss=1.4005, running_acc=0.3518
+  Epoch 2, batch 100/1357, loss=1.3916, running_acc=0.3586
+  Epoch 2, batch 200/1357, loss=1.3892, running_acc=0.3584
+  Epoch 2, batch 300/1357, loss=1.3798, running_acc=0.3581
+  Epoch 2, batch 400/1357, loss=1.3875, running_acc=0.3580
+  Epoch 2, batch 500/1357, loss=1.3754, running_acc=0.3584
+  Epoch 2, batch 600/1357, loss=1.3655, running_acc=0.3587
+  Epoch 2, batch 700/1357, loss=1.3771, running_acc=0.3587
+  Epoch 2, batch 800/1357, loss=1.3838, running_acc=0.3587
+  Epoch 2, batch 900/1357, loss=1.3913, running_acc=0.3588
+  Epoch 2, batch 1000/1357, loss=1.3883, running_acc=0.3589
+  Epoch 2, batch 1100/1357, loss=1.3894, running_acc=0.3590
+  Epoch 2, batch 1200/1357, loss=1.3718, running_acc=0.3591
+  Epoch 2, batch 1300/1357, loss=1.3899, running_acc=0.3592
+Epoch 2/10: loss=1.3850, acc=0.3592, time=24.4s
+  -> New best model saved (acc=0.3592)
+  Epoch 3, batch 0/1357, loss=1.3685, running_acc=0.3706
+  Epoch 3, batch 100/1357, loss=1.3992, running_acc=0.3593
+  Epoch 3, batch 200/1357, loss=1.3783, running_acc=0.3606
+  Epoch 3, batch 300/1357, loss=1.3831, running_acc=0.3606
+  Epoch 3, batch 400/1357, loss=1.3795, running_acc=0.3603
+  Epoch 3, batch 500/1357, loss=1.3750, running_acc=0.3604
+  Epoch 3, batch 600/1357, loss=1.3844, running_acc=0.3607
+  Epoch 3, batch 700/1357, loss=1.3866, running_acc=0.3608
+  Epoch 3, batch 800/1357, loss=1.3739, running_acc=0.3608
+  Epoch 3, batch 900/1357, loss=1.3822, running_acc=0.3610
+  Epoch 3, batch 1000/1357, loss=1.3693, running_acc=0.3610
+  Epoch 3, batch 1100/1357, loss=1.3823, running_acc=0.3610
+  Epoch 3, batch 1200/1357, loss=1.3882, running_acc=0.3610
+  Epoch 3, batch 1300/1357, loss=1.3924, running_acc=0.3611
+Epoch 3/10: loss=1.3812, acc=0.3612, time=24.4s
+  -> New best model saved (acc=0.3612)
+  Epoch 4, batch 0/1357, loss=1.3951, running_acc=0.3491
+  Epoch 4, batch 100/1357, loss=1.3854, running_acc=0.3630
+  Epoch 4, batch 200/1357, loss=1.3956, running_acc=0.3624
+  Epoch 4, batch 300/1357, loss=1.3862, running_acc=0.3625
+  Epoch 4, batch 400/1357, loss=1.3762, running_acc=0.3628
+  Epoch 4, batch 500/1357, loss=1.3883, running_acc=0.3628
+  Epoch 4, batch 600/1357, loss=1.3832, running_acc=0.3626
+  Epoch 4, batch 700/1357, loss=1.3824, running_acc=0.3627
+  Epoch 4, batch 800/1357, loss=1.3851, running_acc=0.3627
+  Epoch 4, batch 900/1357, loss=1.3851, running_acc=0.3627
+  Epoch 4, batch 1000/1357, loss=1.3732, running_acc=0.3627
+  Epoch 4, batch 1100/1357, loss=1.3935, running_acc=0.3627
+  Epoch 4, batch 1200/1357, loss=1.3689, running_acc=0.3627
+  Epoch 4, batch 1300/1357, loss=1.3838, running_acc=0.3626
+Epoch 4/10: loss=1.3789, acc=0.3626, time=24.5s
+  -> New best model saved (acc=0.3626)
+  Epoch 5, batch 0/1357, loss=1.3707, running_acc=0.3582
+  Epoch 5, batch 100/1357, loss=1.3747, running_acc=0.3627
+  Epoch 5, batch 200/1357, loss=1.3743, running_acc=0.3627
+  Epoch 5, batch 300/1357, loss=1.3830, running_acc=0.3629
+  Epoch 5, batch 400/1357, loss=1.3923, running_acc=0.3629
+  Epoch 5, batch 500/1357, loss=1.3807, running_acc=0.3629
+  Epoch 5, batch 600/1357, loss=1.3794, running_acc=0.3628
+  Epoch 5, batch 700/1357, loss=1.3709, running_acc=0.3630
+  Epoch 5, batch 800/1357, loss=1.3799, running_acc=0.3630
+  Epoch 5, batch 900/1357, loss=1.3726, running_acc=0.3629
+  Epoch 5, batch 1000/1357, loss=1.3786, running_acc=0.3631
+  Epoch 5, batch 1100/1357, loss=1.3587, running_acc=0.3631
+  Epoch 5, batch 1200/1357, loss=1.3720, running_acc=0.3632
+  Epoch 5, batch 1300/1357, loss=1.3762, running_acc=0.3632
+Epoch 5/10: loss=1.3774, acc=0.3633, time=24.5s
+  -> New best model saved (acc=0.3633)
+  Epoch 6, batch 0/1357, loss=1.3704, running_acc=0.3691
+  Epoch 6, batch 100/1357, loss=1.3753, running_acc=0.3638
+  Epoch 6, batch 200/1357, loss=1.3643, running_acc=0.3643
+  Epoch 6, batch 300/1357, loss=1.3848, running_acc=0.3639
+  Epoch 6, batch 400/1357, loss=1.3849, running_acc=0.3637
+  Epoch 6, batch 500/1357, loss=1.3800, running_acc=0.3637
+  Epoch 6, batch 600/1357, loss=1.3705, running_acc=0.3634
+  Epoch 6, batch 700/1357, loss=1.3724, running_acc=0.3636
+  Epoch 6, batch 800/1357, loss=1.3750, running_acc=0.3637
+  Epoch 6, batch 900/1357, loss=1.3672, running_acc=0.3638
+  Epoch 6, batch 1000/1357, loss=1.3779, running_acc=0.3638
+  Epoch 6, batch 1100/1357, loss=1.3823, running_acc=0.3637
+  Epoch 6, batch 1200/1357, loss=1.3609, running_acc=0.3637
+  Epoch 6, batch 1300/1357, loss=1.3827, running_acc=0.3637
+Epoch 6/10: loss=1.3761, acc=0.3638, time=24.6s
+  -> New best model saved (acc=0.3638)
+  Epoch 7, batch 0/1357, loss=1.3736, running_acc=0.3579
+  Epoch 7, batch 100/1357, loss=1.3757, running_acc=0.3652
+  Epoch 7, batch 200/1357, loss=1.3853, running_acc=0.3648
+  Epoch 7, batch 300/1357, loss=1.3814, running_acc=0.3653
+  Epoch 7, batch 400/1357, loss=1.3731, running_acc=0.3653
+  Epoch 7, batch 500/1357, loss=1.3859, running_acc=0.3649
+  Epoch 7, batch 600/1357, loss=1.3661, running_acc=0.3650
+  Epoch 7, batch 700/1357, loss=1.3700, running_acc=0.3648
+  Epoch 7, batch 800/1357, loss=1.3788, running_acc=0.3647
+  Epoch 7, batch 900/1357, loss=1.3755, running_acc=0.3645
+  Epoch 7, batch 1000/1357, loss=1.3853, running_acc=0.3645
+  Epoch 7, batch 1100/1357, loss=1.3778, running_acc=0.3645
+  Epoch 7, batch 1200/1357, loss=1.3789, running_acc=0.3644
+  Epoch 7, batch 1300/1357, loss=1.3796, running_acc=0.3645
+Epoch 7/10: loss=1.3747, acc=0.3645, time=24.6s
+  -> New best model saved (acc=0.3645)
+  Epoch 8, batch 0/1357, loss=1.3493, running_acc=0.3794
+  Epoch 8, batch 100/1357, loss=1.3833, running_acc=0.3661
+  Epoch 8, batch 200/1357, loss=1.3636, running_acc=0.3654
+  Epoch 8, batch 300/1357, loss=1.3807, running_acc=0.3651
+  Epoch 8, batch 400/1357, loss=1.3654, running_acc=0.3652
+  Epoch 8, batch 500/1357, loss=1.3678, running_acc=0.3652
+  Epoch 8, batch 600/1357, loss=1.3591, running_acc=0.3651
+  Epoch 8, batch 700/1357, loss=1.3690, running_acc=0.3651
+  Epoch 8, batch 800/1357, loss=1.3789, running_acc=0.3652
+  Epoch 8, batch 900/1357, loss=1.3891, running_acc=0.3652
+  Epoch 8, batch 1000/1357, loss=1.3882, running_acc=0.3652
+  Epoch 8, batch 1100/1357, loss=1.3822, running_acc=0.3651
+  Epoch 8, batch 1200/1357, loss=1.3615, running_acc=0.3650
+  Epoch 8, batch 1300/1357, loss=1.3910, running_acc=0.3651
+Epoch 8/10: loss=1.3734, acc=0.3651, time=24.5s
+  -> New best model saved (acc=0.3651)
+  Epoch 9, batch 0/1357, loss=1.3723, running_acc=0.3674
+  Epoch 9, batch 100/1357, loss=1.3691, running_acc=0.3657
+  Epoch 9, batch 200/1357, loss=1.3734, running_acc=0.3656
+  Epoch 9, batch 300/1357, loss=1.3530, running_acc=0.3657
+  Epoch 9, batch 400/1357, loss=1.3683, running_acc=0.3659
+  Epoch 9, batch 500/1357, loss=1.3793, running_acc=0.3661
+  Epoch 9, batch 600/1357, loss=1.3780, running_acc=0.3660
+  Epoch 9, batch 700/1357, loss=1.3755, running_acc=0.3661
+  Epoch 9, batch 800/1357, loss=1.3925, running_acc=0.3658
+  Epoch 9, batch 900/1357, loss=1.3824, running_acc=0.3657
+  Epoch 9, batch 1000/1357, loss=1.3629, running_acc=0.3658
+  Epoch 9, batch 1100/1357, loss=1.3615, running_acc=0.3658
+  Epoch 9, batch 1200/1357, loss=1.3678, running_acc=0.3658
+  Epoch 9, batch 1300/1357, loss=1.3648, running_acc=0.3658
+Epoch 9/10: loss=1.3722, acc=0.3658, time=24.6s
+  -> New best model saved (acc=0.3658)
+  Epoch 10, batch 0/1357, loss=1.3666, running_acc=0.3689
+  Epoch 10, batch 100/1357, loss=1.3821, running_acc=0.3675
+  Epoch 10, batch 200/1357, loss=1.3625, running_acc=0.3663
+  Epoch 10, batch 300/1357, loss=1.3782, running_acc=0.3660
+  Epoch 10, batch 400/1357, loss=1.3510, running_acc=0.3661
+  Epoch 10, batch 500/1357, loss=1.3600, running_acc=0.3660
+  Epoch 10, batch 600/1357, loss=1.3564, running_acc=0.3660
+  Epoch 10, batch 700/1357, loss=1.3746, running_acc=0.3661
+  Epoch 10, batch 800/1357, loss=1.3605, running_acc=0.3660
+  Epoch 10, batch 900/1357, loss=1.3914, running_acc=0.3660
+  Epoch 10, batch 1000/1357, loss=1.3901, running_acc=0.3660
+  Epoch 10, batch 1100/1357, loss=1.3842, running_acc=0.3661
+  Epoch 10, batch 1200/1357, loss=1.3736, running_acc=0.3659
+  Epoch 10, batch 1300/1357, loss=1.3734, running_acc=0.3660
+Epoch 10/10: loss=1.3715, acc=0.3661, time=24.5s
+  -> New best model saved (acc=0.3661)
+
+Running inference on test set...
+Predictions: (119027,)
+Distribution: {np.int64(0): np.int64(33229), np.int64(1): np.int64(23514), np.int64(2): np.int64(22440), np.int64(3): np.int64(19624), np.int64(4): np.int64(20220)}
+Saved predictions.npz

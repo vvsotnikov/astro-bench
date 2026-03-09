@@ -1,0 +1,36 @@
+Device: cuda:0
+Loading training data...
+  Quality cuts: 475977/5561523 events kept (8.6%)
+  Dataset size: 475977
+Model parameters: 188,965
+  Epoch 1, batch 0/232, loss=4.3729, acc=0.2070
+  Epoch 1, batch 200/232, loss=1.1276, acc=0.4113
+Epoch 1/5: loss=1.3146, acc=0.4208, time=4.5s
+  Epoch 2, batch 0/232, loss=1.1379, acc=0.4800
+  Epoch 2, batch 200/232, loss=1.0946, acc=0.4852
+Epoch 2/5: loss=1.1223, acc=0.4855, time=3.5s
+  Epoch 3, batch 0/232, loss=1.1315, acc=0.4961
+  Epoch 3, batch 200/232, loss=1.1435, acc=0.4908
+Epoch 3/5: loss=1.1100, acc=0.4909, time=3.5s
+  Epoch 4, batch 0/232, loss=1.1320, acc=0.4805
+  Epoch 4, batch 200/232, loss=1.1201, acc=0.4931
+Epoch 4/5: loss=1.1032, acc=0.4929, time=3.5s
+  Epoch 5, batch 0/232, loss=1.1025, acc=0.4878
+  Epoch 5, batch 200/232, loss=1.1221, acc=0.4950
+Epoch 5/5: loss=1.0986, acc=0.4951, time=3.5s
+
+Running inference on test set...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-mar8/train.py", line 194, in <module>
+    main()
+    ~~~~^^
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-mar8/train.py", line 178, in main
+    out = model(mat_t, feat_t)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-mar8/train.py", line 83, in forward
+    x = x.view(x.size(0), -1)                          # (B, 512)
+RuntimeError: view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.

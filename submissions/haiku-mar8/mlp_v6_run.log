@@ -1,0 +1,21 @@
+Device: cuda:0
+Loading data...
+  Cuts: 475977/5561523 kept
+  Loading 475977 events...
+    Loaded 0/475977
+  Final shape: (475977, 519)
+Parameters: 1,225,989
+Epoch 1/40: loss=1.3448 acc=0.4023 2.4s
+Epoch 6/40: loss=1.1743 acc=0.4914 1.5s
+Epoch 11/40: loss=1.1632 acc=0.4963 1.5s
+Epoch 16/40: loss=1.1490 acc=0.5041 1.4s
+Epoch 21/40: loss=1.1273 acc=0.5186 1.5s
+Epoch 26/40: loss=1.0913 acc=0.5410 1.5s
+Epoch 31/40: loss=1.0410 acc=0.5728 1.7s
+Epoch 36/40: loss=0.9957 acc=0.6006 1.6s
+Epoch 40/40: loss=0.9855 acc=0.6061 1.7s
+Best train acc: 0.6065
+
+Inference...
+Predictions: (119027,), dist: {np.int64(0): np.int64(30204), np.int64(1): np.int64(26433), np.int64(2): np.int64(22828), np.int64(3): np.int64(22508), np.int64(4): np.int64(17054)}
+Done

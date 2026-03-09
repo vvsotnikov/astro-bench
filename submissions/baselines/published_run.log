@@ -1,0 +1,76 @@
+Device: cuda
+Model params: 794,629
+  Epoch 1/10 batch 0/2716 loss=1.7056 acc=0.1982
+  Epoch 1/10 batch 500/2716 loss=1.5045 acc=0.2832
+  Epoch 1/10 batch 1000/2716 loss=1.4907 acc=0.2922
+  Epoch 1/10 batch 1500/2716 loss=1.4757 acc=0.2973
+  Epoch 1/10 batch 2000/2716 loss=1.4707 acc=0.3008
+  Epoch 1/10 batch 2500/2716 loss=1.4655 acc=0.3037
+Epoch 1: loss=1.4939 acc=0.3047 lr=0.001000
+  Epoch 2/10 batch 0/2716 loss=1.4595 acc=0.3184
+  Epoch 2/10 batch 500/2716 loss=1.4489 acc=0.3182
+  Epoch 2/10 batch 1000/2716 loss=1.4815 acc=0.3195
+  Epoch 2/10 batch 1500/2716 loss=1.4559 acc=0.3205
+  Epoch 2/10 batch 2000/2716 loss=1.4823 acc=0.3213
+  Epoch 2/10 batch 2500/2716 loss=1.4316 acc=0.3219
+Epoch 2: loss=1.4581 acc=0.3223 lr=0.001000
+  Epoch 3/10 batch 0/2716 loss=1.4434 acc=0.3281
+  Epoch 3/10 batch 500/2716 loss=1.4609 acc=0.3266
+  Epoch 3/10 batch 1000/2716 loss=1.4637 acc=0.3271
+  Epoch 3/10 batch 1500/2716 loss=1.4603 acc=0.3274
+  Epoch 3/10 batch 2000/2716 loss=1.4529 acc=0.3278
+  Epoch 3/10 batch 2500/2716 loss=1.4481 acc=0.3281
+Epoch 3: loss=1.4458 acc=0.3284 lr=0.001000
+  Epoch 4/10 batch 0/2716 loss=1.4323 acc=0.3311
+  Epoch 4/10 batch 500/2716 loss=1.4467 acc=0.3308
+  Epoch 4/10 batch 1000/2716 loss=1.4266 acc=0.3313
+  Epoch 4/10 batch 1500/2716 loss=1.4406 acc=0.3316
+  Epoch 4/10 batch 2000/2716 loss=1.4424 acc=0.3318
+  Epoch 4/10 batch 2500/2716 loss=1.4259 acc=0.3320
+Epoch 4: loss=1.4381 acc=0.3320 lr=0.001000
+  Epoch 5/10 batch 0/2716 loss=1.4459 acc=0.3301
+  Epoch 5/10 batch 500/2716 loss=1.4324 acc=0.3337
+  Epoch 5/10 batch 1000/2716 loss=1.4470 acc=0.3336
+  Epoch 5/10 batch 1500/2716 loss=1.4495 acc=0.3336
+  Epoch 5/10 batch 2000/2716 loss=1.4358 acc=0.3336
+  Epoch 5/10 batch 2500/2716 loss=1.4419 acc=0.3339
+Epoch 5: loss=1.4333 acc=0.3341 lr=0.001000
+  Epoch 6/10 batch 0/2716 loss=1.4358 acc=0.3369
+  Epoch 6/10 batch 500/2716 loss=1.4402 acc=0.3350
+  Epoch 6/10 batch 1000/2716 loss=1.4425 acc=0.3356
+  Epoch 6/10 batch 1500/2716 loss=1.4302 acc=0.3357
+  Epoch 6/10 batch 2000/2716 loss=1.4353 acc=0.3360
+  Epoch 6/10 batch 2500/2716 loss=1.4320 acc=0.3361
+Epoch 6: loss=1.4300 acc=0.3361 lr=0.001000
+  Epoch 7/10 batch 0/2716 loss=1.4151 acc=0.3467
+  Epoch 7/10 batch 500/2716 loss=1.4506 acc=0.3367
+  Epoch 7/10 batch 1000/2716 loss=1.4386 acc=0.3367
+  Epoch 7/10 batch 1500/2716 loss=1.4262 acc=0.3370
+  Epoch 7/10 batch 2000/2716 loss=1.4145 acc=0.3372
+  Epoch 7/10 batch 2500/2716 loss=1.4436 acc=0.3374
+Epoch 7: loss=1.4273 acc=0.3375 lr=0.001000
+  Epoch 8/10 batch 0/2716 loss=1.4320 acc=0.3447
+  Epoch 8/10 batch 500/2716 loss=1.4203 acc=0.3380
+  Epoch 8/10 batch 1000/2716 loss=1.4241 acc=0.3381
+  Epoch 8/10 batch 1500/2716 loss=1.4146 acc=0.3379
+  Epoch 8/10 batch 2000/2716 loss=1.4118 acc=0.3382
+  Epoch 8/10 batch 2500/2716 loss=1.4341 acc=0.3383
+Epoch 8: loss=1.4252 acc=0.3384 lr=0.001000
+  Epoch 9/10 batch 0/2716 loss=1.4270 acc=0.3462
+  Epoch 9/10 batch 500/2716 loss=1.4050 acc=0.3394
+  Epoch 9/10 batch 1000/2716 loss=1.4287 acc=0.3395
+  Epoch 9/10 batch 1500/2716 loss=1.4153 acc=0.3394
+  Epoch 9/10 batch 2000/2716 loss=1.4306 acc=0.3392
+  Epoch 9/10 batch 2500/2716 loss=1.4178 acc=0.3393
+Epoch 9: loss=1.4233 acc=0.3394 lr=0.001000
+  Epoch 10/10 batch 0/2716 loss=1.4271 acc=0.3335
+  Epoch 10/10 batch 500/2716 loss=1.4147 acc=0.3397
+  Epoch 10/10 batch 1000/2716 loss=1.4096 acc=0.3399
+  Epoch 10/10 batch 1500/2716 loss=1.4481 acc=0.3398
+  Epoch 10/10 batch 2000/2716 loss=1.4176 acc=0.3398
+  Epoch 10/10 batch 2500/2716 loss=1.4223 acc=0.3398
+Epoch 10: loss=1.4218 acc=0.3399 lr=0.001000
+
+Predicting on test set...
+Saved predictions_published.npz (1390380 predictions)
+Saved model weights

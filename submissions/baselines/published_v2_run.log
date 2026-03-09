@@ -1,0 +1,26 @@
+Device: cuda
+Model params: 1,455,109
+Epoch  1/20: loss=1.4758 acc=0.3140 lr=0.002982
+Epoch  2/20: loss=1.4370 acc=0.3338 lr=0.002927
+Epoch  3/20: loss=1.4219 acc=0.3416 lr=0.002837
+Epoch  4/20: loss=1.4155 acc=0.3444 lr=0.002714
+Epoch  5/20: loss=1.4113 acc=0.3466 lr=0.002561
+Epoch  6/20: loss=1.4086 acc=0.3479 lr=0.002382
+Epoch  7/20: loss=1.4059 acc=0.3494 lr=0.002181
+Epoch  8/20: loss=1.4041 acc=0.3497 lr=0.001964
+Epoch  9/20: loss=1.4022 acc=0.3509 lr=0.001735
+Epoch 10/20: loss=1.4008 acc=0.3517 lr=0.001500
+Epoch 11/20: loss=1.3992 acc=0.3523 lr=0.001265
+Epoch 12/20: loss=1.3978 acc=0.3530 lr=0.001036
+Epoch 13/20: loss=1.3967 acc=0.3536 lr=0.000819
+Epoch 14/20: loss=1.3954 acc=0.3543 lr=0.000618
+Epoch 15/20: loss=1.3944 acc=0.3547 lr=0.000439
+Epoch 16/20: loss=1.3934 acc=0.3552 lr=0.000286
+Epoch 17/20: loss=1.3926 acc=0.3554 lr=0.000163
+Epoch 18/20: loss=1.3919 acc=0.3558 lr=0.000073
+Epoch 19/20: loss=1.3915 acc=0.3562 lr=0.000018
+Epoch 20/20: loss=1.3912 acc=0.3561 lr=0.000000
+
+Best train acc: 0.3562
+Predicting on test set...
+Saved (1390380 predictions)

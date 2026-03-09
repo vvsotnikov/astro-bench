@@ -1,0 +1,20 @@
+Device: cuda:0
+Loading data...
+  Cuts: 475977/5561523 kept
+  Loading 475977 matrices...
+    0/475977
+    200000/475977
+    400000/475977
+  Ready: 475977 events
+Parameters: 471,109
+Train: 428380, Val: 47597
+E1/50: train=0.4739 val=0.5013 6.3s
+E6/50: train=0.5017 val=0.5044 5.7s
+E11/50: train=0.5082 val=0.4962 5.3s
+E16/50: train=0.5194 val=0.4969 5.3s
+Early stopping at epoch 16
+Best val acc: 0.5044
+
+Inference...
+Predictions: (119027,), dist: {np.int64(0): np.int64(33072), np.int64(1): np.int64(22926), np.int64(2): np.int64(19974), np.int64(3): np.int64(18882), np.int64(4): np.int64(24173)}
+Done

@@ -1,0 +1,5 @@
+Train: (5561523, 5), Test: (119027, 5)
+Training RandomForest...
+Predictions shape: (119027,)
+Prediction distribution: {np.int8(0): np.int64(39445), np.int8(1): np.int64(23971), np.int8(2): np.int64(21095), np.int8(3): np.int64(16778), np.int8(4): np.int64(17738)}
+Saved predictions.npz
