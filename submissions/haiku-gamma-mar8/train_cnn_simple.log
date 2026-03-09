@@ -1,0 +1,49 @@
+Device: cuda:0
+Computing feature statistics...
+Train: 1530715, Test: 35751
+Model params: 104,226
+Class weights: gamma=10.45, hadron=0.53
+Training for 40 epochs...
+Epoch  1/40: loss=0.3311 survival@99=8.61e-01 lr=9.98e-04 <- BEST
+Epoch  2/40: loss=0.2905 survival@99=8.58e-01 lr=9.94e-04 <- BEST
+Epoch  3/40: loss=0.2777 survival@99=9.05e-01 lr=9.86e-04
+Epoch  4/40: loss=0.2717 survival@99=9.12e-01 lr=9.76e-04
+Epoch  5/40: loss=0.2682 survival@99=8.78e-01 lr=9.62e-04
+Epoch  6/40: loss=0.2655 survival@99=8.47e-01 lr=9.46e-04 <- BEST
+Epoch  7/40: loss=0.2634 survival@99=8.72e-01 lr=9.26e-04
+Epoch  8/40: loss=0.2617 survival@99=8.80e-01 lr=9.05e-04
+Epoch  9/40: loss=0.2602 survival@99=8.80e-01 lr=8.80e-04
+Epoch 10/40: loss=0.2596 survival@99=8.34e-01 lr=8.54e-04 <- BEST
+Epoch 11/40: loss=0.2583 survival@99=8.81e-01 lr=8.25e-04
+Epoch 12/40: loss=0.2575 survival@99=8.89e-01 lr=7.94e-04
+Epoch 13/40: loss=0.2563 survival@99=8.62e-01 lr=7.61e-04
+Epoch 14/40: loss=0.2554 survival@99=8.66e-01 lr=7.27e-04
+Epoch 15/40: loss=0.2539 survival@99=8.74e-01 lr=6.91e-04
+Epoch 16/40: loss=0.2534 survival@99=9.13e-01 lr=6.55e-04
+Epoch 17/40: loss=0.2519 survival@99=8.54e-01 lr=6.17e-04
+Epoch 18/40: loss=0.2507 survival@99=8.82e-01 lr=5.78e-04
+Epoch 19/40: loss=0.2497 survival@99=8.16e-01 lr=5.39e-04 <- BEST
+Epoch 20/40: loss=0.2491 survival@99=8.44e-01 lr=5.00e-04
+Epoch 21/40: loss=0.2476 survival@99=8.55e-01 lr=4.61e-04
+Epoch 22/40: loss=0.2462 survival@99=8.47e-01 lr=4.22e-04
+Epoch 23/40: loss=0.2455 survival@99=8.63e-01 lr=3.83e-04
+Epoch 24/40: loss=0.2441 survival@99=8.02e-01 lr=3.45e-04 <- BEST
+Epoch 25/40: loss=0.2424 survival@99=8.37e-01 lr=3.09e-04
+Epoch 26/40: loss=0.2419 survival@99=8.41e-01 lr=2.73e-04
+Epoch 27/40: loss=0.2404 survival@99=8.45e-01 lr=2.39e-04
+Epoch 28/40: loss=0.2392 survival@99=8.38e-01 lr=2.06e-04
+Epoch 29/40: loss=0.2385 survival@99=8.58e-01 lr=1.75e-04
+Epoch 30/40: loss=0.2376 survival@99=8.57e-01 lr=1.46e-04
+Epoch 31/40: loss=0.2369 survival@99=8.47e-01 lr=1.20e-04
+Epoch 32/40: loss=0.2355 survival@99=8.34e-01 lr=9.55e-05
+Epoch 33/40: loss=0.2351 survival@99=8.46e-01 lr=7.37e-05
+Epoch 34/40: loss=0.2341 survival@99=8.52e-01 lr=5.45e-05
+Epoch 35/40: loss=0.2335 survival@99=8.59e-01 lr=3.81e-05
+Epoch 36/40: loss=0.2328 survival@99=8.39e-01 lr=2.45e-05
+Epoch 37/40: loss=0.2322 survival@99=8.38e-01 lr=1.38e-05
+Epoch 38/40: loss=0.2321 survival@99=8.39e-01 lr=6.16e-06
+Epoch 39/40: loss=0.2322 survival@99=8.37e-01 lr=1.54e-06
+Epoch 40/40: loss=0.2319 survival@99=8.54e-01 lr=0.00e+00
+
+Best survival @ 99% gamma eff: 8.02e-01
+Saved (35751 scores)

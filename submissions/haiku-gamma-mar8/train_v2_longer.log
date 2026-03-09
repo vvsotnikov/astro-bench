@@ -1,0 +1,59 @@
+Device: cuda:0
+Computing normalization stats...
+  mean range: [0.00, 180.08]
+  std range:  [0.47, 593.54]
+Model params: 530,946
+Class weights: gamma=10.45, hadron=0.53
+Epoch  1/50: train_loss=0.3749 train_acc=0.8511 test_acc=0.9500 survival@99=8.60e-01 <- BEST
+Epoch  2/50: train_loss=0.3369 train_acc=0.8822 test_acc=0.9573 survival@99=9.00e-01
+Epoch  3/50: train_loss=0.3268 train_acc=0.8877 test_acc=0.9594 survival@99=8.59e-01 <- BEST
+Epoch  4/50: train_loss=0.3182 train_acc=0.8920 test_acc=0.9323 survival@99=8.61e-01
+Epoch  5/50: train_loss=0.3137 train_acc=0.8944 test_acc=0.9365 survival@99=8.07e-01 <- BEST
+Epoch  6/50: train_loss=0.3112 train_acc=0.8955 test_acc=0.9647 survival@99=8.58e-01
+Epoch  7/50: train_loss=0.3073 train_acc=0.8979 test_acc=0.9606 survival@99=9.07e-01
+Epoch  8/50: train_loss=0.3042 train_acc=0.8992 test_acc=0.9689 survival@99=9.09e-01
+Epoch  9/50: train_loss=0.3014 train_acc=0.9007 test_acc=0.9690 survival@99=8.72e-01
+Epoch 10/50: train_loss=0.2997 train_acc=0.9016 test_acc=0.9589 survival@99=8.56e-01
+Epoch 11/50: train_loss=0.2969 train_acc=0.9033 test_acc=0.9659 survival@99=8.79e-01
+Epoch 12/50: train_loss=0.2957 train_acc=0.9032 test_acc=0.9684 survival@99=9.04e-01
+Epoch 13/50: train_loss=0.2929 train_acc=0.9050 test_acc=0.9743 survival@99=9.14e-01
+Epoch 14/50: train_loss=0.2917 train_acc=0.9053 test_acc=0.9632 survival@99=9.16e-01
+Epoch 15/50: train_loss=0.2893 train_acc=0.9063 test_acc=0.9639 survival@99=8.94e-01
+Epoch 16/50: train_loss=0.2888 train_acc=0.9066 test_acc=0.9702 survival@99=9.07e-01
+Epoch 17/50: train_loss=0.2870 train_acc=0.9070 test_acc=0.9674 survival@99=9.09e-01
+Epoch 18/50: train_loss=0.2856 train_acc=0.9081 test_acc=0.9686 survival@99=8.74e-01
+Epoch 19/50: train_loss=0.2845 train_acc=0.9084 test_acc=0.9740 survival@99=9.10e-01
+Epoch 20/50: train_loss=0.2827 train_acc=0.9093 test_acc=0.9673 survival@99=9.30e-01
+Epoch 21/50: train_loss=0.2821 train_acc=0.9093 test_acc=0.9686 survival@99=9.11e-01
+Epoch 22/50: train_loss=0.2803 train_acc=0.9102 test_acc=0.9705 survival@99=9.07e-01
+Epoch 23/50: train_loss=0.2795 train_acc=0.9102 test_acc=0.9686 survival@99=8.94e-01
+Epoch 24/50: train_loss=0.2789 train_acc=0.9103 test_acc=0.9714 survival@99=9.08e-01
+Epoch 25/50: train_loss=0.2779 train_acc=0.9110 test_acc=0.9707 survival@99=8.98e-01
+Epoch 26/50: train_loss=0.2759 train_acc=0.9109 test_acc=0.9749 survival@99=9.08e-01
+Epoch 27/50: train_loss=0.2760 train_acc=0.9112 test_acc=0.9691 survival@99=8.91e-01
+Epoch 28/50: train_loss=0.2752 train_acc=0.9115 test_acc=0.9723 survival@99=9.21e-01
+Epoch 29/50: train_loss=0.2736 train_acc=0.9121 test_acc=0.9685 survival@99=9.13e-01
+Epoch 30/50: train_loss=0.2731 train_acc=0.9125 test_acc=0.9716 survival@99=8.80e-01
+Epoch 31/50: train_loss=0.2718 train_acc=0.9124 test_acc=0.9728 survival@99=9.15e-01
+Epoch 32/50: train_loss=0.2713 train_acc=0.9129 test_acc=0.9708 survival@99=9.15e-01
+Epoch 33/50: train_loss=0.2706 train_acc=0.9130 test_acc=0.9727 survival@99=8.85e-01
+Epoch 34/50: train_loss=0.2699 train_acc=0.9130 test_acc=0.9753 survival@99=8.99e-01
+Epoch 35/50: train_loss=0.2694 train_acc=0.9132 test_acc=0.9732 survival@99=9.19e-01
+Epoch 36/50: train_loss=0.2686 train_acc=0.9134 test_acc=0.9740 survival@99=8.86e-01
+Epoch 37/50: train_loss=0.2679 train_acc=0.9137 test_acc=0.9772 survival@99=9.13e-01
+Epoch 38/50: train_loss=0.2676 train_acc=0.9136 test_acc=0.9777 survival@99=9.00e-01
+Epoch 39/50: train_loss=0.2671 train_acc=0.9145 test_acc=0.9741 survival@99=9.06e-01
+Epoch 40/50: train_loss=0.2660 train_acc=0.9142 test_acc=0.9759 survival@99=9.09e-01
+Epoch 41/50: train_loss=0.2658 train_acc=0.9142 test_acc=0.9760 survival@99=8.92e-01
+Epoch 42/50: train_loss=0.2652 train_acc=0.9145 test_acc=0.9782 survival@99=8.97e-01
+Epoch 43/50: train_loss=0.2655 train_acc=0.9150 test_acc=0.9768 survival@99=8.93e-01
+Epoch 44/50: train_loss=0.2651 train_acc=0.9143 test_acc=0.9778 survival@99=9.00e-01
+Epoch 45/50: train_loss=0.2646 train_acc=0.9148 test_acc=0.9775 survival@99=9.03e-01
+Epoch 46/50: train_loss=0.2646 train_acc=0.9145 test_acc=0.9768 survival@99=9.02e-01
+Epoch 47/50: train_loss=0.2652 train_acc=0.9147 test_acc=0.9773 survival@99=9.03e-01
+Epoch 48/50: train_loss=0.2645 train_acc=0.9146 test_acc=0.9765 survival@99=8.96e-01
+Epoch 49/50: train_loss=0.2643 train_acc=0.9149 test_acc=0.9758 survival@99=9.06e-01
+Epoch 50/50: train_loss=0.2643 train_acc=0.9146 test_acc=0.9759 survival@99=8.96e-01
+
+Best survival @ 99% gamma eff: 8.07e-01
+Saved (35751 scores)

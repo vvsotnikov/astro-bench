@@ -82,12 +82,30 @@ Trend: Better suppression at higher energies (as expected — shower features be
 
 3. **No physics-informed feature engineering**: The model learns from raw matrices, not hand-crafted muon statistics or energy-normalized features.
 
+## Ablation Studies
+
+Tried 3 variants to improve upon 0.836:
+
+| Variant | Epochs | Architecture | Survival | Δ |
+|---------|--------|--------------|----------|---|
+| **MLP baseline** | 30 | 517→512→512→2 | **0.836** | — |
+| Longer training | 50 | Same | 0.807 | -0.029 |
+| CNN | 40 | CNN(2 ch) + MLP fusion | 0.802 | -0.034 |
+
+**Key finding**: Longer training and CNN both hurt performance. The simple 30-epoch MLP was optimal — a Goldilocks solution.
+
+Hypothesis: The CNN's fusion layer may not be optimal for this task. The simple flattened MLP with class weighting already captures the physics (muon suppression = gamma signature). CNNs might be helpful for *spatial* features, but the flattened approach already sees the full detector.
+
 ## Files
 
-- `train.py` — Training script (copy of baseline with path fixes)
-- `predictions.npz` — Test set gamma scores (35,751 values)
-- `metrics_gamma.json` — Detailed evaluation metrics
-- `results.tsv` — Summary of experiments
+- `train.py` — Best training script (30 epochs MLP) [FINAL SUBMISSION]
+- `train_v2_longer.py` — Extended training (50 epochs, worse result)
+- `train_cnn_simple.py` — CNN variant (worse result)
+- `predictions.npz` — Test set gamma scores for best model (35,751 values)
+- `predictions_v2.npz` — V2 (longer, worse)
+- `predictions_cnn.npz` — CNN variant (worse)
+- `metrics_gamma.json` — Detailed evaluation for best model
+- `results.tsv` — Summary of all experiments
 - `README.md` — This file
 
 ## Future Improvements
