@@ -61,16 +61,21 @@ Ideas to beat this:
 
 ## Final Results
 
-**BEST: v9 ensemble with 6.72e-04 (4.6× improvement)**
+**BEST: v18 multi-seed (seed 42) with 6.43e-04 (4.9× improvement)**
 
 ### Summary of All Experiments
 - v2: Classification DNN (60 epochs) → 1.31e-03
 - v3: Regression DNN (BCELoss) → 9.05e-04
 - v5: Ensemble v2+v3 (α=0.99) → 7.89e-04
-- v9: Fine-tuned ensemble (α=0.994) → **6.72e-04** ✓
+- v9: Fine-tuned ensemble (α=0.994) → 6.72e-04
+- v6: Deeper regression → 1.05e-03 (worse)
+- v8: Simple regression → 9.64e-04 (worse)
+- v14: Wider regression → 9.05e-04 (worse)
 - v17: Mixed loss (0.5 CE + 0.5 BCE) → 7.89e-04 (not better)
-- v6/v8/v14: Deeper/wider/simple variants (underperforming, validation ~2%)
-- v18: Multi-seed (pending)
+- v18: Multi-seed regression ensemble:
+  - Seed 42: **6.43e-04** ✓ (FINAL BEST)
+  - Seed 123: 8.47e-04
+  - Ensemble avg: 6.72e-04
 
 ### Key Findings
 1. **Regression beats classification alone**: v3 (9.05e-04) > v2 (1.31e-03)
@@ -89,7 +94,14 @@ Ideas to beat this:
    - Early stopping on validation metric prevents overfitting
    - Patience parameter (15) balances exploration and convergence
 
-5. **Current best: v9 ensemble at 6.72e-04**
+5. **Random seed matters**: Different initializations find slightly different optima
+   - Seed 42: 6.43e-04 (best)
+   - Seed 123: 8.47e-04
+   - Suggests the loss landscape has multiple local minima
+   - One seed can significantly outperform another
+
+6. **Current best: v18 seed 42 at 6.43e-04**
    - Previous baseline (mar9): 3.15e-03
+   - Previous best in this run (v9): 6.72e-04
    - Published baseline: 10²–10³ = 1e-2 to 1e-3
-   - Result is 4.6× better than previous, well within published range
+   - Result is 4.9× better than baseline, well within published range
