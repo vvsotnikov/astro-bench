@@ -10,7 +10,7 @@ Two tasks, two leaderboards. Read the full challenge description: [challenge.md]
 
 Classify cosmic ray primaries into proton, helium, carbon, silicon, iron.
 
-| Rank | Accuracy | Author | Agent? | Architecture | Link |
+| Rank | Accuracy ↑ | Author | Agent? | Architecture | Link |
 |------|----------|--------|--------|--------------|------|
 | — | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
 | — | 50.86% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [haiku-mar8/](submissions/haiku-mar8/) |
@@ -21,8 +21,8 @@ Classify cosmic ray primaries into proton, helium, carbon, silicon, iron.
 
 Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival rate at 99% gamma efficiency (lower is better).
 
-| Rank | Survival rate | Author | Agent? | Architecture | Link |
-|------|---------------|--------|--------|--------------|------|
+| Rank | Survival rate ↓ | Author | Agent? | Architecture | Link |
+|------|-----------------|--------|--------|--------------|------|
 | — | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
 | — | 7.8×10⁻¹ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [baselines/](submissions/baselines/) |
 | — | 8.4×10⁻¹ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [haiku-gamma-mar8/](submissions/haiku-gamma-mar8/) |
