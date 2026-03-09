@@ -1,0 +1,17 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+=== Training Baseline Regression MLP ===
+MLP survival @ 75%: 6.4258e-04
+
+=== Loading Attention CNN Predictions ===
+CNN survival @ 75%: 5.8416e-04
+
+============================================================
+Ensemble (0.5 * MLP + 0.5 * CNN) @ 75%: 5.8416e-04
+
+---
+metric: 5.8416e-04
+description: Ensemble of Attention CNN (v3) + Regression MLP (equal weights)

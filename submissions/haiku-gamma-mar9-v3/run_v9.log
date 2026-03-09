@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training attention CNN with engineered features...
+Epoch  1: loss=0.1165 val_surv@75=2.0185e-02
+Epoch  6: loss=0.0754 val_surv@75=1.7800e-02
+Epoch 11: loss=0.0731 val_surv@75=9.5355e-02
+Epoch 16: loss=0.0715 val_surv@75=1.5423e-02
+Epoch 21: loss=0.0699 val_surv@75=1.4315e-02
+Epoch 26: loss=0.0687 val_surv@75=1.5039e-02
+Running inference...
+
+---
+metric: 3.5050e-04
+description: Attention CNN + engineered features (Ne-Nmu, angles)

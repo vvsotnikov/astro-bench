@@ -1,0 +1,10 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training deeper attention CNN...
+Epoch  1: loss=0.1148 val_surv@75=2.1759e-02
+Epoch  6: loss=0.0740 val_surv@75=2.3481e-02
+Epoch 11: loss=0.0719 val_surv@75=1.5722e-02
+Epoch 16: loss=0.0695 val_surv@75=1.6806e-02
+Epoch 21: loss=0.0667 val_surv@75=1.5173e-02
