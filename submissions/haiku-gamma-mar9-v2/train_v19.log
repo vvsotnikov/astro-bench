@@ -1,0 +1,34 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+Model params: 81,265
+
+Training CNN...
+Epoch  1: loss=0.1356 val_surv@75=3.1416e-02 lr=0.000499
+Epoch  3: loss=0.0877 val_surv@75=2.1658e-02 lr=0.000493
+Epoch  5: loss=0.0835 val_surv@75=2.0681e-02 lr=0.000481
+Epoch  7: loss=0.0810 val_surv@75=1.9096e-02 lr=0.000463
+Epoch  9: loss=0.0798 val_surv@75=1.8499e-02 lr=0.000440
+Epoch 11: loss=0.0785 val_surv@75=1.7751e-02 lr=0.000412
+Epoch 13: loss=0.0773 val_surv@75=1.7469e-02 lr=0.000381
+Epoch 15: loss=0.0765 val_surv@75=1.7181e-02 lr=0.000346
+Epoch 17: loss=0.0762 val_surv@75=1.7363e-02 lr=0.000308
+Epoch 19: loss=0.0755 val_surv@75=1.7051e-02 lr=0.000270
+Epoch 21: loss=0.0749 val_surv@75=1.6694e-02 lr=0.000230
+Epoch 23: loss=0.0743 val_surv@75=1.6677e-02 lr=0.000192
+Epoch 25: loss=0.0740 val_surv@75=1.6725e-02 lr=0.000154
+Epoch 27: loss=0.0735 val_surv@75=1.6526e-02 lr=0.000119
+Epoch 29: loss=0.0732 val_surv@75=1.6550e-02 lr=0.000088
+Epoch 31: loss=0.0729 val_surv@75=1.6413e-02 lr=0.000060
+Epoch 33: loss=0.0727 val_surv@75=1.6228e-02 lr=0.000037
+Epoch 35: loss=0.0725 val_surv@75=1.6272e-02 lr=0.000019
+Epoch 37: loss=0.0725 val_surv@75=1.6262e-02 lr=0.000007
+Epoch 39: loss=0.0724 val_surv@75=1.6262e-02 lr=0.000001
+
+Inference on test set...
+Test survival @ 75% gamma eff: 7.0100e-04
+
+---
+metric: 7.0100e-04
+description: CNN on 16x16x2 matrices + MLP on features

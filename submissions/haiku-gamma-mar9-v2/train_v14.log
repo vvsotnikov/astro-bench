@@ -1,0 +1,52 @@
+Device: cuda:0
+
+Loading data...
+  Training: 1530715 events
+Computing normalization...
+Model params: 2,110,465
+
+Training wide regression DNN...
+Epoch  1: loss=0.1226 val_surv@75=3.1069e-02 lr=0.000500
+Epoch  2: loss=0.0890 val_surv@75=2.7460e-02 lr=0.000498
+Epoch  3: loss=0.0856 val_surv@75=2.4605e-02 lr=0.000496
+Epoch  4: loss=0.0839 val_surv@75=2.4129e-02 lr=0.000492
+Epoch  5: loss=0.0825 val_surv@75=2.3689e-02 lr=0.000488
+Epoch  6: loss=0.0811 val_surv@75=2.2396e-02 lr=0.000482
+Epoch  7: loss=0.0804 val_surv@75=2.2725e-02 lr=0.000476
+Epoch  8: loss=0.0797 val_surv@75=2.1415e-02 lr=0.000469
+Epoch  9: loss=0.0788 val_surv@75=2.1995e-02 lr=0.000461
+Epoch 10: loss=0.0777 val_surv@75=2.2321e-02 lr=0.000452
+Epoch 11: loss=0.0770 val_surv@75=2.1751e-02 lr=0.000443
+Epoch 12: loss=0.0764 val_surv@75=2.0928e-02 lr=0.000432
+Epoch 13: loss=0.0758 val_surv@75=2.0646e-02 lr=0.000421
+Epoch 14: loss=0.0751 val_surv@75=2.1003e-02 lr=0.000409
+Epoch 15: loss=0.0746 val_surv@75=2.0482e-02 lr=0.000397
+Epoch 16: loss=0.0733 val_surv@75=2.0338e-02 lr=0.000384
+Epoch 17: loss=0.0727 val_surv@75=2.0935e-02 lr=0.000370
+Epoch 18: loss=0.0720 val_surv@75=2.0499e-02 lr=0.000356
+Epoch 19: loss=0.0711 val_surv@75=2.0211e-02 lr=0.000342
+Epoch 20: loss=0.0704 val_surv@75=2.0725e-02 lr=0.000327
+Epoch 21: loss=0.0697 val_surv@75=2.0101e-02 lr=0.000312
+Epoch 22: loss=0.0688 val_surv@75=2.0482e-02 lr=0.000297
+Epoch 23: loss=0.0678 val_surv@75=2.0911e-02 lr=0.000281
+Epoch 24: loss=0.0673 val_surv@75=2.0639e-02 lr=0.000266
+Epoch 25: loss=0.0665 val_surv@75=2.0825e-02 lr=0.000250
+Epoch 26: loss=0.0657 val_surv@75=2.0746e-02 lr=0.000234
+Epoch 27: loss=0.0649 val_surv@75=2.0869e-02 lr=0.000219
+Epoch 28: loss=0.0642 val_surv@75=2.0832e-02 lr=0.000203
+Epoch 29: loss=0.0635 val_surv@75=2.0777e-02 lr=0.000188
+Epoch 30: loss=0.0626 val_surv@75=2.0664e-02 lr=0.000173
+Epoch 31: loss=0.0620 val_surv@75=2.1182e-02 lr=0.000158
+Epoch 32: loss=0.0614 val_surv@75=2.0664e-02 lr=0.000144
+Epoch 33: loss=0.0610 val_surv@75=2.0413e-02 lr=0.000130
+Epoch 34: loss=0.0603 val_surv@75=2.0159e-02 lr=0.000116
+Epoch 35: loss=0.0598 val_surv@75=2.0684e-02 lr=0.000103
+Epoch 36: loss=0.0593 val_surv@75=2.0914e-02 lr=0.000091
+Early stopping
+
+Inference on test set...
+Test survival @ 75% gamma eff: 9.0545e-04
+
+---
+metric: 9.0545e-04
+description: Wider regression DNN (1024→1024→512→1)

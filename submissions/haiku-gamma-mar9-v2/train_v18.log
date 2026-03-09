@@ -1,0 +1,28 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+=== Seed 42 ===
+Epoch  1: loss=0.1192 val_surv@75=3.0826e-02
+Epoch  6: loss=0.0840 val_surv@75=2.2977e-02
+Epoch 11: loss=0.0803 val_surv@75=2.1457e-02
+Epoch 16: loss=0.0774 val_surv@75=2.0401e-02
+Epoch 21: loss=0.0747 val_surv@75=2.0137e-02
+Epoch 26: loss=0.0729 val_surv@75=1.9948e-02
+Test survival @ 75% gamma eff: 6.4258e-04
+
+=== Seed 123 ===
+Epoch  1: loss=0.1259 val_surv@75=3.2002e-02
+Epoch  6: loss=0.0840 val_surv@75=2.3972e-02
+Epoch 11: loss=0.0804 val_surv@75=2.2703e-02
+Epoch 16: loss=0.0773 val_surv@75=2.1763e-02
+Epoch 21: loss=0.0746 val_surv@75=2.0844e-02
+Epoch 26: loss=0.0728 val_surv@75=2.0851e-02
+Test survival @ 75% gamma eff: 8.4704e-04
+
+Ensemble of 2 seeds: 6.7179e-04
+
+---
+metric: 6.7179e-04
+description: Average ensemble of 2 regression models

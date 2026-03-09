@@ -1,0 +1,11 @@
+Training 3-model ensemble with different splits...
+
+v21_seed2026: 9.6387e-04
+v21_seed1234: 8.1783e-04
+v21_seed5678: 8.4704e-04
+
+Ensemble average: 7.8862e-04
+
+---
+metric: 7.8862e-04
+description: Ensemble of 3 regression DNNs with different train/val splits

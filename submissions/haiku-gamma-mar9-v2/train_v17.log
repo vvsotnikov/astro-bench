@@ -1,0 +1,40 @@
+Device: cuda:0
+
+Loading data...
+  Training: 1530715 events
+Computing normalization...
+Model params: 662,531
+
+Training mixed loss DNN...
+Epoch  1: loss=0.1393 val_surv@75=3.4634e-02 lr=0.000500
+Epoch  3: loss=0.1000 val_surv@75=2.8256e-02 lr=0.000496
+Epoch  5: loss=0.0969 val_surv@75=2.6084e-02 lr=0.000488
+Epoch  7: loss=0.0944 val_surv@75=2.3607e-02 lr=0.000476
+Epoch  9: loss=0.0928 val_surv@75=2.3480e-02 lr=0.000461
+Epoch 11: loss=0.0907 val_surv@75=2.3477e-02 lr=0.000443
+Epoch 13: loss=0.0883 val_surv@75=2.1538e-02 lr=0.000421
+Epoch 15: loss=0.0862 val_surv@75=2.1206e-02 lr=0.000397
+Epoch 17: loss=0.0835 val_surv@75=2.1998e-02 lr=0.000370
+Epoch 19: loss=0.0816 val_surv@75=2.1614e-02 lr=0.000342
+Epoch 21: loss=0.0788 val_surv@75=2.1573e-02 lr=0.000312
+Epoch 23: loss=0.0773 val_surv@75=2.1466e-02 lr=0.000281
+Epoch 25: loss=0.0755 val_surv@75=2.1116e-02 lr=0.000250
+Epoch 27: loss=0.0736 val_surv@75=2.1031e-02 lr=0.000219
+Epoch 29: loss=0.0725 val_surv@75=2.0838e-02 lr=0.000188
+Epoch 31: loss=0.0706 val_surv@75=2.0931e-02 lr=0.000158
+Epoch 33: loss=0.0696 val_surv@75=2.0797e-02 lr=0.000130
+Epoch 35: loss=0.0684 val_surv@75=2.0612e-02 lr=0.000103
+Epoch 37: loss=0.0675 val_surv@75=2.0372e-02 lr=0.000079
+Epoch 39: loss=0.0666 val_surv@75=2.0437e-02 lr=0.000057
+Epoch 41: loss=0.0658 val_surv@75=2.0979e-02 lr=0.000039
+Epoch 43: loss=0.0652 val_surv@75=2.0471e-02 lr=0.000024
+Epoch 45: loss=0.0649 val_surv@75=2.0303e-02 lr=0.000012
+Epoch 47: loss=0.0644 val_surv@75=2.0543e-02 lr=0.000004
+Epoch 49: loss=0.0649 val_surv@75=2.0468e-02 lr=0.000000
+
+Inference on test set...
+Test survival @ 75% gamma eff: 7.8862e-04
+
+---
+metric: 7.8862e-04
+description: Mixed loss (0.5 CrossEntropy + 0.5 BCELoss)
