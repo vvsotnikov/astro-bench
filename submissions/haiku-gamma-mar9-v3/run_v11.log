@@ -6,3 +6,13 @@ Loading data and computing statistics...
 Test survival @ 75%: 6.1337e-04
 
 === Seed 123 ===
+Test survival @ 75%: 4.6733e-04
+
+=== Seed 256 ===
+Test survival @ 75%: 4.9654e-04
+
+Ensemble of 3 seeds: 4.9654e-04
+
+---
+metric: 4.9654e-04
+description: Attention CNN with multi-seed ensemble (3 seeds)

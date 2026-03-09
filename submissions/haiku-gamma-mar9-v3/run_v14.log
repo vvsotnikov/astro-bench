@@ -1,0 +1,11 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+
+=== Seed 42 ===
+Test survival @ 75%: 4.3812e-04
+
+=== Seed 100 ===
+Test survival @ 75%: 6.4258e-04
+
+=== Seed 200 ===

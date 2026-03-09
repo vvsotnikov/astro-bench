@@ -3,3 +3,17 @@ Device: cuda:0
 Loading data and computing statistics...
 
 === Learning Rate: 0.0005 ===
+Test survival @ 75%: 4.6733e-04
+
+=== Learning Rate: 0.001 ===
+Test survival @ 75%: 3.5050e-04
+
+=== Learning Rate: 0.002 ===
+Test survival @ 75%: 5.2575e-04
+
+============================================================
+Best learning rate: 0.001 with survival 3.5050e-04
+
+---
+metric: 3.5050e-04
+description: Attention CNN with LR tuning (best lr=0.001)
