@@ -1,0 +1,2 @@
+experiment	survival_rate	description
+v1_baseline_copy	0.836	Baseline MLP with CrossEntropyLoss + class weights, 30 epochs
