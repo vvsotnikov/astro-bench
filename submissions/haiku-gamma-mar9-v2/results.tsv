@@ -12,4 +12,8 @@ v6_deeper	1.05e-03	discard	Deeper regression (1024→1024→1024→512→256→1
 v8_simple	9.64e-04	discard	Simple regression (512→512→256→1), 80 epochs
 v14_wide	9.05e-04	discard	Wider regression (1024→1024→512→1)
 v18_multiseed	6.72e-04	keep	Multi-seed ensemble (2 seeds average)
-v18_seed42	6.43e-04	keep	Multi-seed seed 42 alone - FINAL BEST
+v18_seed42	6.43e-04	keep	Multi-seed seed 42 alone - BEST
+v19_cnn	7.01e-04	keep	CNN on 16x16x2 matrices + MLP on features
+v20_energy	8.47e-04	discard	Energy-binned regression models
+v21_ensemble3	7.89e-04	discard	Ensemble of 3 regression DNNs with different splits
+v22_highcap	8.18e-04	discard	High-capacity DNN (2048→2048→1024→512→256)
