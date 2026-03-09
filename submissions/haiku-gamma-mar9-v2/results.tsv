@@ -8,7 +8,7 @@ v11_logit	9.05e-04	discard	Rank-based ensemble (worse)
 v15_rankbased	8.76e-04	discard	Rank-based (worse)
 v16_weighted	6.72e-04	discard	Confidence-weighted (same)
 v17_mixed	7.89e-04	discard	Mixed loss (0.5 CE + 0.5 BCE)
-v6_deeper	pending	pending	Deeper regression (3.3M params)
-v8_simple	pending	pending	Simple regression (80 epochs)
-v14_wide	pending	pending	Wider regression (1024→1024→512→1)
-v18_multiseed	pending	pending	Multi-seed ensemble
+v6_deeper	1.05e-03	discard	Deeper regression (1024→1024→1024→512→256→1)
+v8_simple	9.64e-04	discard	Simple regression (512→512→256→1), 80 epochs
+v14_wide	9.05e-04	discard	Wider regression (1024→1024→512→1)
+v18_multiseed	pending	pending	Multi-seed ensemble (2 seeds, still training)
