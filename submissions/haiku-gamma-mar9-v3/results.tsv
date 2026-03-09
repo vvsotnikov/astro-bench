@@ -1,8 +1,12 @@
 experiment	metric	status	description
 v1_seed_exploration	6.4258e-04	keep	20-seed exploration, best=seed 42
 v2_xgboost	pending	pending	XGBoost gradient boosting (still running)
-v3_attention_cnn	5.8416e-04	keep	Attention CNN on 16x16x2 matrices + MLP on features
+v3_attention_cnn	5.8416e-04	keep	Attention CNN on 16x16x2 matrices + MLP on features - BEST
 v4_cv_ensemble	7.5941e-04	discard	5-fold CV ensemble - worse than baseline
 v5_svm_features	pending	pending	SVM RBF on engineered features (still running)
 v6_logistic	5.9000e-03	discard	Logistic Regression on 15 features - much worse
 v7_calibration	pending	pending	Regression DNN + Platt scaling (still running)
+v8_deeper_attention	pending	pending	Deeper attention CNN with 4 attention blocks (still running)
+v9_attention_features	pending	pending	Attention CNN + engineered features (still running)
+v10_ensemble_cnn_mlp	5.8416e-04	keep	Ensemble of v3 (CNN) + Regression MLP (0.5 each)
+v11_multiseed_best	pending	pending	Attention CNN with multi-seed ensemble (still running)
