@@ -1,0 +1,18 @@
+Generating validation predictions from v2 and v3...
+v2 shape: (35751,)
+v3 shape: (35751,)
+
+Training meta-learner...
+Epoch  1: train_loss=0.8083 val_loss=0.7470
+Epoch  6: train_loss=0.1035 val_loss=0.0776
+Epoch 11: train_loss=0.0535 val_loss=0.0490
+Epoch 16: train_loss=0.0506 val_loss=0.0481
+Epoch 21: train_loss=0.0498 val_loss=0.0482
+Epoch 26: train_loss=0.0495 val_loss=0.0481
+
+Generating final predictions...
+Test survival @ 75% gamma eff: 9.3466e-04
+
+---
+metric: 9.3466e-04
+description: Stacking meta-learner on v2+v3+physics

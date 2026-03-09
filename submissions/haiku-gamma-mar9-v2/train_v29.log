@@ -1,0 +1,39 @@
+Searching for optimal temperature scaling...
+temp=0.50: surv=6.7179e-04
+temp=0.55: surv=6.7179e-04
+temp=0.60: surv=6.7179e-04
+temp=0.65: surv=6.7179e-04
+temp=0.70: surv=6.7179e-04
+temp=0.75: surv=6.7179e-04
+temp=0.80: surv=6.7179e-04
+temp=0.85: surv=6.7179e-04
+temp=0.90: surv=6.7179e-04
+temp=0.95: surv=6.7179e-04
+temp=1.00: surv=6.7179e-04
+temp=1.05: surv=6.7179e-04
+temp=1.10: surv=6.7179e-04
+temp=1.15: surv=6.7179e-04
+temp=1.20: surv=6.7179e-04
+temp=1.25: surv=6.7179e-04
+temp=1.30: surv=6.7179e-04
+temp=1.35: surv=6.7179e-04
+temp=1.40: surv=6.7179e-04
+temp=1.45: surv=6.7179e-04
+temp=1.50: surv=6.7179e-04
+temp=1.55: surv=6.7179e-04
+temp=1.60: surv=6.7179e-04
+temp=1.65: surv=6.7179e-04
+temp=1.70: surv=6.7179e-04
+temp=1.75: surv=6.7179e-04
+temp=1.80: surv=6.7179e-04
+temp=1.85: surv=6.7179e-04
+temp=1.90: surv=6.7179e-04
+temp=1.95: surv=6.7179e-04
+temp=2.00: surv=6.7179e-04
+
+Best temperature: 1.00
+Best survival: 6.7179e-04
+
+---
+metric: 6.7179e-04
+description: Temperature scaling on v18_seed42 (T=1.00)

@@ -1,0 +1,10 @@
+Device: cuda:0
+
+Loading data...
+Training: 1224572 events
+Model params: 662,017
+
+Training regression DNN with augmentation...
+Epoch  1: loss=0.1206 val_surv@75=3.0390e-02
+Epoch 11: loss=0.0810 val_surv@75=2.1446e-02
+Epoch 21: loss=0.0783 val_surv@75=1.9648e-02
