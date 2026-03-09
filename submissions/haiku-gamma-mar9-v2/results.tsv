@@ -3,7 +3,7 @@ v1_reweight	3.15e-03	discard	Re-optimized ensemble (α=1.00 = pure DNN)
 v2_longer	1.31e-03	keep	DNN 60 epochs, higher dropout, classification
 v3_regression	9.05e-04	keep	Regression DNN (BCELoss)
 v5_ensemble23	7.89e-04	keep	Ensemble v2+v3 (α=0.99)
-v9_finetuned	6.72e-04	keep	Fine-tuned ensemble v2+v3 (α=0.994) - FINAL BEST
+v9_finetuned	6.72e-04	keep	Fine-tuned ensemble v2+v3 (α=0.994)
 v11_logit	9.05e-04	discard	Rank-based ensemble (worse)
 v15_rankbased	8.76e-04	discard	Rank-based (worse)
 v16_weighted	6.72e-04	discard	Confidence-weighted (same)
@@ -11,4 +11,5 @@ v17_mixed	7.89e-04	discard	Mixed loss (0.5 CE + 0.5 BCE)
 v6_deeper	1.05e-03	discard	Deeper regression (1024→1024→1024→512→256→1)
 v8_simple	9.64e-04	discard	Simple regression (512→512→256→1), 80 epochs
 v14_wide	9.05e-04	discard	Wider regression (1024→1024→512→1)
-v18_multiseed	pending	pending	Multi-seed ensemble (2 seeds, still training)
+v18_multiseed	6.72e-04	keep	Multi-seed ensemble (2 seeds average)
+v18_seed42	6.43e-04	keep	Multi-seed seed 42 alone - FINAL BEST
