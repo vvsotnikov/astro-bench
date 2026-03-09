@@ -1,0 +1,9 @@
+Device: cuda:0
+
+Loading data...
+  Training: 1530715 events
+Computing normalization...
+Model params: 2,110,465
+
+Training wide regression DNN...
+Epoch  1: loss=0.1226 val_surv@75=3.1069e-02 lr=0.000500

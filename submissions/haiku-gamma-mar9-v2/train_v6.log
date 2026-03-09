@@ -13,3 +13,17 @@ Epoch  4: loss=0.0850 val_surv@75=2.4520e-02 lr=0.000492
 Epoch  5: loss=0.0837 val_surv@75=2.3611e-02 lr=0.000488
 Epoch  6: loss=0.0827 val_surv@75=2.2602e-02 lr=0.000482
 Epoch  7: loss=0.0816 val_surv@75=2.2650e-02 lr=0.000476
+Epoch  8: loss=0.0809 val_surv@75=2.1827e-02 lr=0.000469
+Epoch  9: loss=0.0802 val_surv@75=2.2039e-02 lr=0.000461
+Epoch 10: loss=0.0795 val_surv@75=2.2180e-02 lr=0.000452
+Epoch 11: loss=0.0790 val_surv@75=2.1322e-02 lr=0.000443
+Epoch 12: loss=0.0783 val_surv@75=2.1408e-02 lr=0.000432
+Epoch 13: loss=0.0778 val_surv@75=2.0883e-02 lr=0.000421
+Epoch 14: loss=0.0773 val_surv@75=2.0578e-02 lr=0.000409
+Epoch 15: loss=0.0768 val_surv@75=2.0399e-02 lr=0.000397
+Epoch 16: loss=0.0761 val_surv@75=2.0931e-02 lr=0.000384
+Epoch 17: loss=0.0756 val_surv@75=2.0166e-02 lr=0.000370
+Epoch 18: loss=0.0751 val_surv@75=1.9940e-02 lr=0.000356
+Epoch 19: loss=0.0747 val_surv@75=1.9946e-02 lr=0.000342
+Epoch 20: loss=0.0740 val_surv@75=2.0060e-02 lr=0.000327
+Epoch 21: loss=0.0736 val_surv@75=1.9833e-02 lr=0.000312
