@@ -1,0 +1,11 @@
+Device: cuda:0
+
+Loading data...
+Training energy-binned models for 6 bins
+
+=== Bin 1: E ∈ [14.0, 15.0) ===
+Train: 1200721, Test: 5850
+Test scores for bin: 1.0632e-02
+
+=== Bin 2: E ∈ [15.0, 15.5) ===
+Train: 168914, Test: 18793
