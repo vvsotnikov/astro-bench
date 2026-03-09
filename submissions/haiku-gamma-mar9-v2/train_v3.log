@@ -1,0 +1,55 @@
+Device: cuda:0
+
+Loading data...
+  Training: 1530715 events
+Computing normalization...
+Model params: 662,017
+
+Training regression DNN...
+Epoch  1: loss=0.1158 val_surv@75=2.9415e-02 lr=0.000998
+Epoch  2: loss=0.0889 val_surv@75=2.6506e-02 lr=0.000994
+Epoch  3: loss=0.0859 val_surv@75=2.5943e-02 lr=0.000986
+Epoch  4: loss=0.0845 val_surv@75=2.4156e-02 lr=0.000976
+Epoch  5: loss=0.0828 val_surv@75=2.2804e-02 lr=0.000962
+Epoch  6: loss=0.0810 val_surv@75=2.2183e-02 lr=0.000946
+Epoch  7: loss=0.0806 val_surv@75=2.1988e-02 lr=0.000926
+Epoch  8: loss=0.0797 val_surv@75=2.1730e-02 lr=0.000905
+Epoch  9: loss=0.0790 val_surv@75=2.1041e-02 lr=0.000880
+Epoch 10: loss=0.0785 val_surv@75=2.0794e-02 lr=0.000854
+Epoch 11: loss=0.0778 val_surv@75=2.1679e-02 lr=0.000825
+Epoch 12: loss=0.0771 val_surv@75=2.0595e-02 lr=0.000794
+Epoch 13: loss=0.0762 val_surv@75=2.0876e-02 lr=0.000761
+Epoch 14: loss=0.0759 val_surv@75=2.0674e-02 lr=0.000727
+Epoch 15: loss=0.0751 val_surv@75=1.9796e-02 lr=0.000691
+Epoch 16: loss=0.0745 val_surv@75=2.0598e-02 lr=0.000655
+Epoch 17: loss=0.0740 val_surv@75=2.0478e-02 lr=0.000617
+Epoch 18: loss=0.0736 val_surv@75=1.9912e-02 lr=0.000578
+Epoch 19: loss=0.0727 val_surv@75=2.0368e-02 lr=0.000539
+Epoch 20: loss=0.0724 val_surv@75=1.9844e-02 lr=0.000500
+Epoch 21: loss=0.0718 val_surv@75=1.9710e-02 lr=0.000461
+Epoch 22: loss=0.0711 val_surv@75=2.0173e-02 lr=0.000422
+Epoch 23: loss=0.0704 val_surv@75=2.0183e-02 lr=0.000383
+Epoch 24: loss=0.0702 val_surv@75=2.0334e-02 lr=0.000345
+Epoch 25: loss=0.0692 val_surv@75=1.9981e-02 lr=0.000309
+Epoch 26: loss=0.0689 val_surv@75=1.9960e-02 lr=0.000273
+Epoch 27: loss=0.0682 val_surv@75=1.9960e-02 lr=0.000239
+Epoch 28: loss=0.0674 val_surv@75=1.9651e-02 lr=0.000206
+Epoch 29: loss=0.0671 val_surv@75=1.9476e-02 lr=0.000175
+Epoch 30: loss=0.0666 val_surv@75=2.0104e-02 lr=0.000146
+Epoch 31: loss=0.0663 val_surv@75=1.9998e-02 lr=0.000120
+Epoch 32: loss=0.0657 val_surv@75=1.9871e-02 lr=0.000095
+Epoch 33: loss=0.0657 val_surv@75=1.9717e-02 lr=0.000074
+Epoch 34: loss=0.0655 val_surv@75=1.9638e-02 lr=0.000054
+Epoch 35: loss=0.0650 val_surv@75=1.9957e-02 lr=0.000038
+Epoch 36: loss=0.0648 val_surv@75=1.9744e-02 lr=0.000024
+Epoch 37: loss=0.0646 val_surv@75=2.0128e-02 lr=0.000014
+Epoch 38: loss=0.0646 val_surv@75=1.9720e-02 lr=0.000006
+Epoch 39: loss=0.0647 val_surv@75=1.9919e-02 lr=0.000002
+Epoch 40: loss=0.0646 val_surv@75=1.9796e-02 lr=0.000000
+
+Inference on test set...
+Test survival @ 75% gamma eff: 9.0545e-04
+
+---
+metric: 9.0545e-04
+description: Regression-based DNN (BCELoss, direct score output)

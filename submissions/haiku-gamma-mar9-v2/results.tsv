@@ -1,0 +1,4 @@
+experiment	metric	status	description
+v1_reweight	3.15e-03	discard	Re-optimized ensemble (α=1.00 = pure DNN)
+v2_longer	1.31e-03	keep	DNN with 60 epochs, higher dropout (0.3)
+v3_regression	9.05e-04	keep	Regression DNN with BCELoss, direct score output

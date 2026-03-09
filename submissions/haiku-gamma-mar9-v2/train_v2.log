@@ -1,0 +1,47 @@
+Device: cuda:0
+
+Loading data...
+  Training: 1530715 events
+Computing normalization...
+Model params: 662,274
+
+Class weights: gamma=9.95, hadron=0.03
+
+Training DNN...
+Epoch  1: loss=0.1357 val_surv@75=4.3485e-02 lr=0.000500
+Epoch  3: loss=0.1147 val_surv@75=3.5978e-02 lr=0.000497
+Epoch  5: loss=0.1117 val_surv@75=3.2023e-02 lr=0.000491
+Epoch  7: loss=0.1097 val_surv@75=3.0856e-02 lr=0.000483
+Epoch  9: loss=0.1080 val_surv@75=2.9944e-02 lr=0.000473
+Epoch 11: loss=0.1061 val_surv@75=2.9186e-02 lr=0.000460
+Epoch 13: loss=0.1043 val_surv@75=2.8465e-02 lr=0.000444
+Epoch 15: loss=0.1025 val_surv@75=2.8530e-02 lr=0.000427
+Epoch 17: loss=0.0993 val_surv@75=2.7594e-02 lr=0.000407
+Epoch 19: loss=0.0974 val_surv@75=2.7350e-02 lr=0.000386
+Epoch 21: loss=0.0948 val_surv@75=2.6671e-02 lr=0.000363
+Epoch 23: loss=0.0919 val_surv@75=2.6564e-02 lr=0.000340
+Epoch 25: loss=0.0900 val_surv@75=2.6345e-02 lr=0.000315
+Epoch 27: loss=0.0882 val_surv@75=2.5552e-02 lr=0.000289
+Epoch 29: loss=0.0862 val_surv@75=2.5501e-02 lr=0.000263
+Epoch 31: loss=0.0831 val_surv@75=2.4997e-02 lr=0.000237
+Epoch 33: loss=0.0825 val_surv@75=2.5443e-02 lr=0.000211
+Epoch 35: loss=0.0808 val_surv@75=2.4818e-02 lr=0.000185
+Epoch 37: loss=0.0792 val_surv@75=2.4647e-02 lr=0.000160
+Epoch 39: loss=0.0783 val_surv@75=2.4894e-02 lr=0.000137
+Epoch 41: loss=0.0770 val_surv@75=2.4389e-02 lr=0.000114
+Epoch 43: loss=0.0758 val_surv@75=2.4235e-02 lr=0.000093
+Epoch 45: loss=0.0750 val_surv@75=2.4441e-02 lr=0.000073
+Epoch 47: loss=0.0747 val_surv@75=2.3895e-02 lr=0.000056
+Epoch 49: loss=0.0734 val_surv@75=2.3960e-02 lr=0.000040
+Epoch 51: loss=0.0730 val_surv@75=2.3940e-02 lr=0.000027
+Epoch 53: loss=0.0727 val_surv@75=2.3686e-02 lr=0.000017
+Epoch 55: loss=0.0723 val_surv@75=2.3837e-02 lr=0.000009
+Epoch 57: loss=0.0721 val_surv@75=2.3875e-02 lr=0.000003
+Epoch 59: loss=0.0719 val_surv@75=2.3834e-02 lr=0.000000
+
+Inference on test set...
+Test survival @ 75% gamma eff: 1.3144e-03
+
+---
+metric: 1.3144e-03
+description: DNN with longer training (60 epochs, higher dropout)
