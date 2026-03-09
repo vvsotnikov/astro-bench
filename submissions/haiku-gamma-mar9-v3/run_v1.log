@@ -1,0 +1,27 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+Testing 20 seeds...
+
+[1/20] Seed 42
+  → Test survival @ 75%: 6.4258e-04
+[2/20] Seed 123
+  → Test survival @ 75%: 8.4704e-04
+[3/20] Seed 256
+  → Test survival @ 75%: 8.7624e-04
+[4/20] Seed 512
+  → Test survival @ 75%: 7.0100e-04
+[5/20] Seed 1024
+  → Test survival @ 75%: 7.5941e-04
+[6/20] Seed 2048
+  → Test survival @ 75%: 6.7179e-04
+[7/20] Seed 4096
+  → Test survival @ 75%: 7.3020e-04
+[8/20] Seed 8192
+  → Test survival @ 75%: 6.7179e-04
+[9/20] Seed 16384
+  → Test survival @ 75%: 8.7624e-04
+[10/20] Seed 32768
+  → Test survival @ 75%: 8.1783e-04
+[11/20] Seed 37

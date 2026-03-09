@@ -1,0 +1,14 @@
+Loading data...
+X_train shape: (1530715, 15)
+y_train distribution: [  73236 1457479]
+Train: (1224572, 15), Val: (306143, 15)
+Training Logistic Regression...
+Validation survival @ 75%: 5.9086e-02
+
+Generating test predictions...
+gamma_scores range: [0.0014, 1.0000]
+Test survival @ 75% gamma eff: 5.9000e-03
+
+---
+metric: 5.9000e-03
+description: Logistic Regression with 15 engineered features
