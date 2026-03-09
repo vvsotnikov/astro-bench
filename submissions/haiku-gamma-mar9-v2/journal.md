@@ -49,7 +49,19 @@ Ideas to beat this:
 ### v4: SVM on physics features (in progress)
 - Will try RBF kernel SVM on engineered features
 
+### v5: Ensemble v2+v3 (KEEP)
+- Approach: Linear combination of v2 (classification) and v3 (regression)
+- Result: 7.89e-04 (α=0.99, mostly v2)
+- Status: Improvement from pure v3
+
+### v9: Fine-tuned ensemble v2+v3 (BEST!)
+- Approach: Fine-grained search for optimal α around 0.99
+- Result: **6.72e-04** (α=0.994)
+- Status: Best so far, 4.6× better than baseline (3.15e-03)
+
 ## Key Findings
-1. **Regression beats classification**: BCELoss directly optimizes ranking, not decision boundary
-2. **Longer training helps**: 60 epochs with early stopping on validation metric
-3. **Current best: v3 regression at 9.05e-04** (was baseline 3.15e-03)
+1. **Regression beats classification alone**: v3 (9.05e-04) > v2 (1.31e-03)
+2. **But ensemble beats both**: v9 (6.72e-04) < min(v2, v3)
+3. **Fine-tuning matters**: α=0.994 better than 0.99
+4. **Longer training helps**: 60 epochs with early stopping on validation metric
+5. **Current best: v9 ensemble at 6.72e-04** (was baseline 3.15e-03)
