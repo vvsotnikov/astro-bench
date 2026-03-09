@@ -6,8 +6,9 @@ You are an autonomous ML researcher. Your goal: build the best possible classifi
 
 1. Read `challenge.md` for the full task description, data format, and physics background.
 2. Run `uv run python download_data.py` to get the data (if `data/` doesn't exist).
-3. Pick a task to work on (start with **composition** — 5-class mass classification).
-4. Create your working directory: `submissions/<run_tag>/` where `<run_tag>` is today's date (e.g. `mar8`).
+3. You will be assigned **one task**: either composition (5-class) or gamma/hadron (binary). Focus on that task only.
+4. Create your working directory: `submissions/<run_tag>/` where `<run_tag>` is your assigned tag.
+5. Create a git branch: `git checkout -b agent/<run_tag>` and work on it.
 
 ## Available tools
 
@@ -36,41 +37,99 @@ y_train = np.load('data/gamma_train/labels_gamma.npy', mmap_mode='r')     # (1.5
 Features: E (energy), Ze (zenith), Az (azimuth), Ne (electron number), Nmu (muon number).
 Matrix channels: electron/photon density + muon density on a 16×16 detector grid (~85% zeros, sparse).
 
+This is raw scientific data. Invest time in exploration and understanding before jumping to models:
+- **Explore the data first**: Look at distributions, correlations, class separability. Use numpy/matplotlib to understand what you're working with.
+- **Feature engineering matters**: The raw 5 features are just the starting point. Derived features (ratios, log transforms, trigonometric encodings) can be more informative than raw values.
+- **Data pipeline experiments count**: Normalization strategy, handling sparse matrices (log1p, clipping), quality cuts on training data — these are experiments too, log them.
+
 Test sets have quality cuts pre-applied (Ze<30, Ne>4.8, 0.2<Age<1.48). Train sets have no cuts — apply them or not as a modeling decision.
+
+## The metric
+
+Each task has ONE metric. Optimize it relentlessly.
+
+- **Composition**: accuracy (higher is better). Baseline: ~51% (published CNN, JINST 2024).
+- **Gamma/hadron**: hadronic survival rate @ 99% gamma efficiency (lower is better). Baseline: 10⁻²–10⁻³ (published RF, ICRC 2021). Save predictions as `gamma_scores` (float array, higher = more gamma-like).
 
 ## What to submit
 
 Your `submissions/<run_tag>/` directory must contain:
 1. `predictions.npz` — with key `predictions` (int array, classes 0-4) for composition, or `gamma_scores` (float array) for gamma task
-2. `train.py` (or equivalent) — your training code
+2. Training scripts — your code (multiple files are fine, different approaches get different files)
 3. `README.md` — what you tried, what worked, what didn't
+4. `results.tsv` — experiment log (see below)
+5. `journal.md` — your running research journal (see below)
 
 ## The experiment loop
 
 Work iteratively. Each cycle:
 
-1. **Think**: What architecture/approach should I try? Consider the data structure (small 16×16 images + scalar features).
-2. **Build**: Write or modify your training script.
-3. **Train**: Run training, redirect output to a log file: `uv run python train.py > run.log 2>&1`
-4. **Evaluate**: Run `uv run python verify.py submissions/<run_tag>/predictions.npz` and read the accuracy.
-5. **Log**: Record the result in `submissions/<run_tag>/results.tsv`:
+1. **Think**: Re-read your `journal.md` and `results.tsv`. What have you tried? What worked? What's the most promising direction? If you're stuck, re-read `challenge.md` and think about the physics.
+2. **Build**: Write or modify your training script. Multiple files are fine — different approaches get different scripts.
+3. **Train**: Run training, redirect ALL output to a log file: `uv run python train.py > run.log 2>&1`. Do NOT let output flood your context.
+4. **Extract results**: Your script should print a structured summary at the end:
    ```
-   experiment	accuracy	description
-   baseline_rf	0.2134	RandomForest on 5 features only
-   cnn_v1	0.3891	Simple CNN on 16x16x2 matrices
+   ---
+   metric: 0.5086
+   description: CNN v4 with feature engineering
    ```
-6. **Iterate**: If accuracy improved, keep the code. If not, revert and try something else.
+   Extract with: `grep "^metric:" run.log`
+5. **Evaluate**: Run `uv run python verify.py submissions/<run_tag>/predictions.npz` and read the result.
+6. **Log**: Record the result in `results.tsv` (see format below).
+7. **Journal**: Update `journal.md` with what you learned — especially failures and why they failed.
+8. **Decide**: Did the metric improve?
+   - **Yes → keep**: Commit the code: `git add -A && git commit -m "experiment: <description>"`
+   - **No → discard**: Log as `discard` in results.tsv. Do not commit. Move on.
+   - **Crash → triage**: If it's a trivial bug (typo, shape mismatch), fix and re-run. If the approach is fundamentally broken, log as `crash`, move on. Do not spend more than 2 attempts fixing a crash.
+9. **Iterate**: Go to step 1. Do NOT stop.
+
+### results.tsv format
+
+Tab-separated, 4 columns:
+
+```
+experiment	metric	status	description
+baseline_rf	0.4630	keep	RandomForest on 5 features
+cnn_v1	0.5050	keep	CNN on matrices + MLP on features
+cnn_v2	0.4985	discard	Added quality cuts to training — hurt test
+resnet_v3	0.0000	crash	OOM with 2.2M params
+```
+
+Status: `keep`, `discard`, or `crash`.
+
+### journal.md — your research journal
+
+Maintain a running free-form markdown journal in `submissions/<run_tag>/journal.md`. This is your external memory — it survives context compaction and helps you avoid repeating mistakes.
+
+Write in it after every experiment:
+- What you tried and why
+- What worked and what didn't
+- Hypotheses about why something failed
+- Ideas for next experiments
+- Patterns you've noticed in the data or results
+
+Re-read it at the start of every experiment cycle. This is how you build on your own work instead of going in circles.
+
+### Timeout
+
+Each experiment should complete within **1 hour**. If a run exceeds this, kill it and treat as a crash. Start with quick experiments (minutes) and only scale up training time when you have a promising architecture.
+
+### Simplicity criterion
+
+All else being equal, simpler is better. A small metric improvement that adds significant complexity is probably not worth it. Conversely, removing something and getting equal or better results is a great win — that's a simplification. When in doubt, prefer the simpler approach.
 
 ## Strategy hints
 
 These are suggestions, not requirements. You decide the approach.
 
 - **Start simple**: A random forest or logistic regression on the 5 features gives you a quick baseline.
+- **Explore the data**: Understand distributions, class balance, feature correlations before building complex models. EDA is an experiment too.
+- **Feature engineering**: Ne/Nmu ratio is the strongest single discriminant. Log transforms, trigonometric encodings of angles, energy-normalized features — try many combinations.
 - **Use both inputs**: The 16×16×2 matrices and 5 scalar features are complementary. Models that use both tend to do better.
-- **The physics**: Ne/Nmu ratio is the strongest single discriminant. Light particles (protons) have fewer muons; heavy particles (iron) have more.
+- **The physics**: Ne/Nmu ratio is the strongest single discriminant. Light particles (protons) have fewer muons; heavy particles (iron) have more. Gamma showers have essentially no muons.
 - **Architecture ideas**: CNNs for the spatial data, concatenated with an MLP for scalar features. Or flatten everything into a single MLP. Or try something creative.
 - **Scale matters**: With 5.5M training events, you can train large models. But start small and scale up.
-- **Known baselines**: CNN on 16×16×2 matrices + scalar features → ~51% accuracy (JINST 2024). You should aim to match or beat this.
+- **When you're stuck**: Re-read `challenge.md`. Re-read your journal. Look at your results.tsv for patterns. Try combining previous near-misses. Try more radical changes. Try a completely different approach. Think about what information the model is missing.
 
 ## Rules
 
@@ -78,4 +137,7 @@ These are suggestions, not requirements. You decide the approach.
 - Do NOT look at the test labels. Only use `data/*_train/` for training.
 - Do NOT install additional packages. Use numpy, torch, and scikit-learn.
 - Do NOT pause to ask if you should continue. Work autonomously until stopped.
-- Log everything. Your results.tsv and README.md are part of the submission.
+- ALWAYS redirect training output to log files. Do NOT let output flood your context.
+- ALWAYS log results to `results.tsv` and update `journal.md` after every experiment.
+- ALWAYS commit code that improves the metric. Never commit code that doesn't.
+- Log everything. Your results.tsv, journal.md, and README.md are part of the submission.
