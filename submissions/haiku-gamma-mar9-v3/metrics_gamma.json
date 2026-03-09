@@ -1,0 +1,290 @@
+{
+  "n_gamma": 1514,
+  "n_hadron": 34237,
+  "survival_rates": {
+    "50%": {
+      "threshold": 0.9984855055809021,
+      "gamma_efficiency": 0.5,
+      "hadron_survival": 0.0,
+      "hadron_surviving": 0
+    },
+    "75%": {
+      "threshold": 0.9273602962493896,
+      "gamma_efficiency": 0.750330250990753,
+      "hadron_survival": 0.0005841633320676461,
+      "hadron_surviving": 20
+    },
+    "90%": {
+      "threshold": 0.022159744054079056,
+      "gamma_efficiency": 0.9002642007926024,
+      "hadron_survival": 0.027455676607179368,
+      "hadron_surviving": 940
+    },
+    "95%": {
+      "threshold": 0.0037556670140475035,
+      "gamma_efficiency": 0.9504623513870541,
+      "hadron_survival": 0.3063352513362736,
+      "hadron_surviving": 10488
+    },
+    "99%": {
+      "threshold": 0.0012195911258459091,
+      "gamma_efficiency": 0.9900924702774109,
+      "hadron_survival": 0.8881911382422525,
+      "hadron_surviving": 30409
+    }
+  },
+  "key_metric": 0.0005841633320676461,
+  "accuracy_at_0.5": 0.9906576039831053,
+  "energy_binned": {
+    "14.0-15.0": {
+      "threshold": 0.8281183838844299,
+      "gamma_efficiency": 0.7512864493996569,
+      "hadron_survival": 0.006075564837668502,
+      "hadron_surviving": 32,
+      "n_gamma": 583,
+      "n_hadron": 5267
+    },
+    "15.0-15.5": {
+      "threshold": 0.006959724240005016,
+      "gamma_efficiency": 0.7536231884057971,
+      "hadron_survival": 0.07591735715054342,
+      "hadron_surviving": 1411,
+      "n_gamma": 207,
+      "n_hadron": 18586
+    },
+    "15.5-16.0": {
+      "threshold": 0.9989690780639648,
+      "gamma_efficiency": 0.7518248175182481,
+      "hadron_survival": 0.0,
+      "hadron_surviving": 0,
+      "n_gamma": 411,
+      "n_hadron": 7138
+    },
+    "16.0-16.5": {
+      "threshold": 0.9998542070388794,
+      "gamma_efficiency": 0.7515527950310559,
+      "hadron_survival": 0.0,
+      "hadron_surviving": 0,
+      "n_gamma": 161,
+      "n_hadron": 2213
+    },
+    "16.5-17.0": {
+      "threshold": 0.9999603033065796,
+      "gamma_efficiency": 0.7543859649122807,
+      "hadron_survival": 0.0,
+      "hadron_surviving": 0,
+      "n_gamma": 114,
+      "n_hadron": 719
+    },
+    "17.0-18.0": {
+      "threshold": 0.9999938011169434,
+      "gamma_efficiency": 0.7894736842105263,
+      "hadron_survival": 0.0,
+      "hadron_surviving": 0,
+      "n_gamma": 38,
+      "n_hadron": 314
+    }
+  },
+  "zenith_binned": {
+    "0-10": {
+      "threshold": 0.9317938089370728,
+      "gamma_efficiency": 0.75,
+      "hadron_survival": 0.00018034265103697024,
+      "hadron_surviving": 1,
+      "n_gamma": 212,
+      "n_hadron": 5545
+    },
+    "10-20": {
+      "threshold": 0.8864356279373169,
+      "gamma_efficiency": 0.7513321492007105,
+      "hadron_survival": 0.0007425007425007425,
+      "hadron_surviving": 10,
+      "n_gamma": 563,
+      "n_hadron": 13468
+    },
+    "20-30": {
+      "threshold": 0.9428170323371887,
+      "gamma_efficiency": 0.7506775067750677,
+      "hadron_survival": 0.0005256932579839664,
+      "hadron_surviving": 8,
+      "n_gamma": 738,
+      "n_hadron": 15218
+    }
+  },
+  "energy_zenith_grid": {
+    "0-10": {
+      "14.0-14.5": {
+        "threshold": 0.9317938089370728,
+        "gamma_efficiency": 0.7580645161290323,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 62,
+        "n_hadron": 41
+      },
+      "14.5-15.0": {
+        "threshold": 0.4082429111003876,
+        "gamma_efficiency": 0.7692307692307693,
+        "hadron_survival": 0.004149377593360996,
+        "hadron_surviving": 6,
+        "n_gamma": 26,
+        "n_hadron": 1446
+      },
+      "15.0-15.5": {
+        "threshold": 0.006649564485996962,
+        "gamma_efficiency": 0.7777777777777778,
+        "hadron_survival": 0.058085335245607744,
+        "hadron_surviving": 162,
+        "n_gamma": 27,
+        "n_hadron": 2789
+      },
+      "15.5-16.0": {
+        "threshold": 0.9996657371520996,
+        "gamma_efficiency": 0.75,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 60,
+        "n_hadron": 842
+      },
+      "16.0-16.5": {
+        "threshold": 0.9982141256332397,
+        "gamma_efficiency": 0.7777777777777778,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 18,
+        "n_hadron": 288
+      },
+      "16.5-17.0": {
+        "threshold": 0.9999064207077026,
+        "gamma_efficiency": 0.8,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 15,
+        "n_hadron": 96
+      },
+      "17.0-17.5": {
+        "threshold": 0.01822236366569996,
+        "gamma_efficiency": 0.75,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 4,
+        "n_hadron": 29
+      }
+    },
+    "10-20": {
+      "14.0-14.5": {
+        "threshold": 0.9624951481819153,
+        "gamma_efficiency": 0.7560975609756098,
+        "hadron_survival": 0.015384615384615385,
+        "hadron_surviving": 1,
+        "n_gamma": 82,
+        "n_hadron": 65
+      },
+      "14.5-15.0": {
+        "threshold": 0.2758805751800537,
+        "gamma_efficiency": 0.75,
+        "hadron_survival": 0.01288763592428514,
+        "hadron_surviving": 32,
+        "n_gamma": 124,
+        "n_hadron": 2483
+      },
+      "15.0-15.5": {
+        "threshold": 0.004570433404296637,
+        "gamma_efficiency": 0.7558139534883721,
+        "hadron_survival": 0.1882142365413741,
+        "hadron_surviving": 1367,
+        "n_gamma": 86,
+        "n_hadron": 7263
+      },
+      "15.5-16.0": {
+        "threshold": 0.9989457726478577,
+        "gamma_efficiency": 0.7515527950310559,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 161,
+        "n_hadron": 2563
+      },
+      "16.0-16.5": {
+        "threshold": 0.9999428987503052,
+        "gamma_efficiency": 0.7543859649122807,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 57,
+        "n_hadron": 759
+      },
+      "16.5-17.0": {
+        "threshold": 0.9999790191650391,
+        "gamma_efficiency": 0.7567567567567568,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 37,
+        "n_hadron": 232
+      },
+      "17.0-17.5": {
+        "threshold": 0.9999983310699463,
+        "gamma_efficiency": 0.75,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 16,
+        "n_hadron": 71
+      }
+    },
+    "20-30": {
+      "14.0-14.5": {
+        "threshold": 0.9606179594993591,
+        "gamma_efficiency": 0.7619047619047619,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 42,
+        "n_hadron": 17
+      },
+      "14.5-15.0": {
+        "threshold": 0.8883553147315979,
+        "gamma_efficiency": 0.7520325203252033,
+        "hadron_survival": 0.009060955518945634,
+        "hadron_surviving": 11,
+        "n_gamma": 246,
+        "n_hadron": 1214
+      },
+      "15.0-15.5": {
+        "threshold": 0.008202847093343735,
+        "gamma_efficiency": 0.7553191489361702,
+        "hadron_survival": 0.06507210692930003,
+        "hadron_surviving": 555,
+        "n_gamma": 94,
+        "n_hadron": 8529
+      },
+      "15.5-16.0": {
+        "threshold": 0.998615026473999,
+        "gamma_efficiency": 0.7526315789473684,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 190,
+        "n_hadron": 3733
+      },
+      "16.0-16.5": {
+        "threshold": 0.9998552799224854,
+        "gamma_efficiency": 0.7558139534883721,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 86,
+        "n_hadron": 1166
+      },
+      "16.5-17.0": {
+        "threshold": 0.9999748468399048,
+        "gamma_efficiency": 0.7580645161290323,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 62,
+        "n_hadron": 391
+      },
+      "17.0-17.5": {
+        "threshold": 0.9999938011169434,
+        "gamma_efficiency": 0.7777777777777778,
+        "hadron_survival": 0.0,
+        "hadron_surviving": 0,
+        "n_gamma": 18,
+        "n_hadron": 128
+      }
+    }
+  }
+}
