@@ -1,0 +1,34 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 793,347
+
+Training multi-task model...
+Epoch  1: clf_loss=0.1301 reg_loss=0.3133 val_surv@99=0.8233 lr=0.00100
+Epoch  2: clf_loss=0.1159 reg_loss=0.0721 val_surv@99=0.8272 lr=0.00100
+Epoch  3: clf_loss=0.1135 reg_loss=0.0553 val_surv@99=0.8133 lr=0.00099
+Epoch  4: clf_loss=0.1119 reg_loss=0.0472 val_surv@99=0.8161 lr=0.00098
+Epoch  5: clf_loss=0.1106 reg_loss=0.0420 val_surv@99=0.8262 lr=0.00098
+Epoch  6: clf_loss=0.1096 reg_loss=0.0387 val_surv@99=0.8122 lr=0.00096
+Epoch  7: clf_loss=0.1086 reg_loss=0.0347 val_surv@99=0.8256 lr=0.00095
+Epoch  8: clf_loss=0.1071 reg_loss=0.0351 val_surv@99=0.8293 lr=0.00094
+Epoch  9: clf_loss=0.1066 reg_loss=0.0354 val_surv@99=0.8160 lr=0.00092
+Epoch 10: clf_loss=0.1051 reg_loss=0.0306 val_surv@99=0.8447 lr=0.00090
+Epoch 11: clf_loss=0.1045 reg_loss=0.0314 val_surv@99=0.8310 lr=0.00089
+Epoch 12: clf_loss=0.1033 reg_loss=0.0266 val_surv@99=0.8284 lr=0.00086
+Epoch 13: clf_loss=0.1019 reg_loss=0.0261 val_surv@99=0.8351 lr=0.00084
+Epoch 14: clf_loss=0.1007 reg_loss=0.0253 val_surv@99=0.8591 lr=0.00082
+Epoch 15: clf_loss=0.0997 reg_loss=0.0239 val_surv@99=0.8517 lr=0.00079
+Epoch 16: clf_loss=0.0980 reg_loss=0.0214 val_surv@99=0.8565 lr=0.00077
+Epoch 17: clf_loss=0.0967 reg_loss=0.0207 val_surv@99=0.8557 lr=0.00074
+Epoch 18: clf_loss=0.0955 reg_loss=0.0195 val_surv@99=0.8552 lr=0.00071
+Epoch 19: clf_loss=0.0938 reg_loss=0.0178 val_surv@99=0.8571 lr=0.00068
+Epoch 20: clf_loss=0.0924 reg_loss=0.0168 val_surv@99=0.8577 lr=0.00065
+Epoch 21: clf_loss=0.0914 reg_loss=0.0155 val_surv@99=0.8593 lr=0.00062
+Early stop at epoch 21
+
+Evaluating on test set...
+Threshold: 0.4568
+Test survival @ 99% gamma eff: 0.7806

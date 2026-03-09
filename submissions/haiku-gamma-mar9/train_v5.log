@@ -1,0 +1,21 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 662,017
+
+Class weights: gamma=9.95, hadron=0.03
+
+Training (regression)...
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/loss.py:626: UserWarning: Using a target size (torch.Size([4096, 1])) that is different to the input size (torch.Size([4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.mse_loss(input, target, reduction=self.reduction)
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/loss.py:626: UserWarning: Using a target size (torch.Size([3964, 1])) that is different to the input size (torch.Size([3964])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.mse_loss(input, target, reduction=self.reduction)
+Epoch  1: loss=0.0000 val_surv@99=0.9991 lr=0.00100
+Epoch  2: loss=0.0000 val_surv@99=0.9991 lr=0.00100
+Epoch  3: loss=0.0000 val_surv@99=0.9990 lr=0.00099
+Epoch  4: loss=0.0000 val_surv@99=0.9991 lr=0.00098
+Epoch  5: loss=0.0000 val_surv@99=0.9991 lr=0.00098
+Epoch  6: loss=0.0000 val_surv@99=0.9991 lr=0.00096
+Epoch  7: loss=0.0000 val_surv@99=0.9991 lr=0.00095

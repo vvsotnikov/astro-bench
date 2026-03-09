@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 662,274
+
+Training base model...
+Epoch  5: loss=0.1100 val_surv@99=0.8110 lr=0.00098
+Epoch 10: loss=0.1049 val_surv@99=0.8332 lr=0.00090
+Epoch 15: loss=0.0980 val_surv@99=0.8513 lr=0.00079
+Epoch 20: loss=0.0895 val_surv@99=0.8577 lr=0.00065
+Early stop
+
+=== Optimizing ensemble weights ===
+Best alpha: 0.22, survival: 0.8072

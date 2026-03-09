@@ -1,0 +1,229 @@
+"""Multi-task learning: joint binary classification + muon regression.
+
+Hypothesis: Learning to predict Nmu as an auxiliary task helps the network
+learn the key discriminant (gammas have low Nmu).
+"""
+
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, Dataset, random_split
+import torch.optim as optim
+
+
+class GammaDataset(Dataset):
+    def __init__(self, split: str, mean=None, std=None):
+        self.matrices = np.load(f"data/gamma_{split}/matrices.npy", mmap_mode="r")
+        self.features = np.load(f"data/gamma_{split}/features.npy", mmap_mode="r")
+        self.labels = np.load(f"data/gamma_{split}/labels_gamma.npy", mmap_mode="r")
+        self.mean = mean
+        self.std = std
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        mat = self.matrices[idx].flatten().astype(np.float32)
+        feat = self.features[idx].astype(np.float32)
+        x = np.concatenate([mat, feat])
+        if self.mean is not None:
+            x = (x - self.mean) / (self.std + 1e-8)
+        nmu = feat[4]  # Nmu is at index 4
+        return torch.from_numpy(x), int(self.labels[idx]), torch.tensor(nmu, dtype=torch.float32)
+
+
+def compute_stats(dataset, n_samples=500_000):
+    rng = np.random.default_rng(42)
+    indices = rng.choice(len(dataset), size=min(n_samples, len(dataset)), replace=False)
+    samples = []
+    for idx in indices:
+        mat = dataset.matrices[idx].flatten().astype(np.float32)
+        feat = dataset.features[idx].astype(np.float32)
+        samples.append(np.concatenate([mat, feat]))
+    samples = np.stack(samples)
+    mean = samples.mean(axis=0)
+    std = samples.std(axis=0)
+    std[std == 0] = 1.0
+    return mean, std
+
+
+class MultiTaskNet(nn.Module):
+    def __init__(self, input_dim=517, hidden=512):
+        super().__init__()
+        # Shared backbone
+        self.backbone = nn.Sequential(
+            nn.Linear(input_dim, hidden),
+            nn.BatchNorm1d(hidden),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(hidden, hidden),
+            nn.BatchNorm1d(hidden),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+        )
+        # Classification head
+        self.clf_head = nn.Sequential(
+            nn.Linear(hidden, hidden // 2),
+            nn.ReLU(),
+            nn.Linear(hidden // 2, 2),
+        )
+        # Regression head (Nmu prediction)
+        self.reg_head = nn.Sequential(
+            nn.Linear(hidden, hidden // 2),
+            nn.ReLU(),
+            nn.Linear(hidden // 2, 1),
+        )
+
+    def forward(self, x):
+        feat = self.backbone(x)
+        logits = self.clf_head(feat)
+        nmu_pred = self.reg_head(feat)
+        return logits, nmu_pred.squeeze(-1)
+
+
+def compute_survival_at_99(gamma_probs, labels):
+    is_gamma = labels == 0
+    is_hadron = labels == 1
+    sg = np.sort(gamma_probs[is_gamma])
+    ng = len(sg)
+    thr_99 = sg[max(0, int(np.floor(ng * (1 - 0.99))))]
+    n_hadron_surviving = (gamma_probs[is_hadron] >= thr_99).sum()
+    survival_99 = n_hadron_surviving / is_hadron.sum()
+    return survival_99, thr_99
+
+
+def main():
+    device = torch.device("cuda:0")
+    print(f"Device: {device}\n")
+
+    print("Loading data...")
+    raw_train = GammaDataset("train")
+    print(f"  Total: {len(raw_train)} events")
+
+    print("Computing normalization...")
+    mean, std = compute_stats(raw_train)
+
+    # Split
+    n_train = int(0.8 * len(raw_train))
+    n_val = len(raw_train) - n_train
+    train_ds, val_ds = random_split(
+        GammaDataset("train", mean=mean, std=std),
+        [n_train, n_val],
+        generator=torch.Generator().manual_seed(2026)
+    )
+
+    train_loader = DataLoader(train_ds, batch_size=4096, shuffle=True,
+                             num_workers=8, pin_memory=True)
+    val_loader = DataLoader(val_ds, batch_size=8192, shuffle=False,
+                           num_workers=8, pin_memory=True)
+
+    test_ds = GammaDataset("test", mean=mean, std=std)
+    test_loader = DataLoader(test_ds, batch_size=8192, shuffle=False,
+                            num_workers=8, pin_memory=True)
+    test_labels = np.load("data/gamma_test/labels_gamma.npy")[:]
+
+    model = MultiTaskNet().to(device)
+    n_params = sum(p.numel() for p in model.parameters())
+    print(f"Model params: {n_params:,}\n")
+
+    # Class weights for classification
+    train_labels_all = raw_train.labels[train_ds.indices]
+    n_gamma_train = (train_labels_all == 0).sum()
+    n_hadron_train = (train_labels_all == 1).sum()
+    w_gamma = n_hadron_train / (2 * n_gamma_train)
+    w_hadron = n_gamma_train / (2 * n_hadron_train)
+    class_weights = torch.tensor([w_gamma, w_hadron], dtype=torch.float32).to(device)
+
+    clf_loss = nn.CrossEntropyLoss(weight=class_weights)
+    reg_loss = nn.MSELoss()
+
+    optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50)
+
+    print("Training multi-task model...")
+    best_survival = 1.0
+    patience = 15
+
+    for epoch in range(50):
+        model.train()
+        total_clf_loss = 0
+        total_reg_loss = 0
+        for x, y, nmu in train_loader:
+            x = x.to(device)
+            y = y.to(device)
+            nmu = nmu.to(device)
+
+            logits, nmu_pred = model(x)
+            loss_c = clf_loss(logits, y)
+            loss_r = reg_loss(nmu_pred, nmu)
+            # Combine losses: weight by their relative magnitude
+            loss = loss_c + 0.1 * loss_r
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            total_clf_loss += loss_c.item()
+            total_reg_loss += loss_r.item()
+
+        scheduler.step()
+
+        # Eval
+        model.eval()
+        all_probs = []
+        all_labels = []
+        with torch.no_grad():
+            for x, y, _ in val_loader:
+                x = x.to(device)
+                logits, _ = model(x)
+                probs = torch.softmax(logits, dim=1)
+                all_probs.append(probs[:, 0].cpu().numpy())
+                all_labels.append(y.numpy())
+
+        val_probs = np.concatenate(all_probs)
+        val_labels = np.concatenate(all_labels)
+        val_survival, _ = compute_survival_at_99(val_probs, val_labels)
+
+        lr = optimizer.param_groups[0]["lr"]
+        print(f"Epoch {epoch+1:2d}: clf_loss={total_clf_loss/len(train_loader):.4f} "
+              f"reg_loss={total_reg_loss/len(train_loader):.4f} "
+              f"val_surv@99={val_survival:.4f} lr={lr:.5f}")
+
+        if val_survival < best_survival:
+            best_survival = val_survival
+            patience = 15
+            torch.save(model.state_dict(),
+                      "submissions/haiku-gamma-mar9/model_best_v11.pt")
+        else:
+            patience -= 1
+            if patience <= 0:
+                print(f"Early stop at epoch {epoch+1}")
+                break
+
+    # Test
+    print("\nEvaluating on test set...")
+    model.load_state_dict(
+        torch.load("submissions/haiku-gamma-mar9/model_best_v11.pt")
+    )
+    model.eval()
+
+    all_probs = []
+    with torch.no_grad():
+        for x, _, _ in test_loader:
+            x = x.to(device)
+            logits, _ = model(x)
+            probs = torch.softmax(logits, dim=1)
+            all_probs.append(probs[:, 0].cpu().numpy())
+
+    test_probs = np.concatenate(all_probs)
+    test_survival, test_thr = compute_survival_at_99(test_probs, test_labels)
+
+    print(f"Threshold: {test_thr:.4f}")
+    print(f"Test survival @ 99% gamma eff: {test_survival:.4f}")
+
+    np.savez("submissions/haiku-gamma-mar9/predictions_v11.npz",
+             gamma_scores=test_probs)
+
+
+if __name__ == "__main__":
+    main()

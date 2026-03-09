@@ -1,0 +1,31 @@
+Device: cuda:0
+
+Loading training data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 662,017
+
+Train split: 58573 gamma, 1165999 hadron
+Val split: 14663 gamma, 291480 hadron
+
+Class weights (pos_weight): 396.28
+Training...
+
+Epoch  1/50: loss=10.8379 val_survival@99=1.000 lr=0.000999
+Epoch  2/50: loss=0.5736 val_survival@99=1.000 lr=0.000996
+Epoch  3/50: loss=0.4364 val_survival@99=1.000 lr=0.000991
+Epoch  4/50: loss=0.3952 val_survival@99=1.000 lr=0.000984
+Epoch  5/50: loss=0.3773 val_survival@99=1.000 lr=0.000976
+Epoch  6/50: loss=0.3567 val_survival@99=1.000 lr=0.000965
+Epoch  7/50: loss=0.3472 val_survival@99=1.000 lr=0.000952
+Epoch  8/50: loss=0.3427 val_survival@99=1.000 lr=0.000938
+Epoch  9/50: loss=0.3317 val_survival@99=1.000 lr=0.000922
+Epoch 10/50: loss=0.3280 val_survival@99=1.000 lr=0.000905
+Epoch 11/50: loss=0.3267 val_survival@99=1.000 lr=0.000885
+Epoch 12/50: loss=0.3211 val_survival@99=1.000 lr=0.000864
+Early stopping at epoch 12
+
+Evaluating on test set...
+Best threshold: -10.348
+Test survival @ 99% gamma eff: 1.0000
+Saved predictions (35751 scores)

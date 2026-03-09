@@ -1,0 +1,14 @@
+Loading training data...
+Flattening matrices: 1530715 x 512
+Full feature shape: (1530715, 517)
+Subsampled to (100000, 517)
+Class balance: 4837 gamma, 95163 hadron
+
+Training RF...
+Training took 9.6s
+Loading test data...
+Predicting...
+Prediction took 0.3s
+
+Threshold: 0.0100
+Test survival @ 99% gamma eff: 0.9392

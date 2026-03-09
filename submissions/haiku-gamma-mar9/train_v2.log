@@ -1,0 +1,34 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 662,274
+
+Class weights: gamma=9.95, hadron=0.03
+
+Training...
+Epoch  1/50: loss=0.1307 val_survival@99=0.8345 lr=0.000999
+Epoch  2/50: loss=0.1151 val_survival@99=0.8095 lr=0.000996
+Epoch  3/50: loss=0.1122 val_survival@99=0.8049 lr=0.000991
+Epoch  4/50: loss=0.1108 val_survival@99=0.8108 lr=0.000984
+Epoch  5/50: loss=0.1094 val_survival@99=0.8055 lr=0.000976
+Epoch  6/50: loss=0.1085 val_survival@99=0.8132 lr=0.000965
+Epoch  7/50: loss=0.1079 val_survival@99=0.8268 lr=0.000952
+Epoch  8/50: loss=0.1063 val_survival@99=0.8510 lr=0.000938
+Epoch  9/50: loss=0.1057 val_survival@99=0.8319 lr=0.000922
+Epoch 10/50: loss=0.1044 val_survival@99=0.8259 lr=0.000905
+Epoch 11/50: loss=0.1030 val_survival@99=0.8434 lr=0.000885
+Epoch 12/50: loss=0.1014 val_survival@99=0.8432 lr=0.000864
+Epoch 13/50: loss=0.0997 val_survival@99=0.8457 lr=0.000842
+Epoch 14/50: loss=0.0977 val_survival@99=0.8669 lr=0.000819
+Epoch 15/50: loss=0.0962 val_survival@99=0.8604 lr=0.000794
+Epoch 16/50: loss=0.0948 val_survival@99=0.8562 lr=0.000768
+Epoch 17/50: loss=0.0923 val_survival@99=0.8482 lr=0.000741
+Epoch 18/50: loss=0.0903 val_survival@99=0.8533 lr=0.000713
+Early stopping at epoch 18
+
+Evaluating on test set...
+Threshold: 0.4739
+Test survival @ 99% gamma eff: 0.8096
+Saved predictions (35751 scores)

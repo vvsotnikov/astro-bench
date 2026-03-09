@@ -1,0 +1,10 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 662,017
+
+Training with margin loss...
+Epoch  1: loss=0.5141 val_surv@99=0.8824 lr=0.00050
+Epoch  2: loss=0.3611 val_surv@99=0.8853 lr=0.00050

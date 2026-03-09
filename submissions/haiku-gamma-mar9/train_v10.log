@@ -1,0 +1,62 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+
+=== PASS 1: Initial training ===
+Model params: 662,274
+
+Training initial model...
+Epoch  1: loss=0.1300 val_surv@99=0.8294
+Epoch  2: loss=0.1148 val_surv@99=0.8110
+Epoch  4: loss=0.1111 val_surv@99=0.8030
+Epoch  5: loss=0.1097 val_surv@99=0.8176
+Epoch 10: loss=0.1045 val_surv@99=0.8402
+Epoch 15: loss=0.0966 val_surv@99=0.8551
+Epoch 20: loss=0.0865 val_surv@99=0.8604
+Epoch 25: loss=0.0797 val_surv@99=0.8579
+Epoch 30: loss=0.0730 val_surv@99=0.8567
+Epoch 35: loss=0.0700 val_surv@99=0.8470
+Epoch 40: loss=0.0692 val_surv@99=0.8511
+Best epoch: 4, survival: 0.8030
+
+=== PASS 2: Hard negative mining ===
+Scoring training data...
+Found 291497 hard negatives (top 20%)
+Retraining with hard negative weights...
+
+Epoch  1: loss=0.2204 val_surv@99=0.8468
+Epoch  2: loss=0.2026 val_surv@99=0.8173
+Epoch  3: loss=0.1985 val_surv@99=0.8115
+Epoch  4: loss=0.1996 val_surv@99=0.8080
+Epoch  5: loss=0.1955 val_surv@99=0.8084
+Epoch  6: loss=0.1973 val_surv@99=0.8047
+Epoch  7: loss=0.1912 val_surv@99=0.7701
+Epoch 10: loss=0.1892 val_surv@99=0.7569
+Epoch 11: loss=0.1874 val_surv@99=0.7495
+Epoch 13: loss=0.1836 val_surv@99=0.7474
+Epoch 14: loss=0.1830 val_surv@99=0.7355
+Epoch 15: loss=0.1824 val_surv@99=0.7275
+Epoch 16: loss=0.1825 val_surv@99=0.7101
+Epoch 17: loss=0.1805 val_surv@99=0.6956
+Epoch 18: loss=0.1801 val_surv@99=0.6660
+Epoch 20: loss=0.1780 val_surv@99=0.6497
+Epoch 22: loss=0.1733 val_surv@99=0.6376
+Epoch 23: loss=0.1734 val_surv@99=0.5960
+Epoch 25: loss=0.1708 val_surv@99=0.5868
+Epoch 26: loss=0.1689 val_surv@99=0.5629
+Epoch 28: loss=0.1668 val_surv@99=0.5213
+Epoch 29: loss=0.1651 val_surv@99=0.5028
+Epoch 30: loss=0.1647 val_surv@99=0.4923
+Epoch 31: loss=0.1628 val_surv@99=0.4705
+Epoch 32: loss=0.1628 val_surv@99=0.4594
+Epoch 34: loss=0.1619 val_surv@99=0.4556
+Epoch 35: loss=0.1614 val_surv@99=0.4480
+Epoch 36: loss=0.1579 val_surv@99=0.4381
+Epoch 37: loss=0.1577 val_surv@99=0.4367
+Epoch 40: loss=0.1589 val_surv@99=0.4374
+
+Evaluating on test set...
+Threshold: 0.0178
+Test survival @ 99% gamma eff: 0.8285

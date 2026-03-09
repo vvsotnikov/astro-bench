@@ -1,0 +1,42 @@
+Device: cuda:0
+
+Loading data...
+  Total: 1530715 events
+Computing normalization...
+Model params: 662,274
+
+Training with focal loss...
+Epoch  1: loss=0.0303 val_surv@99=0.8630 lr=0.00100
+Epoch  2: loss=0.0259 val_surv@99=0.8648 lr=0.00100
+Epoch  3: loss=0.0249 val_surv@99=0.8540 lr=0.00099
+Epoch  4: loss=0.0245 val_surv@99=0.8335 lr=0.00099
+Epoch  5: loss=0.0241 val_surv@99=0.8573 lr=0.00098
+Epoch  6: loss=0.0236 val_surv@99=0.8552 lr=0.00098
+Epoch  7: loss=0.0234 val_surv@99=0.8633 lr=0.00097
+Epoch  8: loss=0.0231 val_surv@99=0.8339 lr=0.00096
+Epoch  9: loss=0.0228 val_surv@99=0.8257 lr=0.00095
+Epoch 10: loss=0.0227 val_surv@99=0.8595 lr=0.00093
+Epoch 11: loss=0.0226 val_surv@99=0.8370 lr=0.00092
+Epoch 12: loss=0.0224 val_surv@99=0.8656 lr=0.00090
+Epoch 13: loss=0.0222 val_surv@99=0.8553 lr=0.00089
+Epoch 14: loss=0.0221 val_surv@99=0.8647 lr=0.00087
+Epoch 15: loss=0.0218 val_surv@99=0.8511 lr=0.00085
+Epoch 16: loss=0.0217 val_surv@99=0.8504 lr=0.00083
+Epoch 17: loss=0.0215 val_surv@99=0.8566 lr=0.00081
+Epoch 18: loss=0.0214 val_surv@99=0.8424 lr=0.00079
+Epoch 19: loss=0.0211 val_surv@99=0.8538 lr=0.00077
+Epoch 20: loss=0.0209 val_surv@99=0.8575 lr=0.00075
+Epoch 21: loss=0.0208 val_surv@99=0.8526 lr=0.00073
+Epoch 22: loss=0.0206 val_surv@99=0.8457 lr=0.00070
+Epoch 23: loss=0.0203 val_surv@99=0.8536 lr=0.00068
+Epoch 24: loss=0.0202 val_surv@99=0.8599 lr=0.00065
+Epoch 25: loss=0.0201 val_surv@99=0.8595 lr=0.00063
+Epoch 26: loss=0.0199 val_surv@99=0.8551 lr=0.00060
+Epoch 27: loss=0.0196 val_surv@99=0.8513 lr=0.00058
+Epoch 28: loss=0.0195 val_surv@99=0.8547 lr=0.00055
+Epoch 29: loss=0.0193 val_surv@99=0.8560 lr=0.00053
+Early stop at epoch 29
+
+Evaluating on test set...
+Threshold: 0.0836
+Test survival @ 99% gamma eff: 0.9003
