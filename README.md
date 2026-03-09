@@ -19,13 +19,14 @@ Classify cosmic ray primaries into proton, helium, carbon, silicon, iron.
 
 ## Leaderboard: Gamma/Hadron Separation (binary)
 
-Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival rate at 99% gamma efficiency (lower is better).
+Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival rate at 75% gamma efficiency (lower is better). Published suppression of 10²–10³ was measured at ~70% gamma efficiency ([ICRC 2021](https://arxiv.org/abs/2108.03407)).
 
-| Rank | Survival rate ↓ | Author | Agent? | Architecture | Link |
-|------|-----------------|--------|--------|--------------|------|
+| Rank | Survival ↓ (@ 75% γ eff) | Author | Agent? | Architecture | Link |
+|------|--------------------------|--------|--------|--------------|------|
 | — | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
-| — | 7.8×10⁻¹ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [baselines/](submissions/baselines/) |
-| — | 8.4×10⁻¹ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [haiku-gamma-mar8/](submissions/haiku-gamma-mar8/) |
+| — | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [haiku-gamma-mar9/](submissions/haiku-gamma-mar9/) |
+| — | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [baselines/](submissions/baselines/) |
+| — | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [haiku-gamma-mar8/](submissions/haiku-gamma-mar8/) |
 
 ## Quick Start
 

@@ -49,7 +49,7 @@ Test sets have quality cuts pre-applied (Ze<30, Ne>4.8, 0.2<Age<1.48). Train set
 Each task has ONE metric. Optimize it relentlessly.
 
 - **Composition**: accuracy (higher is better). Baseline: ~51% (published CNN, JINST 2024).
-- **Gamma/hadron**: hadronic survival rate @ 99% gamma efficiency (lower is better). Baseline: 10⁻²–10⁻³ (published RF, ICRC 2021). Save predictions as `gamma_scores` (float array, higher = more gamma-like).
+- **Gamma/hadron**: hadronic survival rate @ 75% gamma efficiency (lower is better). Published baseline: suppression 10²–10³ at ~30–70% gamma efficiency (RF, ICRC 2021). Save predictions as `gamma_scores` (float array, higher = more gamma-like).
 
 ## What to submit
 
