@@ -1,4 +1,10 @@
 experiment	metric	status	description
 v1_reweight	3.15e-03	discard	Re-optimized ensemble (α=1.00 = pure DNN)
-v2_longer	1.31e-03	keep	DNN with 60 epochs, higher dropout (0.3)
+v2_longer	1.31e-03	keep	DNN with 60 epochs, higher dropout (0.3), classification
 v3_regression	9.05e-04	keep	Regression DNN with BCELoss, direct score output
+v4_svm	pending	pending	SVM with physics features (cancelled - too slow)
+v5_ensemble23	7.89e-04	keep	Ensemble v2+v3 (α=0.99)
+v7_ensemblephys	1.31e-03	discard	Ensemble v2+physics (α=1.00)
+v9_finetuned	6.72e-04	keep	Fine-tuned ensemble v2+v3 (α=0.994) - BEST
+v6_deeper	pending	pending	Deeper regression (3.3M params, still training)
+v8_simple	pending	pending	Simple regression (80 epochs, still training)

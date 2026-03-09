@@ -1,0 +1,11 @@
+Device: cuda:0
+
+Loading data...
+  Training: 1530715 events
+Computing normalization...
+Model params: 662,017
+
+Training simple regression DNN...
+Epoch  1: loss=0.1143 val_surv@75=2.9707e-02 lr=0.001000
+Epoch  3: loss=0.0844 val_surv@75=2.4873e-02 lr=0.000997
+Epoch  5: loss=0.0816 val_surv@75=2.3103e-02 lr=0.000990

@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v2/train_v1_calibrate.py", line 58, in <module>
+    model.load_state_dict(torch.load(model_path))
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 2635, in load_state_dict
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Error(s) in loading state_dict for DNN:
+	Missing key(s) in state_dict: "fc1.weight", "fc1.bias", "bn1.weight", "bn1.bias", "bn1.running_mean", "bn1.running_var", "fc2.weight", "fc2.bias", "bn2.weight", "bn2.bias", "bn2.running_mean", "bn2.running_var", "fc3.weight", "fc3.bias", "bn3.weight", "bn3.bias", "bn3.running_mean", "bn3.running_var", "fc4.weight", "fc4.bias". 
+	Unexpected key(s) in state_dict: "net.0.weight", "net.0.bias", "net.1.weight", "net.1.bias", "net.1.running_mean", "net.1.running_var", "net.1.num_batches_tracked", "net.4.weight", "net.4.bias", "net.5.weight", "net.5.bias", "net.5.running_mean", "net.5.running_var", "net.5.num_batches_tracked", "net.8.weight", "net.8.bias", "net.9.weight", "net.9.bias", "net.9.running_mean", "net.9.running_var", "net.9.num_batches_tracked", "net.11.weight", "net.11.bias". 
+Total training events: 1530715
+Train subset: 1224572, validation subset: 306143
+Error: Error(s) in loading state_dict for DNN:
+	Missing key(s) in state_dict: "fc1.weight", "fc1.bias", "bn1.weight", "bn1.bias", "bn1.running_mean", "bn1.running_var", "fc2.weight", "fc2.bias", "bn2.weight", "bn2.bias", "bn2.running_mean", "bn2.running_var", "fc3.weight", "fc3.bias", "bn3.weight", "bn3.bias", "bn3.running_mean", "bn3.running_var", "fc4.weight", "fc4.bias". 
+	Unexpected key(s) in state_dict: "net.0.weight", "net.0.bias", "net.1.weight", "net.1.bias", "net.1.running_mean", "net.1.running_var", "net.1.num_batches_tracked", "net.4.weight", "net.4.bias", "net.5.weight", "net.5.bias", "net.5.running_mean", "net.5.running_var", "net.5.num_batches_tracked", "net.8.weight", "net.8.bias", "net.9.weight", "net.9.bias", "net.9.running_mean", "net.9.running_var", "net.9.num_batches_tracked", "net.11.weight", "net.11.bias". 
