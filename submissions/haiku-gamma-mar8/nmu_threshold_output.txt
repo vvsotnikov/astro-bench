@@ -1,0 +1,20 @@
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:168: RuntimeWarning: overflow encountered in reduce
+  arrmean = umr_sum(arr, axis, dtype, keepdims=True, where=where)
+================================================================================
+SIMPLE NMU THRESHOLD BASELINE
+================================================================================
+
+Nmu statistics:
+  Gamma  Nmu: median=2.826, mean=3.162, std=0.832
+  Hadron Nmu: median=4.246, mean=4.309, std=inf
+
+Testing thresholds (lower Nmu -> more likely gamma):
+   Threshold    GammaKeep   HadronSurv                Notes
+------------------------------------------------------------
+
+================================================================================
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar8/train_nmu_threshold.py", line 73, in <module>
+    print(f"Best threshold: {best_threshold:.3f} (Nmu)")
+                            ^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__

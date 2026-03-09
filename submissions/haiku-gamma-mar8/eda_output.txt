@@ -1,0 +1,86 @@
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:168: RuntimeWarning: overflow encountered in reduce
+  arrmean = umr_sum(arr, axis, dtype, keepdims=True, where=where)
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:201: RuntimeWarning: overflow encountered in reduce
+  ret = umr_sum(x, axis, dtype, out, keepdims=keepdims, where=where)
+================================================================================
+EXPLORATORY DATA ANALYSIS - GAMMA/HADRON CLASSIFICATION
+================================================================================
+
+1. CLASS DISTRIBUTION
+   Training: 73,236 gamma (4.78%), 1,457,479 hadron (95.22%)
+   Test:     1,514 gamma (4.23%), 34,237 hadron (95.77%)
+
+2. FEATURE STATISTICS (Training Set)
+   Feature distributions:
+   E (log10 eV)        : gamma= 14.600±0.659, hadron= 14.591±0.478, d= 0.015
+   Ze (deg)            : gamma= 30.775±12.736, hadron= 25.468±10.021, d= 0.463
+   Az (deg)            : gamma=179.063±103.820, hadron=180.052±103.807, d=-0.010
+   Ne (log10)          : gamma=  4.363±0.909, hadron=  4.128±0.661, d= 0.296
+   Nmu (log10)         : gamma=  3.067±0.472, hadron=  3.536±0.461, d=-1.005
+
+3. KEY PHYSICS DISCRIMINANTS (Training Set)
+   Ne/Nmu ratio:
+     Gamma:  median=    16.4, mean=   874.8
+     Hadron: median=     4.3, mean=     6.1
+
+   Muon density in detector (channel 1):
+     Gamma muon:  median=    30.8, mean=   456.2
+     Hadron muon: median=    77.2, mean=   351.6
+     Gamma electron:  median=  1542.6, mean= 41170.5
+     Hadron electron: median=   975.0, mean=  7393.8
+
+4. MATRIX STATISTICS
+   Matrix shape: (1530715, 16, 16, 2)
+   Train sparsity (zeros): 84.0%
+   Test sparsity (zeros):  53.1%
+   Max value per sample:
+     Gamma:  median=   200.7, mean=  1322.6
+     Hadron: median=   138.6, mean=   738.0
+   Std dev per sample (spatial spread):
+     Gamma:  median=  14.057, mean= 189.202
+     Hadron: median=   9.925, mean=  55.344
+
+5. MODEL PERFORMANCE ON TEST SET
+   Score distribution:
+     Gamma  - min: 0.004686, median: 0.999920, max: 1.000000
+     Hadron - min: 0.000167, median: 0.040136, max: 1.000000
+   ROC AUC: 0.9543
+
+6. FAILURE CASES ANALYSIS
+   Gammas with low scores (bottom 5%, < 0.0685):
+     Count: 76
+     Energy (E): median=15.281, mean=15.312
+     Zenith (Ze): median=17.4, mean=18.3
+     Ne: median=5.086, mean=5.215
+     Nmu: median=4.258, mean=4.250
+
+   Hadrons with high scores (top 5%, > 0.5613):
+     Count: 1712
+     Energy (E): median=15.336, mean=15.750
+     Zenith (Ze): median=19.2, mean=18.5
+     Ne: median=5.609, mean=5.980
+     Nmu: median=4.047, mean=4.445
+
+7. ENERGY-DEPENDENT SEPARATION QUALITY
+   E=[14.0, 14.5): AUC=0.885, γ_median=0.9972, h_median=0.9562, n_γ=186, n_h=123
+   E=[14.5, 15.0): AUC=0.947, γ_median=0.9941, h_median=0.0756, n_γ=397, n_h=5144
+   E=[15.0, 15.5): AUC=0.858, γ_median=0.9939, h_median=0.0288, n_γ=207, n_h=18586
+   E=[15.5, 16.0): AUC=0.965, γ_median=1.0000, h_median=0.0409, n_γ=411, n_h=7138
+   E=[16.0, 16.5): AUC=0.988, γ_median=1.0000, h_median=0.1056, n_γ=161, n_h=2213
+   E=[16.5, 17.0): AUC=0.985, γ_median=1.0000, h_median=0.4440, n_γ=114, n_h=719
+   E=[17.0, 18.0): AUC=0.973, γ_median=1.0000, h_median=0.9908, n_γ=38, n_h=314
+
+8. ZENITH-DEPENDENT SEPARATION QUALITY
+   Ze=[ 0, 10): AUC=0.962, γ_median=1.0000, h_median=0.0322, n_γ=212, n_h=5545
+   Ze=[10, 20): AUC=0.947, γ_median=1.0000, h_median=0.0344, n_γ=563, n_h=13468
+   Ze=[20, 30): AUC=0.958, γ_median=0.9998, h_median=0.0487, n_γ=738, n_h=15218
+
+9. FEATURE IMPORTANCE (via separability)
+   Cohen's d values (larger = better separation):
+   E (log10 eV)        : d= 0.000
+   Ze (deg)            : d= 0.000
+   Az (deg)            : d=-0.000
+   Ne (log10)          : d= 0.000
+   Nmu (log10)         : d=-0.000
+
+================================================================================
