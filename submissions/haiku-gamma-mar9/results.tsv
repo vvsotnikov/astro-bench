@@ -1,0 +1,10 @@
+experiment	survival@99%	gamma_eff@99%	description
+v2_classification	0.8096	99%	DNN (512×2) with CrossEntropy + class weights
+v3_engineering	0.8107	99%	DNN on 5 engineered features (Ne, Nmu, Ne-Nmu, E, Ze)
+v4_randomforest	0.9392	99%	RF on 100K subsampled data (slow, doesn't work well)
+v6_physics_baseline	0.8342	99%	Simple physics: Ne - Nmu as score
+v7_ensemble	0.7908	99%	DNN v2 (α=0.73) + Physics baseline (BEST)
+v9_focal_loss	0.9000	99%	DNN with focal loss (worse than v2)
+v10_hardnegmining	0.8285	99%	Two-pass training with hard negative mining (overfit)
+v11_multitask	0.7810	99%	DNN with auxiliary Nmu regression task
+v12_thresholdopt	0.8072	99%	DNN + ensemble weight optimization
