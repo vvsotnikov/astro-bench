@@ -127,9 +127,10 @@ These are suggestions, not requirements. You decide the approach.
 - **Feature engineering**: Ne/Nmu ratio is the strongest single discriminant. Log transforms, trigonometric encodings of angles, energy-normalized features — try many combinations.
 - **Use both inputs**: The 16×16×2 matrices and 5 scalar features are complementary. Models that use both tend to do better.
 - **The physics**: Ne/Nmu ratio is the strongest single discriminant. Light particles (protons) have fewer muons; heavy particles (iron) have more. Gamma showers have essentially no muons.
-- **Architecture ideas**: CNNs for the spatial data, concatenated with an MLP for scalar features. Or flatten everything into a single MLP. Or try something creative.
+- **Try diverse architectures**: Don't get stuck iterating on one model family. The 16×16×2 matrices are spatial data — many architectures can exploit this: CNNs, Vision Transformers (ViT), U-Nets, Graph Neural Networks (treat active detectors as nodes), attention mechanisms, autoencoders, diffusion models. For scalar features: MLPs, gradient boosting, SVMs. For combining both: hybrid CNN+MLP, cross-attention, late fusion. Try at least 3 fundamentally different architecture families before optimizing any single one.
+- **Ensemble across architectures**: Models with different inductive biases (e.g. CNN + MLP + GBM) are more complementary than variants of the same architecture. Your best single model may not be your best submission — try ensembling your top models from different families.
 - **Scale matters**: With 5.5M training events, you can train large models. But start small and scale up.
-- **When you're stuck**: Re-read `challenge.md`. Re-read your journal. Look at your results.tsv for patterns. Try combining previous near-misses. Try more radical changes. Try a completely different approach. Think about what information the model is missing.
+- **When you're stuck**: Re-read `challenge.md`. Re-read your journal. Look at your results.tsv for patterns. Try combining previous near-misses. Try a completely different architecture family. Think about what information the model is missing.
 
 ## Rules
 
