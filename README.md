@@ -24,6 +24,7 @@ Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival 
 | Rank | Survival ↓ (@ 75% γ eff) | Author | Agent? | Architecture | Link |
 |------|--------------------------|--------|--------|--------------|------|
 | — | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
+| — | 6.4×10⁻⁴ | Claude Haiku 4.5 | Yes | MLP ensemble (BCELoss + classification) | [haiku-gamma-mar9-v2/](submissions/haiku-gamma-mar9-v2/) |
 | — | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [haiku-gamma-mar9/](submissions/haiku-gamma-mar9/) |
 | — | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [baselines/](submissions/baselines/) |
 | — | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [haiku-gamma-mar8/](submissions/haiku-gamma-mar8/) |
