@@ -9,3 +9,26 @@ Test scores for bin: 1.0632e-02
 
 === Bin 2: E ∈ [15.0, 15.5) ===
 Train: 168914, Test: 18793
+Test scores for bin: 3.8099e-01
+
+=== Bin 3: E ∈ [15.5, 16.0) ===
+Train: 54753, Test: 7549
+Test scores for bin: 0.0000e+00
+
+=== Bin 4: E ∈ [16.0, 16.5) ===
+Train: 17684, Test: 2374
+Test scores for bin: 0.0000e+00
+
+=== Bin 5: E ∈ [16.5, 17.0) ===
+Train: 6021, Test: 833
+Test scores for bin: 0.0000e+00
+
+=== Bin 6: E ∈ [17.0, 18.0) ===
+Train: 2679, Test: 352
+Test scores for bin: 0.0000e+00
+
+Overall test survival @ 75% gamma eff: 8.4704e-04
+
+---
+metric: 8.4704e-04
+description: Energy-binned regression models

@@ -45,3 +45,50 @@ Epoch  37: loss=0.0727 val_surv@75=1.9936e-02 lr=0.000050
 Epoch  38: loss=0.0728 val_surv@75=2.0300e-02 lr=0.000050
 Epoch  39: loss=0.0725 val_surv@75=1.9826e-02 lr=0.000050
 Epoch  40: loss=0.0722 val_surv@75=2.0128e-02 lr=0.000050
+Epoch  41: loss=0.0721 val_surv@75=1.9926e-02 lr=0.000050
+Epoch  42: loss=0.0717 val_surv@75=1.9717e-02 lr=0.000050
+Epoch  43: loss=0.0719 val_surv@75=1.9991e-02 lr=0.000050
+Epoch  44: loss=0.0716 val_surv@75=2.0080e-02 lr=0.000050
+Epoch  45: loss=0.0714 val_surv@75=2.0135e-02 lr=0.000050
+Epoch  46: loss=0.0714 val_surv@75=2.0187e-02 lr=0.000050
+Epoch  47: loss=0.0709 val_surv@75=2.0125e-02 lr=0.000050
+Epoch  48: loss=0.0710 val_surv@75=2.0087e-02 lr=0.000025
+Epoch  49: loss=0.0701 val_surv@75=1.9826e-02 lr=0.000025
+Epoch  50: loss=0.0698 val_surv@75=1.9809e-02 lr=0.000025
+Epoch  51: loss=0.0697 val_surv@75=1.9679e-02 lr=0.000025
+Epoch  52: loss=0.0694 val_surv@75=2.0259e-02 lr=0.000025
+Epoch  53: loss=0.0694 val_surv@75=1.9772e-02 lr=0.000025
+Epoch  54: loss=0.0692 val_surv@75=1.9895e-02 lr=0.000025
+Epoch  55: loss=0.0693 val_surv@75=2.0118e-02 lr=0.000025
+Epoch  56: loss=0.0689 val_surv@75=2.0176e-02 lr=0.000025
+Epoch  57: loss=0.0690 val_surv@75=2.0070e-02 lr=0.000013
+Epoch  58: loss=0.0687 val_surv@75=1.9902e-02 lr=0.000013
+Epoch  59: loss=0.0681 val_surv@75=1.9641e-02 lr=0.000013
+Epoch  60: loss=0.0680 val_surv@75=2.0149e-02 lr=0.000013
+Epoch  61: loss=0.0683 val_surv@75=2.0077e-02 lr=0.000013
+Epoch  62: loss=0.0681 val_surv@75=2.0025e-02 lr=0.000013
+Epoch  63: loss=0.0679 val_surv@75=1.9641e-02 lr=0.000013
+Epoch  64: loss=0.0681 val_surv@75=2.0276e-02 lr=0.000013
+Epoch  65: loss=0.0678 val_surv@75=1.9902e-02 lr=0.000006
+Epoch  66: loss=0.0676 val_surv@75=1.9885e-02 lr=0.000006
+Epoch  67: loss=0.0675 val_surv@75=2.0266e-02 lr=0.000006
+Epoch  68: loss=0.0676 val_surv@75=2.0121e-02 lr=0.000006
+Epoch  69: loss=0.0675 val_surv@75=2.0036e-02 lr=0.000006
+Epoch  70: loss=0.0674 val_surv@75=2.0444e-02 lr=0.000006
+Epoch  71: loss=0.0675 val_surv@75=2.0242e-02 lr=0.000003
+Epoch  72: loss=0.0675 val_surv@75=2.0245e-02 lr=0.000003
+Epoch  73: loss=0.0673 val_surv@75=2.0142e-02 lr=0.000003
+Epoch  74: loss=0.0673 val_surv@75=2.0101e-02 lr=0.000003
+Epoch  75: loss=0.0675 val_surv@75=1.9909e-02 lr=0.000003
+Epoch  76: loss=0.0672 val_surv@75=1.9991e-02 lr=0.000003
+Epoch  77: loss=0.0671 val_surv@75=2.0125e-02 lr=0.000002
+Epoch  78: loss=0.0674 val_surv@75=2.0015e-02 lr=0.000002
+Epoch  79: loss=0.0673 val_surv@75=2.0039e-02 lr=0.000002
+No improvement for 20 epochs, stopping
+
+Inference on test set...
+Test survival @ 75% gamma eff: 8.1783e-04
+
+---
+metric: 8.1783e-04
+description: High-capacity DNN (2048→2048→1024→512→256→1) with aggressive regularization
