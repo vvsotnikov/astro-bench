@@ -1,0 +1,53 @@
+Device: cuda:0
+Computing global normalization stats...
+
+================================================================================
+TRAINING ENERGY-BINNED ENSEMBLE
+================================================================================
+
+================================================================================
+Training model for energy bin [14.0, 15.0)
+================================================================================
+Energy range [14.0, 15.0): 1200721 samples
+Energy range [14.0, 15.0): 5850 samples
+Class weights: gamma=12.03, hadron=0.52
+Epoch  1/30: loss=0.3502 test_acc=0.8489 survival@99=8.99e-01
+Epoch 10/30: loss=0.2937 test_acc=0.9133 survival@99=8.84e-01
+Epoch 20/30: loss=0.2738 test_acc=0.9221 survival@99=8.04e-01
+Epoch 30/30: loss=0.2628 test_acc=0.9291 survival@99=8.68e-01
+Best survival @ 99% gamma eff: 7.46e-01
+Bin [14.0, 15.0): survival=7.46e-01
+
+================================================================================
+Training model for energy bin [15.0, 16.0)
+================================================================================
+Energy range [15.0, 16.0): 223667 samples
+Energy range [15.0, 16.0): 26342 samples
+Class weights: gamma=9.96, hadron=0.53
+Epoch  1/30: loss=0.2972 test_acc=0.9843 survival@99=8.27e-01
+Epoch 10/30: loss=0.1685 test_acc=0.9852 survival@99=9.15e-01
+Epoch 20/30: loss=0.1309 test_acc=0.9867 survival@99=9.15e-01
+Epoch 30/30: loss=0.1157 test_acc=0.9867 survival@99=9.55e-01
+Best survival @ 99% gamma eff: 8.27e-01
+Bin [15.0, 16.0): survival=8.27e-01
+
+================================================================================
+Training model for energy bin [16.0, 17.0)
+================================================================================
+Energy range [16.0, 17.0): 23705 samples
+Energy range [16.0, 17.0): 3207 samples
+Class weights: gamma=3.88, hadron=0.57
+Epoch  1/30: loss=0.4581 test_acc=0.6582 survival@99=7.84e-01
+Epoch 10/30: loss=0.1307 test_acc=0.9747 survival@99=8.11e-01
+Epoch 20/30: loss=0.0900 test_acc=0.9819 survival@99=7.00e-01
+Epoch 30/30: loss=0.0829 test_acc=0.9882 survival@99=7.05e-01
+Best survival @ 99% gamma eff: 6.32e-01
+Bin [16.0, 17.0): survival=6.32e-01
+
+================================================================================
+Training model for energy bin [17.0, 18.0)
+================================================================================
+Energy range [17.0, 18.0): 2679 samples
+Energy range [17.0, 18.0): 352 samples
+Class weights: gamma=2.78, hadron=0.61
+Epoch  1/30: loss=0.6601 test_acc=0.9858 survival@99=1.31e-01
