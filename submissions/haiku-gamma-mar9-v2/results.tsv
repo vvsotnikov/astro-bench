@@ -17,3 +17,4 @@ v19_cnn	7.01e-04	keep	CNN on 16x16x2 matrices + MLP on features
 v20_energy	8.47e-04	discard	Energy-binned regression models
 v21_ensemble3	7.89e-04	discard	Ensemble of 3 regression DNNs with different splits
 v22_highcap	8.18e-04	discard	High-capacity DNN (2048→2048→1024→512→256)
+v23_seed999	8.47e-04	discard	Regression DNN with seed 999 (different train/val)

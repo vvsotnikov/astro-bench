@@ -28,3 +28,12 @@ Epoch 39: loss=0.0686 val_surv@75=2.0352e-02 lr=0.000115
 Epoch 41: loss=0.0678 val_surv@75=2.0359e-02 lr=0.000078
 Epoch 43: loss=0.0676 val_surv@75=2.0413e-02 lr=0.000048
 Epoch 45: loss=0.0674 val_surv@75=2.0242e-02 lr=0.000024
+Epoch 47: loss=0.0673 val_surv@75=2.0228e-02 lr=0.000009
+Epoch 49: loss=0.0669 val_surv@75=2.0475e-02 lr=0.000001
+
+Inference on test set...
+Test survival @ 75% gamma eff: 8.4704e-04
+
+---
+metric: 8.4704e-04
+description: Regression DNN with seed 999 (different train/val split)
