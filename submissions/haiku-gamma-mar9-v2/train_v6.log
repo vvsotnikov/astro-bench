@@ -27,3 +27,32 @@ Epoch 18: loss=0.0751 val_surv@75=1.9940e-02 lr=0.000356
 Epoch 19: loss=0.0747 val_surv@75=1.9946e-02 lr=0.000342
 Epoch 20: loss=0.0740 val_surv@75=2.0060e-02 lr=0.000327
 Epoch 21: loss=0.0736 val_surv@75=1.9833e-02 lr=0.000312
+Epoch 22: loss=0.0732 val_surv@75=2.0368e-02 lr=0.000297
+Epoch 23: loss=0.0727 val_surv@75=2.1113e-02 lr=0.000281
+Epoch 24: loss=0.0721 val_surv@75=2.0338e-02 lr=0.000266
+Epoch 25: loss=0.0714 val_surv@75=2.0156e-02 lr=0.000250
+Epoch 26: loss=0.0710 val_surv@75=1.9586e-02 lr=0.000234
+Epoch 27: loss=0.0704 val_surv@75=1.9531e-02 lr=0.000219
+Epoch 28: loss=0.0702 val_surv@75=2.0736e-02 lr=0.000203
+Epoch 29: loss=0.0695 val_surv@75=1.9552e-02 lr=0.000188
+Epoch 30: loss=0.0691 val_surv@75=2.0091e-02 lr=0.000173
+Epoch 31: loss=0.0684 val_surv@75=1.9778e-02 lr=0.000158
+Epoch 32: loss=0.0678 val_surv@75=1.9874e-02 lr=0.000144
+Epoch 33: loss=0.0675 val_surv@75=2.0173e-02 lr=0.000130
+Epoch 34: loss=0.0671 val_surv@75=2.0060e-02 lr=0.000116
+Epoch 35: loss=0.0667 val_surv@75=2.0005e-02 lr=0.000103
+Epoch 36: loss=0.0663 val_surv@75=2.0173e-02 lr=0.000091
+Epoch 37: loss=0.0658 val_surv@75=2.0272e-02 lr=0.000079
+Epoch 38: loss=0.0655 val_surv@75=2.0073e-02 lr=0.000068
+Epoch 39: loss=0.0651 val_surv@75=1.9744e-02 lr=0.000057
+Epoch 40: loss=0.0650 val_surv@75=2.0341e-02 lr=0.000048
+Epoch 41: loss=0.0648 val_surv@75=2.0300e-02 lr=0.000039
+Epoch 42: loss=0.0645 val_surv@75=1.9933e-02 lr=0.000031
+Early stopping
+
+Inference on test set...
+Test survival @ 75% gamma eff: 1.0515e-03
+
+---
+metric: 1.0515e-03
+description: Deeper regression DNN (1024→1024→1024→512→256→1)

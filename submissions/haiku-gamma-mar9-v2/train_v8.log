@@ -19,3 +19,26 @@ Epoch 19: loss=0.0707 val_surv@75=2.0780e-02 lr=0.000867
 Epoch 21: loss=0.0693 val_surv@75=2.1226e-02 lr=0.000839
 Epoch 23: loss=0.0676 val_surv@75=2.2417e-02 lr=0.000810
 Epoch 25: loss=0.0665 val_surv@75=2.0972e-02 lr=0.000778
+Epoch 27: loss=0.0649 val_surv@75=2.1099e-02 lr=0.000744
+Epoch 29: loss=0.0634 val_surv@75=2.1857e-02 lr=0.000709
+Epoch 31: loss=0.0622 val_surv@75=2.2828e-02 lr=0.000673
+Epoch 33: loss=0.0612 val_surv@75=2.1333e-02 lr=0.000636
+Epoch 35: loss=0.0604 val_surv@75=2.1501e-02 lr=0.000598
+Epoch 37: loss=0.0587 val_surv@75=2.2204e-02 lr=0.000559
+Epoch 39: loss=0.0580 val_surv@75=2.3158e-02 lr=0.000520
+Epoch 41: loss=0.0569 val_surv@75=2.3765e-02 lr=0.000480
+Epoch 43: loss=0.0559 val_surv@75=2.2605e-02 lr=0.000441
+Epoch 45: loss=0.0550 val_surv@75=2.3912e-02 lr=0.000402
+Epoch 47: loss=0.0540 val_surv@75=2.3199e-02 lr=0.000364
+Epoch 49: loss=0.0533 val_surv@75=2.3552e-02 lr=0.000327
+Epoch 51: loss=0.0526 val_surv@75=2.6009e-02 lr=0.000291
+Epoch 53: loss=0.0517 val_surv@75=2.3573e-02 lr=0.000256
+Epoch 55: loss=0.0511 val_surv@75=2.5165e-02 lr=0.000222
+Early stopping
+
+Inference on test set...
+Test survival @ 75% gamma eff: 9.6387e-04
+
+---
+metric: 9.6387e-04
+description: Simple regression (512→512→256→1), 80 epochs, low dropout

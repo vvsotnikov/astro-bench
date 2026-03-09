@@ -1,0 +1,8 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+=== Seed 42 ===
+Epoch  1: loss=0.1192 val_surv@75=3.0826e-02
+Epoch  6: loss=0.0840 val_surv@75=2.2977e-02
