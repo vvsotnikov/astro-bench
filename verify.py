@@ -12,7 +12,7 @@ Task 1 (composition, default):
 Task 2 (gamma):
     predictions.npz must contain "gamma_scores": float array of gamma probabilities
     Higher score = more likely to be gamma.
-    Key metric: hadronic survival rate at 99% gamma efficiency (lower is better).
+    Key metric: hadronic survival rate at 75% gamma efficiency (lower is better).
 """
 
 import argparse
@@ -181,9 +181,9 @@ def _survival_at_efficiency(scores_gamma, scores_hadron, efficiency):
 def evaluate_gamma(gamma_scores, labels_gamma, features):
     """Evaluate gamma/hadron separation.
 
-    Key metric: hadronic survival rate at 99% gamma efficiency.
+    Key metric: hadronic survival rate at 75% gamma efficiency.
     This is the fraction of hadrons that survive the gamma selection cut
-    while retaining 99% of true gammas.
+    while retaining 75% of true gammas.
     """
     energies = features[:, 0]
     zeniths = features[:, 1]
@@ -203,13 +203,13 @@ def evaluate_gamma(gamma_scores, labels_gamma, features):
     results["n_hadron"] = int(n_hadron)
 
     # Survival rates at target gamma efficiencies
-    target_efficiencies = [0.50, 0.90, 0.95, 0.99]
+    target_efficiencies = [0.50, 0.75, 0.90, 0.95, 0.99]
     results["survival_rates"] = {}
     for eff in target_efficiencies:
         sr = _survival_at_efficiency(gamma_scores[is_gamma], gamma_scores[is_hadron], eff)
         results["survival_rates"][f"{eff:.0%}"] = sr
 
-    results["key_metric"] = results["survival_rates"]["99%"]["hadron_survival"]
+    results["key_metric"] = results["survival_rates"]["75%"]["hadron_survival"]
 
     # Binary classification metrics at 50% threshold
     binary_preds = (gamma_scores >= 0.5).astype(int)
@@ -222,7 +222,7 @@ def evaluate_gamma(gamma_scores, labels_gamma, features):
         mask = (energies >= lo) & (energies < hi)
         g_mask = mask & is_gamma
         h_mask = mask & is_hadron
-        sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.99)
+        sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.75)
         if sr is not None:
             sr["n_gamma"] = int(g_mask.sum())
             sr["n_hadron"] = int(h_mask.sum())
@@ -235,7 +235,7 @@ def evaluate_gamma(gamma_scores, labels_gamma, features):
         mask = (zeniths >= lo) & (zeniths < hi)
         g_mask = mask & is_gamma
         h_mask = mask & is_hadron
-        sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.99)
+        sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.75)
         if sr is not None:
             sr["n_gamma"] = int(g_mask.sum())
             sr["n_hadron"] = int(h_mask.sum())
@@ -254,7 +254,7 @@ def evaluate_gamma(gamma_scores, labels_gamma, features):
             g_mask = mask & is_gamma
             h_mask = mask & is_hadron
             ng, nh = int(g_mask.sum()), int(h_mask.sum())
-            sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.99)
+            sr = _survival_at_efficiency(gamma_scores[g_mask], gamma_scores[h_mask], 0.75)
             if sr is not None:
                 sr["n_gamma"] = ng
                 sr["n_hadron"] = nh
@@ -270,7 +270,7 @@ def print_gamma_results(results):
     print(f"\n{'='*60}")
     print(f"  TASK: Gamma/Hadron Separation")
     key = results["key_metric"]
-    print(f"  KEY METRIC (hadron survival @ 99% gamma eff): {key:.2e}")
+    print(f"  KEY METRIC (hadron survival @ 75% gamma eff): {key:.2e}")
     print(f"  Events: {results['n_gamma']} gamma, {results['n_hadron']} hadron")
     print(f"{'='*60}")
 
@@ -284,7 +284,7 @@ def print_gamma_results(results):
         )
 
     if results["energy_binned"]:
-        print(f"\n{'Energy-binned hadron survival @ 99% gamma eff':^60}")
+        print(f"\n{'Energy-binned hadron survival @ 75% gamma eff':^60}")
         print(f"{'Bin':<15} {'Survival':>12} {'Gamma':>8} {'Hadron':>8}")
         print("-" * 48)
         for label, m in results["energy_binned"].items():
@@ -294,7 +294,7 @@ def print_gamma_results(results):
             )
 
     if results.get("zenith_binned"):
-        print(f"\n{'Zenith-binned hadron survival @ 99% gamma eff':^60}")
+        print(f"\n{'Zenith-binned hadron survival @ 75% gamma eff':^60}")
         print(f"{'Ze (deg)':<15} {'Survival':>12} {'Gamma':>8} {'Hadron':>8}")
         print("-" * 48)
         for label, m in results["zenith_binned"].items():
@@ -304,7 +304,7 @@ def print_gamma_results(results):
             )
 
     if results.get("energy_zenith_grid"):
-        print(f"\n{'Energy x Zenith grid — hadron survival @ 99% gamma eff':^72}")
+        print(f"\n{'Energy x Zenith grid — hadron survival @ 75% gamma eff':^72}")
         # Collect all energy bin labels
         all_e_labels = []
         for ze_label, row in results["energy_zenith_grid"].items():
@@ -328,7 +328,7 @@ def print_gamma_results(results):
                     vals.append(f"{'—':>10}")
             print(f"{ze_label:<10}" + "".join(vals))
 
-    print(f"\n  Published baseline: suppression 1e2-1e3 (Kostunin et al., ICRC 2021)")
+    print(f"\n  Published baseline: suppression 1e2-1e3 at ~30-70% gamma eff (Kostunin et al., ICRC 2021)")
 
 
 # ---------------------------------------------------------------------------
