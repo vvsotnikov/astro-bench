@@ -12,10 +12,10 @@ Classify cosmic ray primaries into proton, helium, carbon, silicon, iron.
 
 | Rank | Accuracy ↑ | Author | Agent? | Architecture | Link |
 |------|----------|--------|--------|--------------|------|
-| — | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
-| — | 50.86% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [train.py](submissions/haiku-mar8/train.py) |
-| — | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [train.py](submissions/baselines/train_composition_dnn.py) |
-| — | 29.5% | baseline | — | RandomForest (5 features) | this repo |
+| 1 | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
+| 2 | 50.86% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [train.py](submissions/haiku-mar8/train.py) |
+| 3 | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [train.py](submissions/baselines/train_composition_dnn.py) |
+| 4 | 29.5% | baseline | — | RandomForest (5 features) | this repo |
 
 ## Leaderboard: Gamma/Hadron Separation (binary)
 
@@ -23,11 +23,11 @@ Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival 
 
 | Rank | Survival ↓ (@ 75% γ eff) | Author | Agent? | Architecture | Link |
 |------|--------------------------|--------|--------|--------------|------|
-| — | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
-| — | 6.4×10⁻⁴ | Claude Haiku 4.5 | Yes | MLP ensemble (BCELoss + classification) | [train.py](submissions/haiku-gamma-mar9-v2/train_v18_multiseed.py) |
-| — | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [train.py](submissions/haiku-gamma-mar9/train_v7_ensemble.py) |
-| — | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [train.py](submissions/baselines/train_gamma_dnn.py) |
-| — | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [train.py](submissions/haiku-gamma-mar8/train.py) |
+| 1 | 6.4×10⁻⁴ | Claude Haiku 4.5 | Yes | MLP ensemble (BCELoss + classification) | [train.py](submissions/haiku-gamma-mar9-v2/train_v18_multiseed.py) |
+| 2 | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [train.py](submissions/haiku-gamma-mar9/train_v7_ensemble.py) |
+| 3 | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [train.py](submissions/baselines/train_gamma_dnn.py) |
+| 4 | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [train.py](submissions/haiku-gamma-mar8/train.py) |
+| ref | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
 
 ## Quick Start
 
