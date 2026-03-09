@@ -1,2 +1,4 @@
 experiment	survival_rate	description
-v1_baseline_copy	0.836	Baseline MLP with CrossEntropyLoss + class weights, 30 epochs
+mlp_30epochs	0.836	3-layer MLP (517→512→512→2) with CrossEntropyLoss + class weights, 30 epochs [BEST]
+mlp_50epochs	0.807	Same MLP but with 50 epochs — worse, model overfits
+cnn_40epochs	0.802	CNN on 16x16x2 + MLP on features — worse separation than flat MLP

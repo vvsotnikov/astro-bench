@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+"""Gamma/hadron classifier: Same MLP but with longer training (50 epochs)."""
+
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, Dataset
+
+
+class GammaDataset(Dataset):
+    def __init__(self, split: str, mean=None, std=None):
+        self.matrices = np.load(f"data/gamma_{split}/matrices.npy", mmap_mode="r")
+        self.features = np.load(f"data/gamma_{split}/features.npy", mmap_mode="r")
+        self.labels = np.load(f"data/gamma_{split}/labels_gamma.npy", mmap_mode="r")
+        self.mean = mean
+        self.std = std
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        mat = self.matrices[idx].flatten().astype(np.float32)
+        feat = self.features[idx].astype(np.float32)
+        x = np.concatenate([mat, feat])  # 517
+        if self.mean is not None:
+            x = (x - self.mean) / self.std
+        return torch.from_numpy(x), int(self.labels[idx])
+
+
+def compute_stats(dataset, n_samples=500_000):
+    rng = np.random.default_rng(42)
+    indices = rng.choice(len(dataset), size=min(n_samples, len(dataset)), replace=False)
+    samples = []
+    for idx in indices:
+        mat = dataset.matrices[idx].flatten().astype(np.float32)
+        feat = dataset.features[idx].astype(np.float32)
+        samples.append(np.concatenate([mat, feat]))
+    samples = np.stack(samples)
+    mean = samples.mean(axis=0)
+    std = samples.std(axis=0)
+    std[std == 0] = 1.0
+    return mean, std
+
+
+class DNN(nn.Module):
+    def __init__(self, input_dim=517, hidden=512, n_classes=2):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden),
+            nn.BatchNorm1d(hidden),
+            nn.ELU(),
+            nn.Dropout(0.15),
+            nn.Linear(hidden, hidden),
+            nn.BatchNorm1d(hidden),
+            nn.ELU(),
+            nn.Dropout(0.15),
+            nn.Linear(hidden, n_classes),
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+
+def main():
+    device = torch.device("cuda:0")
+    print(f"Device: {device}")
+
+    print("Computing normalization stats...")
+    raw_train = GammaDataset("train")
+    mean, std = compute_stats(raw_train)
+    print(f"  mean range: [{mean.min():.2f}, {mean.max():.2f}]")
+    print(f"  std range:  [{std.min():.2f}, {std.max():.2f}]")
+
+    train_ds = GammaDataset("train", mean=mean, std=std)
+    train_loader = DataLoader(
+        train_ds, batch_size=4096, shuffle=True, num_workers=8, pin_memory=True
+    )
+
+    test_ds = GammaDataset("test", mean=mean, std=std)
+    test_loader = DataLoader(
+        test_ds, batch_size=8192, shuffle=False, num_workers=8, pin_memory=True
+    )
+
+    model = DNN().to(device)
+    n_params = sum(p.numel() for p in model.parameters())
+    print(f"Model params: {n_params:,}")
+
+    # Class weights
+    labels_all = raw_train.labels[:]
+    n_gamma = (labels_all == 0).sum()
+    n_hadron = (labels_all == 1).sum()
+    w_gamma = len(labels_all) / (2 * n_gamma)
+    w_hadron = len(labels_all) / (2 * n_hadron)
+    class_weights = torch.tensor([w_gamma, w_hadron], dtype=torch.float32).to(device)
+    print(f"Class weights: gamma={w_gamma:.2f}, hadron={w_hadron:.2f}")
+
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=50)
+    criterion = nn.CrossEntropyLoss(weight=class_weights)
+
+    output_dir = "submissions/haiku-gamma-mar8"
+    n_epochs = 50
+    best_survival = 1.0
+    for epoch in range(n_epochs):
+        model.train()
+        correct = total = 0
+        total_loss = 0
+        for x, y in train_loader:
+            x, y = x.to(device), y.to(device)
+            logits = model(x)
+            loss = criterion(logits, y)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item() * len(y)
+            correct += (logits.argmax(1) == y).sum().item()
+            total += len(y)
+
+        scheduler.step()
+        train_acc = correct / total
+        lr = optimizer.param_groups[0]["lr"]
+
+        # Evaluate
+        model.eval()
+        test_correct = test_total = 0
+        all_scores = []
+        all_labels = []
+        with torch.no_grad():
+            for x, y in test_loader:
+                x, y = x.to(device), y.to(device)
+                logits = model(x)
+                probs = torch.softmax(logits, dim=1)
+                gamma_scores = probs[:, 0]  # P(gamma)
+                test_correct += (logits.argmax(1) == y).sum().item()
+                test_total += len(y)
+                all_scores.append(gamma_scores.cpu().numpy())
+                all_labels.append(y.cpu().numpy())
+
+        test_acc = test_correct / test_total
+        scores = np.concatenate(all_scores)
+        labels = np.concatenate(all_labels)
+
+        # Compute survival at 99% gamma efficiency
+        is_gamma = labels == 0
+        is_hadron = labels == 1
+        sg = np.sort(scores[is_gamma])
+        ng = len(sg)
+        thr_99 = sg[max(0, int(np.floor(ng * (1 - 0.99))))]
+        n_hadron_surviving = (scores[is_hadron] >= thr_99).sum()
+        survival_99 = n_hadron_surviving / is_hadron.sum()
+
+        status = ""
+        if survival_99 < best_survival:
+            best_survival = survival_99
+            best_scores = scores
+            status = " <- BEST"
+
+        print(
+            f"Epoch {epoch+1:2d}/{n_epochs}: "
+            f"train_loss={total_loss/total:.4f} train_acc={train_acc:.4f} "
+            f"test_acc={test_acc:.4f} survival@99={survival_99:.2e}{status}"
+        )
+
+    print(f"\nBest survival @ 99% gamma eff: {best_survival:.2e}")
+    np.savez(
+        f"{output_dir}/predictions_v2.npz",
+        gamma_scores=best_scores,
+    )
+    print(f"Saved ({len(best_scores)} scores)")
+
+
+if __name__ == "__main__":
+    main()
