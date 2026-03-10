@@ -1,0 +1,35 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+=== Fold 1/5 ===
+Fold 1 test survival @ 75%: 7.5941e-04
+
+=== Fold 2/5 ===
+Fold 2 test survival @ 75%: 8.1783e-04
+
+=== Fold 3/5 ===
+Fold 3 test survival @ 75%: 9.6387e-04
+
+=== Fold 4/5 ===
+Fold 4 test survival @ 75%: 7.8862e-04
+
+=== Fold 5/5 ===
+Fold 5 test survival @ 75%: 7.8862e-04
+
+============================================================
+5-Fold Cross-Validation Results:
+  Fold 1: 7.5941e-04
+  Fold 2: 8.1783e-04
+  Fold 3: 9.6387e-04
+  Fold 4: 7.8862e-04
+  Fold 5: 7.8862e-04
+  Mean: 8.2367e-04
+  Std:  7.2493e-05
+
+Ensemble (averaging CV folds): 7.5941e-04
+
+---
+metric: 7.5941e-04
+description: 5-fold CV ensemble of regression models

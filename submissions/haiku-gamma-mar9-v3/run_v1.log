@@ -1,0 +1,73 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+Testing 20 seeds...
+
+[1/20] Seed 42
+  → Test survival @ 75%: 6.4258e-04
+[2/20] Seed 123
+  → Test survival @ 75%: 8.4704e-04
+[3/20] Seed 256
+  → Test survival @ 75%: 8.7624e-04
+[4/20] Seed 512
+  → Test survival @ 75%: 7.0100e-04
+[5/20] Seed 1024
+  → Test survival @ 75%: 7.5941e-04
+[6/20] Seed 2048
+  → Test survival @ 75%: 6.7179e-04
+[7/20] Seed 4096
+  → Test survival @ 75%: 7.3020e-04
+[8/20] Seed 8192
+  → Test survival @ 75%: 6.7179e-04
+[9/20] Seed 16384
+  → Test survival @ 75%: 8.7624e-04
+[10/20] Seed 32768
+  → Test survival @ 75%: 8.1783e-04
+[11/20] Seed 37
+  → Test survival @ 75%: 8.4704e-04
+[12/20] Seed 73
+  → Test survival @ 75%: 8.4704e-04
+[13/20] Seed 101
+  → Test survival @ 75%: 7.8862e-04
+[14/20] Seed 179
+  → Test survival @ 75%: 8.1783e-04
+[15/20] Seed 251
+  → Test survival @ 75%: 9.6387e-04
+[16/20] Seed 353
+  → Test survival @ 75%: 7.0100e-04
+[17/20] Seed 457
+  → Test survival @ 75%: 7.3020e-04
+[18/20] Seed 599
+  → Test survival @ 75%: 8.7624e-04
+[19/20] Seed 701
+  → Test survival @ 75%: 7.5941e-04
+[20/20] Seed 911
+  → Test survival @ 75%: 8.7624e-04
+
+============================================================
+Summary (sorted by metric):
+  Seed    42: 6.4258e-04 ← BEST
+  Seed  2048: 6.7179e-04
+  Seed  8192: 6.7179e-04
+  Seed   512: 7.0100e-04
+  Seed   353: 7.0100e-04
+  Seed  4096: 7.3020e-04
+  Seed   457: 7.3020e-04
+  Seed  1024: 7.5941e-04
+  Seed   701: 7.5941e-04
+  Seed   101: 7.8862e-04
+  Seed 32768: 8.1783e-04
+  Seed   179: 8.1783e-04
+  Seed   123: 8.4704e-04
+  Seed    37: 8.4704e-04
+  Seed    73: 8.4704e-04
+  Seed   256: 8.7624e-04
+  Seed 16384: 8.7624e-04
+  Seed   599: 8.7624e-04
+  Seed   911: 8.7624e-04
+  Seed   251: 9.6387e-04
+
+---
+metric: 6.4258e-04
+description: Seed exploration (20 seeds), best seed=42

@@ -1,0 +1,20 @@
+experiment	metric	status	description
+v1_seed_exploration	6.4258e-04	keep	20-seed exploration, best=seed 42
+v2_xgboost	running	pending	XGBoost gradient boosting (still running)
+v3_attention_cnn	5.8416e-04	keep	Attention CNN on 16x16x2 matrices + MLP on features
+v4_cv_ensemble	7.5941e-04	discard	5-fold CV ensemble - worse than baseline
+v5_svm_features	running	pending	SVM RBF on engineered features (still running)
+v6_logistic	5.9000e-03	discard	Logistic Regression on 15 features - much worse
+v7_calibration	6.7179e-04	discard	Regression DNN + Platt scaling - no improvement
+v8_deeper_attention	6.1337e-04	discard	Deeper attention CNN with 4 blocks - worse than baseline
+v9_attention_features	3.5050e-04	keep	Attention CNN + engineered features (8 features) - **BEST** ✓
+v10_ensemble_cnn_mlp	5.8416e-04	keep	Ensemble of v3 (CNN) + Regression MLP
+v11_multiseed_best	4.9654e-04	discard	Attention CNN multi-seed ensemble (worse than v9)
+v12_lr_tuning	3.5050e-04	keep	Attention CNN LR tuning - confirms lr=1e-3 is optimal
+v13_rich_features	5.8416e-04	discard	Deeper attention CNN + richer features - overfitting
+v14_v9_multiseed	5.5496e-04	discard	Attention CNN + features multi-seed (5 seeds) - worse than v9
+v15_ensemble_best	3.7971e-04	discard	Ensemble v9 (CNN) + MLP (α=0.80) - slightly worse
+v16_pure_cnn	5.2575e-04	discard	Pure CNN on matrices only - shows features matter
+v17_rf_features	5.5788e-03	discard	RandomForest on engineered features - much worse
+v18_weight_search	3.5050e-04	keep	Weight search v9 + v16 - best weight α=0.45 (equals v9 alone)
+v19_different_split	4.3812e-04	discard	v9 architecture with different split seed (2026) - worse than v9

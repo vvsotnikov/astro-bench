@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training pure CNN on matrices only...
+Epoch  1: loss=0.1707 val_surv@75=6.2993e-02
+Epoch  6: loss=0.0955 val_surv@75=4.6232e-02
+Epoch 11: loss=0.0916 val_surv@75=4.9281e-02
+Epoch 16: loss=0.0890 val_surv@75=4.1467e-02
+Epoch 21: loss=0.0866 val_surv@75=3.9371e-02
+Epoch 26: loss=0.0846 val_surv@75=4.0235e-02
+Running inference...
+
+---
+metric: 5.2575e-04
+description: Pure CNN on 16x16x2 matrices only (no scalar features)

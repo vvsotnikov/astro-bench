@@ -1,0 +1,18 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training rich attention CNN...
+Epoch  1: loss=0.1280 val_surv@75=1.8826e-02
+Epoch  6: loss=0.0750 val_surv@75=1.5571e-02
+Epoch 11: loss=0.0726 val_surv@75=1.7073e-02
+Epoch 16: loss=0.0706 val_surv@75=2.0363e-02
+Epoch 21: loss=0.0685 val_surv@75=1.5543e-02
+Epoch 26: loss=0.0654 val_surv@75=1.5694e-02
+Epoch 31: loss=0.0623 val_surv@75=1.6504e-02
+Epoch 36: loss=0.0603 val_surv@75=1.7214e-02
+Running inference...
+
+---
+metric: 5.8416e-04
+description: Deeper attention CNN + richer features (13 engineered features)

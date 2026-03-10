@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training attention CNN...
+Epoch  1: loss=0.1158 val_surv@75=2.3615e-02
+Epoch  6: loss=0.0753 val_surv@75=1.6250e-02
+Epoch 11: loss=0.0730 val_surv@75=1.6233e-02
+Epoch 16: loss=0.0711 val_surv@75=1.7629e-02
+Epoch 21: loss=0.0695 val_surv@75=1.5090e-02
+Epoch 26: loss=0.0683 val_surv@75=1.4555e-02
+Running inference...
+
+---
+metric: 5.8416e-04
+description: Attention-based CNN on matrices + MLP on features (BCELoss)

@@ -1,0 +1,18 @@
+Loading predictions...
+v9 survival: 3.5050e-04
+v16 survival: 5.2575e-04
+
+Searching ensemble weights...
+  α=0.00: 5.2575e-04
+  α=0.10: 4.0891e-04
+  α=0.20: 3.7971e-04
+  α=0.40: 4.0891e-04
+  α=0.80: 3.7971e-04
+
+============================================================
+Best: α=0.450 → 3.5050e-04
+Improvement over v9 alone: 0.0%
+
+---
+metric: 3.5050e-04
+description: Weighted ensemble v9 + v16 (α=0.450)
