@@ -28,3 +28,6 @@ v26_contrastive	9.9991e-01	crash	Contrastive metric learning - centroid-based sc
 v27_vit_tuned	pending	running	Vision Transformer improved (2x2 patches, 6 layers, 128D) - still running
 v27b_vit_simple	5.5496e-04	keep	Vision Transformer (2x2 patches, 64 tokens, 3 layers, 96D) - 21% worse than v9 but competitive
 v28_vit_4x4	7.8862e-04	discard	Vision Transformer (4x4 patches, 16 tokens, 3 layers) - worse; more tokens better
+v29_gb_tuned	pending	running	GradientBoosting tuned (1000 trees, depth=8) - still training
+v30_rf_tuned	5.6080e-03	discard	RandomForest tuned (500 trees, depth=15, balanced) - still much worse than CNN
+v31_extratrees	5.5788e-03	discard	ExtraTreesClassifier (500 trees, depth=15, bootstrap) - consistent with other tree models
