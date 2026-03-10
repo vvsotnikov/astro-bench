@@ -1,0 +1,17 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training Vision Transformer...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v20_vit.py", line 240, in <module>
+    scores = model(mat, feat)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v20_vit.py", line 148, in forward
+    mat = mat.permute(0, 1, 2, 4, 3, 5).reshape(B, -1, self.patch_size**2 * 2)  # (B, 16, 32)
+          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+RuntimeError: permute(sparse_coo): number of dimensions in the tensor input does not match the length of the desired ordering of dimensions i.e. input.dim() = 5 is not equal to len(dims) = 6
