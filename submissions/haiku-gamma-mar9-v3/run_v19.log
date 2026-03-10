@@ -6,3 +6,11 @@ Training attention CNN with different data split...
 Epoch  1: loss=0.1182 val_surv@75=1.2765e-01
 Epoch  6: loss=0.0749 val_surv@75=2.0550e-02
 Epoch 11: loss=0.0726 val_surv@75=1.5740e-02
+Epoch 16: loss=0.0710 val_surv@75=2.6043e-02
+Epoch 21: loss=0.0694 val_surv@75=1.5775e-02
+Epoch 26: loss=0.0682 val_surv@75=1.3891e-02
+Running inference...
+
+---
+metric: 4.3812e-04
+description: Attention CNN + features with different split seed (2026)
