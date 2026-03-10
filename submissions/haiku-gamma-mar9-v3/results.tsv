@@ -36,3 +36,8 @@ v33_ae_attention	7.0100e-04	discard	Autoencoder with attention + 8 features - at
 v34_ae_rich	5.5496e-04	keep	Autoencoder + 12 engineered features (logs, ratios) - BEST AE! Matches ViT
 v35_lr_engineered	5.2575e-03	discard	Logistic Regression with 12 engineered features - linear model insufficient
 v36_hybrid_fusion	7.0100e-04	discard	CNN + features with cross-attention fusion - not better than simple concat
+v37_svm_features	1.2676e-02	discard	SVM RBF with 12 engineered features (subsampled) - much worse
+v38_resnet	3.7971e-04	keep	ResNet-style CNN with skip connections + features - close to v9!
+v39_unet	7.3020e-04	discard	U-Net encoder-decoder with skip connections + features - competitive
+v40_densenet	pending	crash	DenseNet OOM - skipped
+v41_ensemble_best	3.2129e-04	keep	Ensemble of v9 (0.70) + v38 (0.10) + v27b (0.20) - **NEW BEST** ✓
