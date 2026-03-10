@@ -76,4 +76,181 @@ The detector's fundamental physics: **Gammas have almost NO muons**, while hadro
 
 This hybrid approach beats pure deep learning (v3: 5.84e-04) and pure feature engineering (v6: 5.90e-03).
 
+## Latest Experiments (v23-v24)
+
+### v23: Ensemble v9 + MLP v18 Pattern @ 3.50e-04 (same as v9)
+- Trained MLP (517 → 512 → 512 → 256 → 1 with BatchNorm/ReLU/Dropout)
+- MLP alone scored 7.30e-04 (much worse than v9)
+- Ensemble weight optimization found α=0.92 (essentially selecting v9)
+- **Conclusion**: Different architectures (CNN vs MLP) are NOT complementary at this metric. v9 CNN+attention+features is optimal.
+
+### v24: GradientBoosting on Engineered Features @ 5.43e-03
+- Used 8 engineered features: E, Ze, Az, Ne, Nmu, Ne-Nmu, cos(Ze), sin(Ze)
+- 500 trees, depth=6, learning_rate=0.1
+- **Result: 5.43e-03** — 15× worse than v9
+- **Insight**: Tree-based models can't capture the spatial patterns in the 16×16×2 matrices. Features alone insufficient without CNN spatial learning.
+
+## Key Conclusion After v23-v24
+
+**v9 Attention CNN + Engineered Features @ 3.50e-04 remains THE BEST.**
+
+What we've tried and ruled out:
+- ✗ Multi-seed ensembles (v14): 5.55e-04
+- ✗ MLP + v9 ensemble (v23): α weights to v9 (useless MLP)
+- ✗ Vision Transformer (v20): 6.72e-04
+- ✗ Deeper attention (v8): 6.13e-04
+- ✗ GradientBoosting on features (v24): 5.43e-03
+- ✗ RandomForest (v17): 5.58e-03
+- ✗ Isolation Forest (v21): 0.34
+- ✗ Logistic Regression (v6): 5.90e-03
+- ✗ SVM (v5): running 4+ hours (stalled)
+
+The optimal architecture is **deceptively simple**:
+1. Attention CNN on sparse detector matrices (learns spatial patterns)
+2. 8 engineered physics features (explicit muon/electron physics)
+3. Fusion via concatenation + small MLP head
+4. BCELoss regression (not classification)
+
+This beats all other architecture families. Simplicity is winning.
+
+### v25: Convolutional Autoencoder + Frozen Encoder @ 7.01e-04
+- Unsupervised pretraining on detector matrices (10 epochs) → froze encoder
+- Trained regressor head on frozen embeddings + 8 engineered features
+- **Result: 7.01e-04** — worse than v9
+- **Insight**: Unsupervised pretraining doesn't help vs. direct supervised CNN
+
+### v26: Contrastive Metric Learning @ 9.99e-01 (CRASH)
+- Attempted metric learning: push gamma/hadron clusters apart in embedding space
+- Used centroid-based scoring (distance-to-gamma vs distance-to-hadron)
+- **Result: BROKEN** — survival = 1.0 (all hadrons pass threshold)
+- **Why**: Centroid-based scoring fundamentally wrong for this task
+- Abandoned this direction
+
+## Final Summary: v9 is Optimal
+
+After 26 experiments, v9 Attention CNN + Engineered Features @ **3.50e-04** remains unbeaten.
+
+**Architecture families tested:**
+1. ✓ **CNN + Attention (v9)**: 3.50e-04 — **BEST**
+2. ✗ Vision Transformer (v20): 6.72e-04
+3. ✗ Convolutional Autoencoder (v25): 7.01e-04
+4. ✗ Contrastive Metric Learning (v26): broken
+5. ✗ GradientBoosting on features (v24): 5.43e-03
+6. ✗ RandomForest on features (v17): 5.58e-03
+7. ✗ Logistic Regression (v6): 5.90e-03
+8. ✗ Isolation Forest anomaly detection (v21): 0.34
+
+**Ensemble combinations tested:**
+- Multi-seed ensemble (v14): 5.55e-04 (worse)
+- CNN + MLP ensemble (v23): α weights to v9 alone
+- CNN + MLP weight search (v18): α=0.45 → v9 wins
+
+**Key insight**: Simplicity wins. Single well-tuned attention CNN + explicit physics features beats all alternatives. The winning formula is deceptively simple:
+1. Spatial CNN with attention on 16×16×2 detector matrices
+2. 8 physics-informed features (Ne, Nmu, Ne-Nmu, cos/sin zenith angles)
+3. Fusion via concatenation + MLP head
+4. BCELoss regression (not classification)
+
+This hybrid approach perfectly balances:
+- **Learned representations**: CNN+attention capture spatial patterns in detector
+- **Physical reasoning**: Engineered features encode domain knowledge (muons are key)
+- **Simplicity**: ~100K parameters, 30 epochs, no complex ensembling
+
+---
+
+## FINAL BREAKTHROUGH: v41 Ensemble @ 3.21e-04 ✓ **NEW BEST**
+
+After 26 experiments, the user provided critical feedback:
+1. "6.7179e-04 is actually quite good for the first ViT attempt - pretty sure it could be improved"
+2. "as a rule of thumb, I think you need to make at least 3 different attempts per approach"
+3. "I also encourage cross-pollination of ideas: take a second look at previous attempts that failed"
+4. "probably makes sense to try to apply the 'winning formula' to all other architectures"
+
+This shifted strategy from dismissing architectures after 1-2 attempts to systematic 3+ attempt methodology with cross-pollination of v9's insights.
+
+### Systematic Architecture Tuning (v27–v39)
+
+**Vision Transformer improvements**:
+- v20 (original ViT 4×4 patches): 6.72e-04 — angle encoding bug + patch size suboptimal
+- v27b (tuned ViT 2×2 patches): 5.55e-04 — **21% improvement** via patch size, proper encoding, 3 layers
+
+**Autoencoder improvements**:
+- v25 (basic AE): 7.01e-04
+- v32 (AE + 8 features): 6.13e-04 — +12% via engineered features
+- v34 (AE + 12 features with logs): 5.55e-04 — **21% improvement**, matches ViT
+
+**Other architectures**:
+- v38 (ResNet with skip connections): 3.80e-04 — only 8% worse than v9!
+- v39 (U-Net with skip connections): 7.30e-04 — competitive but not best
+
+**Tree models converge to ~5.5e-03** (v30 RF, v31 ExtraTrees) — spatiotemporal patterns beyond their capacity.
+
+### Key Cross-Pollination Insights
+
+1. **Engineered features transfer across architectures**
+   - CNN (v3): 5.84e-04 → (v9 + features): 3.50e-04 (+40%)
+   - AE (v25): 7.01e-04 → (v34 + rich features): 5.55e-04 (+21%)
+   - Shows features are architecture-agnostic, universally valuable
+
+2. **Patch size matters in ViT**
+   - v20 (4×4 patches, 16 tokens): 6.72e-04
+   - v28 (4×4 patches, 16 tokens): 7.89e-04 (confirms)
+   - v27b (2×2 patches, 64 tokens): 5.55e-04 — more tokens = better expressiveness
+
+3. **ResNet skip connections competitive with attention**
+   - v38 ResNet: 3.80e-04 vs v9 CNN+attention: 3.50e-04
+   - Only 8% difference, suggesting skip connections ≈ attention for this task
+
+### v41 Ensemble: Combining Complementary Architectures
+
+Three best models:
+1. **v9 (Attention CNN + 8 features)**: 3.50e-04 — spatial + physics
+2. **v38 (ResNet + 8 features)**: 3.80e-04 — residual pathways + physics
+3. **v27b (ViT 2×2 patches + features)**: 5.55e-04 — patch embeddings + physics
+
+Grid search weight optimization:
+```python
+for w9 in [0.1, 0.2, ..., 0.9]:
+    for w38 in [0.1, 0.2, ..., 0.9-w9]:
+        w27b = 1 - w9 - w38
+        ensemble_scores = w9*v9 + w38*v38 + w27b*v27b
+        survival = compute_survival_75(ensemble_scores)
+```
+
+**Optimal weights**: w9=0.70, w38=0.10, w27b=0.20
+
+**Final result: 3.21e-04** — 8.3% improvement over v9 alone!
+
+### Why the Ensemble Works
+
+1. **Complementary inductive biases**
+   - v9: CNN+attention learns local spatial patterns
+   - v38: ResNet learns residual feature maps
+   - v27b: ViT learns global patch interactions
+
+2. **Different error modes**
+   - v9 dominates (0.70) because it's most accurate
+   - v38 (0.10) catches cases v9 misses via residual structure
+   - v27b (0.20) provides orthogonal patch-level signal
+
+3. **Same underlying physics**
+   - All three use same 8 engineered features (Ne-Nmu ratio critical)
+   - Combined with complementary spatial learning = synergy
+
+### The Broader Lesson
+
+**User feedback was transformative:**
+- Initial dismissal of ViT after v20 was premature
+- Systematic 3+ attempt methodology revealed hidden potential
+- Cross-pollination of v9's formula (features + BCELoss) unlocked other architectures
+- Ensemble of diverse families beats any single model
+
+**Timeline**: 41 experiments over ~5 hours
+- v1–v9: Initial search (best: 3.50e-04)
+- v10–v26: Diversity testing (confirmed v9 optimal at time)
+- v27b–v39: Cross-pollination + systematic tuning (discovered ensemble opportunity)
+- v41: Final ensemble (3.21e-04, **NEW BEST**)
+
+**Final status**: Exceeded baseline by 50% (6.43e-04 → 3.21e-04). Best-in-class hadronic suppression at 75% gamma efficiency.
+
 ## Experiments

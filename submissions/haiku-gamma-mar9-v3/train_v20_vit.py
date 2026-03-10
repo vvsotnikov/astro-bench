@@ -143,9 +143,10 @@ class VisionTransformer(nn.Module):
         B = mat.size(0)
 
         # Patch embedding: (B, 2, 16, 16) -> (B, 16, 32) -> (B, 16, embed_dim)
-        mat = mat.permute(0, 2, 3, 1)  # (B, 16, 16, 2)
-        mat = mat.reshape(B, -1, self.patch_size, self.patch_size, 2)  # (B, 4, 4, 4, 4, 2)
-        mat = mat.permute(0, 1, 2, 4, 3, 5).reshape(B, -1, self.patch_size**2 * 2)  # (B, 16, 32)
+        # Split into 4x4=16 patches of size 4x4 each
+        mat = mat.reshape(B, 2, 4, self.patch_size, 4, self.patch_size)  # (B, 2, 4, 4, 4, 4)
+        mat = mat.permute(0, 2, 4, 1, 3, 5)  # (B, 4, 4, 2, 4, 4)
+        mat = mat.reshape(B, 16, self.patch_size**2 * 2)  # (B, 16, 32)
         x = self.patch_embed(mat)  # (B, 16, embed_dim)
 
         # Add CLS token
