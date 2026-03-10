@@ -21,3 +21,5 @@ v19_different_split	4.3812e-04	discard	v9 architecture with different split seed
 v20_vit	6.7179e-04	discard	Vision Transformer fundamentally different - worse than v9
 v21_isolation_forest	3.4413e-01	discard	Anomaly detection approach - terrible
 v22_stacking_cv	pending	running	Stacking with RF+GB base + LR meta-learner (still running)
+v23_ensemble_v9_mlp	3.5050e-04	discard	Ensemble v9 + MLP v18 - weights select v9 alone (α=0.92)
+v24_gb_features	5.4327e-03	discard	GradientBoosting on engineered features - much worse than v9

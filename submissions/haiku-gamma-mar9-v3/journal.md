@@ -76,4 +76,41 @@ The detector's fundamental physics: **Gammas have almost NO muons**, while hadro
 
 This hybrid approach beats pure deep learning (v3: 5.84e-04) and pure feature engineering (v6: 5.90e-03).
 
+## Latest Experiments (v23-v24)
+
+### v23: Ensemble v9 + MLP v18 Pattern @ 3.50e-04 (same as v9)
+- Trained MLP (517 → 512 → 512 → 256 → 1 with BatchNorm/ReLU/Dropout)
+- MLP alone scored 7.30e-04 (much worse than v9)
+- Ensemble weight optimization found α=0.92 (essentially selecting v9)
+- **Conclusion**: Different architectures (CNN vs MLP) are NOT complementary at this metric. v9 CNN+attention+features is optimal.
+
+### v24: GradientBoosting on Engineered Features @ 5.43e-03
+- Used 8 engineered features: E, Ze, Az, Ne, Nmu, Ne-Nmu, cos(Ze), sin(Ze)
+- 500 trees, depth=6, learning_rate=0.1
+- **Result: 5.43e-03** — 15× worse than v9
+- **Insight**: Tree-based models can't capture the spatial patterns in the 16×16×2 matrices. Features alone insufficient without CNN spatial learning.
+
+## Key Conclusion After v23-v24
+
+**v9 Attention CNN + Engineered Features @ 3.50e-04 remains THE BEST.**
+
+What we've tried and ruled out:
+- ✗ Multi-seed ensembles (v14): 5.55e-04
+- ✗ MLP + v9 ensemble (v23): α weights to v9 (useless MLP)
+- ✗ Vision Transformer (v20): 6.72e-04
+- ✗ Deeper attention (v8): 6.13e-04
+- ✗ GradientBoosting on features (v24): 5.43e-03
+- ✗ RandomForest (v17): 5.58e-03
+- ✗ Isolation Forest (v21): 0.34
+- ✗ Logistic Regression (v6): 5.90e-03
+- ✗ SVM (v5): running 4+ hours (stalled)
+
+The optimal architecture is **deceptively simple**:
+1. Attention CNN on sparse detector matrices (learns spatial patterns)
+2. 8 engineered physics features (explicit muon/electron physics)
+3. Fusion via concatenation + small MLP head
+4. BCELoss regression (not classification)
+
+This beats all other architecture families. Simplicity is winning.
+
 ## Experiments
