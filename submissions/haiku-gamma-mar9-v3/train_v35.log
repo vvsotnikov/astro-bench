@@ -1,0 +1,14 @@
+Loading data...
+X_train shape: (1530715, 12)
+y_train distribution: [  73236 1457479]
+
+Training Logistic Regression with engineered features...
+
+Generating test predictions...
+gamma_scores shape: (35751,)
+gamma_scores range: [0.0120, 1.0000]
+Hadronic survival @ 75% gamma eff: 5.2575e-03
+
+---
+metric: 5.2575e-03
+description: Logistic Regression with 12 engineered features (C=0.1, balanced)
