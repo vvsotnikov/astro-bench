@@ -1,0 +1,23 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Training Convolutional Autoencoder (unsupervised)...
+  Epoch 0, AE loss: 0.7553, val: 0.7388
+  Epoch 2, AE loss: 0.7424, val: 0.7380
+  Epoch 4, AE loss: 0.7420, val: 0.7378
+  Epoch 6, AE loss: 0.7419, val: 0.7377
+  Epoch 8, AE loss: 0.7419, val: 0.7377
+
+Training regressor on AE embeddings + features...
+  Epoch 0, survival@75%: 5.4207e-02
+  Epoch 5, survival@75%: 4.0843e-02
+  Epoch 10, survival@75%: 2.0864e-02
+  Epoch 15, survival@75%: 2.0716e-02
+
+Autoencoder + regressor survival @ 75%: 7.0100e-04
+
+---
+metric: 7.0100e-04
+description: Convolutional autoencoder (unsupervised) + frozen encoder + regressor head

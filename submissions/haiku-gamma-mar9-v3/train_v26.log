@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Training contrastive metric learning model...
+  Epoch 0, loss: 2.0015, survival@75%: 9.9991e-01
+  Epoch 5, loss: 2.0002, survival@75%: 1.0000e+00
+  Epoch 10, loss: 2.0002, survival@75%: 1.0000e+00
+  Epoch 15, loss: 2.0002, survival@75%: 1.0000e+00
+
+Contrastive metric learning survival @ 75%: 9.9991e-01
+
+---
+metric: 9.9991e-01
+description: Contrastive metric learning (push gamma/hadron clusters apart)
