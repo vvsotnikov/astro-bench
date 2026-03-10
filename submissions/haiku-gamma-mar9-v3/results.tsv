@@ -46,3 +46,8 @@ v43_deeper_resnet	pending	crash	Deeper ResNet with 4 residual blocks - hung duri
 v44_convnext	pending	crash	ConvNeXt with depthwise separable - LayerNorm dimension mismatch
 v45_multihead_attention	pending	crash	v9 with 4-head attention - OOM during training (GPU memory contention)
 v46_tta_ensemble	3.2129e-04	discard	TTA noise perturbations on v41 - same as v41 baseline
+v47_focal_loss	pending	crash	v9 with focal loss - attention block dimension error
+v48_deep_mlp	5.4035e-03	discard	5-layer MLP (512→512→256→128) on 8 features only - worse than v9
+v49_log1p_transform	pending	crash	v9 with log1p transform on matrices - attention block dimension error
+v50_augmentation	pending	crash	v9 with rotation/flip augmentation - attention block dimension error
+v51_ensemble_v9_v20	3.5050e-04	discard	Weighted ensemble v9 (0.80) + v20 (0.20) - equals v9 alone

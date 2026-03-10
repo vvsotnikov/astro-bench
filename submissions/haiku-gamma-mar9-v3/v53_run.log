@@ -1,0 +1,8 @@
+Device: cuda:0
+
+Training with energy-normalized features...
+Epoch 0: survival=3.7731e-02
+Epoch 5: survival=1.8576e-02
+Epoch 10: survival=4.5899e-02
+Epoch 15: survival=1.5553e-02
+Epoch 20: survival=1.6034e-02
