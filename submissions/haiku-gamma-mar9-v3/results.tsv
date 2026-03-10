@@ -43,3 +43,6 @@ v40_densenet	pending	crash	DenseNet OOM - skipped
 v41_ensemble_best	3.2129e-04	keep	Ensemble of v9 (0.70) + v38 (0.10) + v27b (0.20) - **NEW BEST** ✓
 v42_hybrid_resnet_attention	pending	crash	ResNet with SE attention gates - crashed after epoch 5 (training issue)
 v43_deeper_resnet	pending	crash	Deeper ResNet with 4 residual blocks - hung during training (memory/timeout)
+v44_convnext	pending	crash	ConvNeXt with depthwise separable - LayerNorm dimension mismatch
+v45_multihead_attention	pending	crash	v9 with 4-head attention - OOM during training (GPU memory contention)
+v46_tta_ensemble	3.2129e-04	discard	TTA noise perturbations on v41 - same as v41 baseline
