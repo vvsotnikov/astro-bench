@@ -17,4 +17,4 @@ v15_ensemble_best	3.7971e-04	discard	Ensemble v9 (CNN) + MLP (α=0.80) - slightl
 v16_pure_cnn	5.2575e-04	discard	Pure CNN on matrices only - shows features matter
 v17_rf_features	5.5788e-03	discard	RandomForest on engineered features - much worse
 v18_weight_search	3.5050e-04	keep	Weight search v9 + v16 - best weight α=0.45 (equals v9 alone)
-v19_different_split	running	pending	v9 architecture with different split seed (2026)
+v19_different_split	4.3812e-04	discard	v9 architecture with different split seed (2026) - worse than v9
