@@ -26,4 +26,5 @@ v24_gb_features	5.4327e-03	discard	GradientBoosting on engineered features - muc
 v25_autoencoder	7.0100e-04	discard	Convolutional autoencoder (unsupervised) + frozen encoder - worse than v9
 v26_contrastive	9.9991e-01	crash	Contrastive metric learning - centroid-based scoring broken (1.0 survival)
 v27_vit_tuned	pending	running	Vision Transformer improved (2x2 patches, 6 layers, 128D) - still running
-v27b_vit_simple	5.5496e-04	keep	Vision Transformer (2x2 patches, 3 layers, 96D) - 21% worse than v9 but competitive
+v27b_vit_simple	5.5496e-04	keep	Vision Transformer (2x2 patches, 64 tokens, 3 layers, 96D) - 21% worse than v9 but competitive
+v28_vit_4x4	7.8862e-04	discard	Vision Transformer (4x4 patches, 16 tokens, 3 layers) - worse; more tokens better
