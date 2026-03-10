@@ -44,12 +44,23 @@
 - v11: Multi-seed attention ensemble (3 seeds)
 - v12: LR tuning (3 different learning rates)
 
-## Final Status (as of iteration 14)
+## Final Status (as of iteration 19+)
 
-**COMPLETE. Best result stable at 3.50e-04 (v9).**
+**V9 REMAINS OPTIMAL at 3.50e-04. Extensive testing confirms it's the best.**
 
-- v13 (richer features): 5.84e-04 — shows diminishing returns, more features hurt
-- v14 (multi-seed v9): still running, unlikely to beat v9 (single seed beat ensemble in v11)
+Recent experiments (v14-v19):
+- v14 (Multi-seed v9, 5 seeds): 5.55e-04 — **worse** (confirms single seed > ensemble)
+- v15 (Ensemble v9+MLP): 3.80e-04 — slightly worse
+- v16 (Pure CNN, no features): 5.26e-04 — shows **features critical** (33% improvement to match v9)
+- v17 (RandomForest features): 5.58e-03 — much worse
+- v18 (Weight search v9+v16): 3.50e-04 — confirms v9 optimal (best weight α=0.45 = mostly v9)
+- v19 (Different split seed): running, unlikely to beat v9
+
+Key insights from ensemble experiments:
+1. **v9 is already well-optimized** — adding other models doesn't help
+2. **Features are absolutely critical** — pure CNN (5.26e-04) needs engineered features (→ 3.50e-04)
+3. **Diverse architectures don't help** — CNN, MLP, RF, SVM, GBM, SVM all tried; v9 alone wins
+4. **Single well-tuned model > ensemble** — v14 multi-seed worse than single seed
 
 The winning formula is clear:
 1. **Spatial CNN with attention** for detector matrices
