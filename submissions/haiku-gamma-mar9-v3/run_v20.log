@@ -3,15 +3,14 @@ Device: cuda:0
 Loading data and computing statistics...
 Preparing train/val split...
 Training Vision Transformer...
-Traceback (most recent call last):
-  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v20_vit.py", line 240, in <module>
-    scores = model(mat, feat)
-  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v20_vit.py", line 148, in forward
-    mat = mat.permute(0, 1, 2, 4, 3, 5).reshape(B, -1, self.patch_size**2 * 2)  # (B, 16, 32)
-          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-RuntimeError: permute(sparse_coo): number of dimensions in the tensor input does not match the length of the desired ordering of dimensions i.e. input.dim() = 5 is not equal to len(dims) = 6
+Epoch  1: loss=0.1403 val_surv@75=2.1886e-02
+Epoch  6: loss=0.0771 val_surv@75=1.8339e-02
+Epoch 11: loss=0.0748 val_surv@75=1.7049e-02
+Epoch 16: loss=0.0730 val_surv@75=1.6421e-02
+Epoch 21: loss=0.0711 val_surv@75=1.5756e-02
+Epoch 26: loss=0.0697 val_surv@75=1.5471e-02
+Running inference...
+
+---
+metric: 6.7179e-04
+description: Vision Transformer on 16x16x2 matrices + engineered features

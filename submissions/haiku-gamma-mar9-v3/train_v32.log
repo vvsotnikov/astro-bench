@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training autoencoder + regressor with engineered features...
+Epoch  0: loss=0.0939, val_survival=2.3584e-02
+Epoch  5: loss=0.0737, val_survival=1.8521e-02
+Epoch 10: loss=0.0679, val_survival=1.6370e-02
+Epoch 15: loss=0.0565, val_survival=1.8051e-02
+Epoch 20: loss=0.0454, val_survival=1.9245e-02
+Epoch 25: loss=0.0388, val_survival=1.9341e-02
+
+Autoencoder + features survival @ 75%: 6.1337e-04
+
+---
+metric: 6.1337e-04
+description: Autoencoder encoder + engineered features regression (8 feat, BCELoss)

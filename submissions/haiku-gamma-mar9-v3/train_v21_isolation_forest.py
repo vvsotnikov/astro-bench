@@ -52,6 +52,9 @@ X_train_scaled = scaler.fit_transform(X_train)
 contamination = labels[labels == 0].sum() / len(labels)
 print(f"Contamination (gamma fraction): {contamination:.4f}")
 
+# Clamp contamination to valid range [0.01, 0.5]
+contamination = max(0.01, min(0.5, contamination))
+
 print(f"\nTraining Isolation Forest...")
 iso_forest = IsolationForest(
     contamination=contamination,

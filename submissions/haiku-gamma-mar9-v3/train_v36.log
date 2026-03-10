@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training hybrid model with cross-attention fusion...
+Epoch  0: loss=0.0978, val_survival=1.8888e-02
+Epoch  5: loss=0.0736, val_survival=1.7125e-02
+Epoch 10: loss=0.0703, val_survival=1.7131e-02
+Epoch 15: loss=0.0648, val_survival=1.5770e-02
+Epoch 20: loss=0.0542, val_survival=1.6459e-02
+Epoch 25: loss=0.0449, val_survival=1.8778e-02
+
+Hybrid with cross-attention survival @ 75%: 7.0100e-04
+
+---
+metric: 7.0100e-04
+description: CNN spatial + features with cross-attention fusion (different from v9)

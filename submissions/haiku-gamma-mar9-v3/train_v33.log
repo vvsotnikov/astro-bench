@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training autoencoder with attention + engineered features...
+Epoch  0: loss=0.0930, val_survival=1.9227e-02
+Epoch  5: loss=0.0728, val_survival=1.7022e-02
+Epoch 10: loss=0.0658, val_survival=1.6535e-02
+Epoch 15: loss=0.0525, val_survival=7.1246e-02
+Epoch 20: loss=0.0401, val_survival=2.0606e-02
+Epoch 25: loss=0.0326, val_survival=2.1591e-02
+
+Autoencoder+attention + features survival @ 75%: 7.0100e-04
+
+---
+metric: 7.0100e-04
+description: Autoencoder with attention gates + engineered features (same as v9 pattern)

@@ -1,29 +1,30 @@
+[Parallel(n_jobs=48)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=48)]: Done   2 out of  48 | elapsed:    2.8s remaining:  1.1min
+[Parallel(n_jobs=48)]: Done  48 out of  48 | elapsed:    3.6s finished
+[Parallel(n_jobs=1)]: Done  49 tasks      | elapsed:    2.8s
+[Parallel(n_jobs=1)]: Done 199 tasks      | elapsed:   11.4s
+[Parallel(n_jobs=1)]: Done 449 tasks      | elapsed:   25.9s
+[Parallel(n_jobs=1)]: Done 500 out of 500 | elapsed:   28.9s finished
+[Parallel(n_jobs=1)]: Done  49 tasks      | elapsed:    2.8s
+[Parallel(n_jobs=1)]: Done 199 tasks      | elapsed:   11.5s
+[Parallel(n_jobs=1)]: Done 449 tasks      | elapsed:   25.9s
+[Parallel(n_jobs=1)]: Done 500 out of 500 | elapsed:   29.2s finished
+[Parallel(n_jobs=1)]: Done  49 tasks      | elapsed:    0.1s
+[Parallel(n_jobs=1)]: Done 199 tasks      | elapsed:    0.3s
+[Parallel(n_jobs=1)]: Done 449 tasks      | elapsed:    0.6s
+[Parallel(n_jobs=1)]: Done 500 out of 500 | elapsed:    0.7s finished
 Loading data...
 X_train shape: (1530715, 13)
 y_train distribution: [  73236 1457479]
 Contamination (gamma fraction): 0.0000
 
 Training Isolation Forest...
-Traceback (most recent call last):
-  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v21_isolation_forest.py", line 65, in <module>
-    iso_forest.fit(X_train_scaled)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/base.py", line 1329, in wrapper
-    estimator._validate_params()
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/base.py", line 492, in _validate_params
-    validate_parameter_constraints(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self._parameter_constraints,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        self.get_params(deep=False),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        caller_name=self.__class__.__name__,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/utils/_param_validation.py", line 98, in validate_parameter_constraints
-    raise InvalidParameterError(
-    ...<2 lines>...
-    )
-sklearn.utils._param_validation.InvalidParameterError: The 'contamination' parameter of IsolationForest must be a str among {'auto'} or a float in the range (0.0, 0.5]. Got np.float64(0.0) instead.
+Training survival @ 75%: 3.2626e-01
+
+Generating test predictions...
+gamma_scores range: [0.0000, 1.0000]
+Test survival @ 75% gamma eff: 3.4413e-01
+
+---
+metric: 3.4413e-01
+description: Isolation Forest anomaly detection (gammas as outliers)

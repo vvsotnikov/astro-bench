@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training U-Net...
+Epoch  0: loss=0.0930, val_survival=1.8068e-02
+Epoch  5: loss=0.0736, val_survival=1.7715e-02
+Epoch 10: loss=0.0688, val_survival=1.6034e-02
+Epoch 15: loss=0.0590, val_survival=1.7063e-02
+Epoch 20: loss=0.0487, val_survival=1.7454e-02
+Epoch 25: loss=0.0419, val_survival=1.8528e-02
+
+U-Net survival @ 75%: 7.3020e-04
+
+---
+metric: 7.3020e-04
+description: U-Net encoder-decoder with skip connections + engineered features

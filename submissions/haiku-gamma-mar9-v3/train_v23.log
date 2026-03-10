@@ -1,0 +1,20 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+Loading v9 (Attention CNN + features) predictions...
+v9 survival @ 75%: 3.5050e-04
+
+Training MLP regression (v18 pattern)...
+MLP survival @ 75%: 7.3020e-04
+
+Optimizing ensemble weights...
+
+============================================================
+v9 alone: 3.5050e-04
+MLP alone: 7.3020e-04
+Best ensemble (α=0.920): 3.5050e-04
+
+---
+metric: 3.5050e-04
+description: Ensemble v9 (Attention CNN) + MLP v18 pattern (α=0.920)

@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training simple ViT (2x2 patches, 3 layers)...
+Epoch  0: loss=0.1177, val_survival=2.2291e-02
+Epoch  5: loss=0.0755, val_survival=1.6662e-02
+Epoch 10: loss=0.0734, val_survival=1.5238e-02
+Epoch 15: loss=0.0719, val_survival=1.5217e-02
+Epoch 20: loss=0.0704, val_survival=1.3842e-02
+Epoch 25: loss=0.0691, val_survival=1.3560e-02
+
+Simple ViT survival @ 75%: 5.5496e-04
+
+---
+metric: 5.5496e-04
+description: Vision Transformer (2x2 patches, 3 layers, 96D)
