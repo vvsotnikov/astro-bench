@@ -41,3 +41,5 @@ v38_resnet	3.7971e-04	keep	ResNet-style CNN with skip connections + features - c
 v39_unet	7.3020e-04	discard	U-Net encoder-decoder with skip connections + features - competitive
 v40_densenet	pending	crash	DenseNet OOM - skipped
 v41_ensemble_best	3.2129e-04	keep	Ensemble of v9 (0.70) + v38 (0.10) + v27b (0.20) - **NEW BEST** ✓
+v42_hybrid_resnet_attention	pending	crash	ResNet with SE attention gates - crashed after epoch 5 (training issue)
+v43_deeper_resnet	pending	crash	Deeper ResNet with 4 residual blocks - hung during training (memory/timeout)
