@@ -9,3 +9,17 @@ Test survival @ 75%: 4.3812e-04
 Test survival @ 75%: 6.4258e-04
 
 === Seed 200 ===
+Test survival @ 75%: 5.5496e-04
+
+=== Seed 300 ===
+Test survival @ 75%: 6.7179e-04
+
+=== Seed 400 ===
+Test survival @ 75%: 7.3020e-04
+
+============================================================
+Ensemble of 5 seeds: 5.5496e-04
+
+---
+metric: 5.5496e-04
+description: Attention CNN + features multi-seed ensemble (5 seeds)
