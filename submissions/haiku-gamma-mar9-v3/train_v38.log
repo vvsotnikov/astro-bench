@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training ResNet-style CNN...
+Epoch  0: loss=0.0936, val_survival=2.2209e-02
+Epoch  5: loss=0.0733, val_survival=1.6589e-02
+Epoch 10: loss=0.0700, val_survival=1.6044e-02
+Epoch 15: loss=0.0638, val_survival=1.7138e-02
+Epoch 20: loss=0.0521, val_survival=1.9125e-02
+Epoch 25: loss=0.0440, val_survival=1.8113e-02
+
+ResNet-CNN survival @ 75%: 3.7971e-04
+
+---
+metric: 3.7971e-04
+description: ResNet-style CNN with skip connections + engineered features
