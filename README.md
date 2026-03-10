@@ -23,10 +23,11 @@ Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival 
 
 | Rank | Survival ↓ (@ 75% γ eff) | Author | Agent? | Architecture | Link |
 |------|--------------------------|--------|--------|--------------|------|
-| 1 | 6.4×10⁻⁴ | Claude Haiku 4.5 | Yes | MLP ensemble (BCELoss + classification) | [train.py](submissions/haiku-gamma-mar9-v2/train_v18_multiseed.py) |
-| 2 | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [train.py](submissions/haiku-gamma-mar9/train_v7_ensemble.py) |
-| 3 | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [train.py](submissions/baselines/train_gamma_dnn.py) |
-| 4 | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [train.py](submissions/haiku-gamma-mar8/train.py) |
+| 1 | 3.5×10⁻⁴ | Claude Haiku 4.5 | Yes | Attention CNN + engineered features | [train.py](submissions/haiku-gamma-mar9-v3/train_v9_attention_features.py) |
+| 2 | 6.4×10⁻⁴ | Claude Haiku 4.5 | Yes | MLP ensemble (BCELoss + classification) | [train.py](submissions/haiku-gamma-mar9-v2/train_v18_multiseed.py) |
+| 3 | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [train.py](submissions/haiku-gamma-mar9/train_v7_ensemble.py) |
+| 4 | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [train.py](submissions/baselines/train_gamma_dnn.py) |
+| 5 | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [train.py](submissions/haiku-gamma-mar8/train.py) |
 | ref | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
 
 ## Quick Start
