@@ -113,4 +113,47 @@ The optimal architecture is **deceptively simple**:
 
 This beats all other architecture families. Simplicity is winning.
 
+### v25: Convolutional Autoencoder + Frozen Encoder @ 7.01e-04
+- Unsupervised pretraining on detector matrices (10 epochs) → froze encoder
+- Trained regressor head on frozen embeddings + 8 engineered features
+- **Result: 7.01e-04** — worse than v9
+- **Insight**: Unsupervised pretraining doesn't help vs. direct supervised CNN
+
+### v26: Contrastive Metric Learning @ 9.99e-01 (CRASH)
+- Attempted metric learning: push gamma/hadron clusters apart in embedding space
+- Used centroid-based scoring (distance-to-gamma vs distance-to-hadron)
+- **Result: BROKEN** — survival = 1.0 (all hadrons pass threshold)
+- **Why**: Centroid-based scoring fundamentally wrong for this task
+- Abandoned this direction
+
+## Final Summary: v9 is Optimal
+
+After 26 experiments, v9 Attention CNN + Engineered Features @ **3.50e-04** remains unbeaten.
+
+**Architecture families tested:**
+1. ✓ **CNN + Attention (v9)**: 3.50e-04 — **BEST**
+2. ✗ Vision Transformer (v20): 6.72e-04
+3. ✗ Convolutional Autoencoder (v25): 7.01e-04
+4. ✗ Contrastive Metric Learning (v26): broken
+5. ✗ GradientBoosting on features (v24): 5.43e-03
+6. ✗ RandomForest on features (v17): 5.58e-03
+7. ✗ Logistic Regression (v6): 5.90e-03
+8. ✗ Isolation Forest anomaly detection (v21): 0.34
+
+**Ensemble combinations tested:**
+- Multi-seed ensemble (v14): 5.55e-04 (worse)
+- CNN + MLP ensemble (v23): α weights to v9 alone
+- CNN + MLP weight search (v18): α=0.45 → v9 wins
+
+**Key insight**: Simplicity wins. Single well-tuned attention CNN + explicit physics features beats all alternatives. The winning formula is deceptively simple:
+1. Spatial CNN with attention on 16×16×2 detector matrices
+2. 8 physics-informed features (Ne, Nmu, Ne-Nmu, cos/sin zenith angles)
+3. Fusion via concatenation + MLP head
+4. BCELoss regression (not classification)
+
+This hybrid approach perfectly balances:
+- **Learned representations**: CNN+attention capture spatial patterns in detector
+- **Physical reasoning**: Engineered features encode domain knowledge (muons are key)
+- **Simplicity**: ~100K parameters, 30 epochs, no complex ensembling
+
 ## Experiments
