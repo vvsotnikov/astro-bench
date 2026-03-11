@@ -68,3 +68,8 @@ v64_swa_fixed	crashed	crash	SWA (simple averaging): crashed on loading state_dic
 v65_ensemble_v9_resnet	5.2575e-04	discard	2-model ensemble v9 (0.70) + v38 (0.30) - worse than v41 (5.26e-04 vs 3.21e-04)
 v66_focal_loss	4.9654e-04	discard	Focal Loss: α=0.25, γ=2.0 - competitive (4.97e-04) but still worse than v41 (3.21e-04)
 v67_v9_focal_loss	5.2575e-04	discard	v9 Attention CNN with Focal Loss (α=0.25, γ=2.0) - worse than v9 BCE (5.26e-04 vs 3.50e-04)
+v68_augmentation	5.5203e-03	discard	Data augmentation (90° rotations, flips) - much worse! Spatial structure fragile
+v69_resnet_skip	4.9654e-04	discard	ResNet skip connections - same as focal (4.97e-04), worse than v9 (3.50e-04)
+v70_v9_long_training	4.9654e-04	discard	v9 with 100 epochs, lr=5e-4 - no improvement! Early stopping better
+v71_log1p_transform	pending	running	Log1p on sparse matrices - reduces high values, may help sparsity
+v71_log1p_transform	5.2575e-04	discard	Log1p on sparse matrices - same as PINN/ensemble (5.26e-04), no improvement

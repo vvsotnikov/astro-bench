@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training ResNet with Skip Connections...
+Epoch  0: loss=0.1114, test_survival=1.3144e-03
+Epoch  5: loss=0.0857, test_survival=4.9654e-04
+Epoch 10: loss=0.0831, test_survival=6.4258e-04
+Epoch 15: loss=0.0810, test_survival=5.5496e-04
+Epoch 20: loss=0.0785, test_survival=7.3020e-04
+Epoch 25: loss=0.0763, test_survival=9.0545e-04
+
+---
+metric: 4.9654e-04
+description: ResNet-style CNN with improved skip connections + 8 features
