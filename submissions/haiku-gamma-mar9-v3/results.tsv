@@ -89,3 +89,5 @@ v84	crash	crash	Simple 2-model ensemble v9+v27b - ViT architecture mismatch
 v85	crash	crash	Adversarial domain adaptation - model output shape mismatch
 v86	crash	crash	Simple MoE (CNN+MLP) with learned gating - numerical issues
 v87	5.2575e-04	discard	Multi-task learning (gamma + Energy/Zenith/Electron) - same as PINN v53
+v88	5.4532e-02	discard	Nmu regression (reverse problem) - 54× worse! Reversing problem hurts
+v89	3.2129e-04	discard	Isotonic regression calibration - same as v41 (no improvement)
