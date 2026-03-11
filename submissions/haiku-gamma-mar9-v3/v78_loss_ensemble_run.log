@@ -1,0 +1,28 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Training ensemble of v9 with different loss functions...
+
+  Training with BCEWithLogitsLoss...
+    Epoch  0: loss=0.1134, test_survival=3.5634e-03
+    Epoch 10: loss=0.0839, test_survival=5.8416e-04
+    Epoch 20: loss=0.0797, test_survival=4.6733e-04
+  Final BCEWithLogitsLoss: 4.6733e-04
+
+  Training with HuberLoss...
+    Epoch  0: loss=0.0143, test_survival=1.2852e-03
+    Epoch 10: loss=0.0091, test_survival=6.1337e-04
+    Epoch 20: loss=0.0085, test_survival=7.5941e-04
+  Final HuberLoss: 5.5496e-04
+
+  Training with MSELoss...
+    Epoch  0: loss=0.0386, test_survival=1.1391e-03
+    Epoch 10: loss=0.0218, test_survival=5.5496e-04
+    Epoch 20: loss=0.0204, test_survival=6.7179e-04
+  Final MSELoss: 5.5496e-04
+
+Ensembling predictions...
+
+---
+metric: 4.6733e-04
+description: Ensemble of v9 trained with BCEWithLogits, Huber, and MSE loss

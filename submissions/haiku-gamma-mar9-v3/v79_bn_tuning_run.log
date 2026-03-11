@@ -1,0 +1,28 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Training v9 variants with different BN momentum values...
+
+  Training with BN momentum=0.05...
+    Epoch  0: test_survival=1.1391e-03
+    Epoch 10: test_survival=7.8862e-04
+    Epoch 20: test_survival=7.3020e-04
+  Final: 7.3020e-04
+
+  Training with BN momentum=0.1...
+    Epoch  0: test_survival=1.1099e-03
+    Epoch 10: test_survival=5.8416e-04
+    Epoch 20: test_survival=6.1337e-04
+  Final: 5.5496e-04
+
+  Training with BN momentum=0.2...
+    Epoch  0: test_survival=1.1391e-03
+    Epoch 10: test_survival=4.3812e-04
+    Epoch 20: test_survival=5.8416e-04
+  Final: 4.3812e-04
+
+Best BN momentum: 0.2 with survival 4.3812e-04
+
+---
+metric: 4.3812e-04
+description: v9 Attention CNN with optimized BN momentum=0.2
