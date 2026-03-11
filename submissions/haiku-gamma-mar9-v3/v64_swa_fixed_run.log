@@ -1,0 +1,21 @@
+Device: cuda:0
+
+Training with Stochastic Weight Averaging (SWA)...
+Epoch  0: loss=0.1194, test_survival=1.1391e-03
+Epoch  5: loss=0.0864, test_survival=7.3020e-04
+Epoch 10: loss=0.0838, test_survival=6.1337e-04
+Epoch 15: loss=0.0814, test_survival=4.9654e-04
+Epoch 20: loss=0.0793, test_survival=6.1337e-04
+Epoch 25: loss=0.0777, test_survival=7.0100e-04
+
+Averaging 10 checkpoints from epochs 20+...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v64_swa_fixed.py", line 190, in <module>
+    swa_model.load_state_dict(swa_state)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 2635, in load_state_dict
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Error(s) in loading state_dict for SimpleCNN:
+	Missing key(s) in state_dict: "bn1.running_mean", "bn1.running_var", "bn2.running_mean", "bn2.running_var", "bn3.running_mean", "bn3.running_var", "feat_mlp.1.running_mean", "feat_mlp.1.running_var", "fusion.1.running_mean", "fusion.1.running_var", "fusion.5.running_mean", "fusion.5.running_var". 

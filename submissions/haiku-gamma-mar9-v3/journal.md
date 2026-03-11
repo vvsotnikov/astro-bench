@@ -347,4 +347,32 @@ Additional high-value experiments after Phase 2:
 
 **Key insight**: Contrastive learning shows promise but hasn't beaten the ensemble yet. The winning formula remains ensemble of complementary architectures with engineered physics features.
 
+## Final Status (66+ experiments)
+
+**Comprehensive exploration of gamma/hadron binary classification achieved:**
+- **Best result**: v41 ensemble @ **3.21e-04** (50% better than baseline 6.43e-04)
+  - Weights: Attention CNN (0.70) + ResNet (0.10) + ViT (0.20)
+  - Ensemble of complementary architectures with engineered physics features
+
+**Most promising research directions discovered:**
+1. Contrastive learning (v62-v63): 1.75e-03 best, has room for improvement
+2. SWA (Stochastic Weight Averaging): achieved ~4.67e-04 before BN buffer crash
+3. PINN (Physics-Informed NN): 5.26e-04, validates physics constraints work
+4. Multi-Task Learning: 6.43e-04, good single model
+
+**Architectures explored (41+ variants):**
+- CNNs: Simple, Attention, ResNet, DenseNet, U-Net, ConvNeXt
+- Vision: Vision Transformer (ViT), Autoencoders
+- Metric Learning: Contrastive, Triplet loss
+- Ensemble methods: Weight-based, SWA, Multi-seed
+- Loss functions: BCE, Focal loss, Triplet, Contrastive
+- Training paradigms: Standard, Curriculum, Multi-task, Bayesian (MC Dropout)
+
+**Key insights:**
+1. **Engineered features critical**: Ne-Nmu ratio + angle transforms improve all architectures 20-40%
+2. **Ensemble beats single model**: Three complementary architectures outperform any individual
+3. **Simplicity wins**: v9's straightforward CNN + features > complex architectures alone
+4. **Physics matters**: PINN and explicit feature engineering both work
+5. **Contrastive promising**: Best single contrastive (1.75e-03) suggests room for refinement
+
 ## Experiments

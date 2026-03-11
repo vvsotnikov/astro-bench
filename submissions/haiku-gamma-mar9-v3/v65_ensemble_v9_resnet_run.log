@@ -1,0 +1,21 @@
+Device: cuda:0
+
+Training two-model ensemble: v9 (Attention CNN) + v38 (ResNet)...
+
+Training v9 Attention CNN...
+  Epoch  0: loss=0.1160, survival=1.1391e-03
+  Epoch 10: loss=0.0835, survival=7.5941e-04
+  Epoch 20: loss=0.0792, survival=6.4258e-04
+Training v38 ResNet...
+  Epoch  0: loss=0.1178, survival=1.0807e-03
+  Epoch 10: loss=0.0831, survival=6.1337e-04
+  Epoch 20: loss=0.0781, survival=7.3020e-04
+
+Ensemble predictions (weights: v9=0.70, v38=0.30)...
+v9 alone: 6.4258e-04
+v38 alone: 6.1337e-04
+Ensemble (0.70/0.30): 5.2575e-04
+
+---
+metric: 5.2575e-04
+description: 2-model ensemble: v9 (0.70) + v38 ResNet (0.30)
