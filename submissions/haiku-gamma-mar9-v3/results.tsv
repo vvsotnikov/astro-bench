@@ -86,3 +86,6 @@ v81	4.6733e-04	discard	v9 with data augmentation (90° rotations, flips) - worse
 v82	6.4258e-04	discard	v9 with log1p transform on matrices - worse than v9 (6.43e-04 vs 3.50e-04)
 v83	4.6733e-04	discard	v9 trained 100 epochs with lr=3e-4 - same as augmentation, worse than v9
 v84	crash	crash	Simple 2-model ensemble v9+v27b - ViT architecture mismatch
+v85	crash	crash	Adversarial domain adaptation - model output shape mismatch
+v86	crash	crash	Simple MoE (CNN+MLP) with learned gating - numerical issues
+v87	5.2575e-04	discard	Multi-task learning (gamma + Energy/Zenith/Electron) - same as PINN v53
