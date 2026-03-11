@@ -1,0 +1,39 @@
+/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v84_v9_v27b_ensemble.py:80: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.num_heads is odd
+  self.transformer = nn.TransformerEncoder(
+Device: cuda:0
+
+Loading v9 and v27b models...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v84_v9_v27b_ensemble.py", line 135, in <module>
+    v27b_model.load_state_dict(torch.load("/tmp/model_vit_simple.pt", map_location=device))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 2635, in load_state_dict
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Error(s) in loading state_dict for ViT:
+	size mismatch for transformer.layers.0.linear1.weight: copying a param with shape torch.Size([384, 96]) from checkpoint, the shape in current model is torch.Size([256, 96]).
+	size mismatch for transformer.layers.0.linear1.bias: copying a param with shape torch.Size([384]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for transformer.layers.0.linear2.weight: copying a param with shape torch.Size([96, 384]) from checkpoint, the shape in current model is torch.Size([96, 256]).
+	size mismatch for transformer.layers.1.linear1.weight: copying a param with shape torch.Size([384, 96]) from checkpoint, the shape in current model is torch.Size([256, 96]).
+	size mismatch for transformer.layers.1.linear1.bias: copying a param with shape torch.Size([384]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for transformer.layers.1.linear2.weight: copying a param with shape torch.Size([96, 384]) from checkpoint, the shape in current model is torch.Size([96, 256]).
+	size mismatch for transformer.layers.2.linear1.weight: copying a param with shape torch.Size([384, 96]) from checkpoint, the shape in current model is torch.Size([256, 96]).
+	size mismatch for transformer.layers.2.linear1.bias: copying a param with shape torch.Size([384]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for transformer.layers.2.linear2.weight: copying a param with shape torch.Size([96, 384]) from checkpoint, the shape in current model is torch.Size([96, 256]).
+	size mismatch for feat_mlp.0.weight: copying a param with shape torch.Size([192, 8]) from checkpoint, the shape in current model is torch.Size([256, 8]).
+	size mismatch for feat_mlp.0.bias: copying a param with shape torch.Size([192]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for feat_mlp.1.weight: copying a param with shape torch.Size([192]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for feat_mlp.1.bias: copying a param with shape torch.Size([192]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for feat_mlp.1.running_mean: copying a param with shape torch.Size([192]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for feat_mlp.1.running_var: copying a param with shape torch.Size([192]) from checkpoint, the shape in current model is torch.Size([256]).
+	size mismatch for feat_mlp.4.weight: copying a param with shape torch.Size([96, 192]) from checkpoint, the shape in current model is torch.Size([128, 256]).
+	size mismatch for feat_mlp.4.bias: copying a param with shape torch.Size([96]) from checkpoint, the shape in current model is torch.Size([128]).
+	size mismatch for fusion.0.weight: copying a param with shape torch.Size([192, 192]) from checkpoint, the shape in current model is torch.Size([192, 224]).
+	size mismatch for fusion.4.weight: copying a param with shape torch.Size([96, 192]) from checkpoint, the shape in current model is torch.Size([128, 192]).
+	size mismatch for fusion.4.bias: copying a param with shape torch.Size([96]) from checkpoint, the shape in current model is torch.Size([128]).
+	size mismatch for fusion.5.weight: copying a param with shape torch.Size([96]) from checkpoint, the shape in current model is torch.Size([128]).
+	size mismatch for fusion.5.bias: copying a param with shape torch.Size([96]) from checkpoint, the shape in current model is torch.Size([128]).
+	size mismatch for fusion.5.running_mean: copying a param with shape torch.Size([96]) from checkpoint, the shape in current model is torch.Size([128]).
+	size mismatch for fusion.5.running_var: copying a param with shape torch.Size([96]) from checkpoint, the shape in current model is torch.Size([128]).
+	size mismatch for fusion.8.weight: copying a param with shape torch.Size([1, 96]) from checkpoint, the shape in current model is torch.Size([1, 128]).

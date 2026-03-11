@@ -81,3 +81,8 @@ v76	5.2575e-04	discard	v9 with weight_decay=5e-4 - higher regularization hurts p
 v77	4.3812e-04	discard	v9 Attention CNN trained on FULL training set (no validation split) - slight improvement but worse than v41
 v78	4.6733e-04	discard	Ensemble of v9 trained with BCEWithLogits, Huber, and MSE loss - worse than v41
 v79	4.3812e-04	discard	v9 with optimized BN momentum=0.2 - worse than v41 but matches v77
+v80	5.2575e-04	discard	v9 Attention CNN with Focal Loss (gamma=2) - worse than v9 BCE (5.26e-04 vs 3.50e-04)
+v81	4.6733e-04	discard	v9 with data augmentation (90° rotations, flips) - worse than v9 (4.67e-04 vs 3.50e-04)
+v82	6.4258e-04	discard	v9 with log1p transform on matrices - worse than v9 (6.43e-04 vs 3.50e-04)
+v83	4.6733e-04	discard	v9 trained 100 epochs with lr=3e-4 - same as augmentation, worse than v9
+v84	crash	crash	Simple 2-model ensemble v9+v27b - ViT architecture mismatch

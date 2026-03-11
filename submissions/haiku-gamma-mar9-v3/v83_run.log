@@ -1,0 +1,18 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Training v9 for 100 epochs with lr=3e-4...
+Epoch   0: loss=0.1625, test_survival=1.5188e-03
+Epoch  10: loss=0.0857, test_survival=6.7179e-04
+Epoch  20: loss=0.0828, test_survival=4.6733e-04
+Epoch  30: loss=0.0800, test_survival=6.4258e-04
+Epoch  40: loss=0.0771, test_survival=6.7179e-04
+Epoch  50: loss=0.0742, test_survival=7.8862e-04
+Epoch  60: loss=0.0710, test_survival=1.0223e-03
+Epoch  70: loss=0.0685, test_survival=9.9308e-04
+Epoch  80: loss=0.0665, test_survival=1.1683e-03
+Epoch  90: loss=0.0656, test_survival=1.1099e-03
+
+---
+metric: 4.6733e-04
+description: v9 trained 100 epochs with lr=3e-4

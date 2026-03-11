@@ -1,0 +1,14 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Training v9 with log1p transform...
+Epoch  0: loss=0.1121, test_survival=1.0515e-03
+Epoch  5: loss=0.0854, test_survival=8.1783e-04
+Epoch 10: loss=0.0820, test_survival=7.0100e-04
+Epoch 15: loss=0.0782, test_survival=6.4258e-04
+Epoch 20: loss=0.0738, test_survival=7.0100e-04
+Epoch 25: loss=0.0701, test_survival=8.7624e-04
+
+---
+metric: 6.4258e-04
+description: v9 with log1p transform on matrices
