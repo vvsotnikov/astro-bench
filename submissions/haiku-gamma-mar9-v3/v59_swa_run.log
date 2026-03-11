@@ -1,0 +1,24 @@
+Device: cuda:0
+
+Training with Stochastic Weight Averaging (SWA)...
+Epoch  0: loss=0.1221, test_survival=1.3436e-03
+Epoch  5: loss=0.0862, test_survival=5.8416e-04
+Epoch 10: loss=0.0837, test_survival=4.6733e-04
+Epoch 15: loss=0.0815, test_survival=6.1337e-04
+Epoch 20: loss=0.0793, test_survival=5.2575e-04
+Epoch 25: loss=0.0777, test_survival=5.5496e-04
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v59_swa.py", line 184, in <module>
+    update_bn(train_loader, model, device=device)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/optim/swa_utils.py", line 380, in update_bn
+    model(input)
+    ~~~~~^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+TypeError: SimpleCNN.forward() missing 1 required positional argument: 'feat'

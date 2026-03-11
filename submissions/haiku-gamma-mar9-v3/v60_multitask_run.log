@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training Multi-Task CNN...
+Epoch  0: loss=0.0913, test_survival=9.9308e-04
+Epoch  5: loss=0.0735, test_survival=6.4258e-04
+Epoch 10: loss=0.0711, test_survival=7.5941e-04
+Epoch 15: loss=0.0691, test_survival=6.7179e-04
+Epoch 20: loss=0.0672, test_survival=9.9308e-04
+Epoch 25: loss=0.0657, test_survival=7.0100e-04
+
+---
+metric: 6.4258e-04
+description: Multi-Task Learning: gamma classification (85%) + energy prediction (15%)

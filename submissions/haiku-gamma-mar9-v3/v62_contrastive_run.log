@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training Contrastive CNN...
+Epoch  0: loss=0.3059, test_survival=5.4619e-03
+Epoch  5: loss=0.1736, test_survival=6.2213e-03
+Epoch 10: loss=0.1583, test_survival=3.2129e-03
+Epoch 15: loss=0.1294, test_survival=2.9500e-03
+Epoch 20: loss=0.1205, test_survival=2.3074e-03
+Epoch 25: loss=0.1068, test_survival=1.8693e-03
+
+---
+metric: 1.8693e-03
+description: Contrastive Learning: triplet loss (margin=1.0) + classification (85%/15%)
