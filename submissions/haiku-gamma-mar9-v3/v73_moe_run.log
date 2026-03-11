@@ -1,0 +1,15 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Loading pre-trained models...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v73_moe_ensemble.py", line 228, in <module>
+    v38_model.load_state_dict(torch.load("/tmp/model_v38_e65.pt", map_location=device))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 2635, in load_state_dict
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Error(s) in loading state_dict for ResNetCNN:
+	Missing key(s) in state_dict: "conv2.weight", "conv2.bias", "bn2.weight", "bn2.bias", "bn2.running_mean", "bn2.running_var", "conv3.weight", "conv3.bias", "bn3.weight", "bn3.bias", "bn3.running_mean", "bn3.running_var", "skip1.weight", "skip1.bias", "skip2.weight", "skip2.bias". 
+	Unexpected key(s) in state_dict: "conv2a.weight", "conv2a.bias", "bn2a.weight", "bn2a.bias", "bn2a.running_mean", "bn2a.running_var", "bn2a.num_batches_tracked", "conv2b.weight", "conv2b.bias", "bn2b.weight", "bn2b.bias", "bn2b.running_mean", "bn2b.running_var", "bn2b.num_batches_tracked", "conv3a.weight", "conv3a.bias", "bn3a.weight", "bn3a.bias", "bn3a.running_mean", "bn3a.running_var", "bn3a.num_batches_tracked", "conv3b.weight", "conv3b.bias", "bn3b.weight", "bn3b.bias", "bn3b.running_mean", "bn3b.running_var", "bn3b.num_batches_tracked", "skip3.0.weight", "skip3.0.bias", "skip3.1.weight", "skip3.1.bias", "skip3.1.running_mean", "skip3.1.running_var", "skip3.1.num_batches_tracked", "skip2.0.weight", "skip2.0.bias", "skip2.1.weight", "skip2.1.bias", "skip2.1.running_mean", "skip2.1.running_var", "skip2.1.num_batches_tracked". 

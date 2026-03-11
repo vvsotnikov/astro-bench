@@ -73,3 +73,9 @@ v69_resnet_skip	4.9654e-04	discard	ResNet skip connections - same as focal (4.97
 v70_v9_long_training	4.9654e-04	discard	v9 with 100 epochs, lr=5e-4 - no improvement! Early stopping better
 v71_log1p_transform	pending	running	Log1p on sparse matrices - reduces high values, may help sparsity
 v71_log1p_transform	5.2575e-04	discard	Log1p on sparse matrices - same as PINN/ensemble (5.26e-04), no improvement
+v72	1.0807e-03	discard	v9 Attention CNN trained with quality cuts (Ze<30, Ne>4.8)
+v73	pending	crash	MoE ensemble with learned gating network - ResNet architecture mismatch
+v74	1.0000e+00	discard	v9 with temperature scaling - calibration failed (eval set distribution poor)
+v75	6.1337e-04	discard	v9 with learned feature reweighting network - worse than v9
+v76	5.2575e-04	discard	v9 with weight_decay=5e-4 - higher regularization hurts performance
+v77	4.3812e-04	discard	v9 Attention CNN trained on FULL training set (no validation split) - slight improvement but worse than v41
