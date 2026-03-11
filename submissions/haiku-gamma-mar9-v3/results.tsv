@@ -67,3 +67,4 @@ v63_contrastive_tuned	1.7525e-03	discard	Contrastive Learning v2: margin=2.0, ha
 v64_swa_fixed	crashed	crash	SWA (simple averaging): crashed on loading state_dict (BN buffers)
 v65_ensemble_v9_resnet	5.2575e-04	discard	2-model ensemble v9 (0.70) + v38 (0.30) - worse than v41 (5.26e-04 vs 3.21e-04)
 v66_focal_loss	4.9654e-04	discard	Focal Loss: α=0.25, γ=2.0 - competitive (4.97e-04) but still worse than v41 (3.21e-04)
+v67_v9_focal_loss	5.2575e-04	discard	v9 Attention CNN with Focal Loss (α=0.25, γ=2.0) - worse than v9 BCE (5.26e-04 vs 3.50e-04)
