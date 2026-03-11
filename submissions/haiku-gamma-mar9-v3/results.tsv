@@ -66,4 +66,4 @@ v59_swa	crashed	crash	Stochastic Weight Averaging - crashed on update_bn (multi-
 v63_contrastive_tuned	1.7525e-03	discard	Contrastive Learning v2: margin=2.0, hard mining, 50/50 loss - better than v62 (1.75e-03 vs 1.87e-03) but still 5.4× worse than v41
 v64_swa_fixed	crashed	crash	SWA (simple averaging): crashed on loading state_dict (BN buffers)
 v65_ensemble_v9_resnet	5.2575e-04	discard	2-model ensemble v9 (0.70) + v38 (0.30) - worse than v41 (5.26e-04 vs 3.21e-04)
-v66_focal_loss	pending	todo	Focal loss (α=0.25, γ=2.0) - not yet run
+v66_focal_loss	4.9654e-04	discard	Focal Loss: α=0.25, γ=2.0 - competitive (4.97e-04) but still worse than v41 (3.21e-04)
