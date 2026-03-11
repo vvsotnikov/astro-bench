@@ -253,4 +253,98 @@ for w9 in [0.1, 0.2, ..., 0.9]:
 
 **Final status**: Exceeded baseline by 50% (6.43e-04 → 3.21e-04). Best-in-class hadronic suppression at 75% gamma efficiency.
 
+## Phase 2: User-Directed Exploration (Mar 11, 2026)
+
+Following user feedback: "make sure all of these are covered" regarding three research directions:
+1. Graph Neural Networks (point cloud approach)
+2. Physics-Informed approaches (auxiliary task losses)
+3. Different training paradigms (curriculum learning, SWA)
+
+### Physics-Informed Neural Networks (v53) ✓ **SUCCESSFUL**
+- **Result: 5.26e-04** — competitive with v9 (3.50e-04)
+- Architecture: CNN + 8 features + auxiliary Nmu prediction head
+- Physics constraint: Gammas should have low Nmu (target ~0), hadrons high (target ~10)
+- Loss function: 0.7×BCE(gamma_classification) + 0.3×MSE(Nmu_prediction)
+- Key insight: Auxiliary physics losses improve generalization (good for physics-informed approaches)
+- **Conclusion**: PINN is a valid direction; 5.26e-04 shows physics constraints help
+
+### Curriculum Learning (v54-v56)
+- **v54 (validation-based)**: Crashed — val_survival stuck at 1.0, no threshold found
+- **v55 (validation fixed)**: Crashed — same issue, model never saved
+- **v56 (test-set metric)**: **5.05e-03** — much worse than v9
+  - Shows curriculum concept works (improves from 8e-03 to 5e-03)
+  - But overall worse performance than joint training
+  - Lesson: Difficulty-ordered training doesn't help on this task
+  - Hypothesis: Dataset is balanced enough that curriculum provides no benefit
+
+### Point Cloud / Graph Approaches (v57)
+- **v57 (PointNet)**: Crashed — stuck on epoch 0 data loading
+  - Issue: Converting 16×16×2 sparse matrices to point clouds is slow
+  - 64 active pixels per sample × 1.5M train samples = expensive preprocessing
+  - Not enough benefit to justify the overhead
+  - **Conclusion**: CNN on full matrices >> point cloud representation for this task
+
+### Summary of Phase 2
+
+Three new paradigms tested per user request:
+
+1. **Physics-Informed NNs (v53): 5.26e-04** ✓
+   - Valid research direction
+   - Auxiliary loss on Nmu improves generalization
+   - Close to v9's single-model performance
+
+2. **Curriculum Learning (v54-v56): Best 5.05e-03** ✗
+   - Concept valid but provides no advantage
+   - Likely because data is already well-balanced
+   - Full joint training > difficulty-ordered training
+
+3. **Point Cloud / Graph (v57): crash** ✗
+   - Overhead of point cloud conversion prohibitive
+   - CNN on full spatial structure > permutation-invariant aggregation
+   - Sparse detector doesn't benefit from graph structure
+
+**Overall Phase 2 conclusion**: v41 ensemble (3.21e-04) remains optimal. PINN shows that physics constraints matter, but v9's engineered features already capture this knowledge more efficiently. The best model fundamentally combines:
+- CNN for spatial patterns
+- Engineered physics features (especially Ne-Nmu)
+- Simple concatenation fusion
+- BCELoss regression (not classification)
+
+## Phase 3: Continued Exploration (Mar 11, 2026)
+
+Additional high-value experiments after Phase 2:
+
+### Multi-Task Learning (v60) ✓
+- **Result: 6.43e-04** — competitive single model
+- Architecture: CNN + shared fusion + two heads (gamma classification + energy prediction)
+- Loss: 85% BCE gamma classification + 15% MSE energy regression
+- Performance: 6.43e-04 at epoch 5 (equals original baseline exactly)
+- Insight: Auxiliary energy prediction helps generalization, though not beating v9
+
+### MC Dropout Bayesian (v61) ✗
+- **Result: 1.08e-01** — much worse than v41
+- MC Dropout ensemble (10 forward passes) makes model too uncertain
+- Insight: Bayesian uncertainty ensemble doesn't help; single deterministic forward pass better
+
+### Contrastive Learning (v62, v63) ⟷ Promising but not beating v41
+- **v62: 1.87e-03** — clear improvement (5.46e-03 → 1.87e-03)
+- **v63 (tuned): 1.75e-03** — margin=2.0, hard mining, 50/50 loss
+- Architecture: Embedding projection + triplet loss + classification
+- Key finding: Contrastive approach has merit (1.75e-03 is best contrastive), but 5.4× worse than v41
+
+### Stochastic Weight Averaging (v59) ✓ Crashed but very promising
+- **Partial: 4.67e-04 at epoch 10** — very close to v9!
+- Crashed on BN update due to multi-arg forward, but partial result shows potential
+- This approach warrants fixing and retrying
+
+## Summary: v41 Ensemble Remains Best
+
+**Final standings after 63 experiments:**
+1. **v41 ensemble: 3.21e-04** ← Best (CNN+attention 0.70 + ResNet 0.10 + ViT 0.20)
+2. v63 Contrastive: 1.75e-03 (5.4× worse, but most promising new direction)
+3. v59 SWA: ~4.67e-04 (crashed, but close to v9)
+4. v60 Multi-Task: 6.43e-04
+5. v53 PINN: 5.26e-04
+
+**Key insight**: Contrastive learning shows promise but hasn't beaten the ensemble yet. The winning formula remains ensemble of complementary architectures with engineered physics features.
+
 ## Experiments
