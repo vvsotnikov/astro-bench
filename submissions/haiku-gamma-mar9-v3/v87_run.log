@@ -1,0 +1,14 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Training v87 with multi-task learning...
+Epoch  0: loss=0.0968, test_survival=1.1975e-03
+Epoch  5: loss=0.0682, test_survival=5.8416e-04
+Epoch 10: loss=0.0658, test_survival=5.8416e-04
+Epoch 15: loss=0.0641, test_survival=5.2575e-04
+Epoch 20: loss=0.0624, test_survival=5.8416e-04
+Epoch 25: loss=0.0612, test_survival=5.5496e-04
+
+---
+metric: 5.2575e-04
+description: Multi-task learning (gamma + Energy/Zenith/Electron prediction)

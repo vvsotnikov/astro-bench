@@ -1,0 +1,12 @@
+Loading predictions from v9 and v20...
+
+Optimizing weights for v9 + v20 ensemble...
+
+Best weights: v9=0.80, v20=0.20
+v9 alone: 3.5050e-04
+v20 alone: 6.7179e-04
+Ensemble: 3.5050e-04
+
+---
+metric: 3.5050e-04
+description: Weighted ensemble of v9 CNN (0.80) + v20 ViT (0.20)

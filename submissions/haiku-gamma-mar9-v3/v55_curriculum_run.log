@@ -1,0 +1,22 @@
+Device: cuda:0
+
+Computing sample difficulties...
+Training with Curriculum Learning...
+Epoch  0 (ratio=30.0%): loss=0.0798, val_survival=1.0000e+00
+Epoch  4 (ratio=44.7%): loss=0.0349, val_survival=1.0000e+00
+Epoch  8 (ratio=59.5%): loss=0.0364, val_survival=1.0000e+00
+Epoch 12 (ratio=74.2%): loss=0.0413, val_survival=1.0000e+00
+Epoch 16 (ratio=88.9%): loss=0.0555, val_survival=1.0000e+00
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v55_curriculum_fixed.py", line 193, in <module>
+    model.load_state_dict(torch.load("/tmp/model_curriculum.pt"))
+                          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/serialization.py", line 1500, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/serialization.py", line 768, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/serialization.py", line 749, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/model_curriculum.pt'

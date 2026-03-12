@@ -1,0 +1,15 @@
+Device: cuda:0
+
+Training Contrastive CNN (tuned)...
+Epoch  0: loss=2.0084, test_survival=5.4853e-02
+Epoch  5: loss=1.1038, test_survival=5.8708e-03
+Epoch 10: loss=1.1436, test_survival=5.3451e-03
+Epoch 15: loss=1.1527, test_survival=4.4688e-03
+Epoch 20: loss=1.2609, test_survival=3.0961e-03
+Epoch 25: loss=1.0652, test_survival=2.0738e-03
+Epoch 30: loss=1.0614, test_survival=1.8985e-03
+Epoch 35: loss=1.0615, test_survival=1.7525e-03
+
+---
+metric: 1.7525e-03
+description: Contrastive Learning v2: margin=2.0, hard negative mining, 50%/50% loss weight

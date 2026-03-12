@@ -1,0 +1,11 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-gamma-mar9-v3/train_v52_weighted_class_balance.py", line 154, in <module>
+    labels_train = np.array([GammaDataset("train", mean=mean, std=std)[i][1].item() for i in range(len(train_ds))])
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+RuntimeError: a Tensor with 8 elements cannot be converted to Scalar

@@ -1,0 +1,14 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Training v88: Nmu regression (reverse problem)...
+Epoch  0: loss=0.0266, test_survival=7.1735e-02
+Epoch  5: loss=0.0097, test_survival=5.4532e-02
+Epoch 10: loss=0.0089, test_survival=6.3119e-02
+Epoch 15: loss=0.0083, test_survival=6.2389e-02
+Epoch 20: loss=0.0078, test_survival=6.1951e-02
+Epoch 25: loss=0.0075, test_survival=6.2097e-02
+
+---
+metric: 5.4532e-02
+description: Nmu regression (reverse problem: predict muon count)

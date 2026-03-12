@@ -1,0 +1,19 @@
+Device: cuda:0
+
+Loading data...
+Computing normalization...
+
+Preparing train/val split...
+Training Deep MLP (5 layers)...
+Epoch  0: loss=0.1239, val_survival=5.2873e-02
+Epoch  5: loss=0.1001, val_survival=5.3048e-02
+Epoch 10: loss=0.0995, val_survival=5.2091e-02
+Epoch 15: loss=0.0990, val_survival=5.2019e-02
+Epoch 20: loss=0.0987, val_survival=5.1676e-02
+Epoch 25: loss=0.0986, val_survival=5.1775e-02
+
+Deep MLP survival @ 75%: 5.4035e-03
+
+---
+metric: 5.4035e-03
+description: 5-layer deep MLP (512→512→256→128→1) on 8 engineered features only

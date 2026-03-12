@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training MC Dropout CNN...
+Epoch  0: loss=0.1286, test_survival=1.1330e-01
+Epoch  5: loss=0.0929, test_survival=1.4382e-01
+Epoch 10: loss=0.0906, test_survival=1.0608e-01
+Epoch 15: loss=0.0893, test_survival=1.4514e-01
+Epoch 20: loss=0.0881, test_survival=1.1537e-01
+Epoch 25: loss=0.0878, test_survival=1.1879e-01
+
+---
+metric: 1.0795e-01
+description: MC Dropout Bayesian CNN (dropout_p=0.4, 10 stochastic forward passes)

@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training data: 1530715 samples
+Loading v9 model...
+Training feature reweighter network...
+Epoch  0: loss=0.0780, test_survival=6.1337e-04
+Epoch  5: loss=0.0771, test_survival=6.1337e-04
+Epoch 10: loss=0.0770, test_survival=6.1337e-04
+Epoch 15: loss=0.0769, test_survival=6.1337e-04
+
+---
+metric: 6.1337e-04
+description: v9 with learned feature reweighting network

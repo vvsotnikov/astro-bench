@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training with Focal Loss...
+Epoch  0: loss=0.0077, test_survival=1.0515e-03
+Epoch  5: loss=0.0061, test_survival=6.4258e-04
+Epoch 10: loss=0.0060, test_survival=5.8416e-04
+Epoch 15: loss=0.0058, test_survival=5.8416e-04
+Epoch 20: loss=0.0057, test_survival=5.8416e-04
+Epoch 25: loss=0.0056, test_survival=4.9654e-04
+
+---
+metric: 4.9654e-04
+description: Focal Loss: α=0.25, γ=2.0 (address class imbalance)

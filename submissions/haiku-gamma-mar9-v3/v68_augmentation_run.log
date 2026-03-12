@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training with Data Augmentation (90° rotations, flips)...
+Epoch  0: loss=0.1362, test_survival=5.5203e-03
+Epoch  5: loss=0.0996, test_survival=1.2560e-02
+Epoch 10: loss=0.0952, test_survival=7.8862e-03
+Epoch 15: loss=0.0931, test_survival=2.9427e-01
+Epoch 20: loss=0.0916, test_survival=8.9561e-01
+Epoch 25: loss=0.0909, test_survival=8.6643e-01
+
+---
+metric: 5.5203e-03
+description: Data Augmentation: 90° rotations and horizontal/vertical flips

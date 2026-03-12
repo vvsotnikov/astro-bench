@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training v9 Attention CNN with Focal Loss...
+Epoch  0: loss=0.0079, test_survival=2.3659e-03
+Epoch  5: loss=0.0062, test_survival=7.0100e-04
+Epoch 10: loss=0.0060, test_survival=6.4258e-04
+Epoch 15: loss=0.0058, test_survival=5.2575e-04
+Epoch 20: loss=0.0057, test_survival=7.5941e-04
+Epoch 25: loss=0.0055, test_survival=6.4258e-04
+
+---
+metric: 5.2575e-04
+description: v9 Attention CNN with Focal Loss (α=0.25, γ=2.0)

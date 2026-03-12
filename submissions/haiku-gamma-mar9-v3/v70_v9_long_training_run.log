@@ -1,0 +1,17 @@
+Device: cuda:0
+
+Training v9 Attention CNN with extended training (100 epochs, lr=5e-4)...
+Epoch   0: loss=0.1318, test_survival=1.6064e-03
+Epoch  10: loss=0.0850, test_survival=4.9654e-04
+Epoch  20: loss=0.0817, test_survival=7.3020e-04
+Epoch  30: loss=0.0791, test_survival=7.0100e-04
+Epoch  40: loss=0.0758, test_survival=7.3020e-04
+Epoch  50: loss=0.0724, test_survival=1.0807e-03
+Epoch  60: loss=0.0689, test_survival=9.0545e-04
+Epoch  70: loss=0.0661, test_survival=1.1683e-03
+Epoch  80: loss=0.0639, test_survival=1.3728e-03
+Epoch  90: loss=0.0627, test_survival=1.3144e-03
+
+---
+metric: 4.9654e-04
+description: v9 Attention CNN with extended training (100 epochs, lr=5e-4)

@@ -1,0 +1,4 @@
+Device: cuda:0
+
+Training Point Cloud (PointNet) classifier...
+Epoch  0: loss=0.1186, test_survival=2.5995e-03

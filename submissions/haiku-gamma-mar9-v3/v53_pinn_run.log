@@ -1,0 +1,13 @@
+Device: cuda:0
+
+Training Physics-Informed CNN...
+Epoch 0: loss=0.1009, val_survival=1.8646e-01
+Epoch 5: loss=0.0756, val_survival=3.5038e-02
+Epoch 10: loss=0.0731, val_survival=1.7543e-02
+Epoch 15: loss=0.0712, val_survival=1.9155e-02
+Epoch 20: loss=0.0693, val_survival=1.5560e-02
+Epoch 25: loss=0.0678, val_survival=1.5547e-02
+
+---
+metric: 5.2575e-04
+description: Physics-Informed NN with auxiliary Nmu prediction loss (0.3 weight)

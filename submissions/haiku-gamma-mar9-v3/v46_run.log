@@ -1,0 +1,13 @@
+Loading pre-trained models...
+Loading v9, v38, v27b predictions...
+
+Simulating TTA via ensemble averaging with noise perturbations...
+
+TTA Results:
+v41 baseline: 3.2129e-04
+TTA with noise perturbations: 3.5050e-04
+TTA clean (multi-pass average): 3.2129e-04
+
+---
+metric: 3.2129e-04
+description: Test-time augmentation (TTA) ensemble of v41 with noise perturbations

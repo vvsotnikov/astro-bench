@@ -1,0 +1,108 @@
+Loading data...
+Train: 1530715 samples
+Test: 35751 samples
+
+======================================================================
+1. CLASS BALANCE
+======================================================================
+
+TRAIN SET:
+  Gamma:     73236 (4.8%)
+  Hadron:  1457479 (95.2%)
+  Ratio (H/G): 19.9:1
+
+TEST SET:
+  Gamma:      1514 (4.2%)
+  Hadron:    34237 (95.8%)
+  Ratio (H/G): 22.6:1
+
+IMBALANCE RATIO:
+  Train: 19.9:1
+  Test:  22.6:1
+  Status: MISMATCH ✗
+
+======================================================================
+2. FEATURE STATISTICS & SEPARABILITY
+======================================================================
+
+FEATURE RANGES:
+Feature  Min          Max          Mean         Std         
+--------------------------------------------------------
+E        13.397       18.133       14.592       0.489       
+Ze       0.020        59.999       25.722       10.230      
+Az       0.000        360.026      180.004      103.808     
+Ne       2.000        8.786        4.139        0.677       
+Nmu      2.000        6.782        3.513        0.472       
+
+FEATURE SEPARATION (Mann-Whitney U test, p-value):
+Feature  Gamma Mean   Hadron Mean  p-value      Significant
+------------------------------------------------------------
+E        14.600       14.591       0.00e+00     YES ✓
+Ze       30.775       25.468       0.00e+00     YES ✓
+Az       179.063      180.052      1.19e-02     YES ✓
+Ne       4.363        4.128        0.00e+00     YES ✓
+Nmu      3.067        3.536        0.00e+00     YES ✓
+
+KEY FINDING: Ne-Nmu RATIO (engineered feature):
+  Gamma (Ne-Nmu):  mean=1.30, std=0.89
+  Hadron (Ne-Nmu): mean=0.59, std=0.42
+  Separation (d'): 1.01
+
+======================================================================
+3. MATRIX SPARSITY & STRUCTURE
+======================================================================
+
+Matrix Sparsity (16×16×2 = 512 elements):
+  Mean non-zero: 16.3%
+  Median non-zero: 10.9%
+  Min non-zero: 1.4%
+  Max non-zero: 86.5%
+
+Sparsity by Class:
+  Gamma:  mean=14.0%, std=14.2%
+  Hadron: mean=16.5%, std=16.0%
+
+======================================================================
+4. DISTRIBUTION SHIFTS (Train vs Test)
+======================================================================
+
+Feature Statistics Comparison:
+Feature  Train Mean   Test Mean    Diff %       Significant
+------------------------------------------------------------
+E        14.592       15.383       5.4         % YES ✗
+Ze       25.722       18.188       29.3        % YES ✗
+Az       180.004      181.375      0.8         % YES ✗
+Ne       4.139        5.336        28.9        % YES ✗
+Nmu      3.513        4.262        21.3        % YES ✗
+
+Quality Cuts on Test Set (Ze<30, Ne>4.8):
+  Events passing cuts: 35565/35751 (99.5%)
+  Events failing cuts: 186/35751 (0.5%)
+
+Test Set Quality Bounds:
+  Ze range: [0.3, 30.0]
+  Ne range: [4.8, 8.6]
+  Status: Full range
+
+======================================================================
+5. PHYSICS REGIMES & PERFORMANCE VARIATIONS
+======================================================================
+
+Loaded v41 predictions
+
+v41 Score Statistics:
+  Mean: 0.0419
+  Std: 0.1811
+  Min: 0.0006
+  Max: 1.0000
+
+Performance by Energy Bins:
+E Range         n_gamma  n_hadron   gamma_acc    hadron_reject
+------------------------------------------------------------
+[  14.3, 15.1  ) 635      11012      75.1%        99.7%       
+[  15.1, 15.5  ) 142      12049      75.4%        91.8%       
+[  15.5, 17.9  ) 737      11175      75.0%        100.0%      
+
+======================================================================
+EDA COMPLETE
+======================================================================
