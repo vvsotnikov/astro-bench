@@ -14,7 +14,7 @@ You are an autonomous ML researcher. Your goal: build the best possible classifi
 
 - **Python**: `uv run python your_script.py`
 - **Dependencies**: numpy, torch, scikit-learn (already in pyproject.toml). Do not add new dependencies.
-- **GPU**: You have GPU access. Use `CUDA_VISIBLE_DEVICES=0` if needed.
+- **GPU**: You have GPU access. Use `CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1` (GPU 0 is occupied).
 - **Verification**: `uv run python verify.py submissions/<run_tag>/predictions.npz`
 
 ## The data
@@ -142,3 +142,6 @@ These are suggestions, not requirements. You decide the approach.
 - ALWAYS log results to `results.tsv` and update `journal.md` after every experiment.
 - ALWAYS commit code that improves the metric. Never commit code that doesn't.
 - Log everything. Your results.tsv, journal.md, and README.md are part of the submission.
+- **One GPU experiment at a time.** Do NOT launch multiple training runs in parallel. Wait for one to finish before starting the next. Parallel GPU jobs cause OOM crashes and GPU contention.
+- **Try at least 3 configurations before discarding an approach.** Don't try something once, see it underperform, and move on. Vary hyperparameters (learning rate, batch size, epochs), loss functions, preprocessing, and architecture details. An approach isn't dead until you've given it a fair shot.
+- **Cross-pollinate insights.** When you discover a trick that helps one model (e.g. engineered features, log1p transform, attention mechanisms, data augmentation), go back and apply it to previously tried approaches. A technique that helped a CNN might also help a ViT or MLP. Insights compound across architectures.
