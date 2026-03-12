@@ -3,7 +3,9 @@
 ## Current Status
 - **Best**: v1 @ 50.52% (Attention CNN + 8 features)
 - **Target**: 50.71% (haiku-mar8) or 51% (published SOTA)
-- **Running**: v17 (exact haiku-mar8 + quality cuts on val)
+- **v17**: Failed (hung at epoch 20, didn't complete inference) — KILLED
+- **GPU**: Using only GPU 1 (CUDA_VISIBLE_DEVICES=1) — NO parallelism
+- **Timeout**: 2 hours per experiment (v17 was 4 blocks × 35s/epoch × 30 epochs ≈ 30 min, plus I/O)
 
 ---
 
