@@ -41,3 +41,6 @@ v38_resnet	3.7971e-04	keep	ResNet-style CNN with skip connections + features - c
 v39_unet	7.3020e-04	discard	U-Net encoder-decoder with skip connections + features - competitive
 v40_densenet	pending	crash	DenseNet OOM - skipped
 v41_ensemble_best	3.2129e-04	keep	Ensemble of v9 (0.70) + v38 (0.10) + v27b (0.20) - **NEW BEST** ✓
+v37	4.0891e-04	discard	Focal loss (gamma=2.0, alpha=0.5) - worse than v9
+v38	4.9654e-04	discard	Data augmentation (90° rotations, flips) - detector geometry fragile
+v39	5.5496e-04	discard	log1p transform on matrices - loses high-frequency signal
