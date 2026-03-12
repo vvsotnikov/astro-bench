@@ -91,22 +91,36 @@ All v14-v24, v26 queued for sequential execution on GPU 1:
 
 ---
 
-## Current Execution Status (13:30 UTC)
+## Current Execution Status (13:45 UTC) — CORRECTED
 
-### Queued Experiments
-v14-v26 all queued on GPU 1, waiting for GPU availability.
+### Critical Fix Applied ⚠️
+**Problem discovered**: Backgrounding with `&` doesn't wait for GPU.
+All processes started simultaneously and competed for GPU → OOM (same issue as gamma run).
 
-### Running Processes
-- **v14**: Training (epoch 1+ completed)
-- **v15-v16**: Queued (initialized, waiting for GPU)
-- **v22**: Running on CPU (RandomForest data extraction)
-- **v17-v26**: Queued (will start after GPU freed)
+**Solution**: Created `run_sequential.py` that:
+- Runs ONE experiment at a time
+- Uses `process.wait()` to block until completion
+- Enforces true sequential execution (no contention)
+- Auto-extracts results from logs
 
-### Estimated Timeline
-- Each CNN experiment: ~30-40 minutes
-- v22 (RandomForest): ~10-15 minutes
-- Total sequential time: ~18-20 GPU hours
-- Expected completion: 10+ hours from now
+### Previous Background Jobs
+- **Status**: All terminated
+- **GPU 1**: Cleared and ready
+- **Approach**: Fixed and ready to execute properly
+
+### How to Start
+```bash
+python submissions/haiku-composition-mar11/run_sequential.py
+```
+
+This will run v14→v15→v16→...→v26 ONE AT A TIME.
+
+### Estimated Timeline (Corrected)
+- Each CNN experiment: ~30-40 minutes (one at a time, no contention)
+- v22 (RandomForest): ~10-15 minutes (CPU)
+- Total: ~18-20 GPU hours sequential
+- **Key**: GPU never idle, no wasted time waiting
+- Expected completion: ~15-18 hours from start
 
 ---
 
