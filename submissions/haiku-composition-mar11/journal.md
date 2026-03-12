@@ -225,16 +225,27 @@ v14 showed that v1's hyperparameters are **optimal**, not suboptimal:
 
 This means v15 (class weights) and v16 (stronger label smoothing) are unlikely to help v1 further. v1 is already well-optimized.
 
-**Next experiment: v17 (Exact haiku-mar8 replica)**
+## v17: Exact haiku-mar8 Replica WITH QUALITY CUTS on Validation
 
-Why v17:
-- haiku-mar8 got 50.71%, we're stuck at 50.52%
-- Need to understand what's different
-- v17 will test: 4 CNN blocks, OneCycleLR, batch=4096, 7 features, log1p
-- If v17 hits 50.71% → we've found the answer
-- If v17 < 50.71% → something else (seed, data preprocessing, or just random variation)
+**Key insight from team lead**: Test set has quality cuts (Ze<30, Ne>4.8), but our validation doesn't.
+This explains why val_acc (~33%) is much lower than test_acc (~50%).
 
-Expected: v17 should beat v1 since haiku-mar8 uses deeper architecture + stronger optimizer
+**haiku-mar8's key differences**:
+1. **4 CNN blocks** (32→32→64→64→128→128→256) vs our 3 blocks (32→64→128)
+2. **OneCycleLR** scheduler vs cosine annealing
+3. **Batch size 4096** vs our 2048
+4. **LR 2e-3** vs our 1e-3 (but v14 showed lower LR hurts, so maybe this isn't the issue)
+5. **7 features** (E, cos(Ze), sin(Az), cos(Az), Ne, Nmu, Ne-Nmu) - NO sin(Ze)
+6. **BatchNorm on feature input** (haiku-mar8 uses feat_bn before feat_net)
+7. **No train/val split** on training data, but saves model on best train accuracy
+8. **Quality cuts applied** to validation set to match test set distribution
+
+**v17 changes**:
+- Exact haiku-mar8 architecture
+- **NEW**: Quality cuts (Ze<30, Ne>4.8) applied to validation set
+- This should give us honest validation signal, not 33% on unfiltered val
+
+Expected: If quality cuts + haiku-mar8 architecture work together, v17 should beat v1 (50.52%) and approach 50.71%
 
 ---
 
