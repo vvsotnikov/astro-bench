@@ -150,3 +150,158 @@ All experiments properly:
 - Save predictions as .npz
 - Print structured output (metric + description)
 - Handle reproducibility (seeds set to 42)
+
+---
+
+## New Completed Results (March 12, 2026 - During v14 execution)
+
+### v11: Pure MLP on Flattened Input
+**Result: 49.86%** — Better than tree models, worse than CNN
+
+Architecture:
+- Flatten 16×16×2 matrix to 512D
+- Concatenate with 8 engineered features (520D total)
+- Deep MLP: 520 → 1024 → 512 → 256 → 128 → 5
+- Dropout and BatchNorm throughout
+
+Findings:
+- Non-CNN architecture CAN work (49.86% is reasonable)
+- But still underperforms Attention CNN (50.52% vs 49.86%)
+- Spatial structure (CNN inductive bias) helps ~0.7%
+
+### v22: RandomForest with Safe Preprocessing
+**Result: 48.84%** — Better than v7b (37.99%), but worse than neural nets
+
+Architecture:
+- 7 scalar features (E, cos(Ze), sin(Az), cos(Az), Ne, Nmu, Ne-Nmu)
+- 4 spatial features (mean/max per channel from log1p matrices)
+- 11D input total
+- RandomForest with 200 trees, depth=15, safe nan/inf handling
+
+Findings:
+- Tree models viable with proper preprocessing (no crashes!)
+- But neural nets beat tree models decisively (50.52% vs 48.84%)
+- Features alone insufficient; learned spatial patterns matter
+
+### Running: v14 (v1 with 100 epochs, lr=3e-4)
+- Currently epoch 16/100
+- Val accuracy stuck around 32% (concerning, needs investigation)
+- Early stopping patience=15, so will stop if no improvement
+- **Note**: Low validation accuracy might be normal variance or might indicate issue. Need to wait for test accuracy to evaluate.
+
+---
+
+## Current Performance Summary
+
+| Approach | Best | Status |
+|----------|------|--------|
+| **CNN** | v1 @ 50.52% | BEST |
+| **MLP** | v11 @ 49.86% | Works but worse than CNN |
+| **Tree** | v22 @ 48.84% | Works (fixed infinity issues) |
+| **Linear** | v7b @ 37.99% | Too weak |
+| **Baseline** | haiku-mar8 @ 50.71% | Target |
+| **Published SOTA** | ~51% | Stretch goal |
+
+**Key finding**: CNN + spatial learning >> feature-only approaches. v1's 50.52% beats non-CNN approaches by ~1%.
+
+---
+
+## Plan for v14 Result & Beyond
+
+### If v14 > 50.71%
+- Winner found! Log it
+- Try v15/v16 to see if we can push higher
+
+### If v14 ≈ 50.52% (similar to v1)
+- Hypothesis: learning rate/epochs don't matter much
+- Next: **v17 (Exact haiku-mar8 replica)**
+  - 4 CNN blocks (vs our 3)
+  - OneCycleLR (vs cosine annealing)
+  - batch=4096 (vs 2048)
+  - 7 features (vs our 8)
+  - log1p matrices
+- Goal: Replicate 50.71% to understand what haiku-mar8 did differently
+
+### If v14 < 50.3%
+- Something went wrong, investigate
+- Check GPU, check feature preprocessing, check data loading
+
+---
+
+## PHASE 2: Systematic 3+ Variant Exploration (March 12, 2026)
+
+**Principle**: Per team lead: "try every approach at least 3 times with variations before discarding"
+
+### Phase 1 Variants (v14-v16): v1 Hyperparameter Tuning
+- **v14**: v1 + longer training (100 epochs, lr=3e-4 vs 30 epochs, lr=1e-3)
+- **v15**: v1 + class-weighted CrossEntropyLoss (addresses class imbalance)
+- **v16**: v1 + increased label_smoothing (0.1 vs 0.02)
+
+**Hypothesis**: Current v1 (50.52%) is underperforming due to optimization (needs more epochs at lower LR) or regularization (class imbalance or label smoothing strength).
+
+### Phase 2 Variants (v17-v19): CNN Architecture Search
+- **v17**: Exact haiku-mar8 replica (4 CNN blocks, OneCycleLR, batch=4096, 7 features)
+- **v18**: Deeper CNN (5 blocks instead of 4)
+- **v19**: Wider CNN (more channels per layer)
+
+**Hypothesis**: haiku-mar8's 50.71% is replicable if we match exact architecture + training setup. If replicable, v18-v19 test depth/width sensitivity.
+
+### Phase 3 Variants (v20-v21): Non-CNN Architectures
+- **v20**: Vision Transformer (2×2 patches, 64 tokens, 3 layers)
+- **v21**: Pure MLP (flattened 512D matrix + 7 features = 519D input)
+
+**Hypothesis**: CNNs have strong inductive bias for local structure. ViT/MLP might capture global patterns CNNs miss. If competitive, ensemble with CNN.
+
+### Phase 4 Variant (v22): Tree Model with Safe Preprocessing
+- **v22**: RandomForest with safe preprocessing (7 scalar + 4 spatial features, 11D input, nan/inf handling)
+
+**Hypothesis**: With proper feature engineering and preprocessing, tree models can be competitive and provide diversity for ensemble.
+
+### Phase 5 Variants (v23-v24): Loss Functions & Optimizers
+- **v23**: Focal loss (gamma=2.0) for hard example focus
+- **v24**: SGD with momentum (0.9) + Nesterov instead of AdamW
+
+**Hypothesis**: Different loss functions and optimizers train different solution spaces. Focal loss helps with class imbalance, SGD might find sharper minima.
+
+### Implementation Strategy
+1. All v14-v24 created and queued on GPU 1
+2. Run sequentially (one at a time) with timeout=3600s
+3. Extract results via regex (metric, description)
+4. Update results.tsv automatically
+5. Log to journal after Phase 5 completes
+
+### Success Criteria
+- **Phase 1 (v14-v16)**: At least one beats 50.71% OR clear direction identified
+- **Phase 2 (v17-v19)**: v17 validates replication OR one variant beats baseline
+- **Phase 3 (v20-v21)**: Competitive with best CNN (>50%)
+- **Phase 4 (v22)**: Viable baseline (>48%), ensembleable with neural nets
+- **Phase 5 (v23-v24)**: Different approaches tested, results logged
+- **Overall Goal**: Beat 50.86% or identify best architecture + hyperparameters
+
+### What This Tests
+
+**Model Architectures**: CNN vs ViT vs MLP vs Trees
+- 3+ CNN variants (basic, deeper, wider)
+- ViT (non-local structure)
+- MLP (no spatial inductive bias)
+- RandomForest (feature-based learning)
+
+**Training Pipelines**: Optimization and regularization
+- Learning rate schedules (cosine vs OneCycleLR)
+- Different learning rates (1e-3 vs 3e-4)
+- Different epochs (30 vs 100)
+- Different optimizers (AdamW vs SGD)
+
+**Loss Functions & Weighting**: Class imbalance handling
+- Label smoothing strength (0.02 vs 0.1)
+- Class weights (inverse frequency)
+- Focal loss (gamma=2.0)
+
+**Feature Engineering**: Spatial vs scalar
+- Haiku-mar8's 7D (E, cos(Ze), sin/cos(Az), Ne, Nmu, Ne-Nmu)
+- Extended spatial features (mean, max per channel)
+
+**Cross-Pollination**: Insights transfer across families
+- If 7D features work, apply to all variants
+- If OneCycleLR works, apply to v14-v16
+- If ViT/MLP competitive, ensemble with CNN

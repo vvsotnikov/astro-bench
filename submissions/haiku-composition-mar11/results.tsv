@@ -9,3 +9,5 @@ v6b	crash	crash	RandomForest safe — still has infinity issues
 v7	crash	crash	Logistic Regression — infinity in features
 v7b	0.3799	discard	Logistic Regression (linear only) — too simple
 v8	crash	crash	XGBoost — infinity in features
+v11	0.4986	keep	Pure MLP (1024→512→256→128) on 520D input (512D matrix + 8 features)
+v22	0.4884	keep	RandomForest on spatial+scalar features with safe preprocessing
