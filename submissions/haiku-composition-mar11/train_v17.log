@@ -1,0 +1,14 @@
+Device: cuda:0
+Loading data...
+  Dataset: 5561523
+Creating train/val split with quality cuts on validation...
+Validation set: 1112305 → 95116 after quality cuts
+Parameters: 815,955
+  -> Best val_acc (0.4915)
+  -> Best val_acc (0.4948)
+Epoch  5: loss=1.3916 train_acc=0.3625 val_acc=0.4870 35.3s
+Epoch 10: loss=1.3875 train_acc=0.3648 val_acc=0.4977 35.6s
+  -> Best val_acc (0.4977)
+  -> Best val_acc (0.5041)
+Epoch 15: loss=1.3834 train_acc=0.3667 val_acc=0.5016 35.5s
+Epoch 20: loss=1.3790 train_acc=0.3690 val_acc=0.4946 35.7s

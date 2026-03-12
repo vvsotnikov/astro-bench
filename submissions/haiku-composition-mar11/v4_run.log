@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v4: ResNet (skip connections) + engineered features...
+Epoch  1: loss=1.4071 val_acc=0.3452
+Epoch  6: loss=1.3882 val_acc=0.3480
+Epoch 11: loss=1.3851 val_acc=0.3227
+Epoch 16: loss=1.3824 val_acc=0.3197
+Epoch 21: loss=1.3796 val_acc=0.3151
+Epoch 26: loss=1.3773 val_acc=0.3480
+Running inference...
+
+---
+metric: 0.5041
+description: ResNet (skip connections) + 8 engineered features

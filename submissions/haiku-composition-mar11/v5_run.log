@@ -1,0 +1,33 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v5: haiku-mar8 replica (deeper CNN + 7 features + OneCycleLR)...
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-composition-mar11/train_v5_haiku_mar8_replica.py", line 183, in <module>
+    for mat, feat, y in train_loader:
+                        ^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/data/dataloader.py", line 741, in __next__
+    data = self._next_data()
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/data/dataloader.py", line 1548, in _next_data
+    return self._process_data(data, worker_id)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/data/dataloader.py", line 1586, in _process_data
+    data.reraise()
+    ~~~~~~~~~~~~^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/_utils.py", line 775, in reraise
+    raise exception
+ValueError: Caught ValueError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/data/_utils/worker.py", line 358, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = self.dataset.__getitems__(possibly_batched_index)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/utils/data/dataset.py", line 413, in __getitems__
+    return [self.dataset[self.indices[idx]] for idx in indices]
+            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-composition-mar11/train_v5_haiku_mar8_replica.py", line 42, in __getitem__
+    mat = (mat - self.mat_mean) / (self.mat_std + 1e-8)
+           ~~~~^~~~~~~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (2,16,16) (16,16,2) 
+

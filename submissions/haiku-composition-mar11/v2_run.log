@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v2: Basic CNN (no attention) + engineered features...
+Epoch  1: loss=1.4104 val_acc=0.3506
+Epoch  6: loss=1.3894 val_acc=0.3240
+Epoch 11: loss=1.3867 val_acc=0.3320
+Epoch 16: loss=1.3847 val_acc=0.3206
+Epoch 21: loss=1.3828 val_acc=0.3208
+Epoch 26: loss=1.3816 val_acc=0.3329
+Running inference...
+
+---
+metric: 0.4947
+description: Basic CNN (no attention) + 8 engineered features

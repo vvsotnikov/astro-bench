@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v11: Pure MLP on flattened matrices (520D input)...
+Epoch  1: loss=1.4488 train_acc=0.3305 val_acc=0.3538
+Epoch  6: loss=1.3989 train_acc=0.3591 val_acc=0.3596
+Epoch 11: loss=1.3924 train_acc=0.3628 val_acc=0.3616
+Epoch 16: loss=1.3832 train_acc=0.3675 val_acc=0.3609
+Epoch 21: loss=1.3725 train_acc=0.3734 val_acc=0.3597
+Epoch 26: loss=1.3640 train_acc=0.3781 val_acc=0.3585
+Running inference...
+
+---
+metric: 0.4986
+description: Pure MLP (1024→512→256→128) on 520D input (512D matrix + 8 features)

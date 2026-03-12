@@ -1,0 +1,35 @@
+Device: cuda:1
+Loading data...
+  Dataset: 5561523
+  Dataset: 119027
+Traceback (most recent call last):
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-composition-mar11/train_v20_vit_2x2.py", line 191, in <module>
+    main()
+    ~~~~^^
+  File "/home/vladimir/cursor_projects/astro-agents/submissions/haiku-composition-mar11/train_v20_vit_2x2.py", line 125, in main
+    model = ViT2x2().to(DEVICE)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1381, in to
+    return self._apply(convert)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 933, in _apply
+    module._apply(fn)
+    ~~~~~~~~~~~~~^^^^
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 964, in _apply
+    param_applied = fn(param)
+  File "/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1367, in convert
+    return t.to(
+           ~~~~^
+        device,
+        ^^^^^^^
+        dtype if t.is_floating_point() or t.is_complex() else None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        non_blocking,
+        ^^^^^^^^^^^^^
+    )
+    ^
+torch.AcceleratorError: CUDA error: invalid device ordinal
+GPU device may be out of range, do you have enough GPUs?
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
