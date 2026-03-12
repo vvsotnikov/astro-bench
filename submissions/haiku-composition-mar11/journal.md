@@ -183,11 +183,21 @@ Findings:
 - But neural nets beat tree models decisively (50.52% vs 48.84%)
 - Features alone insufficient; learned spatial patterns matter
 
-### Running: v14 (v1 with 100 epochs, lr=3e-4)
-- Currently epoch 16/100
-- Val accuracy stuck around 32% (concerning, needs investigation)
-- Early stopping patience=15, so will stop if no improvement
-- **Note**: Low validation accuracy might be normal variance or might indicate issue. Need to wait for test accuracy to evaluate.
+### v14: v1 with 100 epochs, lr=3e-4 ✗ **WORSE**
+**Result: 49.52%** — **WORSE than v1 (50.52%)**
+
+Key observations:
+- Ran all 100 epochs (validation accuracy never improved enough to trigger early stopping)
+- Validation accuracy stuck at 32-33% throughout training (never exceeded best of 33.6%)
+- Loss decreased from 1.4236 → 1.3743 (tiny improvement)
+- But test accuracy is **WORSE**: 49.52% vs v1's 50.52% (-1.0% absolute)
+
+Analysis & Conclusion:
+- **Longer training HURTS**: v1 (30 epochs) > v14 (100 epochs)
+- **Lower learning rate HURTS**: v1 (lr=1e-3) > v14 (lr=3e-4)
+- **v1's original hyperparameters are BETTER**
+- Hypothesis: Lower LR converges too slowly, overshoots and gets stuck in worse local minimum over 100 epochs
+- **Decision**: v1's hyperparameters (30 epochs, lr=1e-3, cosine annealing) are optimal. Skip v15 & v16 (other v1 variants would likely also underperform)
 
 ---
 
@@ -198,6 +208,7 @@ Findings:
 | **CNN** | v1 @ 50.52% | BEST |
 | **MLP** | v11 @ 49.86% | Works but worse than CNN |
 | **Tree** | v22 @ 48.84% | Works (fixed infinity issues) |
+| **v1 variants** | v14 @ 49.52% | Worse (longer training hurts) |
 | **Linear** | v7b @ 37.99% | Too weak |
 | **Baseline** | haiku-mar8 @ 50.71% | Target |
 | **Published SOTA** | ~51% | Stretch goal |
@@ -206,25 +217,24 @@ Findings:
 
 ---
 
-## Plan for v14 Result & Beyond
+## Decision After v14: Skip v15/v16, Go Straight to v17
 
-### If v14 > 50.71%
-- Winner found! Log it
-- Try v15/v16 to see if we can push higher
+v14 showed that v1's hyperparameters are **optimal**, not suboptimal:
+- **Longer training WORSE** (-1%)
+- **Lower learning rate WORSE** (-1%)
 
-### If v14 ≈ 50.52% (similar to v1)
-- Hypothesis: learning rate/epochs don't matter much
-- Next: **v17 (Exact haiku-mar8 replica)**
-  - 4 CNN blocks (vs our 3)
-  - OneCycleLR (vs cosine annealing)
-  - batch=4096 (vs 2048)
-  - 7 features (vs our 8)
-  - log1p matrices
-- Goal: Replicate 50.71% to understand what haiku-mar8 did differently
+This means v15 (class weights) and v16 (stronger label smoothing) are unlikely to help v1 further. v1 is already well-optimized.
 
-### If v14 < 50.3%
-- Something went wrong, investigate
-- Check GPU, check feature preprocessing, check data loading
+**Next experiment: v17 (Exact haiku-mar8 replica)**
+
+Why v17:
+- haiku-mar8 got 50.71%, we're stuck at 50.52%
+- Need to understand what's different
+- v17 will test: 4 CNN blocks, OneCycleLR, batch=4096, 7 features, log1p
+- If v17 hits 50.71% → we've found the answer
+- If v17 < 50.71% → something else (seed, data preprocessing, or just random variation)
+
+Expected: v17 should beat v1 since haiku-mar8 uses deeper architecture + stronger optimizer
 
 ---
 
