@@ -1,1 +1,4 @@
 experiment	metric	status	description
+v1	0.5052	discard	Attention CNN + 8 engineered features (50.71% to beat)
+v2	0.4947	discard	Basic CNN without attention (confirms attention helps)
+v3	pending	running	Basic CNN + log1p transform (cross-poll from haiku-mar8)
