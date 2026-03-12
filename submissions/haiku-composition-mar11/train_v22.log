@@ -1,0 +1,86 @@
+[Parallel(n_jobs=-1)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=-1)]: Done 104 tasks      | elapsed:  2.9min
+[Parallel(n_jobs=-1)]: Done 200 out of 200 | elapsed:  4.3min finished
+[Parallel(n_jobs=48)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=48)]: Done 104 tasks      | elapsed:    8.4s
+[Parallel(n_jobs=48)]: Done 200 out of 200 | elapsed:   14.4s finished
+[Parallel(n_jobs=48)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=48)]: Done 104 tasks      | elapsed:    0.1s
+[Parallel(n_jobs=48)]: Done 200 out of 200 | elapsed:    0.2s finished
+[Parallel(n_jobs=48)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=48)]: Done 104 tasks      | elapsed:    0.1s
+[Parallel(n_jobs=48)]: Done 200 out of 200 | elapsed:    0.2s finished
+Loading data...
+Train: 5561523, Test: 119027
+Extracting spatial features from train...
+  0/5561523
+  100000/5561523
+  200000/5561523
+  300000/5561523
+  400000/5561523
+  500000/5561523
+  600000/5561523
+  700000/5561523
+  800000/5561523
+  900000/5561523
+  1000000/5561523
+  1100000/5561523
+  1200000/5561523
+  1300000/5561523
+  1400000/5561523
+  1500000/5561523
+  1600000/5561523
+  1700000/5561523
+  1800000/5561523
+  1900000/5561523
+  2000000/5561523
+  2100000/5561523
+  2200000/5561523
+  2300000/5561523
+  2400000/5561523
+  2500000/5561523
+  2600000/5561523
+  2700000/5561523
+  2800000/5561523
+  2900000/5561523
+  3000000/5561523
+  3100000/5561523
+  3200000/5561523
+  3300000/5561523
+  3400000/5561523
+  3500000/5561523
+  3600000/5561523
+  3700000/5561523
+  3800000/5561523
+  3900000/5561523
+  4000000/5561523
+  4100000/5561523
+  4200000/5561523
+  4300000/5561523
+  4400000/5561523
+  4500000/5561523
+  4600000/5561523
+  4700000/5561523
+  4800000/5561523
+  4900000/5561523
+  5000000/5561523
+  5100000/5561523
+  5200000/5561523
+  5300000/5561523
+  5400000/5561523
+  5500000/5561523
+Extracting spatial features from test...
+  0/119027
+  100000/119027
+Extracting scalar features from train...
+Extracting scalar features from test...
+Feature shape: train=(5561523, 11), test=(119027, 11)
+Training RandomForest...
+Evaluating...
+
+Train accuracy: 0.4160
+Test accuracy: 0.4884
+
+---
+metric: 0.4884
+description: RandomForest on spatial+scalar features with safe preprocessing

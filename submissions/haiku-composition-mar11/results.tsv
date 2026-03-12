@@ -1,0 +1,14 @@
+experiment	metric	status	description
+v1	0.5052	discard	Attention CNN + 8 engineered features
+v2	0.4947	discard	Basic CNN without attention
+v3	0.5047	discard	Basic CNN + log1p transform
+v4	0.5041	discard	ResNet (skip connections) + 8 features — close to baseline but not beating it
+v5	crash	crash	haiku-mar8 replica — dimension bug in transpose
+v6	crash	crash	RandomForest — infinity values in features
+v6b	crash	crash	RandomForest safe — still has infinity issues
+v7	crash	crash	Logistic Regression — infinity in features
+v7b	0.3799	discard	Logistic Regression (linear only) — too simple
+v8	crash	crash	XGBoost — infinity in features
+v11	0.4986	keep	Pure MLP (1024→512→256→128) on 520D input (512D matrix + 8 features)
+v22	0.4884	keep	RandomForest on spatial+scalar features with safe preprocessing
+v14	0.4952	discard	v1 with 100 epochs, lr=3e-4 — WORSE than v1 (49.52% < 50.52%)

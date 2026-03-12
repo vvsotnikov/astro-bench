@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v38: Attention CNN with data augmentation (90° rotations, flips)...
+Epoch  1: loss=0.1159 val_surv@75=1.9080e-02
+Epoch  6: loss=0.0755 val_surv@75=1.7787e-02
+Epoch 11: loss=0.0735 val_surv@75=2.4178e-02
+Epoch 16: loss=0.0723 val_surv@75=1.4737e-02
+Epoch 21: loss=0.0713 val_surv@75=1.3986e-02
+Epoch 26: loss=0.0706 val_surv@75=1.4493e-02
+Running inference...
+
+---
+metric: 4.9654e-04
+description: Data augmentation (90° rotations, flips) on Attention CNN

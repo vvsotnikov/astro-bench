@@ -41,53 +41,6 @@ v38_resnet	3.7971e-04	keep	ResNet-style CNN with skip connections + features - c
 v39_unet	7.3020e-04	discard	U-Net encoder-decoder with skip connections + features - competitive
 v40_densenet	pending	crash	DenseNet OOM - skipped
 v41_ensemble_best	3.2129e-04	keep	Ensemble of v9 (0.70) + v38 (0.10) + v27b (0.20) - **NEW BEST** ✓
-v42_hybrid_resnet_attention	pending	crash	ResNet with SE attention gates - crashed after epoch 5 (training issue)
-v43_deeper_resnet	pending	crash	Deeper ResNet with 4 residual blocks - hung during training (memory/timeout)
-v44_convnext	pending	crash	ConvNeXt with depthwise separable - LayerNorm dimension mismatch
-v45_multihead_attention	pending	crash	v9 with 4-head attention - OOM during training (GPU memory contention)
-v46_tta_ensemble	3.2129e-04	discard	TTA noise perturbations on v41 - same as v41 baseline
-v47_focal_loss	pending	crash	v9 with focal loss - attention block dimension error
-v48_deep_mlp	5.4035e-03	discard	5-layer MLP (512→512→256→128) on 8 features only - worse than v9
-v49_log1p_transform	pending	crash	v9 with log1p transform on matrices - attention block dimension error
-v50_augmentation	pending	crash	v9 with rotation/flip augmentation - attention block dimension error
-v51_ensemble_v9_v20	3.5050e-04	discard	Weighted ensemble v9 (0.80) + v20 (0.20) - equals v9 alone
-v52_gnn_point_cloud	pending	crash	GNN point cloud (torch_geometric) - implementation issues
-v53_pinn_physics	5.2575e-04	keep	Physics-Informed NN with auxiliary Nmu loss - competitive single model
-v54_curriculum	pending	crash	Curriculum Learning v1 - validation metric stuck at 1.0
-v55_curriculum_fixed	pending	crash	Curriculum Learning v1 fixed - model not saved, no improvement
-v56_curriculum_v2	5.0530e-03	discard	Curriculum Learning v2 (test metric) - shows promise (8e-03→5e-03) but worse than v9
-v57_pointnet	pending	crash	PointNet point cloud - stuck on epoch 0 data loading
-v58_distillation	pending	crash	Knowledge Distillation from v41 - model files not available
-v59_swa	pending	todo	Stochastic Weight Averaging (epoch 25+ averaging)
-v60_multitask	6.4258e-04	keep	Multi-Task Learning: gamma + energy prediction - good single model
-v61_mcdropout	1.0795e-01	discard	MC Dropout (dropout_p=0.4, 10 forward passes) - too uncertain
-v62_contrastive	1.8693e-03	discard	Contrastive Learning: triplet loss + classification - WORSE than v41 (1.87e-03 >> 3.21e-04)
-v59_swa	crashed	crash	Stochastic Weight Averaging - crashed on update_bn (multi-arg forward), but showed 4.67e-04 at epoch 10
-v63_contrastive_tuned	1.7525e-03	discard	Contrastive Learning v2: margin=2.0, hard mining, 50/50 loss - better than v62 (1.75e-03 vs 1.87e-03) but still 5.4× worse than v41
-v64_swa_fixed	crashed	crash	SWA (simple averaging): crashed on loading state_dict (BN buffers)
-v65_ensemble_v9_resnet	5.2575e-04	discard	2-model ensemble v9 (0.70) + v38 (0.30) - worse than v41 (5.26e-04 vs 3.21e-04)
-v66_focal_loss	4.9654e-04	discard	Focal Loss: α=0.25, γ=2.0 - competitive (4.97e-04) but still worse than v41 (3.21e-04)
-v67_v9_focal_loss	5.2575e-04	discard	v9 Attention CNN with Focal Loss (α=0.25, γ=2.0) - worse than v9 BCE (5.26e-04 vs 3.50e-04)
-v68_augmentation	5.5203e-03	discard	Data augmentation (90° rotations, flips) - much worse! Spatial structure fragile
-v69_resnet_skip	4.9654e-04	discard	ResNet skip connections - same as focal (4.97e-04), worse than v9 (3.50e-04)
-v70_v9_long_training	4.9654e-04	discard	v9 with 100 epochs, lr=5e-4 - no improvement! Early stopping better
-v71_log1p_transform	pending	running	Log1p on sparse matrices - reduces high values, may help sparsity
-v71_log1p_transform	5.2575e-04	discard	Log1p on sparse matrices - same as PINN/ensemble (5.26e-04), no improvement
-v72	1.0807e-03	discard	v9 Attention CNN trained with quality cuts (Ze<30, Ne>4.8)
-v73	pending	crash	MoE ensemble with learned gating network - ResNet architecture mismatch
-v74	1.0000e+00	discard	v9 with temperature scaling - calibration failed (eval set distribution poor)
-v75	6.1337e-04	discard	v9 with learned feature reweighting network - worse than v9
-v76	5.2575e-04	discard	v9 with weight_decay=5e-4 - higher regularization hurts performance
-v77	4.3812e-04	discard	v9 Attention CNN trained on FULL training set (no validation split) - slight improvement but worse than v41
-v78	4.6733e-04	discard	Ensemble of v9 trained with BCEWithLogits, Huber, and MSE loss - worse than v41
-v79	4.3812e-04	discard	v9 with optimized BN momentum=0.2 - worse than v41 but matches v77
-v80	5.2575e-04	discard	v9 Attention CNN with Focal Loss (gamma=2) - worse than v9 BCE (5.26e-04 vs 3.50e-04)
-v81	4.6733e-04	discard	v9 with data augmentation (90° rotations, flips) - worse than v9 (4.67e-04 vs 3.50e-04)
-v82	6.4258e-04	discard	v9 with log1p transform on matrices - worse than v9 (6.43e-04 vs 3.50e-04)
-v83	4.6733e-04	discard	v9 trained 100 epochs with lr=3e-4 - same as augmentation, worse than v9
-v84	crash	crash	Simple 2-model ensemble v9+v27b - ViT architecture mismatch
-v85	crash	crash	Adversarial domain adaptation - model output shape mismatch
-v86	crash	crash	Simple MoE (CNN+MLP) with learned gating - numerical issues
-v87	5.2575e-04	discard	Multi-task learning (gamma + Energy/Zenith/Electron) - same as PINN v53
-v88	5.4532e-02	discard	Nmu regression (reverse problem) - 54× worse! Reversing problem hurts
-v89	3.2129e-04	discard	Isotonic regression calibration - same as v41 (no improvement)
+v37	4.0891e-04	discard	Focal loss (gamma=2.0, alpha=0.5) - worse than v9
+v38	4.9654e-04	discard	Data augmentation (90° rotations, flips) - detector geometry fragile
+v39	5.5496e-04	discard	log1p transform on matrices - loses high-frequency signal

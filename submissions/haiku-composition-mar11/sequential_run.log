@@ -1,0 +1,106 @@
+Sequential Runner: 12 experiments
+GPU: CUDA_VISIBLE_DEVICES=1
+Experiments: ['v14', 'v15', 'v16', 'v17', 'v18', 'v19', 'v20', 'v21', 'v22', 'v23', 'v24', 'v26']
+Total estimated time: 385 minutes for GPU
+
+
+======================================================================
+Starting v14 (train_v14_v1_long_training.py)
+Log: submissions/haiku-composition-mar11/train_v14.log
+======================================================================
+Process 866665 started
+✗ v14 failed with return code -9
+
+======================================================================
+Starting v15 (train_v15_v1_class_weights.py)
+Log: submissions/haiku-composition-mar11/train_v15.log
+======================================================================
+Process 875341 started
+✗ v15 failed with return code 1
+
+======================================================================
+Starting v16 (train_v16_v1_label_smoothing.py)
+Log: submissions/haiku-composition-mar11/train_v16.log
+======================================================================
+Process 875717 started
+✗ v16 failed with return code 1
+
+======================================================================
+Starting v17 (train_v17_haiku_mar8_exact.py)
+Log: submissions/haiku-composition-mar11/train_v17.log
+======================================================================
+Process 876063 started
+✗ v17 failed with return code 1
+
+======================================================================
+Starting v18 (train_v18_deeper_cnn.py)
+Log: submissions/haiku-composition-mar11/train_v18.log
+======================================================================
+Process 876196 started
+✗ v18 failed with return code 1
+
+======================================================================
+Starting v19 (train_v19_wider_cnn.py)
+Log: submissions/haiku-composition-mar11/train_v19.log
+======================================================================
+Process 876324 started
+✗ v19 failed with return code 1
+
+======================================================================
+Starting v20 (train_v20_vit_2x2.py)
+Log: submissions/haiku-composition-mar11/train_v20.log
+======================================================================
+Process 876501 started
+✗ v20 failed with return code 1
+
+======================================================================
+Starting v21 (train_v21_mlp_flattened.py)
+Log: submissions/haiku-composition-mar11/train_v21.log
+======================================================================
+Process 876703 started
+✗ v21 failed with return code 1
+
+======================================================================
+Starting v22 (train_v22_randomforest_safe.py)
+Log: submissions/haiku-composition-mar11/train_v22.log
+======================================================================
+Process 876851 started
+✓ v22 completed successfully
+Result: 0.4884
+
+======================================================================
+Starting v23 (train_v23_focal_loss.py)
+Log: submissions/haiku-composition-mar11/train_v23.log
+======================================================================
+Process 890941 started
+✗ v23 failed with return code 1
+
+======================================================================
+Starting v24 (train_v24_sgd_momentum.py)
+Log: submissions/haiku-composition-mar11/train_v24.log
+======================================================================
+Process 891219 started
+✗ v24 failed with return code 1
+
+======================================================================
+Starting v26 (train_v26_augmentation.py)
+Log: submissions/haiku-composition-mar11/train_v26.log
+======================================================================
+Process 891461 started
+✗ v26 failed with return code 1
+
+======================================================================
+SUMMARY: 1 completed, 11 failed
+======================================================================
+✗ v14: FAILED
+✗ v15: FAILED
+✗ v16: FAILED
+✗ v17: FAILED
+✗ v18: FAILED
+✗ v19: FAILED
+✗ v20: FAILED
+✗ v21: FAILED
+✓ v22: 0.4884
+✗ v23: FAILED
+✗ v24: FAILED
+✗ v26: FAILED

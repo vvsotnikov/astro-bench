@@ -1,0 +1,6 @@
+Device: cuda:0
+Loading data...
+  Dataset: 5561523
+Creating train/val split with quality cuts on validation...
+Validation set: 1112305 → 95116 after quality cuts
+Parameters: 815,955

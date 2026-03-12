@@ -1,0 +1,30 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v14: v1 with 100 epochs, lr=3e-4...
+Epoch   1: loss=1.4236 val_acc=0.3258
+Epoch   6: loss=1.3919 val_acc=0.3075
+Epoch  11: loss=1.3891 val_acc=0.3243
+Epoch  16: loss=1.3875 val_acc=0.3217
+Epoch  21: loss=1.3862 val_acc=0.3292
+Epoch  26: loss=1.3849 val_acc=0.3260
+Epoch  31: loss=1.3840 val_acc=0.3257
+Epoch  36: loss=1.3827 val_acc=0.3311
+Epoch  41: loss=1.3816 val_acc=0.3156
+Epoch  46: loss=1.3806 val_acc=0.3267
+Epoch  51: loss=1.3796 val_acc=0.3217
+Epoch  56: loss=1.3786 val_acc=0.3343
+Epoch  61: loss=1.3778 val_acc=0.3170
+Epoch  66: loss=1.3769 val_acc=0.3364
+Epoch  71: loss=1.3762 val_acc=0.3259
+Epoch  76: loss=1.3757 val_acc=0.3245
+Epoch  81: loss=1.3752 val_acc=0.3189
+Epoch  86: loss=1.3747 val_acc=0.3160
+Epoch  91: loss=1.3744 val_acc=0.3168
+Epoch  96: loss=1.3743 val_acc=0.3209
+Running inference...
+
+---
+metric: 0.4952
+description: v1 Attention CNN with 100 epochs, lr=3e-4

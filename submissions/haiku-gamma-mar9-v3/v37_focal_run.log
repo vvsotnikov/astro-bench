@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v37: Attention CNN with Focal Loss (gamma=2.0, alpha=0.5)...
+Epoch  1: loss=0.0145 val_surv@75=1.2333e-01
+Epoch  6: loss=0.0108 val_surv@75=1.6137e-02
+Epoch 11: loss=0.0104 val_surv@75=3.5604e-02
+Epoch 16: loss=0.0102 val_surv@75=1.5440e-02
+Epoch 21: loss=0.0100 val_surv@75=1.4802e-02
+Epoch 26: loss=0.0098 val_surv@75=1.4785e-02
+Running inference...
+
+---
+metric: 4.0891e-04
+description: Focal Loss (gamma=2.0, alpha=0.5) on Attention CNN
