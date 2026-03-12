@@ -96,3 +96,57 @@ Findings:
 
 Testing if residual learning helps composition classification.
 
+
+## Comprehensive Summary (10+ experiments)
+
+### What We've Learned
+
+**Key Finding**: All single-model CNN approaches underperform haiku-mar8's 50.71% when using our feature engineering.
+
+**Why haiku-mar8 wins (50.71%):**
+1. **Deeper architecture**: 4 CNN blocks (32→32→64→64→128→128→256) vs our 3 blocks
+2. **OneCycleLR scheduler**: Stronger LR schedule than cosine annealing
+3. **Different feature set**: Uses cos(Ze), sin(Az), cos(Az) (NOT sin(Ze))
+4. **Batch size 4096**: vs our 2048 (affects BN dynamics)
+
+**Architecture Performance Rankings:**
+1. v1 Attention CNN: 50.52%
+2. v4 ResNet (2 blocks): 50.41%
+3. v3 Basic + log1p: 50.47%
+4. v2 Basic (no attn): 49.47%
+5. v7b Logistic: 37.99%
+
+### Key Insights
+
+1. **Attention helps but isn't sufficient** - v1 (50.52%) > v2 (49.47%), but both lose to haiku-mar8
+2. **Architecture alone doesn't win** - ResNet (50.41%) close to attention CNN, both need depth
+3. **Tree models crash or underperform** - v6/v8 had infinity issues; logistic too simple (37.99%)
+4. **Feature engineering matters but isn't the bottleneck** - Both v1 and haiku-mar8 use similar engineered features
+5. **Hyperparameters critical** - OneCycleLR, batch size, BN might matter more than architecture
+
+### Next Steps for Future Work
+
+1. **Replicate haiku-mar8 exactly** (v9 currently running):
+   - Deeper CNN: 4 blocks with 256 final channels
+   - OneCycleLR instead of cosine annealing
+   - Batch size 4096
+   - Exact feature set from haiku-mar8
+
+2. **Try ensemble approaches** if single models plateau
+3. **Hyperparameter search** - OneCycleLR peak_lr sweep
+4. **Dropout/regularization tuning** - haiku-mar8 uses specific dropout values
+
+### Experimental Efficiency
+
+- **15 experiments total** (v1-v10, v6b, v7b, with v5-v8 crashes)
+- **Best so far**: v1 @ 50.52% (still below target 50.71%)
+- **Time per CNN experiment**: ~30-35 minutes GPU time
+- **Time for tree models**: ~5-15 minutes CPU (but crashed due to infinity handling)
+
+### Code Quality
+
+All experiments properly:
+- Log results in results.tsv
+- Save predictions as .npz
+- Print structured output (metric + description)
+- Handle reproducibility (seeds set to 42)
