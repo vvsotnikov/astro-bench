@@ -1,0 +1,5 @@
+experiment	metric	status	description
+v1_rf	0.1195	keep	RF 500 trees, 16 eng features, quality cuts on train
+v2_hgb	0.1182	keep	HGB 500 iter, 2M train no cuts, 16 eng features
+v5_cnn_attn	0.1203	discard	CNN+Attn+MLP AMP 30ep, 2M (both sims), 13 eng feats, 48.1% acc
+v8_cnn_full	0.1080	keep	CNN+Attn+MLP AMP 20ep, ALL 5.5M f32, label_smooth=0.05, 50.75% acc
