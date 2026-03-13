@@ -7,7 +7,9 @@ Usage:
 Task 1 (composition, default):
     predictions.npz must contain "predictions": int array of class labels (0-4)
     0=proton, 1=helium, 2=carbon, 3=silicon, 4=iron
-    Key metric: overall accuracy.
+    Key metric: mean fraction error — how well the classifier recovers
+    particle fractions across energy bins and random mixture compositions.
+    Lower is better (0 = perfect fraction recovery).
 
 Task 2 (gamma):
     predictions.npz must contain "gamma_scores": float array of gamma probabilities
@@ -65,11 +67,98 @@ def load_test_truth(task: str):
 # Task 1: Mass composition (5-class)
 # ---------------------------------------------------------------------------
 
+# Mixture evaluation parameters
+N_MIXTURES = 1000       # number of random mixtures per energy bin
+MIXTURE_SIZE = 5000     # events per mixture
+MIXTURE_SEED = 2026     # fixed seed for reproducibility
+
+
+def _fraction_error_for_bin(truth_bin, pred_bin, rng):
+    """Compute mean absolute fraction error for one energy bin.
+
+    Samples N_MIXTURES random mixtures from the events in this bin,
+    each with random target class fractions drawn from Dirichlet(1,...,1).
+    For each mixture, samples MIXTURE_SIZE events with those fractions,
+    then compares true fractions vs predicted fractions.
+
+    Returns:
+        mean_frac_error: float — mean |true_frac - pred_frac| averaged
+                         over classes and mixtures
+        per_class_errors: list[float] — mean |true_frac - pred_frac| per class
+        details: dict — detailed results for analysis
+    """
+    n_classes = 5
+    classes = np.arange(n_classes)
+
+    # Group event indices by true class
+    class_indices = {c: np.where(truth_bin == c)[0] for c in classes}
+    class_counts = {c: len(class_indices[c]) for c in classes}
+
+    # Skip if any class is missing (can't form mixtures)
+    if any(class_counts[c] == 0 for c in classes):
+        return None, None, None
+
+    # Sample random mixture fractions from Dirichlet(1,1,1,1,1) = uniform on simplex
+    fractions = rng.dirichlet(np.ones(n_classes), size=N_MIXTURES)
+
+    all_errors = []  # (N_MIXTURES, n_classes)
+
+    for mix_idx in range(N_MIXTURES):
+        target_fracs = fractions[mix_idx]
+        counts_per_class = np.round(target_fracs * MIXTURE_SIZE).astype(int)
+        # Adjust rounding to hit exactly MIXTURE_SIZE
+        diff = MIXTURE_SIZE - counts_per_class.sum()
+        if diff != 0:
+            # Add/subtract from the largest class
+            counts_per_class[np.argmax(counts_per_class)] += diff
+
+        # Sample events for this mixture
+        sampled_preds = []
+        actual_true_fracs = np.zeros(n_classes)
+        for c in classes:
+            n_sample = counts_per_class[c]
+            if n_sample <= 0:
+                continue
+            # Sample with replacement from this class's events
+            idx = rng.choice(class_indices[c], size=n_sample, replace=True)
+            sampled_preds.append(pred_bin[idx])
+            actual_true_fracs[c] = n_sample
+
+        actual_true_fracs /= actual_true_fracs.sum()
+        all_preds = np.concatenate(sampled_preds)
+
+        # Predicted fractions
+        pred_counts = np.bincount(all_preds, minlength=n_classes)[:n_classes]
+        pred_fracs = pred_counts / pred_counts.sum()
+
+        # Absolute fraction error per class
+        errors = np.abs(actual_true_fracs - pred_fracs)
+        all_errors.append(errors)
+
+    all_errors = np.array(all_errors)  # (N_MIXTURES, n_classes)
+    mean_frac_error = float(all_errors.mean())
+    per_class_errors = [float(all_errors[:, c].mean()) for c in classes]
+
+    details = {
+        "mean_fraction_error": mean_frac_error,
+        "per_class_fraction_error": per_class_errors,
+        "n_mixtures": N_MIXTURES,
+        "mixture_size": MIXTURE_SIZE,
+    }
+    return mean_frac_error, per_class_errors, details
+
 
 def evaluate_composition(predictions, labels_composition, features):
-    """Evaluate 5-class mass composition predictions."""
+    """Evaluate 5-class mass composition predictions.
+
+    Key metric: mean fraction error — averaged across energy bins and
+    random mixture compositions. This measures how well the classifier
+    can recover the true particle fractions in a realistic scenario
+    where the composition is unknown.
+    """
     truth = labels_composition
     energies = features[:, 0]
+    rng = np.random.default_rng(MIXTURE_SEED)
 
     results = {}
     results["accuracy"] = float(accuracy_score(truth, predictions))
@@ -91,26 +180,43 @@ def evaluate_composition(predictions, labels_composition, features):
     results["weighted_f1"] = report["weighted avg"]["f1-score"]
     results["confusion_matrix"] = confusion_matrix(truth, predictions).tolist()
 
-    # Energy-binned accuracy and confusion matrices
+    # Energy-binned accuracy, confusion matrices, and fraction errors
     results["energy_binned"] = {}
+    bin_fraction_errors = []
     for lo, hi, label in ENERGY_BINS:
         mask = (energies >= lo) & (energies < hi)
         if mask.sum() > 0:
             cm = confusion_matrix(truth[mask], predictions[mask], labels=list(range(5)))
-            results["energy_binned"][label] = {
+            bin_result = {
                 "accuracy": float(accuracy_score(truth[mask], predictions[mask])),
                 "count": int(mask.sum()),
                 "confusion_matrix": cm.tolist(),
             }
+            # Fraction error for this energy bin
+            mfe, pce, details = _fraction_error_for_bin(
+                truth[mask], predictions[mask], rng
+            )
+            if mfe is not None:
+                bin_result["fraction_error"] = details
+                bin_fraction_errors.append(mfe)
+            results["energy_binned"][label] = bin_result
+
+    # Key metric: mean fraction error across energy bins
+    if bin_fraction_errors:
+        results["mean_fraction_error"] = float(np.mean(bin_fraction_errors))
+    else:
+        results["mean_fraction_error"] = 1.0
 
     return results
 
 
 def print_composition_results(results):
     """Pretty-print composition evaluation results."""
+    mfe = results["mean_fraction_error"]
     print(f"\n{'='*60}")
     print(f"  TASK: Mass Composition (5-class)")
-    print(f"  OVERALL ACCURACY: {results['accuracy']:.4f} ({results['accuracy']*100:.2f}%)")
+    print(f"  KEY METRIC (mean fraction error): {mfe:.4f}")
+    print(f"  ACCURACY: {results['accuracy']:.4f} ({results['accuracy']*100:.2f}%)")
     print(f"  MACRO F1:         {results['macro_f1']:.4f}")
     print(f"  WEIGHTED F1:      {results['weighted_f1']:.4f}")
     print(f"{'='*60}")
@@ -134,15 +240,30 @@ def print_composition_results(results):
         row = "  ".join(f"{cm[i, j]:>6}" for j in range(len(PARTICLE_NAMES)))
         print(f"{name[:4]:<10} {row}")
 
-    print(f"\n{'Energy-binned accuracy':^60}")
-    print(f"{'Bin':<15} {'Accuracy':>10} {'Count':>10}")
-    print("-" * 40)
+    print(f"\n{'Energy-binned accuracy & fraction error':^60}")
+    print(f"{'Bin':<15} {'Accuracy':>10} {'Frac Err':>10} {'Count':>10}")
+    print("-" * 50)
     for label, m in results["energy_binned"].items():
-        print(f"{label:<15} {m['accuracy']:>10.4f} {m['count']:>10}")
+        fe = m.get("fraction_error", {}).get("mean_fraction_error", None)
+        fe_str = f"{fe:>10.4f}" if fe is not None else f"{'—':>10}"
+        print(f"{label:<15} {m['accuracy']:>10.4f} {fe_str} {m['count']:>10}")
+
+    # Per-class fraction errors per energy bin
+    print(f"\n{'Per-class fraction error by energy bin':^60}")
+    abbrev = [n[:2] for n in PARTICLE_NAMES]
+    print(f"{'Bin':<15}" + "".join(f"{a:>8}" for a in abbrev))
+    print("-" * (15 + 8 * 5))
+    for label, m in results["energy_binned"].items():
+        fe = m.get("fraction_error")
+        if fe:
+            pce = fe["per_class_fraction_error"]
+            vals = "".join(f"{v:>8.4f}" for v in pce)
+        else:
+            vals = "".join(f"{'—':>8}" for _ in range(5))
+        print(f"{label:<15}{vals}")
 
     # Normalized confusion matrices per energy bin
     print(f"\n{'Energy-binned confusion matrices (row-normalized)':^60}")
-    abbrev = [n[:2] for n in PARTICLE_NAMES]
     for label, m in results["energy_binned"].items():
         cm = np.array(m["confusion_matrix"])
         row_sums = cm.sum(axis=1, keepdims=True)
