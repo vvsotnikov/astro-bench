@@ -192,7 +192,7 @@ python verify.py --task gamma submissions/your_submission/predictions.npz
 **Mass composition (Task 1):**
 - Random: ~0.20 fraction error
 - RandomForest (5 features only): ~0.11 fraction error
-- CNN (LeNet-5 inspired, 16×16×2 + Ne, Nmu, θ, s, ~36K params): ~0.09 fraction error ([JINST 2024](https://arxiv.org/abs/2311.06893), QGS-only)
+- CNN (LeNet-5 inspired, 16×16×2 + Ne, Nmu, θ, s, ~36K params): ~51% accuracy ([JINST 2024](https://arxiv.org/abs/2311.06893), QGS-only, fraction error not measured)
 - Published (JINST 2024 + JCAP 2024, years of expert iteration): the target to beat
 
 **Gamma/hadron (Task 2):**
