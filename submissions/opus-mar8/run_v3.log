@@ -1,0 +1,31 @@
+Loading train data...
+  Chunk 1, 200000/2000000
+  Chunk 2, 400000/2000000
+  Chunk 3, 600000/2000000
+  Chunk 4, 800000/2000000
+  Chunk 5, 1000000/2000000
+  Chunk 6, 1200000/2000000
+  Chunk 7, 1400000/2000000
+  Chunk 8, 1600000/2000000
+  Chunk 9, 1800000/2000000
+  Chunk 10, 2000000/2000000
+  Loaded: mat=(2000000, 2, 16, 16), feat=(2000000, 13), labels=(2000000,)
+Loading test data...
+  Chunk 1, 119027/119027
+  Loaded: mat=(119027, 2, 16, 16), feat=(119027, 13), labels=(119027,)
+Model params: 656,101
+Ep 1/30: train=0.4308 test=0.4428 [106s]
+  >>> Best: 0.4428
+Ep 2/30: train=0.4406 test=0.4430 [194s]
+  >>> Best: 0.4430
+Ep 3/30: train=0.4418 test=0.4736 [283s]
+  >>> Best: 0.4736
+Ep 4/30: train=0.4428 test=0.4928 [371s]
+  >>> Best: 0.4928
+Ep 5/30: train=0.4433 test=0.4740 [460s]
+Ep 6/30: train=0.4438 test=0.4845 [548s]
+Ep 7/30: train=0.4445 test=0.4928 [636s]
+  >>> Best: 0.4928
+Ep 8/30: train=0.4453 test=0.4648 [725s]
+Ep 9/30: train=0.4457 test=0.4854 [813s]
+Ep 10/30: train=0.4463 test=0.4677 [902s]

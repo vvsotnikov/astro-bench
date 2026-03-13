@@ -1,0 +1,24 @@
+Loading training data (both sims)...
+  Total training samples: 5561523
+  QGS chunk: 250000/1500000
+  QGS chunk: 500000/1500000
+  QGS chunk: 750000/1500000
+  QGS chunk: 1000000/1500000
+  QGS chunk: 1250000/1500000
+  QGS chunk: 1500000/1500000
+  EPOS chunk: 250000/1500000
+  EPOS chunk: 500000/1500000
+  EPOS chunk: 750000/1500000
+  EPOS chunk: 1000000/1500000
+  EPOS chunk: 1250000/1500000
+  EPOS chunk: 1500000/1500000
+  Combined: 3000000 samples
+Loading test data...
+  Test: 119027 samples
+Model params: 1,047,701
+Ep 1/40: train=0.3940 test=0.4768 [166s]
+  >>> Best: 0.4768
+Ep 2/40: train=0.3998 test=0.4714 [307s]
+Ep 3/40: train=0.4009 test=0.4884 [448s]
+  >>> Best: 0.4884
+Ep 4/40: train=0.4012 test=0.4592 [589s]

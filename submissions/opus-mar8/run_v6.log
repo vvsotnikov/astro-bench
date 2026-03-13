@@ -1,0 +1,26 @@
+Setting up datasets...
+  Engineering features for train (5561523 samples)...
+  Engineering features for test (119027 samples)...
+  Train: 5561523, Test: 119027
+Params: 1,047,701
+  Ep 1 batch 0/1358 acc=0.2070
+  Ep 1 batch 500/1358 acc=0.3538
+  Ep 1 batch 1000/1358 acc=0.3578
+Ep 1/15: train=0.3589 test=0.4586 [165s]
+  >>> Best: 0.4586
+  Ep 2 batch 0/1358 acc=0.3491
+  Ep 2 batch 500/1358 acc=0.3632
+  Ep 2 batch 1000/1358 acc=0.3636
+Ep 2/15: train=0.3636 test=0.5000 [326s]
+  >>> Best: 0.5000
+  Ep 3 batch 0/1358 acc=0.3643
+  Ep 3 batch 500/1358 acc=0.3643
+  Ep 3 batch 1000/1358 acc=0.3644
+Ep 3/15: train=0.3643 test=0.4936 [487s]
+  Ep 4 batch 0/1358 acc=0.3616
+  Ep 4 batch 500/1358 acc=0.3651
+  Ep 4 batch 1000/1358 acc=0.3652
+Ep 4/15: train=0.3652 test=0.4458 [648s]
+  Ep 5 batch 0/1358 acc=0.3604
+  Ep 5 batch 500/1358 acc=0.3661
+  Ep 5 batch 1000/1358 acc=0.3656

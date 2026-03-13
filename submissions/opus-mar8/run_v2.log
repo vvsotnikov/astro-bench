@@ -1,0 +1,17 @@
+Loading training data (no cuts)...
+Loading test data...
+Training HistGradientBoosting (n_train=2000000, n_test=119027)...
+Binning 0.230 GB of training data: 0.219 s
+Binning 0.026 GB of validation data: 0.012 s
+Fitting gradient boosted rounds:
+Fit 1135 trees in 29.955 s, (35185 total leaves)
+Time spent computing histograms: 12.417s
+Time spent finding best splits:  1.066s
+Time spent applying splits:      3.510s
+Time spent predicting:           3.192s
+Test accuracy: 0.4644
+
+Completed in 0.5 minutes
+---
+metric: 0.4644
+description: HGB 500 iter, 2M train, no cuts, 16 eng features

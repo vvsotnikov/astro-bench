@@ -1,0 +1,19 @@
+[Parallel(n_jobs=-1)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=-1)]: Done 104 tasks      | elapsed:   12.6s
+[Parallel(n_jobs=-1)]: Done 354 tasks      | elapsed:   34.1s
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:   45.8s finished
+[Parallel(n_jobs=48)]: Using backend ThreadingBackend with 48 concurrent workers.
+[Parallel(n_jobs=48)]: Done 104 tasks      | elapsed:    0.1s
+[Parallel(n_jobs=48)]: Done 354 tasks      | elapsed:    0.4s
+[Parallel(n_jobs=48)]: Done 500 out of 500 | elapsed:    0.5s finished
+Loading training data...
+Applying quality cuts...
+  After cuts: 475977 / 5561523 events (8.6%)
+Loading test data...
+Training RandomForest (n_train=475977, n_test=119027)...
+Test accuracy: 0.4619
+
+Completed in 0.8 minutes
+---
+metric: 0.4619
+description: RF 500 trees, 16 engineered features, quality cuts on train

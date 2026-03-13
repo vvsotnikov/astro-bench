@@ -1,0 +1,51 @@
+Loading training data...
+  QGS: 250000/1000000
+  QGS: 500000/1000000
+  QGS: 750000/1000000
+  QGS: 1000000/1000000
+  EPOS: 250000/1000000
+  EPOS: 500000/1000000
+  EPOS: 750000/1000000
+  EPOS: 1000000/1000000
+  Total: 2000000
+Loading test data...
+Params: 1,047,701
+Ep 1/30: train=0.4360 test=0.4747 [68s]
+  >>> Best: 0.4747
+Ep 2/30: train=0.4433 test=0.4520 [117s]
+Ep 3/30: train=0.4444 test=0.4753 [166s]
+  >>> Best: 0.4753
+Ep 4/30: train=0.4457 test=0.4328 [215s]
+Ep 5/30: train=0.4461 test=0.4797 [264s]
+  >>> Best: 0.4797
+Ep 6/30: train=0.4463 test=0.4402 [312s]
+Ep 7/30: train=0.4467 test=0.4061 [361s]
+Ep 8/30: train=0.4478 test=0.4613 [410s]
+Ep 9/30: train=0.4479 test=0.4746 [459s]
+Ep 10/30: train=0.4486 test=0.4713 [508s]
+Ep 11/30: train=0.4494 test=0.4528 [557s]
+Ep 12/30: train=0.4502 test=0.4810 [605s]
+  >>> Best: 0.4810
+Ep 13/30: train=0.4514 test=0.4459 [654s]
+Ep 14/30: train=0.4531 test=0.4780 [703s]
+Ep 15/30: train=0.4551 test=0.4627 [753s]
+Ep 16/30: train=0.4572 test=0.4680 [803s]
+Ep 17/30: train=0.4592 test=0.4661 [852s]
+Ep 18/30: train=0.4614 test=0.4760 [901s]
+Ep 19/30: train=0.4635 test=0.4687 [951s]
+Ep 20/30: train=0.4660 test=0.4699 [1000s]
+Ep 21/30: train=0.4681 test=0.4653 [1049s]
+Ep 22/30: train=0.4699 test=0.4662 [1099s]
+Ep 23/30: train=0.4716 test=0.4624 [1147s]
+Ep 24/30: train=0.4730 test=0.4657 [1198s]
+Ep 25/30: train=0.4744 test=0.4644 [1247s]
+Ep 26/30: train=0.4754 test=0.4670 [1297s]
+Ep 27/30: train=0.4764 test=0.4618 [1346s]
+Ep 28/30: train=0.4771 test=0.4611 [1396s]
+Ep 29/30: train=0.4773 test=0.4630 [1445s]
+Ep 30/30: train=0.4775 test=0.4629 [1494s]
+
+Done in 24.9m. Best acc: 0.4810
+---
+metric: 0.4810
+description: CNN+Attn+MLP AMP, 40ep, 2M train (both sims), 13 eng feats

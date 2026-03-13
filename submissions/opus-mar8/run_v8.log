@@ -1,0 +1,62 @@
+Loading train data as float32 tensors...
+  train: 250000/5561523
+  train: 500000/5561523
+  train: 750000/5561523
+  train: 1000000/5561523
+  train: 1250000/5561523
+  train: 1500000/5561523
+  train: 1750000/5561523
+  train: 2000000/5561523
+  train: 2250000/5561523
+  train: 2500000/5561523
+  train: 2750000/5561523
+  train: 3000000/5561523
+  train: 3250000/5561523
+  train: 3500000/5561523
+  train: 3750000/5561523
+  train: 4000000/5561523
+  train: 4250000/5561523
+  train: 4500000/5561523
+  train: 4750000/5561523
+  train: 5000000/5561523
+  train: 5250000/5561523
+  train: 5500000/5561523
+  train: 5561523/5561523
+  train: mat=torch.Size([5561523, 2, 16, 16]) (11.4GB)
+Loading test data as float32 tensors...
+  test: 119027/119027
+  test: mat=torch.Size([119027, 2, 16, 16]) (0.2GB)
+Params: 1,047,701
+Ep 1/20: train=0.3592 test=0.4635 [176s]
+  >>> Best: 0.4635
+Ep 2/20: train=0.3636 test=0.4996 [313s]
+  >>> Best: 0.4996
+Ep 3/20: train=0.3643 test=0.4700 [450s]
+Ep 4/20: train=0.3650 test=0.4989 [586s]
+Ep 5/20: train=0.3655 test=0.5019 [723s]
+  >>> Best: 0.5019
+Ep 6/20: train=0.3662 test=0.4989 [859s]
+Ep 7/20: train=0.3665 test=0.4971 [996s]
+Ep 8/20: train=0.3667 test=0.4995 [1132s]
+Ep 9/20: train=0.3672 test=0.4988 [1269s]
+Ep 10/20: train=0.3679 test=0.5028 [1405s]
+  >>> Best: 0.5028
+Ep 11/20: train=0.3681 test=0.5051 [1541s]
+  >>> Best: 0.5051
+Ep 12/20: train=0.3687 test=0.5018 [1677s]
+Ep 13/20: train=0.3691 test=0.5060 [1813s]
+  >>> Best: 0.5060
+Ep 14/20: train=0.3698 test=0.5032 [1949s]
+Ep 15/20: train=0.3702 test=0.5055 [2086s]
+Ep 16/20: train=0.3707 test=0.5072 [2222s]
+  >>> Best: 0.5072
+Ep 17/20: train=0.3714 test=0.5050 [2358s]
+Ep 18/20: train=0.3717 test=0.5075 [2494s]
+  >>> Best: 0.5075
+Ep 19/20: train=0.3718 test=0.5073 [2630s]
+Ep 20/20: train=0.3719 test=0.5064 [2766s]
+
+Done in 46.1m. Best acc: 0.5075
+---
+metric: 0.5075
+description: CNN+Attn+MLP AMP, 20ep, ALL 5.5M f32 preloaded, label_smooth=0.05

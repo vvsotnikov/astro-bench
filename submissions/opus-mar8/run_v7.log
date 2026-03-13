@@ -1,0 +1,33 @@
+Loading train data into RAM...
+  train: loaded 250000/5561523
+  train: loaded 500000/5561523
+  train: loaded 750000/5561523
+  train: loaded 1000000/5561523
+  train: loaded 1250000/5561523
+  train: loaded 1500000/5561523
+  train: loaded 1750000/5561523
+  train: loaded 2000000/5561523
+  train: loaded 2250000/5561523
+  train: loaded 2500000/5561523
+  train: loaded 2750000/5561523
+  train: loaded 3000000/5561523
+  train: loaded 3250000/5561523
+  train: loaded 3500000/5561523
+  train: loaded 3750000/5561523
+  train: loaded 4000000/5561523
+  train: loaded 4250000/5561523
+  train: loaded 4500000/5561523
+  train: loaded 4750000/5561523
+  train: loaded 5000000/5561523
+  train: loaded 5250000/5561523
+  train: loaded 5500000/5561523
+  train: loaded 5561523/5561523
+  train: mat=(5561523, 2, 16, 16) feat=(5561523, 13) labels=(5561523,)
+Loading test data into RAM...
+  test: loaded 119027/119027
+  test: mat=(119027, 2, 16, 16) feat=(119027, 13) labels=(119027,)
+Params: 1,047,701
+Ep 1/20: train=0.3590 test=0.4998 [211s]
+  >>> Best: 0.4998
+Ep 2/20: train=0.3635 test=0.5008 [363s]
+  >>> Best: 0.5008
