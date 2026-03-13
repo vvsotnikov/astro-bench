@@ -16,7 +16,7 @@ Classify cosmic ray primary particles into 5 mass groups:
 
 Gamma rays (ID=1) are excluded from this task.
 
-**Key metric: overall accuracy.** This is the metric used for the leaderboard. Accuracy is a proxy for unfolding quality — the confusion matrix from a good classifier is used to recover true mass composition fractions per energy bin.
+**Key metric: mean fraction error** (lower is better). This measures how well the classifier recovers true particle fractions across energy bins and random mixture compositions. For each energy bin, 1000 random mixtures are sampled with varying class fractions (Dirichlet distribution, fixed seed=2026). For each mixture, the absolute error |true_fraction - predicted_fraction| is computed per class, then averaged across classes, mixtures, and energy bins. A perfect classifier scores 0. This directly measures what matters for physics: the accuracy of unfolded mass composition spectra.
 
 ### Task 2: Gamma/Hadron Separation (binary classification)
 
@@ -190,9 +190,9 @@ python verify.py --task gamma submissions/your_submission/predictions.npz
 ## Baselines
 
 **Mass composition (Task 1):**
-- Random: ~20% accuracy
-- RandomForest (5 features only): ~30% accuracy
-- CNN (LeNet-5 inspired, 16×16×2 + Ne, Nmu, θ, s, ~36K params): ~51% accuracy ([JINST 2024](https://arxiv.org/abs/2311.06893), QGS-only)
+- Random: ~0.20 fraction error
+- RandomForest (5 features only): ~0.11 fraction error
+- CNN (LeNet-5 inspired, 16×16×2 + Ne, Nmu, θ, s, ~36K params): ~0.09 fraction error ([JINST 2024](https://arxiv.org/abs/2311.06893), QGS-only)
 - Published (JINST 2024 + JCAP 2024, years of expert iteration): the target to beat
 
 **Gamma/hadron (Task 2):**
