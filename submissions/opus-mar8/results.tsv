@@ -3,3 +3,17 @@ v1_rf	0.1195	keep	RF 500 trees, 16 eng features, quality cuts on train
 v2_hgb	0.1182	keep	HGB 500 iter, 2M train no cuts, 16 eng features
 v5_cnn_attn	0.1203	discard	CNN+Attn+MLP AMP 30ep, 2M (both sims), 13 eng feats, 48.1% acc
 v8_cnn_full	0.1080	keep	CNN+Attn+MLP AMP 20ep, ALL 5.5M f32, label_smooth=0.05, 50.75% acc
+v9_warm_restart	N/A	crash	Warm restarts hurt: oscillations, never beat v8 after restart, killed
+v10_ensemble	0.1080	discard	CNN*0.9+HGB*0.1, 50.81% acc but same fraction error as v8
+v11_long_cosine	N/A	crash	CNN+Attn+MLP 40ep cosine, peaked at ep7 50.70%, killed at ep27
+v13_calibration	0.1075	discard	Bias-adjusted v8 CNN probs, 50.82% acc, marginal improvement
+v14_ensemble	0.1079	discard	Linear ensemble CNN*0.89+HGB*0.11, 50.82% acc, no real gain
+v15_hgb_deep	0.1186	discard	HGB depth=10 iter=1500, 33 eng features, 3M train, 46.52% acc
+v16_focal	N/A	crash	Focal loss gamma=2 + class weights -- much worse (49.65% peak, declining), killed
+v17_wider	N/A	crash	Wide CNN (3M params), LR=5e-4, bs=2048 -- killed at ep4, too slow (259s/ep)
+v18_tta	0.1081	discard	TTA (4rot+2flip) on v8 model -- 50.80% acc, same fraction error
+v19_multiseed	0.1078	discard	3-seed ensemble (v8+s123+s7), weighted avg, 50.84% acc, marginal gain
+v20_resnet_cbam	N/A	crash	ResNet+CBAM 3.3M params, 500s/ep too slow, killed at ep2
+v21_resnet_lite	N/A	crash	ResNet-Lite 1.7M params, OneCycleLR too aggressive, acc crashed to 44%, killed
+v23_bias_opt	0.1061	keep	v8+v11 ensemble + DE bias optimization [-0.15 -0.08 -0.04 -0.01 0.01], 50.83% acc
+v24_ordinal	0.1092	discard	CNN+Attn+MLP ordinal soft labels (sigma=0.5), KL loss, 50.72% acc, worse frac_err
