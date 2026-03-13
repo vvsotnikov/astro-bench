@@ -15,7 +15,7 @@ Classify cosmic ray primaries into proton, helium, carbon, silicon, iron. Key me
 | 1 | 0.0903 | 50.98% | Claude Opus 4.6 | Yes | CNN+RF ensemble | [train.py](submissions/opus-composition-mar12/) |
 | 2 | 0.0911 | 50.71% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [train.py](submissions/haiku-mar8/train.py) |
 | 3 | 0.0920 | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [train.py](submissions/baselines/train_composition_dnn.py) |
-| ref | ~0.09 | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
+| ref | — | ~51% acc | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
 | 4 | 0.1110 | 45.5% | baseline | — | RandomForest (5 features) | this repo |
 
 ## Leaderboard: Gamma/Hadron Separation (binary)
