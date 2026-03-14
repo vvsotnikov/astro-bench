@@ -48,7 +48,7 @@ Test sets have quality cuts pre-applied (Ze<30, Ne>4.8, 0.2<Age<1.48). Train set
 
 Each task has ONE metric. Optimize it relentlessly.
 
-- **Composition**: mean fraction error (lower is better). This measures how well your classifier recovers true particle fractions across energy bins and random mixture compositions. Baseline: ~0.09 (CNN, JINST 2024). A perfect classifier scores 0.
+- **Composition**: mean fraction error (lower is better). This measures how well your classifier recovers true particle fractions across random mixture compositions. Published baseline: 0.107 (CNN, JINST 2024). A perfect classifier scores 0.
 - **Gamma/hadron**: hadronic survival rate @ 75% gamma efficiency (lower is better). Published baseline: suppression 10²–10³ at ~30–70% gamma efficiency (RF, ICRC 2021). Save predictions as `gamma_scores` (float array, higher = more gamma-like).
 
 ## What to submit
@@ -74,8 +74,8 @@ Work iteratively. Each cycle:
    description: CNN v4 with feature engineering
    ```
    Extract with: `grep "^metric:" run.log`
-5. **Evaluate**: Run `uv run python verify.py submissions/<run_tag>/predictions.npz` and read the result.
-6. **Log**: Record the result in `results.tsv` (see format below).
+5. **Evaluate**: Run `uv run python verify.py submissions/<run_tag>/predictions.npz` and read the result. **This is the ONLY authoritative metric.** Do NOT implement your own fraction error calculation in training scripts — the metric methodology is non-trivial (grid-based ensemble sampling) and your implementation will not match. Always use verify.py to measure progress.
+6. **Log**: Record the **verify.py result** in `results.tsv` (see format below). Do not log self-computed metrics.
 7. **Journal**: Update `journal.md` with what you learned — especially failures and why they failed.
 8. **Decide**: Did the metric improve?
    - **Yes → keep**: Commit the code: `git add -A && git commit -m "experiment: <description>"`

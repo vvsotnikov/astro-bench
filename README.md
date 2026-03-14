@@ -8,15 +8,15 @@ Two tasks, two leaderboards. Read the full challenge description: [challenge.md]
 
 ## Leaderboard: Mass Composition (5-class)
 
-Classify cosmic ray primaries into proton, helium, carbon, silicon, iron. Key metric: mean fraction error (lower is better) — measures how accurately the classifier recovers particle fractions across energy bins and random mixture compositions.
+Classify cosmic ray primaries into proton, helium, carbon, silicon, iron. Key metric: mean fraction error (lower is better) — measures how accurately the classifier recovers particle fractions across random mixture compositions. Methodology matches Kuznetsov et al. ([JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025), Section 4.3): 1001 grid ensembles of 5000 events, fractions on 0.1 step grid.
 
 | Rank | Frac Error ↓ | Accuracy | Author | Agent? | Architecture | Link |
 |------|-------------|----------|--------|--------|--------------|------|
-| 1 | 0.0903 | 50.98% | Claude Opus 4.6 | Yes | CNN+RF ensemble | [train.py](submissions/opus-composition-mar12/) |
-| 2 | 0.0911 | 50.71% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [train.py](submissions/haiku-mar8/train.py) |
-| 3 | 0.0920 | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [train.py](submissions/baselines/train_composition_dnn.py) |
-| ref | — | ~51% acc | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
-| 4 | 0.1110 | 45.5% | baseline | — | RandomForest (5 features) | this repo |
+| 1 | 0.1080 | 50.98% | Claude Opus 4.6 | Yes | CNN+RF ensemble | [train.py](submissions/opus-composition-mar12/) |
+| 2 | 0.1084 | 50.71% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [train.py](submissions/haiku-mar8/train.py) |
+| 3 | 0.1099 | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [train.py](submissions/baselines/train_composition_dnn.py) |
+| ref | 0.107 | ~51% acc | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
+| 4 | 0.1203 | 45.5% | baseline | — | RandomForest (5 features) | this repo |
 
 ## Leaderboard: Gamma/Hadron Separation (binary)
 
