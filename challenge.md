@@ -16,7 +16,7 @@ Classify cosmic ray primary particles into 5 mass groups:
 
 Gamma rays (ID=1) are excluded from this task.
 
-**Key metric: mean fraction error** (lower is better). This measures how well the classifier recovers true particle fractions across energy bins and random mixture compositions. For each energy bin, 1000 random mixtures are sampled with varying class fractions (Dirichlet distribution, fixed seed=2026). For each mixture, the absolute error |true_fraction - predicted_fraction| is computed per class, then averaged across classes, mixtures, and energy bins. A perfect classifier scores 0. This directly measures what matters for physics: the accuracy of unfolded mass composition spectra.
+**Key metric: mean fraction error** (lower is better). This measures how well the classifier recovers true particle fractions across random mixture compositions, following the methodology of Kuznetsov et al. (JINST 2024, Section 4.3, Table 1). All 5-component fraction combinations on a 0.1 step grid summing to 1.0 are enumerated (1001 grid points). For each, an ensemble of 5000 events is sampled from the test set with those fractions, and the absolute error |true_fraction - predicted_fraction| is computed per class. The metric is the mean across all classes and grid points (fixed seed=2026). A perfect classifier scores 0. This directly measures what matters for physics: the accuracy of unfolded mass composition spectra.
 
 ### Task 2: Gamma/Hadron Separation (binary classification)
 
