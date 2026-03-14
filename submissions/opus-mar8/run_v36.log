@@ -1,0 +1,46 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+Params: 1,047,701
+Ep 1/25: train=0.3563 test=0.4976 [172s]
+  >>> Best: 0.4976
+Ep 2/25: train=0.3601 test=0.4963 [306s]
+Ep 3/25: train=0.3617 test=0.4763 [440s]
+Ep 4/25: train=0.3623 test=0.4850 [574s]
+Ep 5/25: train=0.3630 test=0.5005 [708s]
+  >>> Best: 0.5005
+Ep 6/25: train=0.3633 test=0.4840 [842s]
+Ep 7/25: train=0.3634 test=0.4831 [976s]
+Ep 8/25: train=0.3642 test=0.5014 [1110s]
+  >>> Best: 0.5014
+Ep 9/25: train=0.3646 test=0.5042 [1244s]
+  >>> Best: 0.5042
+Ep 10/25: train=0.3648 test=0.5041 [1378s]
+Ep 11/25: train=0.3652 test=0.5038 [1512s]
+Ep 12/25: train=0.3657 test=0.4818 [1646s]
+Ep 13/25: train=0.3658 test=0.4771 [1780s]
+Ep 14/25: train=0.3667 test=0.4998 [1914s]
+Ep 15/25: train=0.3672 test=0.5061 [2048s]
+  >>> Best: 0.5061
+Ep 16/25: train=0.3673 test=0.5057 [2183s]
+Ep 17/25: train=0.3679 test=0.5006 [2316s]
+Ep 18/25: train=0.3690 test=0.5033 [2450s]
+Ep 19/25: train=0.3696 test=0.4929 [2585s]
+Ep 20/25: train=0.3694 test=0.4985 [2719s]
+Ep 21/25: train=0.3708 test=0.4905 [2854s]
+Ep 22/25: train=0.3712 test=0.5053 [2988s]
+Ep 23/25: train=0.3702 test=0.4987 [3122s]
+Ep 24/25: train=0.3709 test=0.4923 [3256s]
+Ep 25/25: train=0.3710 test=0.4991 [3390s]
+
+Done in 56.5m. Best acc: 0.5061
+---
+metric: 0.5061
+description: CNN+Attn+MLP with MixUp alpha=0.05, 25ep

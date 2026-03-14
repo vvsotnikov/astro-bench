@@ -1,0 +1,58 @@
+Loading train data...
+  train: 0/5561523
+  train: 500000/5561523
+  train: 1000000/5561523
+  train: 1500000/5561523
+  train: 2000000/5561523
+  train: 2500000/5561523
+  train: 3000000/5561523
+  train: 3500000/5561523
+  train: 4000000/5561523
+  train: 4500000/5561523
+  train: 5000000/5561523
+  train: 5500000/5561523
+Train: torch.Size([5561523, 2, 16, 16])
+Loading test data...
+Model params: 751,711
+  Ep 1/20: train=0.3597 test=0.4983 frac_err=0.1114 *** BEST [126s]
+  Ep 2/20: train=0.3635 test=0.4800 frac_err=0.1174 [254s]
+  Ep 3/20: train=0.3643 test=0.4991 frac_err=0.1148 [382s]
+  Ep 4/20: train=0.3649 test=0.4982 [511s]
+  Ep 5/20: train=0.3652 test=0.4846 frac_err=0.1165 [637s]
+  Ep 6/20: train=0.3656 test=0.4688 [766s]
+  Ep 7/20: train=0.3661 test=0.4926 [893s]
+  Ep 8/20: train=0.3666 test=0.5004 [1020s]
+  Ep 9/20: train=0.3669 test=0.4851 [1146s]
+  Ep 10/20: train=0.3672 test=0.5068 frac_err=0.1080 *** BEST [1272s]
+  Ep 11/20: train=0.3674 test=0.5049 [1400s]
+  Ep 12/20: train=0.3679 test=0.4838 [1526s]
+  Ep 13/20: train=0.3681 test=0.5050 [1653s]
+  Ep 14/20: train=0.3687 test=0.5066 [1778s]
+  Ep 15/20: train=0.3689 test=0.5071 frac_err=0.1091 [1904s]
+  Ep 16/20: train=0.3692 test=0.5069 [2032s]
+  Ep 17/20: train=0.3694 test=0.5047 [2159s]
+  Ep 18/20: train=0.3697 test=0.5079 [2285s]
+  Ep 19/20: train=0.3698 test=0.5080 [2414s]
+  Ep 20/20: train=0.3698 test=0.5079 frac_err=0.1084 [2541s]
+
+Final verify:
+
+============================================================
+  TASK: Mass Composition (5-class)
+  KEY METRIC (mean fraction error): 0.1080
+    (1001 grid ensembles × 5000 events, step=0.1)
+  ACCURACY: 0.5068 (50.68%)
+  MACRO F1:         0.4936
+  WEIGHTED F1:      0.5024
+============================================================
+
+     Per-class fraction error (cf. JINST 2024, Table 1)     
+        pr      he      ca      si      ir    Mean
+    0.0845  0.1268  0.1251  0.1229  0.0809  0.1080
+
+  
+
+Best: acc=0.5080, frac_err=0.1080
+---
+metric: 0.1080
+description: Deep CNN (8 conv layers, no SE attn) + MLP, 20ep, 5.5M

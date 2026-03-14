@@ -1,0 +1,55 @@
+Loading v8 model...
+Loading train data (subsample for GBM)...
+  train chunk: 0/2000000
+  train chunk: 200000/2000000
+  train chunk: 400000/2000000
+  train chunk: 600000/2000000
+  train chunk: 800000/2000000
+  train chunk: 1000000/2000000
+  train chunk: 1200000/2000000
+  train chunk: 1400000/2000000
+  train chunk: 1600000/2000000
+  train chunk: 1800000/2000000
+Extracting CNN features for train...
+  extract: 0/2000000
+  extract: 204800/2000000
+  extract: 409600/2000000
+  extract: 614400/2000000
+  extract: 819200/2000000
+  extract: 1024000/2000000
+  extract: 1228800/2000000
+  extract: 1433600/2000000
+  extract: 1638400/2000000
+  extract: 1843200/2000000
+  CNN features: (2000000, 256), 9s
+  GBM input: (2000000, 269)
+Loading test data...
+Extracting CNN features for test...
+  extract: 0/119027
+  GBM test input: (119027, 269)
+
+GBM config: iter500_d6_lr0.05
+  acc=0.5062 frac_err=0.1080 time=131s
+
+GBM config: iter500_d6_lr0.1
+  acc=0.5056 frac_err=0.1083 time=72s
+
+GBM config: iter500_d8_lr0.05
+  acc=0.5060 frac_err=0.1080 time=135s
+
+GBM config: iter500_d8_lr0.1
+  acc=0.5056 frac_err=0.1082 time=72s
+
+GBM config: iter1000_d6_lr0.05
+  acc=0.5062 frac_err=0.1080 time=132s
+
+GBM config: iter1000_d6_lr0.1
+  acc=0.5056 frac_err=0.1083 time=72s
+
+GBM config: iter1000_d8_lr0.05
+  acc=0.5060 frac_err=0.1080 time=135s
+
+GBM config: iter1000_d8_lr0.1
+  acc=0.5056 frac_err=0.1082 time=72s
+---
+description: CNN feature extraction + GBM, various configs

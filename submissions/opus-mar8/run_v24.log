@@ -1,0 +1,44 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+Creating ordinal soft labels...
+  Soft label example (class 0): [0.881 0.119 0.    0.    0.   ]
+  Soft label example (class 2): [0.    0.106 0.787 0.106 0.   ]
+Params: 1,047,701
+Ep 1/20: loss=0.8588 train=0.3593 test=0.5012 [192s]
+  >>> Best: 0.5012
+Ep 2/20: loss=0.8523 train=0.3637 test=0.4777 [343s]
+Ep 3/20: loss=0.8510 train=0.3643 test=0.5006 [495s]
+Ep 4/20: loss=0.8498 train=0.3650 test=0.4913 [652s]
+Ep 5/20: loss=0.8491 train=0.3653 test=0.5016 [848s]
+  >>> Best: 0.5016
+Ep 6/20: loss=0.8483 train=0.3661 test=0.4904 [1042s]
+Ep 7/20: loss=0.8476 train=0.3662 test=0.4972 [1236s]
+Ep 8/20: loss=0.8470 train=0.3667 test=0.5042 [1431s]
+  >>> Best: 0.5042
+Ep 9/20: loss=0.8463 train=0.3671 test=0.5013 [1626s]
+Ep 10/20: loss=0.8457 train=0.3673 test=0.5025 [1822s]
+Ep 11/20: loss=0.8449 train=0.3679 test=0.4973 [2019s]
+Ep 12/20: loss=0.8440 train=0.3683 test=0.5067 [2214s]
+  >>> Best: 0.5067
+Ep 13/20: loss=0.8432 train=0.3687 test=0.5072 [2409s]
+  >>> Best: 0.5072
+Ep 14/20: loss=0.8424 train=0.3693 test=0.5062 [2604s]
+Ep 15/20: loss=0.8415 train=0.3698 test=0.5048 [2802s]
+Ep 16/20: loss=0.8407 train=0.3701 test=0.5045 [2997s]
+Ep 17/20: loss=0.8399 train=0.3706 test=0.5053 [3193s]
+Ep 18/20: loss=0.8394 train=0.3709 test=0.5057 [3389s]
+Ep 19/20: loss=0.8389 train=0.3712 test=0.5068 [3585s]
+Ep 20/20: loss=0.8387 train=0.3713 test=0.5070 [3781s]
+
+Done in 63.0m. Best acc: 0.5072
+---
+metric: 0.5072
+description: CNN+Attn+MLP ordinal soft labels (sigma=0.5), KL loss, 20ep

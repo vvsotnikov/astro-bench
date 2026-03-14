@@ -1,0 +1,45 @@
+Loading train (cuts=True)...
+  Loading features for cut selection...
+  Cuts: 475977/5561523 pass (8.6%)
+  train: 250000/475977
+  train: torch.Size([475977, 2, 16, 16]), classes: [131279 107337  87953  77681  71727]
+Loading test (cuts=False)...
+  Loading features for cut selection...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16]), classes: [32804 26886 22065 19584 17688]
+Params: 1,047,701
+Ep 1/25: train=0.4797 test=0.4956 [25s]
+  >>> Best: 0.4956
+Ep 2/25: train=0.4984 test=0.4979 [42s]
+  >>> Best: 0.4979
+Ep 3/25: train=0.5017 test=0.4990 [58s]
+  >>> Best: 0.4990
+Ep 4/25: train=0.5031 test=0.5009 [75s]
+  >>> Best: 0.5009
+Ep 5/25: train=0.5038 test=0.4961 [91s]
+Ep 6/25: train=0.5055 test=0.5026 [107s]
+  >>> Best: 0.5026
+Ep 7/25: train=0.5074 test=0.4511 [124s]
+Ep 8/25: train=0.5084 test=0.5004 [140s]
+Ep 9/25: train=0.5103 test=0.4478 [156s]
+Ep 10/25: train=0.5119 test=0.4979 [173s]
+Ep 11/25: train=0.5152 test=0.4839 [190s]
+Ep 12/25: train=0.5193 test=0.4975 [206s]
+Ep 13/25: train=0.5260 test=0.4881 [223s]
+Ep 14/25: train=0.5336 test=0.4791 [239s]
+Ep 15/25: train=0.5434 test=0.4738 [255s]
+Ep 16/25: train=0.5557 test=0.4769 [271s]
+Ep 17/25: train=0.5676 test=0.4718 [288s]
+Ep 18/25: train=0.5817 test=0.4678 [304s]
+Ep 19/25: train=0.5956 test=0.4661 [320s]
+Ep 20/25: train=0.6086 test=0.4685 [337s]
+Ep 21/25: train=0.6195 test=0.4637 [353s]
+Ep 22/25: train=0.6302 test=0.4627 [369s]
+Ep 23/25: train=0.6372 test=0.4593 [386s]
+Ep 24/25: train=0.6427 test=0.4590 [402s]
+Ep 25/25: train=0.6453 test=0.4586 [419s]
+
+Done in 7.0m. Best acc: 0.5026
+---
+metric: 0.5026
+description: CNN+Attn+MLP with quality cuts on train (Ze<30, Ne>4.8), seed=77, 25ep

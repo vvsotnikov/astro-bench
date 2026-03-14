@@ -1,0 +1,25 @@
+Loading train...
+  Scalar features: (3000000, 16)
+  mat features: 200000/3000000
+  mat features: 1200000/3000000
+  mat features: 2200000/3000000
+  Matrix features: (3000000, 25)
+  Combined: (3000000, 41), labels: [636306 639676 615646 579650 528722]
+Loading test...
+  Scalar features: (119027, 16)
+  mat features: 119027/119027
+  Matrix features: (119027, 25)
+  Combined: (119027, 41), labels: [32804 26886 22065 19584 17688]
+
+Total features: 41
+Training HGB with 1000 iterations...
+Binning 0.886 GB of training data: 0.536 s
+Binning 0.098 GB of validation data: 0.049 s
+Fitting gradient boosted rounds:
+Fit 3950 trees in 254.947 s, (122450 total leaves)
+Time spent computing histograms:   Ep 6/20: train=0.3580 test=0.4502 [972s]
+  Ep 7/20: train=0.3572 test=0.4640 [1112s]
+  Ep 8/20: train=0.3590 test=0.4766 [1252s]
+  Ep 9/20: train=0.3592 test=0.4969 [1391s]
+  Ep 10/20: train=0.3596 test=0.4237 frac_err=0.1554 [1530s]
+  Ep 11/20: train=0.3601 test=0.4697 [1671s]

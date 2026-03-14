@@ -1,0 +1,18 @@
+Loading train data...
+  train: 0/5561523
+  train: 500000/5561523
+  train: 1000000/5561523
+  train: 1500000/5561523
+  train: 2000000/5561523
+  train: 2500000/5561523
+  train: 3000000/5561523
+  train: 3500000/5561523
+  train: 4000000/5561523
+  train: 4500000/5561523
+  train: 5000000/5561523
+  train: 5500000/5561523
+Train: torch.Size([5561523, 2, 16, 16])
+Loading test data...
+Model params: 1,836,637
+  Ep 1/20: train=0.3592 test=0.4983 frac_err=0.1165 *** BEST [169s]
+  Ep 2/20: train=0.3635 test=0.5031 frac_err=0.1103 *** BEST [341s]

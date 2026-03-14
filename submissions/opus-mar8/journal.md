@@ -156,32 +156,141 @@ The fraction error metric samples random mixtures of 5 classes and checks how we
 - The soft labels spread probability to neighbors, which may hurt calibration
 - LEARNING: Ordinal structure doesn't help fraction error metric
 
+### v21_vit (0.1215 frac error, 47.38% acc) -- DISCARDED (1/3)
+- ViT 4x4 patches, dim=128, depth=4, no warmup
+- 44.47% acc at epoch 8, declining -- killed
+- LEARNING: ViT without warmup is unstable on this data
+
+### v22_resnet (0.1093 frac error, 50.08% acc) -- DISCARDED
+- ResNet with res blocks + channel attention + MLP, OneCycleLR, 25 epochs
+- Peaked at epoch 5 (0.1102), then oscillated. 2.1M params
+- Worse than v8 on both accuracy and fraction error
+- LEARNING: ResNet skip connections don't help on 16x16 grids
+
+### v25_ensemble (0.1073) -- superseded by v26b
+- Approximate bias optimization (50 random Dirichlet samples)
+- Best: v8+v11+v22+hgb at 0.1073
+
+### v26b_bias_opt (0.1060 frac error, 50.84% acc) -- NEW BEST
+- Exact-grid bias optimization (1001 grid, 5000 events, matching verify.py)
+- Precomputed sampling indices for speed (0.036s/eval vs minutes)
+- Comprehensive sweep of 8 ensemble combos:
+  | Ensemble | Raw | Optimized |
+  |---|---|---|
+  | v8 | 0.1080 | 0.1063 |
+  | v8+v11 | 0.1080 | **0.1060** |
+  | v8+v22 | 0.1081 | 0.1067 |
+  | v8+v11+v22 | 0.1080 | 0.1063 |
+  | all_cnn | 0.1078 | 0.1061 |
+  | all | 0.1080 | 0.1062 |
+- Best biases for v8+v11: [-0.381, -0.222, -0.095, 0.016, 0.057]
+- Shifts predictions away from proton/helium toward silicon/iron
+- Per-class: pr=0.0819, he=0.1239, ca=0.1251, si=0.1222, ir=0.0770
+
+### v27_mixup (killed at ep10) -- DISCARDED (1/3)
+- MixUp alpha=0.2 on v8 architecture, severe instability
+- Accuracy: 42.37% at epoch 10 (vs v8's 50.75%)
+- LEARNING: MixUp alpha=0.2 too aggressive, need lower alpha (0.05)
+
+### EDA findings (v21_eda)
+- Only 8.6% of training data passes test quality cuts
+- Helium accuracy only 36.3%, drops to 14.4% at low energies (E<15)
+- Muon channel 79% zeros, electron 34% zeros
+- Confidence paradox: helium correct preds have lower confidence (0.40) than wrong (0.49)
+- Train mean E=14.63, test mean E=15.45 -- huge distribution shift
+
+### Gamma solution insights (from README)
+- Best gamma: cross-architecture ensemble (Attn CNN + ResNet + ViT) at 3.2e-4
+- Key: spatial self-attention (QKV, not SE blocks) in gamma CNN
+- Cross-architecture diversity is critical for ensembles
+- The haiku composition CNN used 8 conv layers (deeper than v8's 5)
+
 ## Key Learnings (updated)
-13. BIAS OPTIMIZATION IS POWERFUL: DE optimization of per-class logit biases gave 0.1080->0.1061
-14. ENSEMBLE + BIAS BEATS INDIVIDUAL BIAS: v8+v11 ensemble is a better base than v8 alone
-15. ORDINAL SOFT LABELS DON'T HELP: fraction error metric not improved by ordinal structure
+13. BIAS OPTIMIZATION IS POWERFUL: DE on per-class logit biases 0.1080->0.1060
+14. v8+v11 IS THE BEST ENSEMBLE BASE: adding more models doesn't help with bias opt
+15. ORDINAL SOFT LABELS DON'T HELP: fraction error not improved
+16. RESNET DOESN'T BEAT CNN: skip connections add nothing on 16x16 grids
+17. VIT NEEDS WARMUP: unstable without it
+18. MIXUP ALPHA=0.2 TOO AGGRESSIVE: need alpha<0.1
+19. MASSIVE TRAIN/TEST SHIFT: only 8.6% of train matches test distribution
+20. CROSS-ARCHITECTURE DIVERSITY KEY FOR ENSEMBLES (gamma lesson)
 
-## Broad Exploration Plan (Phase 2)
-18 experiments done, best still v8 at 0.1080. Need radical diversification.
+### v32_qkv_cnn (0.1115, killed at ep7) -- DISCARDED (1/3)
+- QKV spatial self-attention CNN (from gamma winner)
+- 344s/epoch (2.5x v8), 50.62% at ep7, frac_err 0.1115
+- LEARNING: Full QKV attention at every conv block is too expensive for 16x16 grids
+- The gamma data has denser grids; spatial attention helps less here
 
-### Architecture families to try (3+ configs each before discarding)
-1. ResNet with skip connections
-2. Vision Transformer (ViT) with patch embeddings
-3. Pure MLP on matrix statistics + scalar features
-4. Depthwise separable CNN (MobileNet-style)
-5. 1D CNN on flattened matrix
-6. Graph Neural Network (active detectors as nodes)
+### v33_vit_warmup (0.1074 frac error, 50.70% acc) -- KEEP
+- ViT 4x4 patches, dim=128, depth=4, with 3-epoch warmup + cosine
+- Much better than v21 (0.1215) -- warmup was the key
+- Different architecture family from CNN -- useful for cross-architecture ensembling
+- Config 2/3 for ViT
 
-### Training strategy variations
-1. MixUp / CutMix augmentation (improves calibration)
-2. Quality cuts on train data (match test distribution)
-3. Spatial augmentation (rotations/flips during training)
-4. Ordinal regression (exploit mass ordering)
-5. Curriculum learning (easy classes first)
-6. Class-balanced sampling
+### v35_cross_arch (0.1060) -- no improvement
+- Cross-architecture ensembles: v8 (CNN) + v33 (ViT) + v11, all with bias opt
+- v8+v11+v33: 0.1060 (tied with baseline)
+- v8+v33: 0.1062
+- LEARNING: Cross-architecture diversity doesn't break through the 0.1060 barrier
+- The error patterns of all models are too similar in terms of fraction estimation
 
-### EDA needed
-1. Per-energy-bin confusion matrices
-2. Feature importance for helium vs proton
-3. Train vs test distribution shift
-4. Spatial patterns by class
+### v36_mixup_low (0.1096, 50.61% acc) -- DISCARDED (2/3)
+- MixUp alpha=0.05 (gentler than v27's 0.2)
+- Severe oscillation between 47-50% accuracy
+- Worse than v8 on fraction error
+- LEARNING: MixUp doesn't help this task; label smoothing is sufficient
+
+### v38_helium_wt (killed at ep3) -- CRASHED
+- 2x class weight on helium to address the bottleneck class
+- Helium accuracy 80% but overall accuracy dropped to 44%
+- LEARNING: Class weights are too blunt; you fix one class but break others
+
+### v39_cnn_gbm (0.1080) -- DISCARDED
+- GBM on v8 CNN features (256d) + engineered features
+- 8 GBM configs all converge to 0.1080
+- LEARNING: The bottleneck is feature extraction, not the classification head.
+  GBM can match but not beat the CNN head on the same features.
+
+### v40_importance (killed at ep13) -- CRASHED
+- Importance weighting: 5x for quality-cut events in WeightedRandomSampler
+- Best at ep5 (0.1087) then severe overfitting: 50% -> 44% accuracy
+- LEARNING: Importance weighting causes repeated sampling of rare events, leading to overfitting
+
+### v43_big_feat (0.1078 frac error, 50.75% acc) -- KEEP
+- CNN + bigger feature MLP (22 features, 512d)
+- Extended features: Nmu/Ne ratio, zenith-corrected E, log differences, quadratics
+- Matches v8 accuracy with slightly better raw fraction error (0.1078 vs 0.1080)
+- Potentially useful for ensembling due to different feature processing
+
+## Key Learnings (updated)
+13. BIAS OPTIMIZATION IS POWERFUL: DE on per-class logit biases 0.1080->0.1060
+14. v8+v11 IS THE BEST ENSEMBLE BASE: adding more models doesn't help with bias opt
+15. ORDINAL SOFT LABELS DON'T HELP: fraction error not improved
+16. RESNET DOESN'T BEAT CNN: skip connections add nothing on 16x16 grids
+17. VIT NEEDS WARMUP: unstable without it
+18. MIXUP DOESN'T HELP THIS TASK: alpha=0.05 and 0.2 both hurt; label smoothing is enough
+19. MASSIVE TRAIN/TEST SHIFT: only 8.6% of train matches test distribution
+20. CROSS-ARCHITECTURE DIVERSITY KEY FOR ENSEMBLES (gamma lesson)
+21. 0.1060 IS A HARD FLOOR: all models, all ensembles, all post-processing converge to this
+22. QKV ATTENTION TOO EXPENSIVE: 344s/ep vs 136s for SE attention, no accuracy gain
+23. CNN FEATURES ARE THE BOTTLENECK: GBM on CNN features = CNN head (0.1080)
+24. IMPORTANCE WEIGHTING OVERFITS: upsampling quality-cut events causes train/test divergence
+25. EXTENDED FEATURES HELP SLIGHTLY: 22 features -> 0.1078 vs 13 features -> 0.1080
+
+## The 0.1060 barrier
+All approaches converge to 0.1060 after bias optimization:
+- v8+v11 (2 CNNs): 0.1060
+- v8+v11+v33 (2 CNNs + ViT): 0.1060
+- v8+v11+v30 (2 CNNs + deep CNN): 0.1060
+- v8+v11+v39 (snapshots): 0.10603
+This suggests a fundamental limitation of the approach. To break through, need either:
+1. A base model with fundamentally different error patterns
+2. Direct optimization of the fraction error metric during training
+3. Post-hoc correction beyond simple logit biases (e.g. confusion matrix inversion)
+
+## Next Steps
+- Test confusion matrix correction (v41) -- may break the bias-only ceiling
+- Test v43 in ensemble (v44 running)
+- Try direct fraction error optimization during training
+- Try curriculum learning (easy events first)
+- Try knowledge distillation from ensemble

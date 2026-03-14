@@ -1,0 +1,42 @@
+Loading train...
+  train: 250000/5561523
+  train: 150000  opt=0.1060 official=0.1060 acc=0.5084 biases=[-0.3809, -0.2221, -0.095, 0.0157, 0.0574] (25506 evals, 948s)
+  per-class: ['0.0819', '0.1239', '0.1251', '0.1222', '0.0770']
+
+v8+v43: raw=0.1076
+, 16, 16])
+Params: 1,047,701
+Ep 1/25: train=0.3558 test=0.4999 [174s]
+  >>> Best: 0.4999
+Ep 2/25: train=0.3619 test=0.4988 [309s]
+Ep 3/25: train=0.3628 test=0.4972 [444s]
+Ep 4/25: train=0.3636 test=0.5005 [578s]
+  >>> Best: 0.5005
+Ep 5/25: train=0.3641 test=0.4952 [713s]
+Ep 6/25: train=0.3645 test=0.5024 [848s]
+  >>> Best: 0.5024
+Ep 7/25: train=0.3648 test=0.5011 [982s]
+Ep 8/25: train=0.3654 test=0.4579 [1118s]
+Ep 9/25: train=0.3655 test=0.4988 [1254s]
+Ep 10/25: train=0.3660 test=0.4950 [1388s]
+Ep 11/25: train=0.3662 test=0.4723 [1523s]
+Ep 12/25: train=0.3664 test=0.5038 [1656s]
+  >>> Best: 0.5038
+Ep 13/25: train=0.3665 test=0.5001 [1792s]
+Ep 14/25: train=0.3669 test=0.4941 [1927s]
+Ep 15/25: train=0.3670 test=0.4940 [2061s]
+Ep 16/25: train=0.3673 test=0.5022 [2195s]
+Ep 17/25: train=0.3676 test=0.4898 [2329s]
+Ep 18/25: train=0.3678 test=0.5015 [2464s]
+Ep 19/25: train=0.3681 test=0.4980 [2598s]
+Ep 20/25: train=0.3680 test=0.4969 [2733s]
+Ep 21/25: train=0.3683 test=0.5009 [2867s]
+Ep 22/25: train=0.3684 test=0.5003 [3001s]
+Ep 23/25: train=0.3686 test=0.4997 [3135s]
+Ep 24/25: train=0.3687 test=0.4973 [3269s]
+Ep 25/25: train=0.3687 test=0.5000 [3403s]
+
+Done in 56.7m. Best acc: 0.5038
+---
+metric: 0.5038
+description: CNN+Attn+MLP heavy reg (d=0.4, wd=5e-4, ls=0.08, seed=123), 25ep

@@ -1,0 +1,73 @@
+Precomputing sampling plans...
+  Precomputed 1001 ensemble sampling plans
+  Single evaluation: 0.036s (fe=0.1590)
+
+v8: raw=0.1080
+  opt=0.1063 official=0.1063 acc=0.5071 biases=[0.0303, 0.1846, 0.3116, 0.3682, 0.3598] (36631 evals, 1435s)
+  per-class: ['0.0822', '0.1240', '0.1255', '0.1227', '0.0773']
+
+v8+v11: raw=0.1080
+  opt=0.1060 official=0.1060 acc=0.5084 biases=[-0.3809, -0.2221, -0.095, 0.0157, 0.0574] (25506 evals, 976s)
+  per-class: ['0.0819', '0.1239', '0.1251', '0.1222', '0.0770']
+
+v8+v22: raw=0.1081
+  opt=0.1067 official=0.1067 acc=0.5050 biases=[-0.4359, -0.2669, -0.171, -0.1102, -0.1304] (20881 evals, 784s)
+  per-class: ['0.0824', '0.1241', '0.1254', '0.1231', '0.0786']
+
+v8+v11+v22: raw=0.1080
+  opt=0.1063 official=0.1063 acc=0.5067 biases=[-0.1423, 0.0403, 0.1925, 0.3042, 0.3124] (24506 evals, 918s)
+  per-class: ['0.0823', '0.1235', '0.1250', '0.1229', '0.0777']
+
+v8+v11+v22+hgb: raw=0.1082
+  opt=0.1063 official=0.1063 acc=0.5069 biases=[-0.4844, -0.3015, -0.2064, -0.1318, -0.1405] (30756 evals, 1153s)
+  per-class: ['0.0823', '0.1242', '0.1248', '0.1226', '0.0778']
+
+all_cnn: raw=0.1078
+  opt=0.1061 official=0.1061 acc=0.5078 biases=[-0.0136, 0.1525, 0.2865, 0.3905, 0.3898] (24881 evals, 930s)
+  per-class: ['0.0819', '0.1237', '0.1248', '0.1229', '0.0773']
+
+all_cnn+v22: raw=0.1078
+  opt=0.1063 official=0.1063 acc=0.5067 biases=[-0.3401, -0.1601, -0.0321, 0.0711, 0.0784] (29256 evals, 1095s)
+  per-class: ['0.0821', '0.1237', '0.1250', '0.1229', '0.0779']
+
+all: raw=0.1080
+  opt=0.1062 official=0.1062 acc=0.5072 biases=[0.0449, 0.2239, 0.3612, 0.4545, 0.4417] (27631 evals, 1030s)
+  per-class: ['0.0823', '0.1237', '0.1249', '0.1226', '0.0775']
+
+============================================================
+BEST: v8+v11
+  Fraction error: 0.1060
+  Biases: [-0.3809, -0.2221, -0.095, 0.0157, 0.0574]
+
+Final verify:
+
+============================================================
+  TASK: Mass Composition (5-class)
+  KEY METRIC (mean fraction error): 0.1060
+    (1001 grid ensembles × 5000 events, step=0.1)
+  ACCURACY: 0.5084 (50.84%)
+  MACRO F1:         0.5027
+  WEIGHTED F1:      0.5103
+============================================================
+
+     Per-class fraction error (cf. JINST 2024, Table 1)     
+        pr      he      ca      si      ir    Mean
+    0.0819  0.1239  0.1251  0.1222  0.0770  0.1060
+
+                     Per-class metrics                      
+Class       Precision     Recall         F1    Support
+------------------------------------------------------------
+proton         0.7036     0.6296     0.6646    32804.0
+helium         0.4200     0.3982     0.4088    26886.0
+carbon         0.3738     0.3983     0.3857    22065.0
+silicon        0.3994     0.4277     0.4131    19584.0
+iron           0.6088     0.6779     0.6415    17688.0
+
+                      Confusion matrix                      
+True\Pred    prot    heli    carb    sili    iron
+prot        20655    8422    2983     613     131
+heli         7713   10705    6100    1916     452
+carb          927    5385    8789    5
+---
+metric: 0.1060
+description: v8+v11 + exact-grid bias optimization (precomputed)

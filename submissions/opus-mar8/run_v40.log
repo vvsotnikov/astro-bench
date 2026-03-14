@@ -1,0 +1,32 @@
+Loading train data...
+Computing importance weights...
+  train: 0/5561523
+  train: 500000/5561523
+  train: 1000000/5561523
+  train: 1500000/5561523
+  train: 2000000/5561523
+  train: 2500000/5561523
+  train: 3000000/5561523
+  train: 3500000/5561523
+  train: 4000000/5561523
+  train: 4500000/5561523
+  train: 5000000/5561523
+  train: 5500000/5561523
+Events passing cuts: 475977/5561523 (8.6%)
+Effective weight ratio: cut=2379885 vs no_cut=5085546
+Train: torch.Size([5561523, 2, 16, 16])
+Loading test data...
+Model params: 1,047,701
+  Ep 1/20: train=0.3937 test=0.5008 frac_err=0.1115 *** BEST [133s]
+  Ep 2/20: train=0.3989 test=0.4976 frac_err=0.1097 *** BEST [268s]
+  Ep 3/20: train=0.4004 test=0.4858 frac_err=0.1218 [404s]
+  Ep 4/20: train=0.4009 test=0.4932 [539s]
+  Ep 5/20: train=0.4026 test=0.5017 frac_err=0.1087 *** BEST [673s]
+  Ep 6/20: train=0.4043 test=0.4823 [809s]
+  Ep 7/20: train=0.4085 test=0.4775 [944s]
+  Ep 8/20: train=0.4150 test=0.4716 [1078s]
+  Ep 9/20: train=0.4245 test=0.4713 [1213s]
+  Ep 10/20: train=0.4344 test=0.4552 frac_err=0.1164 [1348s]
+  Ep 11/20: train=0.4441 test=0.4540 [1485s]
+  Ep 12/20: train=0.4538 test=0.4421 [1619s]
+  Ep 13/20: train=0.4622 test=0.4463 [1754s]

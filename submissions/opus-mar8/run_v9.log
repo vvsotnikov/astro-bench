@@ -1,0 +1,34 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16]) (11.4GB)
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16]) (0.2GB)
+Params: 1,047,701
+Ep 1/40: train=0.3590 test=0.4772 [175s]
+  >>> Best: 0.4772
+Ep 2/40: train=0.3636 test=0.5012 [311s]
+  >>> Best: 0.5012
+Ep 3/40: train=0.3646 test=0.5035 [447s]
+  >>> Best: 0.5035
+Ep 4/40: train=0.3653 test=0.5029 [584s]
+Ep 5/40: train=0.3659 test=0.4356 [720s]
+Ep 6/40: train=0.3665 test=0.5043 [856s]
+  >>> Best: 0.5043
+Ep 7/40: train=0.3671 test=0.5054 [992s]
+  >>> Best: 0.5054
+Ep 8/40: train=0.3677 test=0.5042 [1129s]
+Ep 9/40: train=0.3681 test=0.5062 [1265s]
+  >>> Best: 0.5062
+Ep 10/40: train=0.3685 test=0.5071 [1401s]
+  >>> Best: 0.5071
+  Saved probs at epoch 10
+Ep 11/40: train=0.3663 test=0.4995 [1537s]
+Ep 12/40: train=0.3667 test=0.5055 [1673s]
+Ep 13/40: train=0.3670 test=0.4801 [1809s]
+Ep 14/40: train=0.3675 test=0.4922 [1944s]
+Ep 15/40: train=0.3678 test=0.4783 [2080s]

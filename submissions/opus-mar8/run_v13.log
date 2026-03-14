@@ -1,0 +1,44 @@
+Loaded probs: (119027, 5), labels: (119027,)
+Baseline accuracy: 0.5075
+
+--- Temperature Scaling ---
+  T=0.3: acc=0.5075
+  T=0.5: acc=0.5075
+  T=0.7: acc=0.5075
+  T=0.8: acc=0.5075
+  T=0.9: acc=0.5075
+  T=1.0: acc=0.5075
+  T=1.1: acc=0.5075
+  T=1.2: acc=0.5075
+  T=1.5: acc=0.5075
+  T=2.0: acc=0.5075
+  T=3.0: acc=0.5075
+Best temperature: T=1.0, acc=0.5075
+
+--- Per-class bias adjustment ---
+Optimal bias: [-1.03031926 -1.01135473 -0.97165139 -0.98262366 -0.99140097]
+Bias-adjusted accuracy: 0.5082
+
+--- Confusion Matrix (v8) ---
+True \ Pred    proton    helium    carbon   silicon      iron
+  proton         22680      7025      2447       528       124
+  helium          9749      9749      5264      1672       452
+  carbon          1509      5885      8209      4833      1629
+ silicon           125      1235      4894      7874      5456
+    iron             7       118      1027      4644     11892
+
+--- Per-class fraction analysis ---
+True fractions:  [0.27560133 0.22588152 0.18537811 0.1645341  0.14860494]
+Pred fractions:  [0.28623758 0.20173574 0.18349618 0.16425685 0.16427365]
+Abs difference:  [0.01063624 0.02414578 0.00188193 0.00027725 0.01566871]
+
+baseline: acc=0.5075
+
+bias_adjusted: acc=0.5082
+
+Best: bias_adjusted, acc=0.5082
+
+Done in 0.5m
+---
+metric: 0.5082
+description: Calibration of v8 CNN probs, best=bias_adjusted

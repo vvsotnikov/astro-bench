@@ -1,0 +1,16 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+Class weights: tensor([0.9433, 0.9387, 0.9740, 1.0346, 1.1346])
+Params: 1,047,701
+Ep 1/25: train=0.3574 test=0.4965 [185s]
+  >>> Best: 0.4965
+Ep 2/25: train=0.3619 test=0.4879 [322s]
+Ep 3/25: train=0.3631 test=0.4599 [458s]

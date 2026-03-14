@@ -1,0 +1,21 @@
+Loading training data...
+  Total training: 5561523
+  Loaded 500000/3000000
+  Loaded 1000000/3000000
+  Loaded 1500000/3000000
+  Loaded 2000000/3000000
+  Loaded 2500000/3000000
+  Loaded 3000000/3000000
+  Features: (3000000, 33)
+  Test: (119027, 33)
+
+Training HGB config 1/1: {'max_iter': 1500, 'max_depth': 10, 'learning_rate': 0.05, 'min_samples_leaf': 30, 'l2_regularization': 0.05}
+  Accuracy: 0.4652, frac_diff: 0.0190
+  True fracs: [0.27560133 0.22588152 0.18537811 0.1645341  0.14860494]
+  Pred fracs: [0.32310316 0.20202979 0.16897007 0.16084586 0.14505112]
+
+Best: HGB cfg1 depth=10 iter=1500, acc=0.4652
+Done in 1.2m
+---
+metric: 0.4652
+description: HGB cfg1 depth=10 iter=1500, 30+ features, ALL 5.5M train

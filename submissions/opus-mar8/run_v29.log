@@ -1,0 +1,79 @@
+Loading train data with quality cuts...
+  chunk 0: 86235/500000 pass cuts
+  chunk 500000: 60669/500000 pass cuts
+  chunk 1000000: 32389/500000 pass cuts
+  chunk 1500000: 29569/500000 pass cuts
+  chunk 2000000: 34011/500000 pass cuts
+  chunk 2500000: 38159/500000 pass cuts
+  chunk 3000000: 41949/500000 pass cuts
+  chunk 3500000: 30026/500000 pass cuts
+  chunk 4000000: 33257/500000 pass cuts
+  chunk 4500000: 35278/500000 pass cuts
+  chunk 5000000: 48285/500000 pass cuts
+  chunk 5500000: 6150/61523 pass cuts
+Events passing cuts: 475977/5561523 (8.6%)
+  loading 0/475977
+  loading 100000/475977
+  loading 200000/475977
+  loading 300000/475977
+  loading 400000/475977
+Train: torch.Size([475977, 2, 16, 16]), labels: 475977
+  class 0: 131279 (27.6%)
+  class 1: 107337 (22.6%)
+  class 2: 87953 (18.5%)
+  class 3: 77681 (16.3%)
+  class 4: 71727 (15.1%)
+Loading test data...
+Model params: 1,047,701
+  Ep 1/30: train=0.4801 test=0.4993 frac_err=0.1107 *** BEST [15s]
+  Ep 2/30: train=0.4977 test=0.4841 frac_err=0.1207 [32s]
+  Ep 3/30: train=0.5009 test=0.4926 frac_err=0.1171 [49s]
+  Ep 4/30: train=0.5022 test=0.4976 [65s]
+  Ep 5/30: train=0.5034 test=0.4920 frac_err=0.1126 [80s]
+  Ep 6/30: train=0.5046 test=0.4978 [96s]
+  Ep 7/30: train=0.5059 test=0.5031 [110s]
+  Ep 8/30: train=0.5069 test=0.4915 [125s]
+  Ep 9/30: train=0.5083 test=0.4939 [140s]
+  Ep 10/30: train=0.5107 test=0.4886 frac_err=0.1164 [155s]
+  Ep 11/30: train=0.5131 test=0.4968 [171s]
+  Ep 12/30: train=0.5168 test=0.4905 [186s]
+  Ep 13/30: train=0.5227 test=0.4930 [200s]
+  Ep 14/30: train=0.5283 test=0.4860 [215s]
+  Ep 15/30: train=0.5367 test=0.4833 frac_err=0.1212 [230s]
+  Ep 16/30: train=0.5473 test=0.4866 [247s]
+  Ep 17/30: train=0.5581 test=0.4677 [261s]
+  Ep 18/30: train=0.5701 test=0.4805 [276s]
+  Ep 19/30: train=0.5840 test=0.4659 [290s]
+  Ep 20/30: train=0.5984 test=0.4655 frac_err=0.1140 [304s]
+  Ep 21/30: train=0.6114 test=0.4603 [321s]
+  Ep 22/30: train=0.6246 test=0.4627 [336s]
+  Ep 23/30: train=0.6366 test=0.4568 [351s]
+  Ep 24/30: train=0.6493 test=0.4608 [365s]
+  Ep 25/30: train=0.6595 test=0.4546 frac_err=0.1172 [380s]
+  Ep 26/30: train=0.6687 test=0.4548 [396s]
+  Ep 27/30: train=0.6759 test=0.4528 [411s]
+  Ep 28/30: train=0.6814 test=0.4512 [425s]
+  Ep 29/30: train=0.6847 test=0.4502 [440s]
+  Ep 30/30: train=0.6863 test=0.4523 frac_err=0.1173 [455s]
+
+Final verify:
+
+============================================================
+  TASK: Mass Composition (5-class)
+  KEY METRIC (mean fraction error): 0.1107
+    (1001 grid ensembles × 5000 events, step=0.1)
+  ACCURACY: 0.4993 (49.93%)
+  MACRO F1:         0.4829
+  WEIGHTED F1:      0.4932
+============================================================
+
+     Per-class fraction error (cf. JINST 2024, Table 1)     
+        pr      he      ca      si      ir    Mean
+    0.0848  0.1274  0.1282  0.1249  0.0884  0.1107
+
+  
+
+Best: acc=0.5031, frac_err=0.1107
+---
+metric: 0.1107
+description: CNN+Attn+MLP on quality-cut train only (~480K events), 30ep

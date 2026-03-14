@@ -1,0 +1,19 @@
+Loading models...
+Loaded 5 individual snapshots
+
+Testing 9 configs...
+
+  v8+v11 (baseline)                            : raw=0.107983, opt=0.106045, acc=0.5083 ***
+  v8+v11+v33                                   : raw=0.107441, opt=0.106080, acc=0.5085
+  v8+v11+v39                                   : raw=0.107814, opt=0.106034, acc=0.5084 ***
+  v8+v11+v33+v39                               : raw=0.107637, opt=0.106110, acc=0.5086
+  v8*0.4+v11*0.4+v33*0.2                       : raw=0.107516, opt=0.106018, acc=0.5085 ***
+  v8*0.4+v11*0.4+v39*0.2                       : raw=0.107880, opt=0.106031, acc=0.5085
+  v8*0.35+v11*0.35+v33*0.15+v39*0.15           : raw=0.107593, opt=0.106047, acc=0.5088
+  v8+v11+snaps34                               : raw=0.108208, opt=0.106051, acc=0.5080
+  v8*0.4+v11*0.4+snaps34*0.2                   : raw=0.108134, opt=0.105987, acc=0.5083 ***
+
+*** BEST: v8*0.4+v11*0.4+snaps34*0.2 with fe=0.105987 ***
+---
+metric: 0.1060
+description: comprehensive ensemble opt with snapshots + ViT + bias

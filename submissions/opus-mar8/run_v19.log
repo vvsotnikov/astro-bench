@@ -1,0 +1,88 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+v8 (existing): acc=0.5075
+
+============================================================
+Training seed=123
+============================================================
+  Ep 1/20: train=0.3589 test=0.4994 [137s]
+    >>> Best: 0.4994
+  Ep 2/20: train=0.3634 test=0.4980 [274s]
+  Ep 3/20: train=0.3644 test=0.5009 [410s]
+    >>> Best: 0.5009
+  Ep 4/20: train=0.3649 test=0.5006 [546s]
+  Ep 5/20: train=0.3657 test=0.4922 [682s]
+  Ep 6/20: train=0.3661 test=0.5003 [818s]
+  Ep 7/20: train=0.3662 test=0.4948 [954s]
+  Ep 8/20: train=0.3668 test=0.5054 [1090s]
+    >>> Best: 0.5054
+  Ep 9/20: train=0.3674 test=0.5057 [1226s]
+    >>> Best: 0.5057
+  Ep 10/20: train=0.3678 test=0.4997 [1362s]
+  Ep 11/20: train=0.3685 test=0.4948 [1498s]
+  Ep 12/20: train=0.3690 test=0.5059 [1634s]
+    >>> Best: 0.5059
+  Ep 13/20: train=0.3695 test=0.5060 [1770s]
+    >>> Best: 0.5060
+  Ep 14/20: train=0.3701 test=0.5070 [1907s]
+    >>> Best: 0.5070
+  Ep 15/20: train=0.3707 test=0.5050 [2043s]
+  Ep 16/20: train=0.3712 test=0.5070 [2179s]
+    >>> Best: 0.5070
+  Ep 17/20: train=0.3718 test=0.5057 [2316s]
+  Ep 18/20: train=0.3723 test=0.5064 [2452s]
+  Ep 19/20: train=0.3727 test=0.5061 [2588s]
+  Ep 20/20: train=0.3728 test=0.5058 [2724s]
+  Seed 123 done. Best acc: 0.5070
+
+============================================================
+Training seed=7
+============================================================
+  Ep 1/20: train=0.3591 test=0.4897 [136s]
+    >>> Best: 0.4897
+  Ep 2/20: train=0.3634 test=0.4953 [272s]
+    >>> Best: 0.4953
+  Ep 3/20: train=0.3644 test=0.5030 [409s]
+    >>> Best: 0.5030
+  Ep 4/20: train=0.3649 test=0.5041 [545s]
+    >>> Best: 0.5041
+  Ep 5/20: train=0.3656 test=0.4729 [681s]
+  Ep 6/20: train=0.3661 test=0.5036 [817s]
+  Ep 7/20: train=0.3666 test=0.5049 [954s]
+    >>> Best: 0.5049
+  Ep 8/20: train=0.3670 test=0.4964 [1090s]
+  Ep 9/20: train=0.3676 test=0.5030 [1226s]
+  Ep 10/20: train=0.3679 test=0.5031 [1362s]
+  Ep 11/20: train=0.3685 test=0.5046 [1497s]
+  Ep 12/20: train=0.3690 test=0.5059 [1633s]
+    >>> Best: 0.5059
+  Ep 13/20: train=0.3696 test=0.5053 [1769s]
+  Ep 14/20: train=0.3701 test=0.4967 [1905s]
+  Ep 15/20: train=0.3709 test=0.5053 [2040s]
+  Ep 16/20: train=0.3715 test=0.5056 [2175s]
+  Ep 17/20: train=0.3722 test=0.5058 [2311s]
+  Ep 18/20: train=0.3725 test=0.5049 [2447s]
+  Ep 19/20: train=0.3727 test=0.5064 [2583s]
+    >>> Best: 0.5064
+  Ep 20/20: train=0.3730 test=0.5061 [2719s]
+  Seed 7 done. Best acc: 0.5064
+
+============================================================
+Ensemble results:
+============================================================
+  1 models: acc=0.5075, frac_diff=0.0105
+  2 models: acc=0.5080, frac_diff=0.0104
+  3 models: acc=0.5080, frac_diff=0.0115
+
+Done in 91.3m. Ensemble acc: 0.5080
+---
+metric: 0.5080
+description: 3-seed ensemble (v8+seed123+seed7), avg probs, 20ep each

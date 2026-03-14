@@ -1,0 +1,79 @@
+CNN probs: (119027, 5), HGB probs: (119027, 5)
+CNN acc: 0.5075
+HGB acc: 0.4648
+
+--- Fine-grained sweep ---
+Best linear: w_cnn=0.89, acc=0.5082
+
+--- Per-class weight optimization ---
+
+--- Stacking meta-learner ---
+Meta features shape: (119027, 26)
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/home/vladimir/cursor_projects/astro-agents/.venv/lib/python3.13/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=1000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+LR stacking (5-fold CV): acc=0.5039
+HGB stacking (5-fold CV): acc=0.5059
+
+--- Geometric mean ---
+Geometric mean: acc=0.5008
+
+--- Rank fusion ---
+Rank fusion: acc=0.4918
+
+--- Summary ---
+  linear_w=0.89            : acc=0.5082  frac_diff=0.0118
+  geometric_mean           : acc=0.5008  frac_diff=0.0137
+  rank_fusion              : acc=0.4918  frac_diff=0.0179
+  lr_stacking              : acc=0.5039  frac_diff=0.0123
+  hgb_stacking             : acc=0.5059  frac_diff=0.0082
+  cnn_only                 : acc=0.5075  frac_diff=0.0105
+  hgb_only                 : acc=0.4648  frac_diff=0.0182
+
+Best: linear_w=0.89, acc=0.5082
+Done in 4.6m
+---
+metric: 0.5082
+description: Ensemble stacking linear_w=0.89, CNN+HGB

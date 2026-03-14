@@ -1,0 +1,13 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+Params: 3,312,561
+Ep 1/30: train=0.3592 [475s]
+Ep 2/30: train=0.3638 [984s]

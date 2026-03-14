@@ -1,0 +1,60 @@
+Extracting features for train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: 63 features
+Extracting features for test...
+  test: 119027/119027
+  test: 63 features
+Feature dim: 63
+Data loaded in 373s
+Params: 496,901
+Ep 1/30: train=0.3550 test=0.4940 [419s]
+  >>> Best: 0.4940
+Ep 2/30: train=0.3606 test=0.4991 [462s]
+  >>> Best: 0.4991
+Ep 3/30: train=0.3617 test=0.5005 [506s]
+  >>> Best: 0.5005
+Ep 4/30: train=0.3624 test=0.4967 [550s]
+Ep 5/30: train=0.3629 test=0.5004 [594s]
+Ep 6/30: train=0.3631 test=0.5018 [638s]
+  >>> Best: 0.5018
+Ep 7/30: train=0.3631 test=0.5006 [682s]
+Ep 8/30: train=0.3634 test=0.5028 [726s]
+  >>> Best: 0.5028
+Ep 9/30: train=0.3636 test=0.5037 [769s]
+  >>> Best: 0.5037
+Ep 10/30: train=0.3637 test=0.5030 [813s]
+Ep 11/30: train=0.3638 test=0.5028 [857s]
+Ep 12/30: train=0.3640 test=0.5032 [901s]
+Ep 13/30: train=0.3642 test=0.5041 [945s]
+  >>> Best: 0.5041
+Ep 14/30: train=0.3645 test=0.5036 [989s]
+Ep 15/30: train=0.3645 test=0.5037 [1033s]
+Ep 16/30: train=0.3645 test=0.5045 [1077s]
+  >>> Best: 0.5045
+Ep 17/30: train=0.3647 test=0.5039 [1121s]
+Ep 18/30: train=0.3649 test=0.5048 [1164s]
+  >>> Best: 0.5048
+Ep 19/30: train=0.3649 test=0.5029 [1208s]
+Ep 20/30: train=0.3650 test=0.5034 [1252s]
+Ep 21/30: train=0.3650 test=0.5056 [1296s]
+  >>> Best: 0.5056
+Ep 22/30: train=0.3651 test=0.5047 [1340s]
+Ep 23/30: train=0.3652 test=0.5053 [1384s]
+Ep 24/30: train=0.3653 test=0.5057 [1428s]
+  >>> Best: 0.5057
+Ep 25/30: train=0.3653 test=0.5055 [1472s]
+Ep 26/30: train=0.3656 test=0.5052 [1516s]
+Ep 27/30: train=0.3655 test=0.5061 [1560s]
+  >>> Best: 0.5061
+Ep 28/30: train=0.3655 test=0.5059 [1604s]
+Ep 29/30: train=0.3656 test=0.5058 [1648s]
+Ep 30/30: train=0.3654 test=0.5055 [1692s]
+
+Done in 28.2m. Best acc: 0.5061
+---
+metric: 0.5061
+description: Deep MLP on rich matrix features (63d) + eng feats, 30ep

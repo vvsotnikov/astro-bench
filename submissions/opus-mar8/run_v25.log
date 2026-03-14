@@ -1,0 +1,99 @@
+=== Individual models ===
+  v8          : acc=0.5075 frac_err=0.1080
+  v11         : acc=0.5070 frac_err=0.1084
+  v22         : acc=0.5008 frac_err=0.1093
+  v19_s123    : acc=0.5070 frac_err=0.1082
+  v19_s7      : acc=0.5064 frac_err=0.1083
+  v24         : acc=0.5072 frac_err=0.1092
+  hgb         : acc=0.4648 frac_err=0.1185
+
+=== Pairwise ensembles ===
+  v8+v11: acc=0.5083 frac_err=0.1080
+  v8+v22: acc=0.5070 frac_err=0.1081
+  v8+v19_s123: acc=0.5080 frac_err=0.1079
+  v8+v24: acc=0.5083 frac_err=0.1082
+  v8+hgb: acc=0.4986 frac_err=0.1105
+  v11+v22: acc=0.50Ep 7/20: train=0.2865 test=0.4556 [1190s]
+Ep 8/20: train=0.2865 test=0.4717 [1326s]
+Ep 9/20: train=0.2875 test=0.4776 [1462s]
+Ep 10/20: train=0.2847 test=0.4799 [1599s]
+Ep 11/20: train=0.2898 test=0.4975 [1735s]
+  >>> Best: 0.4975
+Ep 12/20: train=0.2851 test=0.4715 [1872s]
+Ep 13/20: train=0.2874 test=0.4800 [2008s]
+Ep 14/20: train=0.2887 test=0.4982 [2145s]
+  >>> Best: 0.4982
+Ep 15/20: train=0.2906 test=0.4864 [2281s]
+Ep 16/20: train=0.2896 test=0.4803 [2418s]
+Ep 17/20: train=0.2857 test=0.4956 [2554s]
+Ep 18/20: train=0.2901 test=0.4969 [2690s]
+Ep 19/20: train=0.2861 test=0.4896 [2827s]
+Ep 20/20: train=0.2904 test=0.4881 [2963s]
+
+Done in 49.4m. Best acc: 0.4982
+---
+metric: 0.4982
+description: CNN+Attn+MLP MixUp alpha=0.2, seed=99, 20ep
+1079
+  v8+v22+v24: acc=0.5086 frac_err=0.1080
+  v8+v22+hgb: acc=0.5060 frac_err=0.1087
+  v8+v19_s123+v24: acc=0.5083 frac_err=0.1081
+  v8+v19_s123+hgb: acc=0.5064 frac_err=0.1086
+  v8+v24+hgb: acc=0.5064 frac_err=0.1089
+  v11+v22+v19_s123: acc=0.5081 frac_err=0.1079
+  v11+v22+v24: acc=0.5082 frac_err=0.1081
+  v11+v22+hgb: acc=0.5055 frac_err=0.1088
+  v11+v19_s123+v24: acc=0.5083 frac_err=0.1081
+  v11+v19_s123+hgb: acc=0.5059 frac_err=0.1086
+  v11+v24+hgb: acc=0.5049 frac_err=0.1092
+  v22+v19_s123+v24: acc=0.5084 frac_err=0.1081
+  v22+v19_s123+hgb: acc=0.5053 frac_err=0.1088
+  v22+v24+hgb: acc=0.5047 frac_err=0.1092
+  v19_s123+v24+hgb: acc=0.5060 frac_err=0.1090
+
+=== Top 5 triples ===
+  v8+v11+v19_s123: 0.1078
+  v8+v22+v19_s123: 0.1079
+  v11+v22+v19_s123: 0.1079
+  v8+v11+v22: 0.1080
+  v8+v22+v24: 0.1080
+
+=== Bias optimization on top ensembles ===
+  v8                       : raw=0.1080 bias=0.1074 acc=0.5055 biases=[-0.152, 0.047, 0.235, 0.183, 0.14]
+  v8+v11                   : raw=0.1080 bias=0.1074 acc=0.5069 biases=[-0.276, -0.112, 0.028, -0.023, -0.074]
+  v8+v22                   : raw=0.1081 bias=0.1077 acc=0.5043 biases=[-0.095, 0.075, 0.218, 0.148, 0.101]
+  v8+v11+v22               : raw=0.1080 bias=0.1074 acc=0.5054 biases=[0.044, 0.241, 0.422, 0.4, 0.368]
+  v8+v11+v19_s123          : raw=0.1078 bias=0.1074 acc=0.5065 biases=[0.122, 0.296, 0.464, 0.409, 0.381]
+  all_cnn                  : raw=0.1078 bias=0.1076 acc=0.5067 biases=[0.179, 0.334, 0.469, 0.386, 0.286]
+  all_cnn+v22              : raw=0.1078 bias=0.1074 acc=0.5060 biases=[-0.362, -0.167, 0.014, -0.043, -0.101]
+  v8+v11+v22+hgb           : raw=0.1082 bias=0.1073 acc=0.5047 biases=[-0.373, -0.159, 0.03, 0.004, -0.049]
+
+=== BEST RESULT ===
+  Combo: v8+v11+v22+hgb
+  Fraction error: 0.1073
+  Biases: [-0.3733, -0.1592, 0.0298, 0.0043, -0.0492]
+
+Final verify:
+
+============================================================
+  TASK: Mass Composition (5-class)
+  KEY METRIC (mean fraction error): 0.1073
+    (1001 grid ensembles × 5000 events, step=0.1)
+  ACCURACY: 0.5047 (50.47%)
+  MACRO F1:         0.5015
+  WEIGHTED F1:      0.5088
+============================================================
+
+     Per-class fraction error (cf. JINST 2024, Table 1)     
+        pr      he      ca      si      ir    Mean
+    0.0829  0.1235  0.1302  0.1226  0.0775  0.1073
+
+                     Per-class metrics                      
+Class       Precision     Recall         F1    Support
+------------------------------------------------------------
+proton         0.7150     0.6043     0.6550    32804.0
+helium         0.4211     0.3956     0.4080    26886.0
+carbon         
+---
+metric: 0.1073
+description: v8+v11+v22+hgb + bias optimization

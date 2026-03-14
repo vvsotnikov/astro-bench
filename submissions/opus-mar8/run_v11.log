@@ -1,0 +1,41 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+Params: 1,047,701
+Ep 1/40: train=0.3589 test=0.4967 [175s]
+  >>> Best: 0.4967
+Ep 2/40: train=0.3634 test=0.5048 [311s]
+  >>> Best: 0.5048
+Ep 3/40: train=0.3643 test=0.4469 [446s]
+Ep 4/40: train=0.3650 test=0.5018 [582s]
+Ep 5/40: train=0.3655 test=0.5033 [718s]
+Ep 6/40: train=0.3659 test=0.4920 [854s]
+Ep 7/40: train=0.3665 test=0.5070 [990s]
+  >>> Best: 0.5070
+Ep 8/40: train=0.3667 test=0.5060 [1126s]
+Ep 9/40: train=0.3673 test=0.4953 [1262s]
+Ep 10/40: train=0.3674 test=0.5049 [1398s]
+Ep 11/40: train=0.3680 test=0.4986 [1534s]
+Ep 12/40: train=0.3685 test=0.4697 [1670s]
+Ep 13/40: train=0.3689 test=0.4881 [1807s]
+Ep 14/40: train=0.3695 test=0.4966 [1942s]
+Ep 15/40: train=0.3699 test=0.5034 [2078s]
+Ep 16/40: train=0.3705 test=0.5022 [2214s]
+Ep 17/40: train=0.3710 test=0.4980 [2349s]
+Ep 18/40: train=0.3718 test=0.5015 [2485s]
+Ep 19/40: train=0.3725 test=0.5062 [2621s]
+Ep 20/40: train=0.3732 test=0.5050 [2756s]
+Ep 21/40: train=0.3741 test=0.5010 [2892s]
+Ep 22/40: train=0.3747 test=0.5060 [3028s]
+Ep 23/40: train=0.3754 test=0.5067 [3164s]
+Ep 24/40: train=0.3762 test=0.5030 [3299s]
+Ep 25/40: train=0.3770 test=0.5052 [3473s]
+Ep 26/40: train=0.3777 test=0.5046 [3715s]
+Ep 27/40: train=0.3784 test=0.5064 [3876s]

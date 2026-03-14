@@ -1,0 +1,63 @@
+Loading train data...
+  train: 0/5561523
+  train: 500000/5561523
+  train: 1000000/5561523
+  train: 1500000/5561523
+  train: 2000000/5561523
+  train: 2500000/5561523
+  train: 3000000/5561523
+  train: 3500000/5561523
+  train: 4000000/5561523
+  train: 4500000/5561523
+  train: 5000000/5561523
+  train: 5500000/5561523
+Train: torch.Size([5561523, 2, 16, 16])
+Loading test data...
+Model params: 2,098,213
+  Ep 1/25: train=0.3456 test=0.4810 frac_err=0.1212 *** BEST [185s]
+  Ep 2/25: train=0.3614 test=0.4907 frac_err=0.1134 *** BEST [369s]
+  Ep 3/25: train=0.3631 test=0.4995 frac_err=0.1136 [555s]
+  Ep 4/25: train=0.3640 test=0.5032 [739s]
+  Ep 5/25: train=0.3649 test=0.5029 frac_err=0.1102 *** BEST [924s]
+  Ep 6/25: train=0.3653 test=0.4985 [1110s]
+  Ep 7/25: train=0.3658 test=0.5023 [1296s]
+  Ep 8/25: train=0.3663 test=0.5045 [1481s]
+  Ep 9/25: train=0.3669 test=0.5063 [1662s]
+  Ep 10/25: train=0.3677 test=0.4958 frac_err=0.1145 [1848s]
+  Ep 11/25: train=0.3683 test=0.5038 [2034s]
+  Ep 12/25: train=0.3692 test=0.5042 [2220s]
+  Ep 13/25: train=0.3702 test=0.5059 [2404s]
+  Ep 14/25: train=0.3713 test=0.5002 [2589s]
+  Ep 15/25: train=0.3729 test=0.5051 frac_err=0.1111 [2774s]
+  Ep 16/25: train=0.3746 test=0.5045 [2960s]
+  Ep 17/25: train=0.3768 test=0.5034 [3146s]
+  Ep 18/25: train=0.3789 test=0.5023 [3290s]
+  Ep 19/25: train=0.3812 test=0.5011 [3433s]
+  Ep 20/25: train=0.3836 test=0.4974 frac_err=0.1125 [3576s]
+  Ep 21/25: train=0.3854 test=0.5016 [3731s]
+  Ep 22/25: train=0.3869 test=0.5007 [3918s]
+  Ep 23/25: train=0.3883 test=0.5008 [4106s]
+  Ep 24/25: train=0.3891 test=0.5005 [4294s]
+  Ep 25/25: train=0.3894 test=0.5008 frac_err=0.1093 *** BEST [4480s]
+
+Final verify:
+
+============================================================
+  TASK: Mass Composition (5-class)
+  KEY METRIC (mean fraction error): 0.1093
+    (1001 grid ensembles × 5000 events, step=0.1)
+  ACCURACY: 0.5008 (50.08%)
+  MACRO F1:         0.4878
+  WEIGHTED F1:      0.4977
+============================================================
+
+     Per-class fraction error (cf. JINST 2024, Table 1)     
+        pr      he      ca      si      ir    Mean
+    0.0857  0.1274  0.1270  0.1249  0.0811  0.1093
+
+  
+
+Best: acc=0.5008, frac_err=0.1093
+---
+metric: 0.1093
+description: ResNet (res blocks + ch attn) + MLP, OneCycleLR, 25ep, 5.5M

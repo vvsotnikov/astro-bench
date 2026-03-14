@@ -1,0 +1,57 @@
+Loading train...
+  train mat: 250000/5561523
+  train mat: 1500000/5561523
+  train mat: 2750000/5561523
+  train mat: 4000000/5561523
+  train mat: 5250000/5561523
+  train: X=torch.Size([5561523, 525])
+Loading test...
+  test mat: 119027/119027
+  test: X=torch.Size([119027, 525])
+Params: 1,232,133
+Ep 1/30: train=0.3445 test=0.4698 [159s]
+  >>> Best: 0.4698
+Ep 2/30: train=0.3561 test=0.4838 [228s]
+  >>> Best: 0.4838
+Ep 3/30: train=0.3585 test=0.4819 [295s]
+Ep 4/30: train=0.3597 test=0.4931 [349s]
+  >>> Best: 0.4931
+Ep 5/30: train=0.3606 test=0.4967 [400s]
+  >>> Best: 0.4967
+Ep 6/30: train=0.3610 test=0.4973 [450s]
+  >>> Best: 0.4973
+Ep 7/30: train=0.3617 test=0.4939 [500s]
+Ep 8/30: train=0.3624 test=0.4958 [551s]
+Ep 9/30: train=0.3627 test=0.4970 [601s]
+Ep 10/30: train=0.3633 test=0.4966 [652s]
+Ep 11/30: train=0.3638 test=0.4981 [702s]
+  >>> Best: 0.4981
+Ep 12/30: train=0.3642 test=0.4986 [753s]
+  >>> Best: 0.4986
+Ep 13/30: train=0.3645 test=0.4968 [803s]
+Ep 14/30: train=0.3651 test=0.4950 [853s]
+Ep 15/30: train=0.3655 test=0.4988 [904s]
+  >>> Best: 0.4988
+Ep 16/30: train=0.3661 test=0.4976 [954s]
+Ep 17/30: train=0.3665 test=0.4963 [1005s]
+Ep 18/30: train=0.3666 test=0.4987 [1056s]
+Ep 19/30: train=0.3671 test=0.4993 [1106s]
+  >>> Best: 0.4993
+Ep 20/30: train=0.3673 test=0.4990 [1155s]
+Ep 21/30: train=0.3676 test=0.4996 [1204s]
+  >>> Best: 0.4996
+Ep 22/30: train=0.3681 test=0.4999 [1252s]
+  >>> Best: 0.4999
+Ep 23/30: train=0.3684 test=0.4990 [1300s]
+Ep 24/30: train=0.3684 test=0.4995 [1348s]
+Ep 25/30: train=0.3687 test=0.4990 [1396s]
+Ep 26/30: train=0.3687 test=0.4995 [1445s]
+Ep 27/30: train=0.3688 test=0.4998 [1493s]
+Ep 28/30: train=0.3691 test=0.4996 [1542s]
+Ep 29/30: train=0.3692 test=0.4996 [1591s]
+Ep 30/30: train=0.3692 test=0.4999 [1639s]
+
+Done in 27.3m. Best acc: 0.4999
+---
+metric: 0.4999
+description: Pure MLP on flattened log1p matrices (512) + 13 eng features, 30ep

@@ -1,0 +1,63 @@
+Loading train data...
+  train: 0/5561523
+  train: 500000/5561523
+  train: 1000000/5561523
+  train: 1500000/5561523
+  train: 2000000/5561523
+  train: 2500000/5561523
+  train: 3000000/5561523
+  train: 3500000/5561523
+  train: 4000000/5561523
+  train: 4500000/5561523
+  train: 5000000/5561523
+  train: 5500000/5561523
+Train: torch.Size([5561523, 2, 16, 16])
+Loading test data...
+Model params: 938,629
+  Ep 1/25: train=0.3426 test=0.4938 lr=0.000100 frac_err=0.1110 *** BEST [127s]
+  Ep 2/25: train=0.3573 test=0.4925 lr=0.000200 frac_err=0.1134 [254s]
+  Ep 3/25: train=0.3604 test=0.5003 lr=0.000300 frac_err=0.1099 *** BEST [383s]
+  Ep 4/25: train=0.3617 test=0.5019 lr=0.000298 [511s]
+  Ep 5/25: train=0.3622 test=0.4927 lr=0.000294 frac_err=0.1126 [638s]
+  Ep 6/25: train=0.3626 test=0.4866 lr=0.000286 [765s]
+  Ep 7/25: train=0.3629 test=0.4974 lr=0.000276 [892s]
+  Ep 8/25: train=0.3633 test=0.4898 lr=0.000263 [1018s]
+  Ep 9/25: train=0.3635 test=0.5047 lr=0.000248 [1145s]
+  Ep 10/25: train=0.3638 test=0.5032 lr=0.000231 frac_err=0.1098 *** BEST [1271s]
+  Ep 11/25: train=0.3640 test=0.5016 lr=0.000212 [1399s]
+  Ep 12/25: train=0.3641 test=0.5016 lr=0.000192 [1526s]
+  Ep 13/25: train=0.3644 test=0.5050 lr=0.000171 [1653s]
+  Ep 14/25: train=0.3646 test=0.5048 lr=0.000150 [1781s]
+  Ep 15/25: train=0.3648 test=0.5055 lr=0.000129 frac_err=0.1074 *** BEST [1908s]
+  Ep 16/25: train=0.3648 test=0.5035 lr=0.000108 [2038s]
+  Ep 17/25: train=0.3652 test=0.5048 lr=0.000088 [2166s]
+  Ep 18/25: train=0.3652 test=0.5058 lr=0.000069 [2294s]
+  Ep 19/25: train=0.3654 test=0.5058 lr=0.000052 [2422s]
+  Ep 20/25: train=0.3657 test=0.5056 lr=0.000037 frac_err=0.1092 [2550s]
+  Ep 21/25: train=0.3657 test=0.5054 lr=0.000024 [2680s]
+  Ep 22/25: train=0.3656 test=0.5070 lr=0.000014 [2808s]
+  Ep 23/25: train=0.3659 test=0.5065 lr=0.000006 [2936s]
+  Ep 24/25: train=0.3659 test=0.5068 lr=0.000002 [3063s]
+  Ep 25/25: train=0.3658 test=0.5069 lr=0.000000 frac_err=0.1083 [3191s]
+
+Final verify:
+
+============================================================
+  TASK: Mass Composition (5-class)
+  KEY METRIC (mean fraction error): 0.1074
+    (1001 grid ensembles × 5000 events, step=0.1)
+  ACCURACY: 0.5055 (50.55%)
+  MACRO F1:         0.4961
+  WEIGHTED F1:      0.5047
+============================================================
+
+     Per-class fraction error (cf. JINST 2024, Table 1)     
+        pr      he      ca      si      ir    Mean
+    0.0822  0.1257  0.1261  0.1228  0.0803  0.1074
+
+  
+
+Best: acc=0.5070, frac_err=0.1074
+---
+metric: 0.1074
+description: ViT 4x4 patch dim=128 depth=4 + warmup + cosine, 25ep, config 2/3

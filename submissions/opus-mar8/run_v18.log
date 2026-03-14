@@ -1,0 +1,30 @@
+Loading test data...
+Test: torch.Size([119027, 2, 16, 16])
+Model loaded
+
+Rotation 0 degrees...
+  Accuracy (rot 0): 0.5075
+
+Rotation 90 degrees...
+  Accuracy (rot 90): 0.5057
+
+Rotation 180 degrees...
+  Accuracy (rot 180): 0.5072
+
+Rotation 270 degrees...
+  Accuracy (rot 270): 0.5059
+
+Flip vertical...
+  Accuracy (flip vertical): 0.5058
+
+Flip horizontal...
+  Accuracy (flip horizontal): 0.5065
+
+--- Averaging ---
+TTA-4: acc=0.5078, frac_diff=0.0109
+TTA-6: acc=0.5080, frac_diff=0.0110
+
+Done in 0.1m. Best acc: 0.5080 (TTA-6)
+---
+metric: 0.5080
+description: TTA-6 on v8 model (rotations+ flips)

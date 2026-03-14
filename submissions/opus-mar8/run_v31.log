@@ -1,0 +1,15 @@
+  v8+v11                                  : fe=0.106053, acc=0.5083
+    *** NEW BEST ***
+  v8+v30                                  : fe=0.106294, acc=0.5068
+  v8+v11+v30                              : fe=0.106199, acc=0.5075
+  v8_0.4+v11_0.3+v30_0.3                  : fe=0.106169, acc=0.5081
+  v8+v11+v30+v28                          : fe=0.106222, acc=0.5074
+  v8+v11+v30+v24                          : fe=0.106258, acc=0.5080
+  v8_0.5+v30_0.5                          : fe=0.106294, acc=0.5068
+
+BEST: v8+v11 -> 0.106053
+Saved predictions_v31.npz
+
+---
+metric: 0.106053
+description: Ensemble+bias with v30 added

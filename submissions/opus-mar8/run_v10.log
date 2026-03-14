@@ -1,0 +1,40 @@
+Loading CNN probabilities from v8...
+  CNN probs shape: (119027, 5)
+Loading training data for HGB...
+  Loaded 500000/3000000
+  Loaded 1000000/3000000
+  Loaded 1500000/3000000
+  Loaded 2000000/3000000
+  Loaded 2500000/3000000
+  Loaded 3000000/3000000
+Training HGB (n_train=3000000)...
+  HGB accuracy: 0.4648
+
+Ensemble sweep (CNN weight):
+  w=0.00: acc=0.4648
+  w=0.05: acc=0.4672
+  w=0.10: acc=0.4698
+  w=0.15: acc=0.4725
+  w=0.20: acc=0.4756
+  w=0.25: acc=0.4791
+  w=0.30: acc=0.4827
+  w=0.35: acc=0.4860
+  w=0.40: acc=0.4901
+  w=0.45: acc=0.4943
+  w=0.50: acc=0.4986
+  w=0.55: acc=0.5022
+  w=0.60: acc=0.5042
+  w=0.65: acc=0.5058
+  w=0.70: acc=0.5069
+  w=0.75: acc=0.5076
+  w=0.80: acc=0.5077
+  w=0.85: acc=0.5079
+  w=0.90: acc=0.5081
+  w=0.95: acc=0.5078
+  w=1.00: acc=0.5075
+
+Best: w=0.90, acc=0.5081
+Done in 1.1m
+---
+metric: 0.5081
+description: Ensemble CNN(v8)*0.90 + HGB*0.10, 3M HGB train

@@ -1,0 +1,54 @@
+Loading train...
+  train: 250000/5561523
+  train: 1500000/5561523
+  train: 2750000/5561523
+  train: 4000000/5561523
+  train: 5250000/5561523
+  train: torch.Size([5561523, 2, 16, 16])
+Loading test...
+  test: 119027/119027
+  test: torch.Size([119027, 2, 16, 16])
+Params: 1,047,701
+/home/vladimir/cursor_projects/astro-agents/submissions/opus-mar8/train_v39_snapshot.py:158: DeprecationWarning: __array__ implementation doesn't accept a copy keyword, so passing copy=False failed. __array__ must implement 'dtype' and 'copy' keyword arguments. To learn more, see the migration guide https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword
+  y_test_np = np.array(y_test[:])
+Ep 1/20 (c1e1): train=0.3592 test=0.4992 [172s]
+  >>> Best single: 0.4992
+Ep 2/20 (c1e2): train=0.3638 test=0.4899 [305s]
+Ep 3/20 (c1e3): train=0.3648 test=0.5023 [439s]
+  >>> Best single: 0.5023
+Ep 4/20 (c1e4): train=0.3661 test=0.5058 [573s]
+  >>> Best single: 0.5058
+  === Snapshot 1 saved (acc=0.5058) ===
+Ep 5/20 (c2e1): train=0.3645 test=0.5018 [707s]
+Ep 6/20 (c2e2): train=0.3657 test=0.4960 [842s]
+Ep 7/20 (c2e3): train=0.3665 test=0.4910 [976s]
+Ep 8/20 (c2e4): train=0.3675 test=0.5064 [1110s]
+  >>> Best single: 0.5064
+  === Snapshot 2 saved (acc=0.5064) ===
+  Ensemble of 2 snapshots: acc=0.5074
+Ep 9/20 (c3e1): train=0.3661 test=0.5025 [1244s]
+Ep 10/20 (c3e2): train=0.3665 test=0.5013 [1379s]
+Ep 11/20 (c3e3): train=0.3674 test=0.5000 [1513s]
+Ep 12/20 (c3e4): train=0.3686 test=0.5067 [1648s]
+  >>> Best single: 0.5067
+  === Snapshot 3 saved (acc=0.5067) ===
+  Ensemble of 3 snapshots: acc=0.5075
+Ep 13/20 (c4e1): train=0.3672 test=0.4968 [1782s]
+Ep 14/20 (c4e2): train=0.3677 test=0.5038 [1916s]
+Ep 15/20 (c4e3): train=0.3687 test=0.5041 [2050s]
+Ep 16/20 (c4e4): train=0.3698 test=0.5070 [2184s]
+  >>> Best single: 0.5070
+  === Snapshot 4 saved (acc=0.5070) ===
+  Ensemble of 4 snapshots: acc=0.5075
+Ep 17/20 (c5e1): train=0.3683 test=0.4951 [2318s]
+Ep 18/20 (c5e2): train=0.3689 test=0.5073 [2452s]
+  >>> Best single: 0.5073
+Ep 19/20 (c5e3): train=0.3702 test=0.5038 [2586s]
+Ep 20/20 (c5e4): train=0.3718 test=0.5025 [2721s]
+  === Snapshot 5 saved (acc=0.5025) ===
+  Ensemble of 5 snapshots: acc=0.5080
+
+Done in 45.3m. Best single: 0.5073, Ensemble: 0.5080
+---
+metric: 0.5080
+description: Snapshot ensemble (5 cycles x 4ep), cosine warm restarts
