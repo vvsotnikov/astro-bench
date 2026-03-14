@@ -17,3 +17,25 @@ v20_resnet_cbam	N/A	crash	ResNet+CBAM 3.3M params, 500s/ep too slow, killed at e
 v21_resnet_lite	N/A	crash	ResNet-Lite 1.7M params, OneCycleLR too aggressive, acc crashed to 44%, killed
 v23_bias_opt	0.1061	keep	v8+v11 ensemble + DE bias optimization [-0.15 -0.08 -0.04 -0.01 0.01], 50.83% acc
 v24_ordinal	0.1092	discard	CNN+Attn+MLP ordinal soft labels (sigma=0.5), KL loss, 50.72% acc, worse frac_err
+v21_vit	0.1215	discard	ViT 4x4 patch dim=128 depth=4, 47.38% acc, no warmup, killed at ep8
+v22_resnet	0.1093	discard	ResNet (res blocks + ch attn) + MLP, OneCycleLR, 25ep, 50.08% acc
+v25_ensemble	0.1073	discard	v8+v11+v22+hgb + approx-grid DE bias opt, 50.47% acc
+v26b_bias_opt	0.1060	keep	v8+v11 + exact-grid DE bias opt, 50.84% acc, BEST
+v27_mixup	N/A	crash	CNN+Attn+MLP with MixUp alpha=0.2 -- severe instability, 42% acc at ep10, killed
+v29_qualcuts	0.1107	discard	CNN+Attn+MLP on quality-cut train only (~480K), 50.31% acc, overfitting
+v30_deep_cnn	0.1080	keep	Deep CNN (8 conv, no SE attn, BN feats) + MLP, 20ep, 5.5M, 50.80% acc
+v31_bias_v30	0.1060	discard	v8+v11 still best; adding v30/v24/v28 to ensemble doesn't improve bias-opt result
+v32_qkv_cnn	0.1115	discard	QKV spatial self-attn CNN, 344s/ep too slow, 50.62% acc at ep7, frac_err 0.1115 (1/3)
+v33_vit_warmup	0.1074	keep	ViT 4x4 patch dim=128 depth=4 + warmup + cosine, 25ep, 50.70% acc (2/3)
+v36_mixup_low	0.1080	discard	CNN+Attn+MLP with MixUp alpha=0.05, 25ep, 50.61% acc, severe oscillation
+v37_swa	0.1080	discard	CNN+Attn+MLP with SWA, 20ep, 50.70% acc, SWA BN update crashed (multi-input)
+v38_ensemble	0.1060	discard	v8*0.4+v11*0.4+v33_vit*0.2 + bias opt = 0.106020, ties v26b (no breakthrough)
+v35_cross_arch	0.1060	discard	Cross-arch bias opt: v8+v11+v33 ties 0.1060, v8+v33=0.1062, ViT adds no improvement
+v39_cnn_gbm	0.1080	discard	GBM on v8 CNN features (256d) + eng feats, 8 configs all ~0.1080, matches CNN head
+v40_importance	0.1087	crash	Importance weighting 5x for quality-cut events, overfits from ep6 (50%->44% acc), killed
+v37_swa_opus	0.1080	discard	CNN+Attn+MLP with SWA (start ep15), 20ep, 50.70% acc, SWA BN crashed (multi-input)
+v39_snapshot	0.1080	keep	Snapshot ensemble (5 cycles x 4ep cosine restarts), 50.80% acc, useful for ensemble
+v41_snap_ens	0.1060	keep	v8*0.4+v11*0.4+snap34*0.2 + bias opt = 0.105987 NEW BEST (beats 0.1060)
+v42_richfeat	0.1083	discard	Deep MLP on 63 matrix stats + eng feats, 50.61% acc, different representation
+v43_big_feat	0.1078	keep	CNN+Attn + BigFeatMLP (22 feats, 512d), 20ep, 50.75% acc
+v44_heavyreg	0.1099	discard	CNN heavy reg (d=0.4, wd=5e-4, ls=0.08, seed=123), 50.38% acc, too much reg
