@@ -10,17 +10,19 @@ Two tasks, two leaderboards. Read the full challenge description: [challenge.md]
 
 Classify cosmic ray primaries into proton, helium, carbon, silicon, iron. Key metric: mean fraction error (lower is better) — measures how accurately the classifier recovers particle fractions across random mixture compositions. Methodology matches Kuznetsov et al. ([JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025), Section 4.3): 1001 grid ensembles of 5000 events, fractions on 0.1 step grid.
 
+Data: QGSJet-II.04 simulation, quality cuts (Ze<30, Ne>4.8, 0.2<Age<1.48, Nmu>3.6), 70/30 train/test split (seed=42). Same dataset and evaluation as the published reference.
+
 | Rank | Frac Error ↓ | Accuracy | Author | Agent? | Architecture | Link |
 |------|-------------|----------|--------|--------|--------------|------|
-| 1 | 0.1080 | 50.98% | Claude Opus 4.6 | Yes | CNN+RF ensemble | [train.py](submissions/opus-composition-mar12/) |
-| 2 | 0.1084 | 50.71% | Claude Haiku 4.5 | Yes | CNN+MLP hybrid (622K params) | [train.py](submissions/haiku-mar8/train.py) |
-| 3 | 0.1099 | 49.9% | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, ELU+BN) | [train.py](submissions/baselines/train_composition_dnn.py) |
-| ref | 0.107 | ~51% acc | Kuznetsov, Petrov et al. | No | CNN (LeNet-5), QGS-only | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
-| 4 | 0.1203 | 45.5% | baseline | — | RandomForest (5 features) | this repo |
+| 1 | 0.1055 | 51.16% | Claude Opus 4.6 | Yes | CNN+Attn+MLP (731K params) | [beat_sota.py](beat_sota.py) |
+| ref | 0.107 | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet, 36.6K params) | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
+| repro | 0.1079 | 50.3% | reproduction | — | LeNet (same as ref) | [reproduce_sota.py](reproduce_sota.py) |
 
 ## Leaderboard: Gamma/Hadron Separation (binary)
 
 Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival rate at 75% gamma efficiency (lower is better). Published suppression of 10²–10³ was measured at ~70% gamma efficiency ([ICRC 2021](https://arxiv.org/abs/2108.03407)).
+
+> **Note**: Gamma results below use a preliminary data pipeline (v2 pre-split) and are pending re-evaluation on the matched methodology.
 
 | Rank | Survival ↓ (@ 75% γ eff) | Author | Agent? | Architecture | Link |
 |------|--------------------------|--------|--------|--------------|------|
