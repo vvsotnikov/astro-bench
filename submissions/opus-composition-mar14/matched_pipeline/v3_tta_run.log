@@ -1,0 +1,4 @@
+Loading data...
+Params: 731,285
+Ep 1: train=0.4771 val_loss=1.1970 [108s]
+Ep 11: train=0.5071 val_loss=1.1726 [371s]

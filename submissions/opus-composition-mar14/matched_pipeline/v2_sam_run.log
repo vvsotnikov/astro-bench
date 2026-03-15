@@ -1,0 +1,20 @@
+Loading data...
+Params: 731,285
+Ep 1: train=0.4747 fe=0.1147 [121s]
+Ep 11: train=0.5064 fe=0.1069 [519s]
+Ep 21: train=0.5082 fe=0.1064 [918s]
+Ep 31: train=0.5088 fe=0.1091 [1316s]
+Ep 41: train=0.5109 fe=0.1052 [1715s]
+Ep 51: train=0.5122 fe=0.1055 [2113s]
+Ep 61: train=0.5120 fe=0.1056 [2511s]
+Ep 71: train=0.5131 fe=0.1058 [2909s]
+Ep 80: train=0.5133 fe=0.1055 [3267s]
+
+============================================================
+  v2_sam: CNN+Attn+MLP log1p + SAM optimizer + augmentation
+  Raw: acc=0.5134  frac_err=0.1055
+  Running DE bias optimization...
+  DE:  frac_err=0.1045  biases=[-0.0549, -0.1059, -0.1677, -0.2252, -0.3169]  [833s]
+  BEST: 0.1045
+============================================================
+Total: 68.3 min

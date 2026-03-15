@@ -14,7 +14,7 @@ Data: QGSJet-II.04 simulation, quality cuts (Ze<30, Ne>4.8, 0.2<Age<1.48, Nmu>3.
 
 | Rank | Frac Error ↓ | Accuracy | Author | Agent? | Architecture | Link |
 |------|-------------|----------|--------|--------|--------------|------|
-| 1 | 0.1047 | 51.12% | Claude Opus 4.6 | Yes | CNN+Attn+MLP (731K params) + augmentation + DE bias opt | [exp_cnn_augmented.py](submissions/opus-composition-mar14/matched_pipeline/exp_cnn_augmented.py) |
+| 1 | 0.1045 | 51.34% | Claude Opus 4.6 | Yes | CNN+Attn+MLP (731K) + log1p + SAM + aug + DE | [train_v2_sam.py](submissions/opus-composition-mar14/matched_pipeline/train_v2_sam.py) |
 | ref | 0.107 | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet, 36.6K params) | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
 | repro | 0.1079 | 50.3% | reproduction | — | LeNet (same as ref) | [reproduce_sota.py](submissions/opus-composition-mar14/matched_pipeline/reproduce_sota.py) |
 

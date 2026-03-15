@@ -1,0 +1,21 @@
+Loading data...
+Train: 268483, Val: 80545, Test: 34519
+Params: 731,285
+Ep 1: train=0.4771 fe=0.1211 [112s]
+Ep 11: train=0.5064 fe=0.1059 [392s]
+Ep 21: train=0.5087 fe=0.1063 [664s]
+Ep 31: train=0.5096 fe=0.1073 [940s]
+Ep 41: train=0.5111 fe=0.1057 [1222s]
+Ep 51: train=0.5121 fe=0.1062 [1502s]
+Ep 61: train=0.5135 fe=0.1057 [1779s]
+Ep 71: train=0.5135 fe=0.1058 [2059s]
+Ep 80: train=0.5141 fe=0.1056 [2301s]
+
+============================================================
+  v1_log1p: CNN+Attn+MLP with log1p matrices + augmentation
+  Raw: acc=0.5115  frac_err=0.1056
+  Running DE bias optimization...
+  DE:  frac_err=0.1050  biases=[-0.1634, -0.2273, -0.2318, -0.2318, -0.3045]  [1215s]
+  BEST: 0.1050
+============================================================
+Total: 58.6 min

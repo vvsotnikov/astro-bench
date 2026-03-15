@@ -13,3 +13,10 @@
   lenet32: DE=0.1056
 
 === Cross-architecture ensembles (DE) ===
+  cnn_aug+gnn: raw=0.1059 DE=0.1049
+  cnn_aug+vit128: raw=0.1057 DE=0.1050
+  cnn_aug+hgb_d8: raw=0.1057 DE=0.1047
+  cnn_aug+lenet32: raw=0.1055 DE=0.1048
+  cnn_aug+gnn+vit128: raw=0.1062 DE=0.1051
+  cnn_aug+gnn+hgb_d8: raw=0.1058 DE=0.1049
+  cnn_aug+gnn+vit128+hgb_d8: raw=0.1059 DE=0.1051
