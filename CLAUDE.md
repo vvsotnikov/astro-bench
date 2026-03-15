@@ -132,6 +132,42 @@ These are suggestions, not requirements. You decide the approach.
 - **Scale matters**: With 5.5M training events, you can train large models. But start small and scale up.
 - **When you're stuck**: Re-read `challenge.md`. Re-read your journal. Look at your results.tsv for patterns. Try combining previous near-misses. Try a completely different architecture family. Think about what information the model is missing.
 
+## Artifact preservation
+
+**Your entire research trajectory is data for the paper.** Every experiment — including failures — must be preserved with full provenance. The paper analyzes *how* agents search for solutions, not just final results.
+
+### Never overwrite files
+
+- **NEVER edit a training script in place.** If you want to modify `train_v3.py`, copy it to `train_v4.py` and edit the copy. The original must remain unchanged.
+- **NEVER reuse filenames.** Every experiment gets a unique, sequentially numbered script: `train_v1.py`, `train_v2.py`, etc. Even small changes (hyperparameter tweaks, bug fixes) get a new version.
+- **Git commit after EVERY experiment** — whether it succeeded, failed, or crashed. The commit message should include the metric result. Failed experiments are valuable data.
+
+### Save all artifacts
+
+Every experiment must produce and preserve:
+
+1. **Training script** (`train_vN.py`) — immutable after creation
+2. **Log file** (`vN_run.log`) — full stdout/stderr
+3. **Model weights** (`model_vN.pt`) — `torch.save(model.state_dict(), ...)` for the best checkpoint
+4. **Probability outputs** (`probs_vN.npy`) — `np.save(...)` the softmax probabilities on the test set
+5. **Predictions** (`predictions_vN.npz`) — the final class predictions
+
+Name all artifacts with the same version number so they can be cross-referenced.
+
+### Commit discipline
+
+```bash
+# After EVERY experiment (success or failure):
+git add submissions/<run_tag>/train_vN.py submissions/<run_tag>/vN_run.log
+git add submissions/<run_tag>/model_vN.pt submissions/<run_tag>/probs_vN.npy  # if produced
+git commit -m "vN: <metric> — <one-line description>"
+
+# Examples:
+git commit -m "v3: 0.1075 — CNN+Attn+MLP with spatial features, seed=7"
+git commit -m "v4: crash — GNN OOM at batch_size=4096, reduced to 1024 in v5"
+git commit -m "v5: 0.1069 — GNN with batch_size=1024, 200K train subsample"
+```
+
 ## Rules
 
 - Do NOT modify `verify.py`, `download_data.py`, or `challenge.md`.
@@ -140,7 +176,8 @@ These are suggestions, not requirements. You decide the approach.
 - Do NOT pause to ask if you should continue. Work autonomously until stopped.
 - ALWAYS redirect training output to log files. Do NOT let output flood your context.
 - ALWAYS log results to `results.tsv` and update `journal.md` after every experiment.
-- ALWAYS commit code that improves the metric. Never commit code that doesn't.
+- ALWAYS commit after every experiment, whether it improved the metric or not.
+- ALWAYS save model weights (`.pt`) and test probabilities (`.npy`) for every experiment.
 - Log everything. Your results.tsv, journal.md, and README.md are part of the submission.
 - **One GPU experiment at a time.** Do NOT launch multiple training runs in parallel. Wait for one to finish before starting the next. Parallel GPU jobs cause OOM crashes and GPU contention.
 - **Try at least 3 configurations before discarding an approach.** Don't try something once, see it underperform, and move on. Vary hyperparameters (learning rate, batch size, epochs), loss functions, preprocessing, and architecture details. An approach isn't dead until you've given it a fair shot.
