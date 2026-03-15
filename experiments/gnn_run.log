@@ -1,0 +1,26 @@
+Loading data...
+  383547 events after cuts
+Train: 200000, Val: 80545, Test: 34519
+  Building graphs for 200000 events...
+    50000/200000
+    100000/200000
+    150000/200000
+  Graphs built.
+  Building graphs for 80545 events...
+    50000/80545
+  Graphs built.
+  Building graphs for 34519 events...
+  Graphs built.
+Params: 76,805
+Ep 1: acc=0.1835 fe=0.3200 [359s]
+Ep 11: acc=0.4987 fe=0.1094 [428s]
+Ep 21: acc=0.5027 fe=0.1080 [498s]
+Ep 31: acc=0.5069 fe=0.1069 [568s]
+Ep 41: acc=0.5037 fe=0.1088 [639s]
+Ep 51: acc=0.4979 fe=0.1092 [711s]
+Ep 61: acc=0.5042 fe=0.1077 [782s]
+Ep 71: acc=0.5060 fe=0.1073 [853s]
+Ep 80: acc=0.5053 fe=0.1074 [918s]
+
+Final: acc=0.5053 fe=0.1074
+Time: 15.3 min

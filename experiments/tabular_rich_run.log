@@ -1,0 +1,20 @@
+Loading and splitting data...
+Train: 268483, Val: 80545, Test: 34519
+Extracting matrix features...
+Matrix features: 28
+Reco features: 26
+Total features: 54
+
+HGB d=8 lr=0.03...
+  acc=0.5053 fe=0.1073 [21s]
+
+HGB d=10 lr=0.05...
+  acc=0.5029 fe=0.1078 [15s]
+
+HGB d=6 lr=0.05 big...
+  acc=0.5029 fe=0.1079 [18s]
+
+RF 1000...
+  acc=0.5007 fe=0.1083 [92s]
+
+Total time: 5.5 min
