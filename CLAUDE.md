@@ -132,7 +132,7 @@ This saves `probs_v3_gnn.npy`, `predictions_v3_gnn.npz`, `model_v3_gnn.pt`, and 
 
 ### Timeout
 
-Each experiment should complete within **1 hour**. If a run exceeds this, kill it and treat as a crash. Start with quick experiments (minutes) and only scale up training time when you have a promising architecture.
+Each experiment should complete within **1 day**. If a run exceeds this, kill it and treat as a crash. Start with quick experiments (minutes) and only scale up training time when you have a promising architecture.
 
 ### Simplicity criterion
 
