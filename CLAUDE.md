@@ -110,6 +110,26 @@ Write in it after every experiment:
 
 Re-read it at the start of every experiment cycle. This is how you build on your own work instead of going in circles.
 
+### Training script template
+
+Every training script should end by calling `eval_utils.evaluate_and_save()`. This handles evaluation, DE bias optimization, and artifact saving automatically:
+
+```python
+# At the end of your training script:
+from eval_utils import evaluate_and_save
+
+evaluate_and_save(
+    test_probs=probs,           # (N, 5) softmax probabilities on test set
+    test_labels=labels,         # (N,) true labels (0-4)
+    model=model,                # torch model
+    experiment_name="v3_gnn",   # unique name (matches filename train_v3_gnn.py)
+    description="GNN 3-layer MP, 77K params, seed=42",
+    out_dir="submissions/<run_tag>",
+)
+```
+
+This saves `probs_v3_gnn.npy`, `predictions_v3_gnn.npz`, `model_v3_gnn.pt`, and appends to `results.tsv`. No manual logging needed.
+
 ### Timeout
 
 Each experiment should complete within **1 hour**. If a run exceeds this, kill it and treat as a crash. Start with quick experiments (minutes) and only scale up training time when you have a promising architecture.
