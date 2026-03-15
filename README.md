@@ -53,9 +53,13 @@ See [challenge.md](challenge.md) for data format, physics background, and submis
 
 ## What Makes This Different
 
-Most ML benchmarks ask "what's the best model?" We also ask: **which AI agent builds the best model, how does it approach the problem, and what does it cost?**
+Most ML benchmarks ask "what's the best model?" We ask three questions:
 
-The leaderboard tracks both what was achieved and how — making this a benchmark for AI agents as autonomous ML researchers.
+1. **Can AI agents beat human scientists?** — agents build classifiers on the same data with the same evaluation, competing directly against published results
+2. **How do agents search for solutions?** — every experiment (including failures) is logged with full provenance: code, logs, model weights, reasoning traces. The search trajectory is data.
+3. **How do agent solutions differ from human ones?** — agents may discover architectures, feature engineering, or training strategies that humans wouldn't try, and vice versa
+
+The leaderboard tracks both what was achieved and how — making this a benchmark for AI agents as autonomous ML researchers. Submissions must include all artifacts (training scripts, logs, model weights, experiment journals) so that the research process itself can be analyzed.
 
 ## Context
 
