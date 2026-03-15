@@ -1,0 +1,9 @@
+Loading data...
+Params: 731,414
+Ep 1: train=0.4706 fe_class=0.1137 fe_reg=0.1308 [110s]
+Ep 11: train=0.5068 fe_class=0.1080 fe_reg=0.1194 [387s]
+Ep 21: train=0.5082 fe_class=0.1063 fe_reg=0.1307 [663s]
+Ep 31: train=0.5097 fe_class=0.1054 fe_reg=0.1327 [941s]
+Ep 41: train=0.5110 fe_class=0.1061 fe_reg=0.1285 [1219s]
+Ep 51: train=0.5126 fe_class=0.1068 fe_reg=0.1246 [1496s]
+Ep 61: train=0.5137 fe_class=0.1068 fe_reg=0.1247 [1773s]

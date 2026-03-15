@@ -1,0 +1,16 @@
+Loading data...
+Params: 731,414
+Ep 1: train=0.4767 fe=0.1176 [110s]
+Ep 11: train=0.5064 fe=0.1085 [388s]
+Ep 21: train=0.5091 fe=0.1061 [664s]
+Ep 31: train=0.5104 fe=0.1055 [942s]
+Ep 41: train=0.5115 fe=0.1060 [1219s]
+Ep 51: train=0.5119 fe=0.1071 [1496s]
+Ep 61: train=0.5141 fe=0.1066 [1774s]
+Ep 71: train=0.5141 fe=0.1056 [2052s]
+Ep 80: train=0.5141 fe=0.1061 [2303s]
+
+============================================================
+  v8_multitask: MultiTask(class+energy) + CNN + log1p + aug
+  Raw: acc=0.5092  frac_err=0.1061
+  Running DE bias optimization...
