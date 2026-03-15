@@ -143,7 +143,7 @@ def evaluate_and_save(
             seed=42,
             maxiter=500,
             tol=1e-8,
-            polish=True,
+            polish=False,  # polish=True causes Nelder-Mead to hang on some models
             popsize=25,
         )
         de_preds = (log_probs + res.x).argmax(1)
