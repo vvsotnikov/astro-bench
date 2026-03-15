@@ -1,0 +1,11 @@
+Loading data and model...
+Without TTA: fe=0.5895
+
+============================================================
+  v3_tta: CNN+Attn+MLP log1p + aug + TTA(8x)
+  Raw: acc=0.5109  frac_err=0.1057
+  Running DE bias optimization...
+  DE:  frac_err=0.1050  biases=[-0.1279, -0.2004, -0.3253, -0.3884, -0.4894]  [1567s]
+  BEST: 0.1050
+============================================================
+Time: 28.4 min

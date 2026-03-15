@@ -20,3 +20,5 @@
   cnn_aug+gnn+vit128: raw=0.1062 DE=0.1051
   cnn_aug+gnn+hgb_d8: raw=0.1058 DE=0.1049
   cnn_aug+gnn+vit128+hgb_d8: raw=0.1059 DE=0.1051
+  cnn_aug+gnn+vit128+hgb_d8+lenet32: raw=0.1059 DE=0.1050
+  gnn+vit128: raw=0.1068 DE=0.1056

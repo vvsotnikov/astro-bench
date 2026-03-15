@@ -2,3 +2,19 @@ Loading data...
 Params: 731,285
 Ep 1: train=0.4771 val_loss=1.1970 [108s]
 Ep 11: train=0.5071 val_loss=1.1726 [371s]
+Ep 21: train=0.5086 val_loss=1.1523 [634s]
+Ep 31: train=0.5097 val_loss=1.1496 [898s]
+Ep 41: train=0.5106 val_loss=1.1495 [1163s]
+Ep 51: train=0.5131 val_loss=1.1484 [1428s]
+Ep 61: train=0.5139 val_loss=1.1468 [1695s]
+Ep 71: train=0.5147 val_loss=1.1470 [1969s]
+Ep 80: train=0.5142 val_loss=1.1468 [2213s]
+
+Running TTA (8 augmentations)...
+Without TTA: fe=0.1058
+With TTA (8x): fe=0.1057
+
+============================================================
+  v3_tta: CNN+Attn+MLP log1p + aug + TTA(8x)
+  Raw: acc=0.5109  frac_err=0.1057
+  Running DE bias optimization...
