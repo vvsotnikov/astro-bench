@@ -179,20 +179,60 @@ All experiments use the matched data pipeline. Probs saved as .npy files.
 
 ---
 
+## Phase 4: Optimization Techniques (VALID)
+
+### train_v1_log1p.py — log1p Matrix Preprocessing
+- Same CNN+Attn+MLP + cutout/noise augmentation
+- Matrices transformed with log1p to compress dynamic range (raw electron ~100-5000 → log1p ~4.6-8.5)
+- **Result: 0.1056 raw, 0.1050 DE**
+- Slightly worse than raw matrices (0.1052/0.1047) — the CNN already handles raw values well
+- Artifacts: model_v1_log1p.pt, probs_v1_log1p.npy
+
+### train_v2_sam.py — SAM Optimizer (NEW BEST)
+- SAM (Sharpness-Aware Minimization) replaces AdamW
+- SAM does 2 forward/backward passes per step: perturb → compute gradient at perturbed point → step
+- Uses log1p matrices + cutout/noise augmentation
+- **Result: 0.1055 raw, 0.1045 DE** ← NEW BEST
+- Key insight: SAM's raw accuracy is similar to AdamW (51.34% vs 51.12%) but DE extracts more from it
+- SAM finds flatter minima → the confusion matrix is more "correctable" by bias optimization
+- Artifacts: model_v2_sam.pt, probs_v2_sam.npy
+- Training time: 68 min (2x slower than AdamW due to double forward pass)
+
+### train_v3_tta.py — Test-Time Augmentation (IN PROGRESS)
+- Same training as v1 (log1p + AdamW + augmentation)
+- At test time: average predictions over 8 augmented versions (4 rotations × 2 flips)
+- Status: training complete, TTA inference + DE running
+
+### Ideas not yet tried
+4. Knowledge distillation (ensemble → student)
+5. Focal loss (focus on hard proton-helium confusion)
+6. Cross-attention fusion (instead of late concatenation)
+7. SWA (Stochastic Weight Averaging)
+8. Physics-informed features (lateral distribution function fits)
+9. Contrastive pre-training (SimCLR)
+10. Multi-task learning (class + energy)
+11. Regression on log(A) (ordinal mass structure)
+12. Adversarial training
+
+---
+
 ## Summary of All Valid Results
 
 | Rank | Architecture | Params | Raw FE | DE FE | Script |
 |---|---|---|---|---|---|
-| 1 | CNN+Attn+MLP + aug (s2026) | 731K | 0.1052 | **0.1047** | exp_cnn_augmented.py |
-| 2 | CNN+Attn+MLP (s7) | 731K | 0.1055 | 0.1048 | beat_sota.py |
-| 3 | CNN+Attn+MLP (s123) | 731K | 0.1056 | 0.1051 | beat_sota.py |
-| 4 | CNN+Attn+MLP (s42) | 731K | 0.1059 | 0.1051 | beat_sota.py |
-| 5 | GNN (3-layer MP) | 77K | 0.1069 | 0.1058 | exp_gnn.py |
-| 6 | Enhanced LeNet-16 | 80K | 0.1069 | — | exp_lenet_plus.py |
-| 7 | ViT-128-4 | 567K | 0.1067 | 0.1064 | exp_vit.py |
-| 8 | Enhanced LeNet-32 | 139K | 0.1060 | — | exp_lenet_plus.py |
-| 9 | ViT-64-6 | 226K | 0.1072 | — | exp_vit.py |
-| 10 | HGB (tabular, rich feats) | — | 0.1073 | pending | exp_tabular_rich.py |
+| 1 | **CNN+Attn+MLP + SAM + aug** | 731K | 0.1055 | **0.1045** | train_v2_sam.py |
+| 2 | CNN+Attn+MLP + aug (s2026) | 731K | 0.1052 | 0.1047 | exp_cnn_augmented.py |
+| 3 | CNN+Attn+MLP (s7) | 731K | 0.1055 | 0.1048 | beat_sota.py |
+| 4 | CNN+Attn+MLP + log1p | 731K | 0.1056 | 0.1050 | train_v1_log1p.py |
+| 5 | CNN+Attn+MLP (s123) | 731K | 0.1056 | 0.1051 | beat_sota.py |
+| 6 | CNN+Attn+MLP (s42) | 731K | 0.1059 | 0.1051 | beat_sota.py |
+| 7 | Enhanced LeNet-32 | 139K | 0.1060 | 0.1056 | exp_lenet_plus.py |
+| 8 | GNN (3-layer MP) | 77K | 0.1069 | 0.1058 | exp_gnn.py |
+| 9 | ViT-128-4 | 567K | 0.1067 | 0.1064 | exp_vit.py |
+| 10 | Enhanced LeNet-16 | 80K | 0.1069 | — | exp_lenet_plus.py |
+| 11 | HGB (tabular, rich feats) | — | 0.1073 | 0.1066 | exp_tabular_rich.py |
+| 12 | ViT-64-6 | 226K | 0.1072 | — | exp_vit.py |
+| 13 | CNN+Attn+EPOS | 731K | 0.1063 | — | beat_sota_v2.py |
 | ref | Published LeNet (repro) | 36.6K | 0.1079 | — | reproduce_sota.py |
 | ref | Published LeNet (paper) | 36.6K | 0.107 | — | JINST 2024 |
 
@@ -203,3 +243,5 @@ All experiments use the matched data pipeline. Probs saved as .npy files.
 4. **Wrong data pipeline**: Spent hours optimizing on invalid data before realizing the comparison was unfair.
 5. **DE is too slow**: Each DE optimization takes 1-2 hours. Should use Nelder-Mead for screening, DE only for final result.
 6. **Sleep-based polling**: Wasted time with `sleep 600 && check` pattern instead of proper background monitoring.
+7. **eval_utils.py**: Created standardized evaluation utility after losing artifacts. All future experiments use it.
+8. **SAM insight**: Raw accuracy doesn't fully predict DE-optimized fraction error. SAM's flatter loss landscape makes the confusion matrix more amenable to post-hoc correction.
