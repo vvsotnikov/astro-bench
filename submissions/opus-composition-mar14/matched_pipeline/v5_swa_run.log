@@ -1,0 +1,24 @@
+Loading data...
+Params: 731,285
+Ep 1: train=0.4771 fe=0.1211 swa_n=0 [113s]
+Ep 11: train=0.5066 fe=0.1061 swa_n=0 [396s]
+Ep 21: train=0.5089 fe=0.1093 swa_n=0 [668s]
+Ep 31: train=0.5102 fe=0.1057 swa_n=0 [943s]
+Ep 41: train=0.5122 fe=0.1049 swa_n=1 [1218s]
+Ep 51: train=0.5130 fe=0.1054 swa_n=11 [1485s]
+Ep 60: train=0.5135 fe=0.1056 swa_n=20 [1733s]
+
+Regular model:
+  fe=0.1056
+SWA model (averaged 20 checkpoints from epoch 41):
+  Updating BN statistics...
+  fe=0.1057
+
+============================================================
+  v5_swa: CNN+Attn+MLP log1p+aug (SWA didn't help: 0.1057 vs 0.1056)
+  Raw: acc=0.5114  frac_err=0.1056
+  Running DE bias optimization...
+  DE:  frac_err=0.1046  biases=[-0.0737, -0.1613, -0.2878, -0.3816, -0.4879]  [1000s]
+  BEST: 0.1046
+============================================================
+Total: 46.0 min

@@ -1,0 +1,23 @@
+Loading data...
+Loading teacher model (v2_sam)...
+Generating teacher probs for training data...
+Teacher probs: torch.Size([268483, 5])
+Student params: 731,285
+Ep 1: train=0.4788 fe=0.1191 [112s]
+Ep 11: train=0.5076 fe=0.1065 [387s]
+Ep 21: train=0.5094 fe=0.1074 [662s]
+Ep 31: train=0.5101 fe=0.1054 [937s]
+Ep 41: train=0.5122 fe=0.1071 [1213s]
+Ep 51: train=0.5132 fe=0.1060 [1498s]
+Ep 61: train=0.5145 fe=0.1069 [1787s]
+Ep 71: train=0.5150 fe=0.1059 [2075s]
+Ep 80: train=0.5165 fe=0.1059 [2327s]
+
+============================================================
+  v6_distill: KD from v2_sam teacher, T=3.0, alpha=0.7, seed=2026
+  Raw: acc=0.5120  frac_err=0.1054
+  Running DE bias optimization...
+  DE:  frac_err=0.1047  biases=[0.1723, 0.1363, 0.1015, 0.0954, 0.0724]  [996s]
+  BEST: 0.1047
+============================================================
+Total: 55.4 min

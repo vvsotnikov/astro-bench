@@ -1,0 +1,37 @@
+Loading data...
+Params: 731,285
+gamma=1.0 Ep 1: train=0.4713 fe=0.1185 [128s]
+gamma=1.0 Ep 11: train=0.5052 fe=0.1069 [535s]
+gamma=1.0 Ep 21: train=0.5071 fe=0.1065 [943s]
+gamma=1.0 Ep 31: train=0.5073 fe=0.1096 [1352s]
+gamma=1.0 Ep 41: train=0.5088 fe=0.1053 [1759s]
+gamma=1.0 Ep 51: train=0.5109 fe=0.1062 [2155s]
+gamma=1.0 Ep 61: train=0.5101 fe=0.1063 [2549s]
+gamma=1.0 Ep 71: train=0.5110 fe=0.1065 [2942s]
+gamma=1.0 Ep 80: train=0.5114 fe=0.1059 [3295s]
+
+============================================================
+  v4_focal_g1: CNN+Attn+MLP log1p+SAM+focal(gamma=1.0)+aug
+  Raw: acc=0.5091  frac_err=0.1063
+  Running DE bias optimization...
+  DE:  frac_err=0.1046  biases=[0.4985, 0.3921, 0.2347, 0.1239, -0.0298]  [1231s]
+  BEST: 0.1046
+============================================================
+gamma=2.0 Ep 1: train=0.4646 fe=0.1153 [4568s]
+gamma=2.0 Ep 11: train=0.5008 fe=0.1065 [4966s]
+gamma=2.0 Ep 21: train=0.5034 fe=0.1066 [5362s]
+gamma=2.0 Ep 31: train=0.5037 fe=0.1110 [5757s]
+gamma=2.0 Ep 41: train=0.5049 fe=0.1057 [6152s]
+gamma=2.0 Ep 51: train=0.5063 fe=0.1061 [6547s]
+gamma=2.0 Ep 61: train=0.5069 fe=0.1074 [6941s]
+gamma=2.0 Ep 71: train=0.5072 fe=0.1076 [7335s]
+gamma=2.0 Ep 80: train=0.5075 fe=0.1066 [7703s]
+
+============================================================
+  v4_focal_g2: CNN+Attn+MLP log1p+SAM+focal(gamma=2.0)+aug
+  Raw: acc=0.5080  frac_err=0.1066
+  Running DE bias optimization...
+  DE:  frac_err=0.1047  biases=[0.0387, -0.0394, -0.109, -0.1455, -0.2248]  [738s]
+  BEST: 0.1047
+============================================================
+Total: 140.7 min
