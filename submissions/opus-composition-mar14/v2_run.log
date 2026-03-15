@@ -1,0 +1,65 @@
+Loading train data as float32 tensors...
+  train: 250000/5561523
+  train: 1250000/5561523
+  train: 2250000/5561523
+  train: 3250000/5561523
+  train: 4250000/5561523
+  train: 5250000/5561523
+  train: mat=torch.Size([5561523, 2, 16, 16]) (11.4GB)
+Loading test data as float32 tensors...
+  test: 119027/119027
+  test: mat=torch.Size([119027, 2, 16, 16]) (0.2GB)
+Params: 1,048,981
+
+============================================================
+Phase 1: Full data training (20 epochs)
+============================================================
+Ep 1/20: train=0.3588 test=0.4929 lr=0.000994 [189s]
+  >>> Best: 0.4929
+Ep 2/20: train=0.3633 test=0.4961 lr=0.000976 [323s]
+  >>> Best: 0.4961
+Ep 3/20: train=0.3641 test=0.5041 lr=0.000946 [459s]
+  >>> Best: 0.5041
+Ep 4/20: train=0.3646 test=0.4914 lr=0.000905 [594s]
+Ep 5/20: train=0.3652 test=0.5028 lr=0.000854 [731s]
+Ep 6/20: train=0.3656 test=0.5049 lr=0.000794 [869s]
+  >>> Best: 0.5049
+Ep 7/20: train=0.3659 test=0.4991 lr=0.000727 [1008s]
+Ep 8/20: train=0.3659 test=0.4981 lr=0.000655 [1146s]
+Ep 9/20: train=0.3665 test=0.4884 lr=0.000578 [1284s]
+Ep 10/20: train=0.3667 test=0.5063 lr=0.000500 [1423s]
+  >>> Best: 0.5063
+Ep 11/20: train=0.3669 test=0.5031 lr=0.000422 [1561s]
+Ep 12/20: train=0.3672 test=0.5057 lr=0.000345 [1699s]
+Ep 13/20: train=0.3676 test=0.5076 lr=0.000273 [1838s]
+  >>> Best: 0.5076
+Ep 14/20: train=0.3677 test=0.5073 lr=0.000206 [1976s]
+Ep 15/20: train=0.3679 test=0.5066 lr=0.000146 [2118s]
+Ep 16/20: train=0.3679 test=0.5073 lr=0.000095 [2256s]
+Ep 17/20: train=0.3683 test=0.5079 lr=0.000054 [2395s]
+  >>> Best: 0.5079
+Ep 18/20: train=0.3683 test=0.5074 lr=0.000024 [2531s]
+Ep 19/20: train=0.3684 test=0.5081 lr=0.000006 [2666s]
+  >>> Best: 0.5081
+Ep 20/20: train=0.3683 test=0.5081 lr=0.000000 [2803s]
+Phase 1 best: 0.5081
+
+============================================================
+Phase 2: Fine-tuning on quality-cut events (10 epochs)
+============================================================
+Quality-cut events: 475977 (8.6%)
+FT 1/10: train=0.4841 test=0.5020 [2815s]
+FT 2/10: train=0.5024 test=0.5057 [2828s]
+FT 3/10: train=0.5043 test=0.5064 [2841s]
+FT 4/10: train=0.5052 test=0.5063 [2853s]
+FT 5/10: train=0.5058 test=0.5075 [2866s]
+FT 6/10: train=0.5056 test=0.5063 [2879s]
+FT 7/10: train=0.5058 test=0.5080 [2891s]
+FT 8/10: train=0.5063 test=0.5079 [2904s]
+FT 9/10: train=0.5068 test=0.5076 [2916s]
+FT 10/10: train=0.5065 test=0.5071 [2929s]
+
+Done in 48.8m. Best acc: 0.5081
+---
+metric: 0.5081
+description: CNN+Attn+MLP 18feats, augment, phase1(20ep)+phase2(10ep QC finetune)

@@ -1,0 +1,35 @@
+Device: cuda
+Creating val split...
+  FeatureDataset (train): 5561523
+  FeatureDataset (val): 47597
+Parameters: 443,961
+Epoch 1/60: train=0.3095 14.0s
+Epoch 5/60: loss=1.5019 train=0.3113 val=0.4621 13.1s
+  -> Best val (0.4621)
+Epoch 10/60: loss=1.5013 train=0.3116 val=0.4622 17.9s
+  -> Best val (0.4622)
+Epoch 11/60: train=0.3116 17.0s
+Epoch 15/60: loss=1.5009 train=0.3117 val=0.4613 12.9s
+Epoch 20/60: loss=1.5006 train=0.3120 val=0.4619 13.8s
+Epoch 21/60: train=0.3119 14.9s
+Epoch 25/60: loss=1.5004 train=0.3122 val=0.4631 12.5s
+  -> Best val (0.4631)
+Epoch 30/60: loss=1.5003 train=0.3119 val=0.4630 13.4s
+Epoch 31/60: train=0.3119 13.3s
+Epoch 35/60: loss=1.5001 train=0.3121 val=0.4639 14.2s
+  -> Best val (0.4639)
+Epoch 40/60: loss=1.5000 train=0.3122 val=0.4637 13.3s
+Epoch 41/60: train=0.3122 13.8s
+Epoch 45/60: loss=1.4999 train=0.3121 val=0.4636 13.4s
+Epoch 50/60: loss=1.4998 train=0.3121 val=0.4643 12.2s
+  -> Best val (0.4643)
+Epoch 51/60: train=0.3123 12.9s
+Epoch 55/60: loss=1.4997 train=0.3124 val=0.4634 13.4s
+Epoch 60/60: loss=1.4997 train=0.3122 val=0.4636 13.4s
+
+Best val: 0.4643
+
+---
+metric: 0.4643
+experiment: v19_feature_mlp
+description: Deep MLP on 25 engineered features only, 60ep cosine

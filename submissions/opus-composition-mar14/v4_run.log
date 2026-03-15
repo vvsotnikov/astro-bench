@@ -1,0 +1,55 @@
+Loading train data...
+  train matrices: 250000/5561523
+  train matrices: 1250000/5561523
+  train matrices: 2250000/5561523
+  train matrices: 3250000/5561523
+  train matrices: 4250000/5561523
+  train matrices: 5250000/5561523
+  Extracting spatial features...
+  Spatial features: (5561523, 16)
+  train: mat=torch.Size([5561523, 2, 16, 16]), feat=torch.Size([5561523, 29])
+Loading test data...
+  test matrices: 119027/119027
+  Extracting spatial features...
+  Spatial features: (119027, 16)
+  test: mat=torch.Size([119027, 2, 16, 16]), feat=torch.Size([119027, 29])
+Scalar features: 13, Spatial features: 16
+Params: 1,088,661
+Ep 1/25: train=0.3599 test=0.4598 lr=0.000996 [367s]
+  >>> Best: 0.4598
+Ep 2/25: train=0.3640 test=0.4895 lr=0.000984 [503s]
+  >>> Best: 0.4895
+Ep 3/25: train=0.3648 test=0.4983 lr=0.000965 [640s]
+  >>> Best: 0.4983
+Ep 4/25: train=0.3655 test=0.5051 lr=0.000938 [775s]
+  >>> Best: 0.5051
+Ep 5/25: train=0.3661 test=0.5056 lr=0.000905 [911s]
+  >>> Best: 0.5056
+Ep 6/25: train=0.3664 test=0.5062 lr=0.000864 [1049s]
+  >>> Best: 0.5062
+Ep 7/25: train=0.3669 test=0.5025 lr=0.000819 [1207s]
+Ep 8/25: train=0.3672 test=0.5028 lr=0.000768 [1343s]
+Ep 9/25: train=0.3677 test=0.5037 lr=0.000713 [1479s]
+Ep 10/25: train=0.3682 test=0.4807 lr=0.000655 [1615s]
+Ep 11/25: train=0.3686 test=0.5001 lr=0.000594 [1751s]
+Ep 12/25: train=0.3691 test=0.5063 lr=0.000531 [1889s]
+  >>> Best: 0.5063
+Ep 13/25: train=0.3700 test=0.5047 lr=0.000469 [2024s]
+Ep 14/25: train=0.3706 test=0.4964 lr=0.000406 [2160s]
+Ep 15/25: train=0.3712 test=0.5050 lr=0.000345 [2295s]
+Ep 16/25: train=0.3723 test=0.5060 lr=0.000287 [2429s]
+Ep 17/25: train=0.3731 test=0.5079 lr=0.000232 [2564s]
+  >>> Best: 0.5079
+Ep 18/25: train=0.3738 test=0.5062 lr=0.000181 [2699s]
+Ep 19/25: train=0.3747 test=0.5063 lr=0.000136 [2835s]
+Ep 20/25: train=0.3753 test=0.5056 lr=0.000095 [2971s]
+Ep 21/25: train=0.3757 test=0.5066 lr=0.000062 [3109s]
+Ep 22/25: train=0.3764 test=0.5062 lr=0.000035 [3247s]
+Ep 23/25: train=0.3767 test=0.5061 lr=0.000016 [3382s]
+Ep 24/25: train=0.3769 test=0.5063 lr=0.000004 [3517s]
+Ep 25/25: train=0.3773 test=0.5067 lr=0.000000 [3651s]
+
+Done in 60.9m. Best acc: 0.5079
+---
+metric: 0.5079
+description: CNN+Attn + SpatialFeat MLP, 25ep, seed=7

@@ -1,0 +1,16 @@
+Device: cuda:0
+
+Loading data and computing statistics...
+Preparing train/val split...
+Training v39: Attention CNN with log1p transform on matrices...
+Epoch  1: loss=0.1104 val_surv@75=1.8010e-02
+Epoch  6: loss=0.0738 val_surv@75=1.5650e-02
+Epoch 11: loss=0.0711 val_surv@75=1.5516e-02
+Epoch 16: loss=0.0685 val_surv@75=1.5948e-02
+Epoch 21: loss=0.0648 val_surv@75=1.7073e-02
+Epoch 26: loss=0.0614 val_surv@75=1.7653e-02
+Running inference...
+
+---
+metric: 5.5496e-04
+description: log1p transform on matrices for sparse data handling

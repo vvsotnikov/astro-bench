@@ -1,0 +1,15 @@
+=== Individual models (raw) ===
+  cnn_aug: acc=0.5112 fe=0.1054
+  gnn: acc=0.5053 fe=0.1074
+  vit128: acc=0.5040 fe=0.1073
+  hgb_d8: acc=0.5053 fe=0.1073
+  lenet32: acc=0.5088 fe=0.1063
+
+=== Individual models (DE) ===
+  cnn_aug: DE=0.1047
+  gnn: DE=0.1058
+  vit128: DE=0.1064
+  hgb_d8: DE=0.1066
+  lenet32: DE=0.1056
+
+=== Cross-architecture ensembles (DE) ===

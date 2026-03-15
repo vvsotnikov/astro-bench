@@ -1,0 +1,47 @@
+Loading train matrices...
+  train: 250000/5561523
+  train: 1250000/5561523
+  train: 2250000/5561523
+  train: 3250000/5561523
+  train: 4250000/5561523
+  train: 5250000/5561523
+  train: mat=torch.Size([5561523, 2, 16, 16])
+Loading test matrices...
+  test: 119027/119027
+  test: mat=torch.Size([119027, 2, 16, 16])
+Params: 1,961,749
+Ep 1/25: train=0.3435 test=0.4649 lr=0.000996 [168s]
+  >>> Best: 0.4649
+Ep 2/25: train=0.3491 test=0.4818 lr=0.000984 [303s]
+  >>> Best: 0.4818
+Ep 3/25: train=0.3513 test=0.4707 lr=0.000965 [437s]
+Ep 4/25: train=0.3534 test=0.4854 lr=0.000938 [571s]
+  >>> Best: 0.4854
+Ep 5/25: train=0.3547 test=0.4773 lr=0.000905 [706s]
+Ep 6/25: train=0.3559 test=0.4321 lr=0.000864 [840s]
+Ep 7/25: train=0.3567 test=0.4893 lr=0.000819 [974s]
+  >>> Best: 0.4893
+Ep 8/25: train=0.3572 test=0.4795 lr=0.000768 [1108s]
+Ep 9/25: train=0.3579 test=0.4853 lr=0.000713 [1242s]
+Ep 10/25: train=0.3587 test=0.4799 lr=0.000655 [1376s]
+Ep 11/25: train=0.3595 test=0.4853 lr=0.000594 [1511s]
+Ep 12/25: train=0.3603 test=0.4883 lr=0.000531 [1645s]
+Ep 13/25: train=0.3612 test=0.4843 lr=0.000469 [1779s]
+Ep 14/25: train=0.3619 test=0.4853 lr=0.000406 [1913s]
+Ep 15/25: train=0.3632 test=0.4774 lr=0.000345 [2047s]
+Ep 16/25: train=0.3644 test=0.4805 lr=0.000287 [2181s]
+Ep 17/25: train=0.3657 test=0.4898 lr=0.000232 [2315s]
+  >>> Best: 0.4898
+Ep 18/25: train=0.3671 test=0.4870 lr=0.000181 [2449s]
+Ep 19/25: train=0.3685 test=0.4892 lr=0.000136 [2583s]
+Ep 20/25: train=0.3699 test=0.4861 lr=0.000095 [2717s]
+Ep 21/25: train=0.3712 test=0.4853 lr=0.000062 [2851s]
+Ep 22/25: train=0.3722 test=0.4878 lr=0.000035 [2985s]
+Ep 23/25: train=0.3731 test=0.4869 lr=0.000016 [3119s]
+Ep 24/25: train=0.3737 test=0.4850 lr=0.000004 [3253s]
+Ep 25/25: train=0.3739 test=0.4857 lr=0.000000 [3386s]
+
+Done in 56.4m. Best acc: 0.4898
+---
+metric: 0.4898
+description: Deep CNN only (8 layers, no features), seed=123

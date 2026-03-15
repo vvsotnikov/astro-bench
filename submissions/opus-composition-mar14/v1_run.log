@@ -1,0 +1,8 @@
+Test set: 119027 events
+Energy range: 14.27 - 18.00
+Loaded v8+v11 ensemble probs: (119027, 5)
+
+Raw v8+v11: 0.1080
+  per-class: ['0.0860', '0.1279', '0.1264', '0.1227', '0.0769']
+
+=== Global bias optimization ===

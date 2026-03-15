@@ -1,0 +1,93 @@
+Loaded models: ['v8', 'v11', 'v33', 'v22', 'v2', 'v4']
+
+=== Model agreement rates ===
+  v8 vs v11: 89.1%
+  v8 vs v33: 85.8%
+  v8 vs v22: 83.5%
+  v8 vs v2: 90.9%
+  v8 vs v4: 88.6%
+  v11 vs v33: 87.1%
+  v11 vs v22: 82.5%
+  v11 vs v2: 90.3%
+  v11 vs v4: 88.0%
+  v33 vs v22: 81.4%
+  v33 vs v2: 88.0%
+  v33 vs v4: 86.3%
+  v22 vs v2: 83.8%
+  v22 vs v4: 82.9%
+  v2 vs v4: 89.5%
+
+Testing 57 ensemble combinations...
+  v8+v11: raw=0.107983 bias=0.107950
+  v8+v33: raw=0.107354 bias=0.107344
+  v8+v22: raw=0.108085 bias=0.108064
+  v8+v2: raw=0.107844 bias=0.107811
+  v8+v4: raw=0.107569 bias=0.107538
+  v11+v33: raw=0.107416 bias=0.107395
+  v11+v22: raw=0.108177 bias=0.107502
+  v11+v2: raw=0.107871 bias=0.107849
+  v11+v4: raw=0.107682 bias=0.107629
+  v33+v22: raw=0.107596 bias=0.107587
+  v33+v2: raw=0.107228 bias=0.107192
+  v33+v4: raw=0.106879 bias=0.106863
+  v22+v2: raw=0.107875 bias=0.107844
+  v22+v4: raw=0.107656 bias=0.107560
+  v2+v4: raw=0.107399 bias=0.107341
+  v8+v11+v33: raw=0.107441 bias=0.107416
+  v8+v11+v22: raw=0.107995 bias=0.107983
+  v8+v11+v2: raw=0.107779 bias=0.107765
+  v8+v11+v4: raw=0.107688 bias=0.107674
+  v8+v33+v22: raw=0.107476 bias=0.107393
+  v8+v33+v2: raw=0.107327 bias=0.107305
+  v8+v33+v4: raw=0.107280 bias=0.107250
+  v8+v22+v2: raw=0.107790 bias=0.107719
+  v8+v22+v4: raw=0.107597 bias=0.107570
+  v8+v2+v4: raw=0.107499 bias=0.107482
+  v11+v33+v22: raw=0.107464 bias=0.107426
+  v11+v33+v2: raw=0.107311 bias=0.107304
+  v11+v33+v4: raw=0.107238 bias=0.107232
+  v11+v22+v2: raw=0.107773 bias=0.107742
+  v11+v22+v4: raw=0.107653 bias=0.107647
+  v11+v2+v4: raw=0.107545 bias=0.107517
+  v33+v22+v2: raw=0.107391 bias=0.107338
+  v33+v22+v4: raw=0.107288 bias=0.107281
+  v33+v2+v4: raw=0.107175 bias=0.107170
+  v22+v2+v4: raw=0.107476 bias=0.107467
+  v8+v11+v33+v22: raw=0.107576 bias=0.107536
+  v8+v11+v33+v2: raw=0.107469 bias=0.107414
+  v8+v11+v33+v4: raw=0.107256 bias=0.107223
+  v8+v11+v22+v2: raw=0.107752 bias=0.107734
+  v8+v11+v22+v4: raw=0.107656 bias=0.107606
+  v8+v11+v2+v4: raw=0.107681 bias=0.107642
+  v8+v33+v22+v2: raw=0.107538 bias=0.107485
+  v8+v33+v22+v4: raw=0.107260 bias=0.107239
+  v8+v33+v2+v4: raw=0.107359 bias=0.107253
+  v8+v22+v2+v4: raw=0.107598 bias=0.107534
+  v11+v33+v22+v2: raw=0.107398 bias=0.107364
+  v11+v33+v22+v4: raw=0.107307 bias=0.107290
+  v11+v33+v2+v4: raw=0.107256 bias=0.107240
+  v11+v22+v2+v4: raw=0.107512 bias=0.107504
+  v33+v22+v2+v4: raw=0.107339 bias=0.107334
+  v8+v11+v33+v22+v2: raw=0.107524 bias=0.107510
+  v8+v11+v33+v22+v4: raw=0.107301 bias=0.107281
+  v8+v11+v33+v2+v4: raw=0.107366 bias=0.107360
+  v8+v11+v22+v2+v4: raw=0.107522 bias=0.107503
+  v8+v33+v22+v2+v4: raw=0.107344 bias=0.107276
+  v11+v33+v22+v2+v4: raw=0.107333 bias=0.107321
+  v8+v11+v33+v22+v2+v4: raw=0.107387 bias=0.107342
+
+============================================================
+BEST ensemble: v33+v4 = 0.106863
+
+=== Energy-conditional optimization on best ensemble ===
+Energy-conditional: 0.106863
+
+=== Weighted ensemble optimization ===
+Weighted: 0.106863 weights=[0.5, 0.5]
+
+============================================================
+FINAL BEST: v33+v4 = 0.106863
+Total time: 2.4 min
+---
+metric: 0.106863
+description: v33+v4 ensemble + bias opt

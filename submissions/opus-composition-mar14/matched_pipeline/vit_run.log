@@ -1,0 +1,28 @@
+Loading data...
+  Loaded 383547 events
+
+ViT-128-4: 566,661 params
+  Ep 1: acc=0.1971 fe=0.2153 val_loss=1.6292 [137s]
+  Ep 11: acc=0.4971 fe=0.1109 val_loss=1.1477 [318s]
+  Ep 21: acc=0.4979 fe=0.1083 val_loss=1.1421 [498s]
+  Ep 31: acc=0.5024 fe=0.1080 val_loss=1.1416 [679s]
+  Ep 41: acc=0.5030 fe=0.1075 val_loss=1.1357 [860s]
+  Ep 51: acc=0.5018 fe=0.1077 val_loss=1.1349 [1040s]
+  Ep 61: acc=0.5072 fe=0.1067 val_loss=1.1349 [1220s]
+  Ep 71: acc=0.5031 fe=0.1074 val_loss=1.1323 [1401s]
+  Ep 80: acc=0.5040 fe=0.1073 val_loss=1.1322 [1563s]
+  Final: acc=0.5040 fe=0.1073
+
+ViT-64-6: 225,989 params
+  Ep 1: acc=0.1971 fe=0.2494 val_loss=1.6168 [1583s]
+  Ep 11: acc=0.4972 fe=0.1089 val_loss=1.1450 [1768s]
+  Ep 21: acc=0.4995 fe=0.1095 val_loss=1.1399 [1954s]
+  Ep 31: acc=0.5016 fe=0.1085 val_loss=1.1361 [2139s]
+  Ep 41: acc=0.5060 fe=0.1073 val_loss=1.1372 [2324s]
+  Ep 51: acc=0.5021 fe=0.1078 val_loss=1.1334 [2509s]
+  Ep 61: acc=0.5023 fe=0.1078 val_loss=1.1326 [2695s]
+  Ep 71: acc=0.5033 fe=0.1073 val_loss=1.1317 [2881s]
+  Ep 80: acc=0.5039 fe=0.1072 val_loss=1.1316 [3048s]
+  Final: acc=0.5039 fe=0.1072
+
+Total: 50.8 min

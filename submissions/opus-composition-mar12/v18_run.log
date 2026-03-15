@@ -1,0 +1,38 @@
+Device: cuda
+Creating val split...
+  Dataset (train): 5561523 samples
+  Dataset (val): 47597 samples
+Parameters: 527,272
+Epoch 1/60: loss=1.3985 train=0.3590 44.5s
+Epoch 5/60: loss=1.3879 train=0.3649 val=0.4999 43.6s
+  -> Best val (0.4999)
+Epoch 10/60: loss=1.3847 train=0.3664 val=0.5038 43.5s
+  -> Best val (0.5038)
+Epoch 11/60: loss=1.3842 train=0.3665 43.5s
+Epoch 15/60: loss=1.3822 train=0.3678 val=0.4960 43.7s
+Epoch 20/60: loss=1.3801 train=0.3687 val=0.4961 43.5s
+Epoch 21/60: loss=1.3797 train=0.3689 43.2s
+Epoch 25/60: loss=1.3778 train=0.3700 val=0.5016 44.0s
+Epoch 30/60: loss=1.3751 train=0.3717 val=0.5079 43.3s
+  -> Best val (0.5079)
+Epoch 31/60: loss=1.3745 train=0.3720 43.3s
+Epoch 35/60: loss=1.3720 train=0.3733 val=0.5084 43.9s
+  -> Best val (0.5084)
+Epoch 40/60: loss=1.3686 train=0.3753 val=0.5110 44.1s
+  -> Best val (0.5110)
+Epoch 41/60: loss=1.3679 train=0.3757 44.0s
+Epoch 45/60: loss=1.3652 train=0.3769 val=0.5114 43.8s
+  -> Best val (0.5114)
+Epoch 50/60: loss=1.3627 train=0.3785 val=0.5140 43.8s
+  -> Best val (0.5140)
+Epoch 51/60: loss=1.3623 train=0.3787 44.2s
+Epoch 55/60: loss=1.3611 train=0.3795 val=0.5127 43.6s
+Epoch 60/60: loss=1.3605 train=0.3797 val=0.5137 43.1s
+
+Best val: 0.5140
+Saved predictions to /home/vladimir/cursor_projects/astro-agents/submissions/opus-composition-mar12/predictions.npz
+
+---
+metric: 0.5140
+experiment: v18_attn_cnn
+description: CNN + spatial attention + GAP, feature MLP, 60ep cosine

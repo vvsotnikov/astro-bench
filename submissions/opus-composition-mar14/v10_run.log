@@ -1,0 +1,50 @@
+Loaded v8b_s42
+Loaded v8b_s7
+Loaded v8b_s123
+Loaded v2
+Loaded v4
+Loaded v33_old
+
+Models: ['v8_old', 'v11_old', 'v8b_s42', 'v8b_s7', 'v8b_s123', 'v2', 'v4', 'v33_old']
+
+=== Individual model scores ===
+  v8_old: raw_fe=0.108010 acc=0.5075
+  v11_old: raw_fe=0.108427 acc=0.5070
+  v8b_s42: raw_fe=0.108300 acc=0.5071
+  v8b_s7: raw_fe=0.107135 acc=0.5072
+  v8b_s123: raw_fe=0.108272 acc=0.5070
+  v2: raw_fe=0.107848 acc=0.5081
+  v4: raw_fe=0.107494 acc=0.5079
+  v33_old: raw_fe=0.107418 acc=0.5055
+
+=== Agreement rates ===
+  v8_old vs v11_old: 89.1%
+  v8_old vs v8b_s42: 89.8%
+  v8_old vs v8b_s7: 88.7%
+  v8_old vs v8b_s123: 89.9%
+  v8_old vs v2: 90.9%
+  v8_old vs v4: 88.6%
+  v8_old vs v33_old: 85.8%
+  v11_old vs v8b_s42: 88.5%
+  v11_old vs v8b_s7: 86.9%
+  v11_old vs v8b_s123: 88.2%
+  v11_old vs v2: 90.3%
+  v11_old vs v4: 88.0%
+  v11_old vs v33_old: 87.1%
+  v8b_s42 vs v8b_s7: 89.1%
+  v8b_s42 vs v8b_s123: 89.7%
+  v8b_s42 vs v2: 91.1%
+  v8b_s42 vs v4: 88.5%
+  v8b_s42 vs v33_old: 86.7%
+  v8b_s7 vs v8b_s123: 88.8%
+  v8b_s7 vs v2: 89.7%
+  v8b_s7 vs v4: 88.5%
+  v8b_s7 vs v33_old: 87.1%
+  v8b_s123 vs v2: 90.3%
+  v8b_s123 vs v4: 88.2%
+  v8b_s123 vs v33_old: 85.9%
+  v2 vs v4: 89.5%
+  v2 vs v33_old: 88.0%
+  v4 vs v33_old: 86.3%
+
+=== Ensemble optimization (17 combos) ===

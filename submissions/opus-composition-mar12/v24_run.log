@@ -1,0 +1,30 @@
+Device: cuda
+Soft labels (sigma=0.7):
+  proton: [8.75227574e-01 1.23155924e-01 1.60593694e-03 1.05070715e-05
+ 5.77345327e-08]
+  helium: [9.67531617e-02 6.87592056e-01 2.00660645e-01 1.44306230e-02
+ 5.63514032e-04]
+  carbon: [0.00098483 0.15663414 0.536729   0.25799194 0.04766009]
+  silicon: [5.67840748e-06 9.92704729e-03 2.27361506e-01 4.73005139e-01
+ 2.89700629e-01]
+  iron: [3.87555027e-08 4.81495903e-04 5.21697229e-02 3.59834078e-01
+ 5.87514665e-01]
+Creating val split...
+  Dataset (train): 5561523 samples
+  Dataset (val): 47597 samples
+Parameters: 556,135
+Epoch 1/60: loss=0.8513 train=0.3429 42.1s
+Epoch 5/60: loss=0.8441 train=0.3475 val=0.4965 41.6s
+  -> Best val (0.4965)
+Epoch 10/60: loss=0.8418 train=0.3488 val=0.4943 41.5s
+Epoch 11/60: loss=0.8413 train=0.3490 41.7s
+Epoch 15/60: loss=0.8396 train=0.3499 val=0.4963 41.5s
+Epoch 20/60: loss=0.8377 train=0.3509 val=0.4986 41.8s
+  -> Best val (0.4986)
+Epoch 21/60: loss=0.8373 train=0.3510 41.4s
+Epoch 25/60: loss=0.8355 train=0.3518 val=0.4862 41.5s
+Epoch 30/60: loss=0.8331 train=0.3528 val=0.4986 41.9s
+  -> Best val (0.4986)
+Epoch 31/60: loss=0.8326 train=0.3530 41.8s
+Epoch 35/60: loss=0.8304 train=0.3538 val=0.4956 41.6s
+Epoch 40/60: loss=0.8276 train=0.3551 val=0.4984 41.6s

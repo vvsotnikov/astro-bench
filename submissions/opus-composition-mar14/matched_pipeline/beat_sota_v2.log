@@ -1,0 +1,35 @@
+Loading QGS data...
+  data/qgs_spectra_matrices.npz: 383547 events
+Loading EPOS data...
+  data/epos_spectra_matrices.npz: 199891 events
+Extracting features...
+Train: 468374 (QGS 268483 + EPOS 199891)
+Val: 80545, Test: 34519
+Class weights: [1.0, 1.1998666524887085, 1.4694311618804932, 1.6646034717559814, 1.8123457431793213]
+Model params: 731,285
+Ep   1/80: train=0.4667 val=0.4765 [170s]
+Ep  11/80: train=0.4973 val=0.5015 [475s]
+Ep  21/80: train=0.4998 val=0.5096 [781s]
+Ep  31/80: train=0.5013 val=0.5110 [1084s]
+Ep  41/80: train=0.5017 val=0.5089 [1383s]
+Ep  51/80: train=0.5024 val=0.5117 [1689s]
+Ep  61/80: train=0.5035 val=0.5094 [1994s]
+Ep  71/80: train=0.5044 val=0.5109 [2297s]
+Ep  80/80: train=0.5040 val=0.5105 [2561s]
+
+Test accuracy: 0.5106
+Raw fraction error: 0.1063
+Bias-optimized fraction error: 0.1049
+Biases: [0.0239, -0.0657, -0.2201, -0.282, -0.4814]
+
+Confusion matrix:
+         pr     he     ca     si     ir
+  pr  0.606  0.266  0.108  0.018  0.003
+  he  0.251  0.394  0.260  0.076  0.019
+  ca  0.034  0.222  0.413  0.243  0.088
+  si  0.001  0.030  0.228  0.401  0.339
+  ir  0.000  0.002  0.039  0.212  0.747
+
+SOTA (LeNet, QGS only): 0.1079
+>>> BEAT SOTA by 0.0030 <<<
+Total time: 57.7 min

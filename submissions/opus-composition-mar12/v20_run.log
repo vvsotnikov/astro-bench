@@ -1,0 +1,27 @@
+Loading data...
+Quality cut: 475977 events
+Train: 428380, Val: 47597
+Features: 32
+
+--- Config 1: {'max_iter': 500, 'max_depth': 6, 'learning_rate': 0.05, 'max_leaf_nodes': 63, 'min_samples_leaf': 50}
+  Train: 0.4776, Val: 0.4645, Time: 11.9s
+  -> New best val!
+
+--- Config 2: {'max_iter': 1000, 'max_depth': 8, 'learning_rate': 0.02, 'max_leaf_nodes': 127, 'min_samples_leaf': 20}
+  Train: 0.4892, Val: 0.4657, Time: 40.0s
+  -> New best val!
+
+--- Config 3: {'max_iter': 500, 'max_depth': 10, 'learning_rate': 0.05, 'max_leaf_nodes': 255, 'min_samples_leaf': 10}
+  Train: 0.5120, Val: 0.4626, Time: 25.0s
+
+--- Full data training (sampling 1M for speed)...
+  Full-data Val: 0.4642, Time: 17.8s
+
+Best val: 0.4657 (cfg2)
+Inference on test set...
+Predictions: {np.int8(0): np.int64(38775), np.int8(1): np.int64(23451), np.int8(2): np.int64(21099), np.int8(3): np.int64(17871), np.int8(4): np.int64(17831)}
+
+---
+metric: 0.4657
+experiment: v20_hgb
+description: HistGradientBoosting on 32 eng features, best of 4 configs (cfg2)

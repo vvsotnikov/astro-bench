@@ -1,0 +1,118 @@
+Loading train data...
+  train: 250000/5561523
+  train: 1250000/5561523
+  train: 2250000/5561523
+  train: 3250000/5561523
+  train: 4250000/5561523
+  train: 5250000/5561523
+  train: mat=torch.Size([5561523, 2, 16, 16])
+Loading test data...
+  test: 119027/119027
+  test: mat=torch.Size([119027, 2, 16, 16])
+
+============================================================
+Training seed=42
+============================================================
+  Seed 42 Ep 1/20: train=0.3592 test=0.4992 [136s]
+    >>> Best: 0.4992
+  Seed 42 Ep 2/20: train=0.3636 test=0.4859 [270s]
+  Seed 42 Ep 3/20: train=0.3642 test=0.5034 [405s]
+    >>> Best: 0.5034
+  Seed 42 Ep 4/20: train=0.3651 test=0.4850 [540s]
+  Seed 42 Ep 5/20: train=0.3656 test=0.5020 [675s]
+  Seed 42 Ep 6/20: train=0.3662 test=0.4958 [810s]
+  Seed 42 Ep 7/20: train=0.3664 test=0.4975 [945s]
+  Seed 42 Ep 8/20: train=0.3669 test=0.5043 [1080s]
+    >>> Best: 0.5043
+  Seed 42 Ep 9/20: train=0.3671 test=0.5003 [1214s]
+  Seed 42 Ep 10/20: train=0.3676 test=0.5012 [1350s]
+  Seed 42 Ep 11/20: train=0.3679 test=0.5008 [1484s]
+  Seed 42 Ep 12/20: train=0.3684 test=0.5063 [1620s]
+    >>> Best: 0.5063
+  Seed 42 Ep 13/20: train=0.3691 test=0.5051 [1755s]
+  Seed 42 Ep 14/20: train=0.3696 test=0.5070 [1889s]
+    >>> Best: 0.5070
+  Seed 42 Ep 15/20: train=0.3700 test=0.5061 [2024s]
+  Seed 42 Ep 16/20: train=0.3705 test=0.5063 [2159s]
+  Seed 42 Ep 17/20: train=0.3710 test=0.5058 [2293s]
+  Seed 42 Ep 18/20: train=0.3713 test=0.5052 [2427s]
+  Seed 42 Ep 19/20: train=0.3715 test=0.5071 [2562s]
+    >>> Best: 0.5071
+  Seed 42 Ep 20/20: train=0.3718 test=0.5067 [2698s]
+Seed 42: 0.5071
+
+============================================================
+Training seed=7
+============================================================
+  Seed 7 Ep 1/20: train=0.3590 test=0.5000 [135s]
+    >>> Best: 0.5000
+  Seed 7 Ep 2/20: train=0.3635 test=0.5015 [270s]
+    >>> Best: 0.5015
+  Seed 7 Ep 3/20: train=0.3647 test=0.4985 [405s]
+  Seed 7 Ep 4/20: train=0.3652 test=0.4874 [540s]
+  Seed 7 Ep 5/20: train=0.3657 test=0.5049 [675s]
+    >>> Best: 0.5049
+  Seed 7 Ep 6/20: train=0.3662 test=0.4984 [810s]
+  Seed 7 Ep 7/20: train=0.3668 test=0.5052 [945s]
+    >>> Best: 0.5052
+  Seed 7 Ep 8/20: train=0.3673 test=0.5021 [1080s]
+  Seed 7 Ep 9/20: train=0.3677 test=0.5005 [1215s]
+  Seed 7 Ep 10/20: train=0.3682 test=0.5031 [1349s]
+  Seed 7 Ep 11/20: train=0.3686 test=0.4706 [1484s]
+  Seed 7 Ep 12/20: train=0.3691 test=0.5053 [1619s]
+    >>> Best: 0.5053
+  Seed 7 Ep 13/20: train=0.3698 test=0.5013 [1754s]
+  Seed 7 Ep 14/20: train=0.3703 test=0.5055 [1889s]
+    >>> Best: 0.5055
+  Seed 7 Ep 15/20: train=0.3709 test=0.5057 [2024s]
+    >>> Best: 0.5057
+  Seed 7 Ep 16/20: train=0.3714 test=0.5052 [2158s]
+  Seed 7 Ep 17/20: train=0.3720 test=0.5045 [2293s]
+  Seed 7 Ep 18/20: train=0.3725 test=0.5072 [2428s]
+    >>> Best: 0.5072
+  Seed 7 Ep 19/20: train=0.3727 test=0.5066 [2563s]
+  Seed 7 Ep 20/20: train=0.3729 test=0.5071 [2698s]
+Seed 7: 0.5072
+
+============================================================
+Training seed=123
+============================================================
+  Seed 123 Ep 1/20: train=0.3587 test=0.4680 [135s]
+    >>> Best: 0.4680
+  Seed 123 Ep 2/20: train=0.3636 test=0.5035 [270s]
+    >>> Best: 0.5035
+  Seed 123 Ep 3/20: train=0.3643 test=0.5033 [405s]
+  Seed 123 Ep 4/20: train=0.3651 test=0.4746 [539s]
+  Seed 123 Ep 5/20: train=0.3657 test=0.4988 [674s]
+  Seed 123 Ep 6/20: train=0.3660 test=0.4986 [809s]
+  Seed 123 Ep 7/20: train=0.3667 test=0.5064 [944s]
+    >>> Best: 0.5064
+  Seed 123 Ep 8/20: train=0.3672 test=0.4832 [1079s]
+  Seed 123 Ep 9/20: train=0.3675 test=0.5051 [1213s]
+  Seed 123 Ep 10/20: train=0.3679 test=0.5052 [1348s]
+  Seed 123 Ep 11/20: train=0.3685 test=0.4913 [1483s]
+  Seed 123 Ep 12/20: train=0.3690 test=0.5019 [1620s]
+  Seed 123 Ep 13/20: train=0.3697 test=0.5041 [1759s]
+  Seed 123 Ep 14/20: train=0.3702 test=0.5065 [1898s]
+    >>> Best: 0.5065
+  Seed 123 Ep 15/20: train=0.3708 test=0.5044 [2037s]
+  Seed 123 Ep 16/20: train=0.3715 test=0.5063 [2176s]
+  Seed 123 Ep 17/20: train=0.3719 test=0.5052 [2315s]
+  Seed 123 Ep 18/20: train=0.3723 test=0.5061 [2453s]
+  Seed 123 Ep 19/20: train=0.3726 test=0.5069 [2591s]
+    >>> Best: 0.5069
+  Seed 123 Ep 20/20: train=0.3728 test=0.5070 [2728s]
+    >>> Best: 0.5070
+Seed 123: 0.5070
+
+============================================================
+Training seed=2026
+============================================================
+  Seed 2026 Ep 1/20: train=0.3593 test=0.4078 [138s]
+    >>> Best: 0.4078
+  Seed 2026 Ep 2/20: train=0.3634 test=0.4566 [275s]
+    >>> Best: 0.4566
+  Seed 2026 Ep 3/20: train=0.3645 test=0.4998 [413s]
+    >>> Best: 0.4998
+  Seed 2026 Ep 4/20: train=0.3652 test=0.4988 [549s]
+  Seed 2026 Ep 5/20: train=0.3659 test=0.4878 [686s]

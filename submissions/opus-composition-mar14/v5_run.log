@@ -1,0 +1,44 @@
+Loaded probs_v22.npy
+Loaded probs_v33.npy
+Loaded probs_v19_seed123.npy
+Loaded probs_v19_seed7.npy
+Loaded v2 probs
+Stacking features: (119027, 48)
+Raw v8+v11 avg: 0.107983
+
+=== Cross-validated stacking ===
+
+Config 0: {'max_iter': 500, 'max_depth': 6, 'learning_rate': 0.05, 'min_samples_leaf': 50, 'l2_regularization': 1.0}
+  Train-on-all: fe=0.103731 acc=0.5245
+  CV OOF: fe=0.107360 acc=0.5078
+  CV + bias: fe=0.107336
+
+Config 1: {'max_iter': 1000, 'max_depth': 4, 'learning_rate': 0.1, 'min_samples_leaf': 100, 'l2_regularization': 2.0}
+  Train-on-all: fe=0.105979 acc=0.5143
+  CV OOF: fe=0.107203 acc=0.5083
+  CV + bias: fe=0.107166
+
+Config 2: {'max_iter': 500, 'max_depth': 8, 'learning_rate': 0.05, 'min_samples_leaf': 20, 'l2_regularization': 0.5}
+  Train-on-all: fe=0.102047 acc=0.5320
+  CV OOF: fe=0.107669 acc=0.5067
+  CV + bias: fe=0.107639
+
+Config 3: {'max_iter': 300, 'max_depth': 5, 'learning_rate': 0.1, 'min_samples_leaf': 50, 'l2_regularization': 1.0}
+  Train-on-all: fe=0.105278 acc=0.5186
+  CV OOF: fe=0.107315 acc=0.5080
+  CV + bias: fe=0.107170
+
+============================================================
+Best stacking: 0.107166
+
+=== Ensemble: CNN avg + GBM CV ===
+  w_cnn=0.3: 0.107377
+  w_cnn=0.5: 0.107452
+  w_cnn=0.7: 0.107641
+  w_cnn=0.8: 0.107717
+  w_cnn=0.9: 0.107833
+
+Total time: 2.0 min
+---
+metric: 0.107166
+description: Stacking GBM on CNN probs + features, CV + bias opt

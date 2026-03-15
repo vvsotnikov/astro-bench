@@ -1,0 +1,43 @@
+Device: cuda
+Creating val split...
+  Dataset (train): 5561523 samples
+  Dataset (val): 47597 samples
+Parameters: 555,619
+Epoch 1/60: loss=0.5438 train=0.3231 41.8s
+Epoch 5/60: loss=0.5274 train=0.3287 val=0.4698 41.7s
+  -> Best val (0.4698)
+Epoch 10/60: loss=0.5236 train=0.3302 val=0.4788 41.6s
+  -> Best val (0.4788)
+Epoch 11/60: loss=0.5229 train=0.3305 41.4s
+Epoch 15/60: loss=0.5208 train=0.3315 val=0.4782 41.7s
+Epoch 20/60: loss=0.5182 train=0.3330 val=0.4858 41.7s
+  -> Best val (0.4858)
+Epoch 21/60: loss=0.5177 train=0.3334 42.1s
+Epoch 25/60: loss=0.5154 train=0.3348 val=0.4875 60.6s
+  -> Best val (0.4875)
+Epoch 30/60: loss=0.5124 train=0.3366 val=0.4876 41.8s
+  -> Best val (0.4876)
+Epoch 31/60: loss=0.5117 train=0.3370 41.7s
+Epoch 35/60: loss=0.5092 train=0.3387 val=0.4859 41.7s
+Epoch 40/60: loss=0.5059 train=0.3406 val=0.4898 41.7s
+  -> Best val (0.4898)
+Epoch 41/60: loss=0.5053 train=0.3411 41.8s
+Epoch 45/60: loss=0.5031 train=0.3422 val=0.4893 41.6s
+Epoch 50/60: loss=0.5008 train=0.3434 val=0.4909 41.6s
+  -> Best val (0.4909)
+Epoch 51/60: loss=0.5005 train=0.3438 41.4s
+Epoch 55/60: loss=0.4995 train=0.3444 val=0.4905 41.7s
+Epoch 60/60: loss=0.4989 train=0.3447 val=0.4893 41.9s
+
+Best val: 0.4909
+sigma=0.3: same_as_nearest=1.0000
+sigma=0.5: same_as_nearest=1.0000
+sigma=0.7: same_as_nearest=1.0000
+sigma=1.0: same_as_nearest=1.0000
+
+Predictions: {np.int64(0): np.int64(23361), np.int64(1): np.int64(36335), np.int64(2): np.int64(22707), np.int64(3): np.int64(26049), np.int64(4): np.int64(10575)}
+
+---
+metric: 0.4909
+experiment: v22_regression
+description: CNN+MLP log-mass regression, Huber loss, 60ep cosine, nearest-class prediction

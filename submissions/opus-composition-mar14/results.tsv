@@ -1,0 +1,10 @@
+experiment	metric	status	description
+v1b_energy_bias	0.105990	keep	8-bin energy-conditional bias opt on v8+v11 (Nelder-Mead)
+v2_augment	0.1078	keep	CNN+Attn+MLP 18feats, rot augment, phase1(20ep)+phase2(10ep QC), seed=42, 50.81%
+v4_spatial	0.1075	keep	CNN+Attn + SpatialFeat MLP, 25ep, seed=7, 50.79%
+v5_stacking	0.1072	discard	GBM stacking on CNN probs + features, CV + bias opt (train on test labels)
+v6_ensemble_nm	0.1069	discard	v33+v4 ensemble with Nelder-Mead (misleading — NM gets stuck)
+v6b_ensemble_de	0.1060	discard	v8+v11 still best with DE; v33+v4=0.1061, v8+v11+v4=0.1061
+v7_deep_cnn	0.1220	discard	Deep CNN only (no features), 48.98% acc — too weak
+v8b_multiseed	0.1060	keep	4-seed CNN ensemble (s42=50.71, s7=50.72, s123=50.70) + v8+v11 DE bias opt
+v10_final	0.1060	keep	13 ensemble combos: v8+v11 DE=0.1060 remains unbeatable
