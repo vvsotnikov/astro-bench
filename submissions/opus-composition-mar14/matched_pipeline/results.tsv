@@ -1,3 +1,4 @@
 experiment	metric	status	description
 v1_log1p	0.1050	keep	CNN+Attn+MLP with log1p matrices + augmentation (DE=0.1050)
 v2_sam	0.1045	keep	CNN+Attn+MLP log1p + SAM optimizer + augmentation (DE=0.1045)
+v3_tta	0.1050	keep	CNN+Attn+MLP log1p + aug + TTA(8x) (DE=0.1050)
