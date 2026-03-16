@@ -12,52 +12,75 @@ plt.rcParams.update({
 })
 
 def fig_detector_and_event():
-    """Show detector grid layout + example sparse event."""
+    """Show detector grid layout + example event from real KASCADE simulation data."""
+    # Load real simulation data (channel 0=time, 1=electron, 2=muon)
+    data = np.load('data/qgs_spectra_matrices.npz')
+    matrices = data['matrices']  # (4164709, 16, 16, 3) float32
+
+    # Find a visually interesting event: high total signal with spatial structure
+    # Sample a manageable subset to search through
+    np.random.seed(42)
+    n_candidates = 50000
+    idx_candidates = np.random.choice(len(matrices), n_candidates, replace=False)
+
+    best_idx = None
+    best_score = -1
+    for idx in idx_candidates:
+        event = matrices[idx]
+        e_ch = event[:, :, 1]  # electron/photon
+        m_ch = event[:, :, 2]  # muon
+        combined_active = (e_ch > 0) | (m_ch > 0)
+        frac_active = combined_active.sum() / (16 * 16)
+        n_active_m = np.count_nonzero(m_ch)
+        # Want: clear shower pattern with realistic sparsity (~15-40% active cells)
+        # and muon hits for panel (c) to be interesting
+        if 0.15 < frac_active < 0.40 and n_active_m >= 8:
+            total_signal = e_ch.sum() + m_ch.sum()
+            coords_e = np.argwhere(e_ch > 0)
+            if len(coords_e) > 5:
+                spread = coords_e.std(axis=0).mean()
+                score = total_signal * spread
+                if score > best_score:
+                    best_score = score
+                    best_idx = idx
+
+    print(f"Selected event index: {best_idx}")
+    event = matrices[best_idx]
+    event_e = event[:, :, 1]  # electron/photon channel
+    event_m = event[:, :, 2]  # muon channel
+
+    n_active_e = np.count_nonzero(event_e)
+    n_active_m = np.count_nonzero(event_m)
+    print(f"  Electron channel: {n_active_e}/256 active, max={event_e.max():.1f}")
+    print(f"  Muon channel:     {n_active_m}/256 active, max={event_m.max():.1f}")
+
     fig, axes = plt.subplots(1, 3, figsize=(7, 2.5))
 
-    # Panel A: Schematic of 16x16 binned grid
+    # Panel A: Active detector cells (non-zero in either channel)
     ax = axes[0]
     ax.set_xlim(0, 16); ax.set_ylim(0, 16)
     for i in range(17):
         ax.axhline(i, color='gray', linewidth=0.3)
         ax.axvline(i, color='gray', linewidth=0.3)
-    # Show some "active" stations
-    np.random.seed(42)
-    active = np.random.random((16, 16)) < 0.15
+    active = (event_e > 0) | (event_m > 0)
+    frac_zero = 1.0 - active.sum() / (16 * 16)
     for i in range(16):
         for j in range(16):
             if active[i, j]:
                 ax.add_patch(Rectangle((j, i), 1, 1, color='#2196F3', alpha=0.6))
     ax.set_xlabel('x bin')
     ax.set_ylabel('y bin')
-    ax.set_title('(a) 16×16 grid\n(~85% zero)', fontsize=9)
+    ax.set_title(f'(a) Active cells\n({frac_zero:.0%} zero)', fontsize=9)
     ax.set_aspect('equal')
 
-    # Panel B: Example electron channel
-    np.random.seed(7)
-    event_e = np.zeros((16, 16))
-    # Simulate a shower core
-    cx, cy = 8, 7
-    for i in range(16):
-        for j in range(16):
-            r = np.sqrt((i - cy)**2 + (j - cx)**2)
-            if r < 6 and np.random.random() < 0.4 * np.exp(-r/3):
-                event_e[i, j] = np.random.exponential(100) * np.exp(-r/2)
-
+    # Panel B: Electron/photon channel with log1p
     ax = axes[1]
     im = ax.imshow(np.log1p(event_e), cmap='YlOrRd', aspect='equal', origin='lower')
     ax.set_xlabel('x bin')
     ax.set_title('(b) Electron channel\n(log1p)', fontsize=9)
     ax.set_yticks([])
 
-    # Panel C: Example muon channel (sparser)
-    event_m = np.zeros((16, 16))
-    for i in range(16):
-        for j in range(16):
-            r = np.sqrt((i - cy)**2 + (j - cx)**2)
-            if r < 5 and np.random.random() < 0.15 * np.exp(-r/4):
-                event_m[i, j] = np.random.exponential(30) * np.exp(-r/3)
-
+    # Panel C: Muon channel with log1p
     ax = axes[2]
     im = ax.imshow(np.log1p(event_m), cmap='YlGnBu', aspect='equal', origin='lower')
     ax.set_xlabel('x bin')

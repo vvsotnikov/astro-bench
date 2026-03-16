@@ -29,7 +29,7 @@ $^{2}$ \quad JetBrains Astroparticle Physics Lab}
 
 \corres{Correspondence: vladimir.sotnikov@jetbrains.com}
 
-\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with building classifiers for 5-class mass composition (proton, helium, carbon, silicon, iron) --- the same problem that human physicists have spent years optimizing. Our benchmark reproduces the published methodology of Kuznetsov et al.\ (JINST 2024) and provides a standardized evaluation framework based on fraction error --- a physically meaningful metric that measures how well a classifier recovers true particle fractions across random mixture compositions. We deploy Claude Opus~4.6 as an autonomous researcher that iteratively designs, trains, and evaluates neural network architectures. Over 12 experiments spanning CNNs, Vision Transformers, Graph Neural Networks, gradient boosting, and various training strategies (SAM optimization, focal loss, knowledge distillation, test-time augmentation), the agent achieves a fraction error of 0.1045, improving upon the published result of 0.107 by 2.3\%. We analyze the agent's research trajectory --- including failures, dead ends, and insights --- as data for understanding how AI agents approach open-ended scientific problems. All code, model weights, training logs, and reasoning traces are publicly available.}
+\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with two classification problems: 5-class mass composition (proton, helium, carbon, silicon, iron) and binary gamma/hadron separation. We deploy two agents --- Claude Opus~4.6 and Claude Haiku~4.5 --- across 9 independent runs totaling over 150 experiments. On composition, Opus achieves a fraction error of 0.1045, improving upon the published result of 0.107 by 2.3\%. On gamma/hadron separation, Haiku achieves a hadronic survival rate of $3.21 \times 10^{-4}$ at 75\% gamma efficiency through a cross-architecture ensemble --- an order of magnitude better than published baselines. We analyze the agents' research trajectories, revealing distinct behavioral patterns: Opus focuses on systematic optimization within promising architectures, while Haiku explores a broader diversity of approaches including novel ensemble strategies. All code, model weights, training logs, and reasoning traces are publicly available.}
 
 \keyword{cosmic rays; mass composition; KASCADE; AI agents; machine learning; deep learning; autonomous research; benchmark}
 
@@ -54,10 +54,10 @@ We ask three questions:
 \begin{enumerate}
     \item Can AI agents beat human-designed classifiers on real astrophysics data?
     \item How do agents search for solutions --- what do their research trajectories look like?
-    \item What architectural and methodological innovations (if any) do agents discover?
+    \item How do different agents (models) compare in their research strategies and outcomes?
 \end{enumerate}
 
-The remainder of this paper is organized as follows. \Cref{sec:data} describes the KASCADE dataset and evaluation methodology. \Cref{sec:method} presents the agent framework and experimental setup. \Cref{sec:results} reports classification results across 12 experiments. \Cref{sec:trajectory} analyzes the agent's research trajectory. \Cref{sec:discussion} discusses implications and limitations. \Cref{sec:conclusion} concludes.
+The remainder of this paper is organized as follows. \Cref{sec:data} describes the KASCADE dataset and evaluation methodology for both tasks. \Cref{sec:method} presents the agent framework and experimental setup. \Cref{sec:results_composition} reports composition classification results. \Cref{sec:results_gamma} reports gamma/hadron separation results. \Cref{sec:trajectory} analyzes agent research trajectories across all runs. \Cref{sec:discussion} discusses agent behavioral patterns, implications, and limitations. \Cref{sec:conclusion} concludes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,9 +94,19 @@ All 5-component fraction combinations on a 0.1 step grid summing to 1.0 are enum
 
 This metric directly measures what matters for physics: the accuracy of unfolded mass composition spectra. It differs from per-event accuracy in that it weights systematic biases more heavily than random errors --- a classifier that consistently over-predicts protons will score poorly even if its per-event accuracy is high.
 
-\subsection{Baseline: Reproducing Published Results}
+\subsection{Evaluation Metric: Hadronic Survival Rate}
 
-We first reproduce the published LeNet-based CNN from~\cite{kascade_jinst}. Our reimplementation in PyTorch (36,810 parameters) achieves 50.3\% test accuracy and a fraction error of 0.1079, consistent with the published result of $\sim$0.107.
+For the gamma/hadron binary classification task (Task~2), the metric is the \textit{hadronic survival rate at 75\% gamma efficiency} --- the fraction of hadronic background events that survive a classification threshold set to retain 75\% of true gamma events. Lower is better.
+
+This metric is standard in gamma-ray astronomy, where the goal is to identify rare gamma-ray showers (signal) against an overwhelming background of hadronic cosmic ray showers. The test set contains 1,514 gamma events and 34,237 hadron events; agents must produce a continuous ``gamma score'' (higher = more gamma-like) rather than binary labels. At the threshold where 75\% of gammas are retained, a perfect classifier would have zero hadronic survival.
+
+The published baseline from Kostunin et al.~\cite{kascade_icrc} achieves hadronic suppression factors of $10^2$--$10^3$ (survival rates of $10^{-2}$--$10^{-3}$) at 30--70\% gamma efficiency using Random Forest regressors on reconstructed features.
+
+\subsection{Baselines: Reproducing Published Results}
+
+For composition, we reproduce the published LeNet-based CNN from~\cite{kascade_jinst}. Our reimplementation in PyTorch (36,810 parameters) achieves 50.3\% test accuracy and a fraction error of 0.1079, consistent with the published result of $\sim$0.107.
+
+For gamma/hadron separation, the published baseline~\cite{kascade_icrc} uses a Random Forest regressor on reconstructed shower parameters, achieving suppression factors of $10^2$--$10^3$ at 30--70\% gamma efficiency.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,17 +115,17 @@ We first reproduce the published LeNet-based CNN from~\cite{kascade_jinst}. Our 
 
 \subsection{Agent Framework}
 
-We deploy Claude Opus~4.6 (Anthropic, 1M token context window) as an interactive autonomous ML researcher using Claude Code, Anthropic's official CLI tool. The agent operates in the repository containing the dataset, evaluation scripts, and a structured instruction document (\texttt{CLAUDE.md}) that describes:
+We deploy two AI agents as interactive autonomous ML researchers using Claude Code, Anthropic's official CLI tool:
 \begin{itemize}
-    \item The dataset format and physics background
-    \item The evaluation metric and how to measure it
-    \item Artifact preservation requirements (versioned scripts, model weights, probability outputs, training logs)
-    \item The experiment loop: think $\rightarrow$ build $\rightarrow$ train $\rightarrow$ evaluate $\rightarrow$ log $\rightarrow$ iterate
+    \item \textbf{Claude Opus~4.6}: 1M token context window, the most capable model in the Claude family. Used for composition (5-class) experiments.
+    \item \textbf{Claude Haiku~4.5}: 200K token context window, a smaller and faster model optimized for speed and cost. Used for gamma/hadron (binary) experiments and additional composition runs.
 \end{itemize}
 
-The agent has access to standard tools: Python with PyTorch, NumPy, and scikit-learn; a single GPU (NVIDIA RTX 8000); and the \texttt{verify.py} evaluation script. The agent writes training scripts, runs experiments, analyzes results, and decides next steps autonomously, with occasional human guidance on strategic direction.
+Each agent operates in the repository containing the dataset, evaluation scripts, and a structured instruction document (\texttt{CLAUDE.md}) that describes the dataset format and physics background, the evaluation metrics, artifact preservation requirements, and the experiment loop (think $\rightarrow$ build $\rightarrow$ train $\rightarrow$ evaluate $\rightarrow$ log $\rightarrow$ iterate).
 
-A key design principle is \textbf{artifact preservation}: every experiment --- including failures --- must produce versioned training scripts, log files, model weights, softmax probability outputs, and predictions. This enables post-hoc analysis of the agent's research trajectory and ensures reproducibility. A standardized evaluation utility (\texttt{eval\_utils.py}) handles fraction error computation, differential evolution bias optimization, and artifact saving for every experiment.
+Agents have access to standard tools: Python with PyTorch, NumPy, and scikit-learn; a single GPU (NVIDIA Quadro RTX~8000 or A6000); and the \texttt{verify.py} evaluation script. Each agent writes training scripts, runs experiments, analyzes results, and decides next steps autonomously, with occasional human guidance on strategic direction.
+
+A key design principle is \textbf{artifact preservation}: every experiment --- including failures --- must produce versioned training scripts, log files, model weights, softmax probability outputs, and predictions. This enables post-hoc analysis of each agent's research trajectory and ensures reproducibility. A standardized evaluation utility (\texttt{eval\_utils.py}) handles metric computation, differential evolution bias optimization (for composition), and artifact saving for every experiment.
 
 \subsection{Post-Processing: Differential Evolution Bias Optimization}
 
@@ -129,18 +139,49 @@ where $b_c$ are 5 bias parameters optimized to minimize fraction error directly.
 
 \subsection{Experiment Progression}
 
-The agent's research proceeded through four phases:
-\begin{enumerate}
-    \item \textbf{SOTA reproduction}: Reimplemented the published LeNet CNN to establish a valid baseline (0.1079).
-    \item \textbf{Architecture exploration}: Tested CNN+Attention+MLP (731K params), Vision Transformer, Graph Neural Network, enhanced LeNet, and gradient boosting.
-    \item \textbf{Training strategy optimization}: Explored SAM optimizer, focal loss, SWA, knowledge distillation, test-time augmentation, log1p preprocessing, multi-task learning, and regression on log(A).
-    \item \textbf{Pre-training}: Attempted masked autoencoder pre-training on 73 million real KASCADE events from the experimental archive.
-\end{enumerate}
+We conducted 9 independent agent runs across the two tasks (\Cref{tab:all_runs}). Each run was a separate agent session, sometimes spanning multiple hours.
+
+For \textbf{composition}, Claude Opus~4.6 conducted the primary investigation through four phases: (1)~SOTA reproduction of the published LeNet CNN, (2)~architecture exploration (CNN+Attention+MLP, ViT, GNN, enhanced LeNet, gradient boosting), (3)~training strategy optimization (SAM, focal loss, SWA, knowledge distillation, TTA, log1p preprocessing), and (4)~attempted pre-training on 73M real KASCADE events. Claude Haiku~4.5 independently ran two composition sessions, achieving comparable accuracy but with more crashes due to implementation errors.
+
+For \textbf{gamma/hadron separation}, Claude Haiku~4.5 conducted four successive sessions totaling 77 experiments. The research progressed from simple MLPs and Random Forests through CNNs, autoencoders, contrastive learning, SVMs, isolation forests, Attention CNNs, ResNets, and Vision Transformers, culminating in a cross-architecture ensemble that achieved an order-of-magnitude improvement over published baselines.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
-\label{sec:results}
+\section{Overview of Agent Runs}
+\label{sec:runs}
+
+\Cref{tab:all_runs} summarizes all 9 agent runs across both tasks. Each row represents an independent agent session with its own branch, working directory, and experiment sequence.
+
+\begin{table}[H]
+\caption{Summary of all agent runs. Composition metric is fraction error (lower is better); gamma metric is hadronic survival rate at 75\% gamma efficiency (lower is better). ``Exps'' = number of versioned experiments conducted.\label{tab:all_runs}}
+\begin{tabularx}{\textwidth}{llCCCl}
+\toprule
+\textbf{Agent} & \textbf{Task} & \textbf{Exps} & \textbf{Best Result} & \textbf{Time} & \textbf{Key Finding} \\
+\midrule
+\multicolumn{6}{l}{\textit{Composition (5-class, fraction error $\downarrow$)}} \\
+\midrule
+Haiku~4.5 & Comp. & 10 & 0.1087 (50.9\%) & 83~min & CNN v4 best; feature eng. helps \\
+Haiku~4.5 & Comp. & 10 & 0.1093 (50.5\%) & $\sim$2~h & Many crashes; stability issues \\
+Opus~4.6 & Comp. & 45 & 0.1060 & $\sim$24~h & Old pipeline; all results invalidated \\
+Opus~4.6 & Comp. & --- & --- & $\sim$4~h & Incomplete; pipeline correction \\
+\textbf{Opus~4.6} & \textbf{Comp.} & \textbf{12} & \textbf{0.1045} & \textbf{$\sim$36~h} & \textbf{SAM + DE on matched pipeline} \\
+\midrule
+\multicolumn{6}{l}{\textit{Gamma/hadron (binary, hadronic survival rate $\downarrow$)}} \\
+\midrule
+Haiku~4.5 & Gamma & 3 & 0.836 & 20~min & Stopped too early \\
+Haiku~4.5 & Gamma & $\sim$10 & $3.2 \times 10^{-3}$ & $\sim$1~h & First competitive result \\
+Haiku~4.5 & Gamma & 23 & $6.43 \times 10^{-4}$ & 90~min & MLP multi-seed BCE \\
+\textbf{Haiku~4.5} & \textbf{Gamma} & \textbf{41} & $\mathbf{3.21 \times 10^{-4}}$ & \textbf{$\sim$4~h} & \textbf{Cross-arch. ensemble} \\
+\midrule
+\multicolumn{2}{l}{\textbf{Total}} & \textbf{$\sim$154} & & & \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Composition Results (Task 1)}
+\label{sec:results_composition}
 
 \subsection{Architecture Comparison}
 
@@ -230,35 +271,111 @@ Ensembles provide no improvement over the best single model after DE optimizatio
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gamma/Hadron Separation Results (Task 2)}
+\label{sec:results_gamma}
+
+The gamma/hadron separation task was tackled exclusively by Claude Haiku~4.5 across four successive sessions totaling 77 experiments. The agent's progression from na\"ive baselines to a cross-architecture ensemble achieving $3.21 \times 10^{-4}$ hadronic survival rate represents an order-of-magnitude improvement over published baselines.
+
+\subsection{Architecture Exploration}
+
+The agent explored a remarkably diverse set of architectures over the four sessions (\Cref{tab:gamma_archs}). Early sessions focused on tabular methods (Random Forest, MLP, SVM, Isolation Forest) and simple CNNs. Later sessions introduced more sophisticated architectures including ResNets, Vision Transformers, autoencoders for anomaly detection, and contrastive learning approaches.
+
+\begin{table}[H]
+\caption{Architecture progression on gamma/hadron separation (Claude Haiku~4.5). Metric is hadronic survival rate at 75\% gamma efficiency. Results shown are the best achieved with each architecture family across all sessions.\label{tab:gamma_archs}}
+\begin{tabularx}{\textwidth}{lCCl}
+\toprule
+\textbf{Architecture} & \textbf{Session} & \textbf{Best Survival} & \textbf{Notes} \\
+\midrule
+Random Forest & 1 & 0.836 & Features only, stopped early \\
+MLP (tabular) & 2--3 & $6.43 \times 10^{-4}$ & Multi-seed BCE, best single tabular \\
+CNN (basic) & 2 & $3.2 \times 10^{-3}$ & First use of grid images \\
+Attention CNN & 4 & $3.50 \times 10^{-4}$ & Best single model overall \\
+ResNet & 4 & $4.1 \times 10^{-4}$ & Deeper architecture \\
+Vision Transformer & 4 & $5.2 \times 10^{-4}$ & 4$\times$4 patches \\
+Autoencoder & 3 & --- & Anomaly detection approach; crashed \\
+Contrastive learning & 3 & --- & SimCLR-style; did not converge \\
+SVM / Isolation Forest & 2 & --- & Novelty detection; poor results \\
+\textbf{Ensemble} & \textbf{4} & $\mathbf{3.21 \times 10^{-4}}$ & \textbf{AttnCNN(0.7) + ResNet(0.1) + ViT(0.2)} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Cross-Architecture Ensemble}
+
+The agent's most significant discovery was that ensembling models from different architecture families provides meaningful gains --- in contrast to the composition task, where same-architecture ensembles showed no improvement. The final ensemble combines three models with learned weights:
+\begin{itemize}
+    \item Attention CNN: weight 0.70 (best single model, survival $3.50 \times 10^{-4}$)
+    \item ResNet: weight 0.10 (survival $4.1 \times 10^{-4}$)
+    \item Vision Transformer: weight 0.20 (survival $5.2 \times 10^{-4}$)
+\end{itemize}
+
+The ensemble achieves $3.21 \times 10^{-4}$, an 8.3\% improvement over the best single model. This success --- compared to the failure of ensembles on composition --- suggests that different architectures capture complementary signal patterns in the gamma/hadron discrimination problem, where the physics is more distinct (gamma showers have essentially zero muon content) and the decision boundary is sharper.
+
+\subsection{Comparison with Published Baselines}
+
+The published gamma/hadron baseline~\cite{kascade_icrc} achieves suppression factors of $10^2$--$10^3$ (survival rates of $10^{-2}$--$10^{-3}$) at 30--70\% gamma efficiency using Random Forest regressors. The agent's result of $3.21 \times 10^{-4}$ at 75\% gamma efficiency represents approximately an order-of-magnitude improvement, and at a higher gamma efficiency operating point. This larger improvement relative to the composition task (2.3\%) suggests that the gamma/hadron problem was previously less optimized by human researchers, leaving more room for automated exploration to find gains.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Agent Research Trajectory}
 \label{sec:trajectory}
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory.pdf}
-\caption{Agent research trajectory showing DE-optimized fraction error for each experiment in chronological order. Colors indicate experiment category. The running best (black line) decreases rapidly during architecture exploration, then plateaus during training strategy optimization --- consistent with the confusion matrix ceiling hypothesis.\label{fig:trajectory}}
+\caption{Agent research trajectory for composition (Opus~4.6) showing DE-optimized fraction error for each experiment in chronological order. Colors indicate experiment category. The running best (black line) decreases rapidly during architecture exploration, then plateaus during training strategy optimization --- consistent with the confusion matrix ceiling hypothesis.\label{fig:trajectory}}
 \end{figure}
 
-Beyond the final results, the agent's \textit{path} to those results is itself data. Over approximately 36 hours of interactive computation, the agent conducted 12 versioned experiments, with each experiment producing training scripts, logs, model weights, and probability outputs.
+Beyond the final results, each agent's \textit{path} to those results is itself data. Across 9 runs, the agents conducted approximately 154 versioned experiments, with each producing training scripts, logs, model weights, and probability outputs.
 
-\subsection{Key Decisions and Pivots}
+\subsection{Opus on Composition: Depth-First Optimization}
+
+Over approximately 36 hours, Opus conducted 12 experiments on the matched pipeline (plus 45 earlier experiments on a mismatched pipeline that were invalidated). Key decision points:
 
 \begin{enumerate}
-    \item \textbf{Data pipeline correction} (critical): The agent initially spent several hours optimizing on a data pipeline that did not match the published methodology --- using 5.5M events without Age as a feature, different quality cuts, and a different train/test split. After reading the published code, the pipeline was corrected to match exactly. All prior results were invalidated. \textit{Lesson: reproducibility requires matching every detail of the reference methodology.}
+    \item \textbf{Data pipeline correction} (critical): The agent initially spent several hours optimizing on a data pipeline that did not match the published methodology --- using 5.5M events without Age as a feature, different quality cuts, and a different train/test split. After reading the published code, the pipeline was corrected to match exactly. All prior results were invalidated.
 
     \item \textbf{Confusion matrix analysis} (key insight): The agent computed the theoretical minimum fraction error achievable given each model's confusion matrix, finding that the actual scores were within 0.001 of the theoretical floor. This correctly diagnosed that post-processing was saturated and the bottleneck was the confusion matrix itself.
 
-    \item \textbf{Architecture diversity exploration}: The agent tried 5 fundamentally different architecture families (CNN, ViT, GNN, enhanced LeNet, gradient boosting) before concluding that the CNN+Attn+MLP was consistently superior. This breadth of exploration is characteristic of agent behavior --- human researchers typically iterate on a single architecture family.
-
-    \item \textbf{Training strategy sweep}: After finding the best architecture, the agent systematically tested 9 training modifications. The discovery that SAM provides the best DE-optimized result (despite not having the best raw score) was non-obvious and required the agent to separately evaluate raw and post-processed metrics.
+    \item \textbf{Systematic strategy sweep}: After finding the best architecture, the agent tested 9 training modifications. The discovery that SAM provides the best DE-optimized result (despite not having the best raw score) was non-obvious and required the agent to separately evaluate raw and post-processed metrics.
 \end{enumerate}
+
+\subsection{Haiku on Gamma: Breadth-First Exploration}
+
+Over four successive sessions spanning approximately 7 hours total, Haiku conducted 77 experiments with a notably different research style:
+
+\begin{enumerate}
+    \item \textbf{Session 1} (3 experiments, 20~min): Started with Random Forest on tabular features. Achieved 0.836 survival rate. Stopped prematurely due to session timeout.
+
+    \item \textbf{Session 2} ($\sim$10 experiments, $\sim$1~h): Explored CNNs, SVMs, and isolation forests for anomaly-based gamma detection. First competitive result at $3.2 \times 10^{-3}$.
+
+    \item \textbf{Session 3} (23 experiments, 90~min): Focused on MLP variants with multi-seed training, contrastive learning, and autoencoders. Best result $6.43 \times 10^{-4}$ with MLP using BCE loss. Several approaches crashed (autoencoder, contrastive learning).
+
+    \item \textbf{Session 4} (41 experiments, $\sim$4~h): The most productive session. Introduced Attention CNN, ResNet, and ViT architectures. Discovered that cross-architecture ensembles provide gains where same-architecture ensembles do not. Final ensemble achieved $3.21 \times 10^{-4}$.
+\end{enumerate}
+
+A distinctive aspect of Haiku's approach was its willingness to try unconventional methods (isolation forests, contrastive learning, autoencoders) even when they were unlikely to succeed. While none of these novel approaches produced competitive results, the breadth of exploration eventually led to the key insight that architecturally diverse models produce complementary predictions.
 
 \subsection{Failure Modes}
 
-Several agent behaviors merit analysis:
+Agent failure modes differed by model:
+
+\textbf{Common to both agents:}
 \begin{itemize}
-    \item \textbf{File overwriting}: The agent edited training scripts in place rather than creating versioned copies, losing intermediate code versions. This was corrected by adding artifact preservation rules to the instruction document.
-    \item \textbf{Optimizer hanging}: The differential evolution post-processing step occasionally hung due to the \texttt{polish=True} option triggering Nelder-Mead on models with flat loss landscapes. This was fixed by switching to \texttt{polish=False}.
-    \item \textbf{Pre-training scale issues}: An attempt to pre-train on 73M real KASCADE events failed due to memory constraints when concatenating all data. A streaming approach was implemented but was network-bound on S3 downloads.
+    \item \textbf{File overwriting}: Both agents initially edited training scripts in place rather than creating versioned copies. This was corrected by adding artifact preservation rules to the instruction document.
+\end{itemize}
+
+\textbf{Opus-specific:}
+\begin{itemize}
+    \item \textbf{Optimizer hanging}: The differential evolution post-processing step occasionally hung due to the \texttt{polish=True} option triggering Nelder-Mead on models with flat loss landscapes. Fixed by switching to \texttt{polish=False}.
+    \item \textbf{Pre-training scale issues}: An attempt to pre-train on 73M real KASCADE events failed due to memory constraints.
+    \item \textbf{Pipeline mismatch}: Opus spent $\sim$24 hours and 45 experiments on a data pipeline that did not match published methodology before the error was identified. All results were invalidated.
+\end{itemize}
+
+\textbf{Haiku-specific:}
+\begin{itemize}
+    \item \textbf{Session instability}: Haiku went idle every 10--15 minutes, requiring human nudging to resume work. This necessitated splitting work across 4 sessions.
+    \item \textbf{Crash-prone implementations}: Haiku's code had more runtime errors (shape mismatches, OOM from oversized batches), resulting in several crashed experiments per session.
+    \item \textbf{Mega-script batching}: Haiku tended to batch many experiment variants into single scripts, causing all experiments to fail together when one had a bug.
 \end{itemize}
 
 
@@ -268,37 +385,64 @@ Several agent behaviors merit analysis:
 
 \subsection{Comparison with Published Results}
 
-The agent's best result (fraction error 0.1045) improves upon the published CNN baseline (0.107) by 2.3\% absolute (2.1\% relative). The improvement comes from three sources:
-\begin{enumerate}
-    \item \textbf{Larger model}: 731K vs 36.6K parameters, with channel attention mechanisms
-    \item \textbf{Stronger augmentation}: Cutout and Gaussian noise in addition to standard rotations/flips
-    \item \textbf{Post-processing}: DE bias optimization bridges the gap between cross-entropy training and fraction error evaluation
-\end{enumerate}
+On \textbf{composition}, the best agent result (fraction error 0.1045, Opus~4.6) improves upon the published CNN baseline (0.107) by 2.3\% absolute (2.1\% relative). The improvement comes from three sources: (1)~a larger model (731K vs 36.6K parameters) with channel attention, (2)~stronger augmentation (cutout and Gaussian noise), and (3)~DE bias optimization that bridges the gap between cross-entropy training and fraction error evaluation. Neither agent discovered fundamentally novel architectures, but the specific combination of SAM, augmentation, and DE was arrived at through systematic experimentation.
 
-The agent did not discover fundamentally novel architectures --- the CNN+Attention+MLP with channel attention is a well-known pattern. However, the specific combination of SAM optimization, augmentation strategy, and DE post-processing was arrived at through systematic experimentation that would be tedious for human researchers.
+On \textbf{gamma/hadron separation}, the best agent result ($3.21 \times 10^{-4}$ survival at 75\% gamma efficiency, Haiku~4.5) represents approximately an order-of-magnitude improvement over published baselines ($10^{-2}$--$10^{-3}$ at 30--70\% efficiency~\cite{kascade_icrc}). The improvement is both in the metric value and in the operating point (75\% vs 30--70\% gamma efficiency). This much larger relative gain suggests the gamma/hadron problem was less thoroughly optimized in prior work.
 
 \subsection{The Confusion Matrix Ceiling}
 
-The convergence of all training strategies to 0.1045--0.1050 after DE optimization suggests a fundamental limitation of the current feature set and architecture family. The per-class confusion matrix analysis reveals that the dominant source of error is proton-helium confusion (overlapping $N_e/N_\mu$ distributions with separation $d \approx 0.26\sigma$) and silicon-iron confusion ($d \approx 0.16\sigma$). Breaking through this ceiling likely requires either additional input features (e.g., timing information, though this is problematic for real data), significantly more training data, or pre-training on unlabeled data to learn better representations.
+The convergence of all composition training strategies to 0.1045--0.1050 after DE optimization suggests a fundamental limitation of the current feature set and architecture family. The per-class confusion matrix analysis reveals that the dominant source of error is proton-helium confusion (overlapping $N_e/N_\mu$ distributions with separation $d \approx 0.26\sigma$) and silicon-iron confusion ($d \approx 0.16\sigma$). Breaking through this ceiling likely requires either additional input features (e.g., timing information, though this is problematic for real data), significantly more training data, or pre-training on unlabeled data to learn better representations.
+
+Interestingly, no such ceiling was observed for the gamma/hadron task. The agent continued to improve results throughout all four sessions, and the cross-architecture ensemble provided a meaningful 8.3\% gain over the best single model. This asymmetry may reflect the fundamentally different nature of the two problems: composition classification requires distinguishing particles along a continuous spectrum of $N_e/N_\mu$ values, while gamma/hadron separation exploits a qualitative physical difference (gamma showers produce essentially zero muons).
+
+\subsection{Haiku vs.\ Opus: Research Strategy Comparison}
+
+The two agents exhibited distinctly different research styles (\Cref{tab:agent_comparison}).
+
+\begin{table}[H]
+\caption{Behavioral comparison between Claude Opus~4.6 and Claude Haiku~4.5 as autonomous ML researchers.\label{tab:agent_comparison}}
+\begin{tabularx}{\textwidth}{lCC}
+\toprule
+\textbf{Dimension} & \textbf{Opus~4.6} & \textbf{Haiku~4.5} \\
+\midrule
+Research style & Depth-first & Breadth-first \\
+Architecture families tried & 5 & 9+ \\
+Experiments per session & 12 (focused) & 3--41 (variable) \\
+Total experiments & $\sim$57 & $\sim$97 \\
+Crash rate & Low & Moderate \\
+Session stability & Continuous & Idle every 10--15~min \\
+Ensemble strategy & Same-architecture & Cross-architecture \\
+Key innovation & SAM + DE synergy & Cross-arch. ensemble \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Opus} exhibited a \textit{depth-first} strategy: after identifying CNN+Attention+MLP as the best architecture, it systematically explored 9 training modifications within that family. This led to the non-obvious discovery that SAM optimization, despite not having the best raw score, produces confusion matrices most amenable to DE post-processing. Opus also showed stronger software engineering: fewer crashes, cleaner code, and better artifact management.
+
+\textbf{Haiku} exhibited a \textit{breadth-first} strategy: it tried 9+ architecture families including unconventional approaches (autoencoders, contrastive learning, isolation forests) that Opus never attempted. While most of these failed, the architectural diversity eventually led to the key insight that cross-architecture ensembles capture complementary signal patterns. Haiku's code was less reliable (more shape mismatches, OOM errors), but its willingness to explore dead ends paradoxically led to its most important finding.
+
+Both agents converged on CNN+Attention as the best single-model architecture, suggesting this architectural insight is robust across agent capabilities. The complementarity of their strategies --- Opus's systematic optimization and Haiku's exploratory breadth --- suggests that multi-agent approaches combining both styles could be productive.
 
 \subsection{Agent vs.\ Human Research Patterns}
 
-Comparing the agent's approach with the human researchers who developed the published baselines~\cite{kascade_jinst}:
+Comparing the agents' approaches with the human researchers who developed the published baselines~\cite{kascade_jinst,kascade_icrc}:
 \begin{itemize}
-    \item \textbf{Breadth}: The agent tested 5 architecture families and 9 training strategies in 36 hours. Human researchers typically focus on 1--2 architectures over weeks to months.
-    \item \textbf{Systematic evaluation}: The agent evaluated every experiment with the same metric (fraction error + DE), enabling direct comparison. Human papers often report different metrics across experiments.
-    \item \textbf{Failure documentation}: The agent's full trajectory --- including 3 crashed experiments and 2 dead-end approaches --- is preserved. Human papers report only successful results.
-    \item \textbf{Cost}: The computation cost was approximately \$50--100 in API credits (Claude Opus~4.6 at \$15/M input, \$75/M output tokens) plus $\sim$24 GPU-hours on a single NVIDIA Quadro RTX~8000. The total wall-clock time was $\sim$36 hours of interactive work.
+    \item \textbf{Breadth}: Across all runs, agents tested 10+ architecture families and numerous training strategies. Human researchers typically focus on 1--2 architectures over weeks to months.
+    \item \textbf{Speed}: Agents conducted $\sim$154 experiments in approximately 50 total GPU-hours. Equivalent human experimentation would likely span weeks.
+    \item \textbf{Systematic evaluation}: Agents evaluated every experiment with the same metric and evaluation script, enabling direct comparison. Human papers often report different metrics across experiments.
+    \item \textbf{Failure documentation}: The agents' full trajectories --- including crashes and dead ends --- are preserved. Human papers report only successful results.
+    \item \textbf{Cross-pollination}: Within a single session, agents applied insights from one approach to another (e.g., log1p preprocessing discovered for CNNs was applied to ViTs). Across sessions, insights accumulated through the research journal.
 \end{itemize}
 
 \subsection{Limitations}
 
 This study has several limitations:
 \begin{itemize}
-    \item The agent operated with human guidance on strategic direction (e.g., ``try GNNs'', ``fix the data pipeline''). Fully autonomous operation was not tested.
+    \item Agents operated with occasional human guidance on strategic direction (e.g., ``try GNNs'', ``fix the data pipeline''). Fully autonomous operation without any human intervention was not tested.
     \item Results are on simulation data only. Transfer to real KASCADE measurements requires validating that models trained on simulation generalize to real detector responses.
-    \item The 2.3\% improvement, while statistically meaningful, is modest. The confusion matrix ceiling analysis suggests that much larger gains require fundamentally different approaches.
-    \item Only one agent (Claude Opus~4.6) was tested. Comparative studies with other models would strengthen the conclusions.
+    \item The composition improvement (2.3\%) is modest, and the confusion matrix ceiling analysis suggests much larger gains require fundamentally different approaches.
+    \item The two tasks were tackled by different agents (Opus for composition, Haiku for gamma), making it difficult to fully disentangle task difficulty from agent capability. Cross-task agent comparisons would strengthen the behavioral analysis.
+    \item Haiku's gamma results benefited from accumulated knowledge across 4 sessions (77 total experiments), while Opus's composition results came primarily from 12 experiments on the matched pipeline. The total ``research effort'' is not directly comparable.
 \end{itemize}
 
 
@@ -306,17 +450,17 @@ This study has several limitations:
 \section{Conclusions}
 \label{sec:conclusion}
 
-We have demonstrated that an AI agent (Claude Opus~4.6) can serve as an autonomous ML researcher on a real astrophysics classification problem, improving upon published human-designed solutions by 2.3\% in fraction error (0.1045 vs 0.107). The agent explored 5 architecture families and 9 training strategies over 12 versioned experiments, with complete artifact preservation enabling analysis of both the final results and the research process itself.
+We have demonstrated that AI agents can serve as autonomous ML researchers on real astrophysics classification problems, improving upon published human-designed solutions on both tasks. On 5-class mass composition, Claude Opus~4.6 achieved a fraction error of 0.1045 (vs.\ published 0.107, a 2.3\% improvement) through systematic optimization of a CNN+Attention architecture with SAM and DE post-processing. On gamma/hadron separation, Claude Haiku~4.5 achieved a hadronic survival rate of $3.21 \times 10^{-4}$ at 75\% gamma efficiency --- approximately an order of magnitude better than published baselines --- through a cross-architecture ensemble discovered via broad exploratory search.
 
-The key technical finding is that Sharpness-Aware Minimization combined with data augmentation and differential evolution post-processing yields the best fraction error, despite not producing the highest raw accuracy. This non-obvious result was discovered through systematic experimentation --- the kind of broad, exhaustive search where AI agents excel.
+Across 9 runs and $\sim$154 experiments, we observe two complementary research strategies: Opus's depth-first systematic optimization within a chosen architecture, and Haiku's breadth-first exploration across many architecture families. Both strategies produced results that improve upon human baselines, but through different mechanisms: Opus found non-obvious training strategy synergies (SAM + DE), while Haiku discovered that architecturally diverse ensembles capture complementary signal patterns. Both agents independently converged on CNN+Attention as the best single-model architecture.
 
-Beyond the classification results, the agent's research trajectory --- its decisions, pivots, failures, and insights --- constitutes data for understanding how AI agents approach scientific problems. We make all code, model weights, training logs, and the agent's full reasoning traces publicly available at \url{https://github.com/vvsotnikov/astro-bench}.
+Beyond the classification results, the agents' research trajectories --- their decisions, pivots, failures, and insights --- constitute data for understanding how AI agents approach scientific problems. We make all code, model weights, training logs, and agent reasoning traces publicly available at \url{https://github.com/vvsotnikov/astro-bench}.
 
-As AI agents become more capable, benchmarks like astro-bench that capture not just what was achieved but \textit{how} will be essential for understanding and improving the role of AI in scientific discovery.
+As AI agents become more capable, benchmarks like astro-bench that capture not just what was achieved but \textit{how} --- and that enable comparison across different agent models --- will be essential for understanding and improving the role of AI in scientific discovery.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{Not applicable (single author).}
+\authorcontributions{V.S.\ designed the benchmark, developed the evaluation framework, orchestrated all agent runs, analyzed results, and wrote the manuscript.}
 
 \funding{This research received no external funding.}
 
@@ -326,7 +470,7 @@ As AI agents become more capable, benchmarks like astro-bench that capture not j
 
 \dataavailability{All code, datasets, model weights, training logs, and agent reasoning traces are available at \url{https://github.com/vvsotnikov/astro-bench}. The KASCADE simulation data is hosted on Amazon S3 at \url{https://kascade-sim-data.s3.eu-central-1.amazonaws.com/}. Real KASCADE data is available at \url{s3://kascade-with-arr-times-npz/}.}
 
-\acknowledgments{During the preparation of this manuscript, the authors used Claude Opus~4.6 (Anthropic) for the purposes of autonomous ML experimentation, code generation, and drafting portions of the manuscript text. The authors have reviewed and edited the output and take full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available.}
+\acknowledgments{During the preparation of this manuscript, the authors used Claude Opus~4.6 and Claude Haiku~4.5 (Anthropic) for the purposes of autonomous ML experimentation, code generation, and drafting portions of the manuscript text. The authors have reviewed and edited the output and take full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available.}
 
 \conflictsofinterest{The authors declare no conflicts of interest.}
 
@@ -347,7 +491,9 @@ SWA & Stochastic Weight Averaging \\
 DE & Differential Evolution \\
 MAE & Masked Autoencoder \\
 TTA & Test-Time Augmentation \\
-FE & Fraction Error
+FE & Fraction Error \\
+RF & Random Forest \\
+BCE & Binary Cross-Entropy
 \end{tabular}
 }
 
