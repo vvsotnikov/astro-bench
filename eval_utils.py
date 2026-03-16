@@ -128,6 +128,11 @@ def evaluate_and_save(
     best_preds = raw_preds
     biases = None
 
+    # Save artifacts BEFORE DE (so they survive if DE hangs)
+    np.save(out / f"probs_{experiment_name}.npy", test_probs)
+    if model is not None:
+        torch.save(model.state_dict(), out / f"model_{experiment_name}.pt")
+
     # DE bias optimization
     if run_de:
         print(f"  Running DE bias optimization...", flush=True)
@@ -161,11 +166,8 @@ def evaluate_and_save(
     print(f"  BEST: {best_fe:.4f}", flush=True)
     print(f"{'=' * 60}", flush=True)
 
-    # Save artifacts
-    np.save(out / f"probs_{experiment_name}.npy", test_probs)
+    # Save predictions (probs and model already saved before DE)
     np.savez(out / f"predictions_{experiment_name}.npz", predictions=best_preds.astype(np.int8))
-    if model is not None:
-        torch.save(model.state_dict(), out / f"model_{experiment_name}.pt")
 
     # Append to results.tsv
     tsv_path = out / "results.tsv"
