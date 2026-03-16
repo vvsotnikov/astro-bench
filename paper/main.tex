@@ -322,7 +322,12 @@ The published gamma/hadron baseline~\cite{kascade_icrc} achieves suppression fac
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory.pdf}
-\caption{Agent research trajectory for composition (Opus~4.6) showing DE-optimized fraction error for each experiment in chronological order. Colors indicate experiment category. The running best (black line) decreases rapidly during architecture exploration, then plateaus during training strategy optimization --- consistent with the confusion matrix ceiling hypothesis.\label{fig:trajectory}}
+\caption{Chronological research trajectory for composition classification. Crossed-out points indicate experiments that used an incorrect data pipeline (no Age feature, different quality cuts and splits) or metric (accuracy instead of fraction error); these are shown for completeness but excluded from the valid comparison. The vertical dotted line separates the invalid early runs from the matched-pipeline experiments. Valid results (filled circles) show rapid improvement during architecture exploration followed by a plateau during training strategy optimization.\label{fig:trajectory}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma.pdf}
+\caption{Chronological research trajectory for gamma/hadron separation (Haiku~4.5). Only runs using the correct metric (hadronic survival at 75\% gamma efficiency) are shown; two earlier runs that evaluated at 99\% gamma efficiency are omitted. Shaded bands indicate separate agent sessions (Run~3 and Run~4). The breakthrough at v9 (Attention CNN with engineered features) and the final ensemble (v41) are the key advances. Note the log scale.\label{fig:trajectory_gamma}}
 \end{figure}
 
 Beyond the final results, each agent's \textit{path} to those results is itself data. Across 9 runs, the agents conducted approximately 154 versioned experiments, with each producing training scripts, logs, model weights, and probability outputs.
