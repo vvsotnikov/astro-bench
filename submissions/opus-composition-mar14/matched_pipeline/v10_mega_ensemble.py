@@ -87,7 +87,8 @@ def main():
                                        maxiter=500, tol=1e-8, polish=False, popsize=25)
         fe_k = feval.evaluate((la_k + res_k.x).argmax(1))
         names = [n for n, _ in ranked[:k]]
-        p(f"  Top-{k} ({', '.join(names[:3]}...): raw={feval.evaluate(avg_k.argmax(1)):.4f} DE={fe_k:.4f}")
+        top_names = ', '.join(names[:3])
+        p(f"  Top-{k} ({top_names}...): raw={feval.evaluate(avg_k.argmax(1)):.4f} DE={fe_k:.4f}")
         if fe_k < best_fe:
             best_fe = fe_k
             best_preds = (la_k + res_k.x).argmax(1)
