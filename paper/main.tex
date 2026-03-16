@@ -1,4 +1,4 @@
-\documentclass[universe,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+\documentclass[universe,article,submit,pdftex,oneauthor]{Definitions/mdpi}
 
 \firstpage{1}
 \makeatletter
@@ -19,14 +19,13 @@
 
 \newcommand{\orcidauthorA}{0000-0002-3429-0484}
 
-\Author{Vladimir Sotnikov $^{1,2,}$*\orcidA{} and Dmitriy Kostunin $^{3}$}
+\Author{Vladimir Sotnikov $^{1,2}$\orcidA{}}
 
-\AuthorNames{Vladimir Sotnikov, Dmitriy Kostunin}
+\AuthorNames{Vladimir Sotnikov}
 
 \address{%
 $^{1}$ \quad JetBrains, Prague, Czech Republic\\
-$^{2}$ \quad JetBrains Astroparticle Physics Lab\\
-$^{3}$ \quad DESY, Zeuthen, Germany}
+$^{2}$ \quad JetBrains Astroparticle Physics Lab}
 
 \corres{Correspondence: vladimir.sotnikov@jetbrains.com}
 
@@ -154,6 +153,11 @@ HGB (tabular features) & --- & 50.5 & 0.1073 & 0.1066 \\
 \end{tabularx}
 \end{table}
 
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_architectures.pdf}
+\caption{Architecture comparison on KASCADE mass composition classification. Light bars show raw fraction error; dark bars show fraction error after differential evolution bias optimization. Dashed lines indicate published SOTA (red) and our best result (green). Parameter counts are shown below each bar.\label{fig:architectures}}
+\end{figure}
+
 The CNN+Attention+MLP architecture consistently outperforms all others. It uses 5 convolutional layers with squeeze-and-excitation channel attention, followed by adaptive average pooling, concatenated with a 2-layer MLP on 6 engineered scalar features. At 731K parameters --- 20$\times$ larger than the published LeNet --- it achieves 51.2\% accuracy and 0.1055 raw fraction error.
 
 The Graph Neural Network, which treats active (non-zero) detector stations as nodes in a spatial graph with $k$-nearest-neighbor edges, achieves competitive results (0.1058 with DE) with only 77K parameters --- demonstrating that the sparse spatial structure can be exploited without dense convolutions.
@@ -181,6 +185,11 @@ Cross-attention fusion & 0.1058 & 0.1050 & scalar $\rightarrow$ spatial \\
 \end{tabularx}
 \end{table}
 
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_strategies.pdf}
+\caption{Training strategy comparison on the CNN+Attn+MLP architecture. All strategies use log1p matrix preprocessing and data augmentation. The yellow-highlighted bar marks the best result (SAM + DE = 0.1045). Note the narrow range of DE-optimized scores (0.1045--0.1050) despite wider variation in raw scores.\label{fig:strategies}}
+\end{figure}
+
 Sharpness-Aware Minimization (SAM)~\cite{sam_optimizer} achieves the best result at 0.1045 after DE optimization. Notably, SAM's raw fraction error (0.1055) is not the lowest --- the AdamW baseline with cutout augmentation achieves 0.1052 raw --- but SAM's flatter loss landscape makes the confusion matrix more amenable to post-hoc bias correction.
 
 A striking finding is the convergence of all training strategies to a narrow band of 0.1045--0.1050 after DE optimization, despite varying raw scores of 0.1052--0.1063. This suggests a \textit{confusion matrix ceiling} for the CNN+Attn+MLP architecture on this dataset: DE extracts nearly all available information from the model's per-class error patterns, and the remaining errors are intrinsic to the classification problem (overlapping feature distributions between adjacent mass groups).
@@ -202,12 +211,22 @@ All 10 models & 0.1058 & 0.1045 \\
 \end{tabularx}
 \end{table}
 
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_confusion.pdf}
+\caption{Row-normalized confusion matrices for the reproduced LeNet baseline (left) and the best CNN+Attn+MLP model after DE bias optimization (right). The main confusion is between neighboring mass groups: proton--helium and silicon--iron. The bias-optimized model shifts predictions away from proton toward heavier elements, improving fraction error at the cost of per-event accuracy for protons.\label{fig:confusion}}
+\end{figure}
+
 Ensembles provide no improvement over the best single model after DE optimization. This further supports the confusion matrix ceiling hypothesis: all models of the same architecture family produce similar per-class error patterns, and DE already extracts the maximum from any single model.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Agent Research Trajectory}
 \label{sec:trajectory}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory.pdf}
+\caption{Agent research trajectory showing DE-optimized fraction error for each experiment in chronological order. Colors indicate experiment category. The running best (black line) decreases rapidly during architecture exploration, then plateaus during training strategy optimization --- consistent with the confusion matrix ceiling hypothesis.\label{fig:trajectory}}
+\end{figure}
 
 Beyond the final results, the agent's \textit{path} to those results is itself data. Over approximately 36 hours of interactive computation, the agent conducted 12 versioned experiments, with each experiment producing training scripts, logs, model weights, and probability outputs.
 
@@ -287,7 +306,7 @@ As AI agents become more capable, benchmarks like astro-bench that capture not j
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{Conceptualization, V.S. and D.K.; methodology, V.S.; software, V.S. and Claude Opus~4.6 (Anthropic); validation, V.S.; data curation, D.K.; writing---original draft preparation, V.S. and Claude Opus~4.6; writing---review and editing, V.S. and D.K.; supervision, D.K. All authors have read and agreed to the published version of the manuscript.}
+\authorcontributions{Not applicable (single author).}
 
 \funding{This research received no external funding.}
 
@@ -363,7 +382,7 @@ Karpathy, A. autoresearch. Available online: \url{https://github.com/karpathy/au
 Papailiopoulos, D. Addition Under Pressure. Available online: \url{https://dimitrisp.substack.com/p/addition-under-pressure} (accessed on 15 March 2026).
 
 \bibitem{sam_optimizer}
-Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. \textit{arXiv preprint} \textbf{2021}, arXiv:2010.01412.
+Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. In Proceedings of the 9th International Conference on Learning Representations (ICLR), Virtual, 3--7 May 2021.
 
 \end{thebibliography}
 
