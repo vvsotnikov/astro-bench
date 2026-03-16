@@ -68,11 +68,21 @@ The remainder of this paper is organized as follows. \Cref{sec:data} describes t
 
 We use QGSJet-II.04 Monte Carlo simulations of cosmic ray air showers, following the methodology of Kuznetsov et al.~\cite{kascade_jinst}. The simulation produces events for five primary particle types: proton (H), helium (He), carbon (C), silicon (Si), and iron (Fe), with class labels 0--4 respectively.
 
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_detector.pdf}
+\caption{KASCADE detector grid representation. (\textbf{a})~Schematic of the 16$\times$16 binned grid, with active stations shown in blue ($\sim$85\% of cells are zero). (\textbf{b})~Example electron/photon channel (log1p-transformed). (\textbf{c})~Example muon channel, which is sparser than the electron channel. Iron primaries produce relatively more muons; protons produce more electrons.\label{fig:detector}}
+\end{figure}
+
 Each event consists of two data modalities:
 \begin{itemize}
     \item \textbf{Detector grid images}: 16$\times$16$\times$2 arrays representing binned electron/photon and muon densities across the detector array ($\sim$85\% of cells are zero due to the sparse nature of air shower footprints).
     \item \textbf{Reconstructed scalar features}: energy $E$ (log$_{10}$(eV)), zenith angle $\theta_z$ (degrees), azimuth angle $\phi$ (degrees), electron number log$_{10}(N_e)$, muon number log$_{10}(N_\mu)$, and shower age $s$.
 \end{itemize}
+
+\begin{figure}[H]
+\includegraphics[width=0.7\textwidth]{fig_separation.pdf}
+\caption{Distribution of $\log_{10}(N_e/N_\mu)$ for the five mass groups in the test set. The $N_e/N_\mu$ ratio is the single strongest discriminant: heavier nuclei produce more muons relative to electrons. Adjacent mass groups overlap significantly, particularly H--He ($d \approx 0.54\sigma$) and Si--Fe ($d \approx 0.22\sigma$).\label{fig:separation}}
+\end{figure}
 
 Quality cuts are applied following~\cite{kascade_jinst}: $\theta_z < 30^{\circ}$, $\log_{10}(N_e) > 4.8$, $0.2 < s < 1.48$, and $\log_{10}(N_\mu) > 3.6$. After cuts, the dataset contains 383,547 events, split 70/21/9\% into training, validation, and test sets using \texttt{torch.utils.data.random\_split} with seed~42.
 
