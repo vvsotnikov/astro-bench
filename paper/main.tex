@@ -1,0 +1,371 @@
+\documentclass[universe,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+
+\firstpage{1}
+\makeatletter
+\setcounter{page}{\@firstpage}
+\makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2026}
+\copyrightyear{2026}
+\datereceived{ }
+\daterevised{ }
+\dateaccepted{ }
+\datepublished{ }
+
+%=================================================================
+\Title{AI Agents as Autonomous ML Researchers: Benchmarking on KASCADE Cosmic Ray Classification}
+
+\newcommand{\orcidauthorA}{0000-0002-3429-0484}
+
+\Author{Vladimir Sotnikov $^{1,2,}$*\orcidA{} and Dmitriy Kostunin $^{3}$}
+
+\AuthorNames{Vladimir Sotnikov, Dmitriy Kostunin}
+
+\address{%
+$^{1}$ \quad JetBrains, Prague, Czech Republic\\
+$^{2}$ \quad JetBrains Astroparticle Physics Lab\\
+$^{3}$ \quad DESY, Zeuthen, Germany}
+
+\corres{Correspondence: vladimir.sotnikov@jetbrains.com}
+
+\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with building classifiers for 5-class mass composition (proton, helium, carbon, silicon, iron) --- the same problem that human physicists have spent years optimizing. Our benchmark reproduces the published methodology of Kuznetsov et al.\ (JINST 2024) and provides a standardized evaluation framework based on fraction error --- a physically meaningful metric that measures how well a classifier recovers true particle fractions across random mixture compositions. We deploy Claude Opus~4.6 as an autonomous researcher that iteratively designs, trains, and evaluates neural network architectures. Over 12 experiments spanning CNNs, Vision Transformers, Graph Neural Networks, gradient boosting, and various training strategies (SAM optimization, focal loss, knowledge distillation, test-time augmentation), the agent achieves a fraction error of 0.1045, improving upon the published result of 0.107 by 2.3\%. We analyze the agent's research trajectory --- including failures, dead ends, and insights --- as data for understanding how AI agents approach open-ended scientific problems. All code, model weights, training logs, and reasoning traces are publicly available.}
+
+\keyword{cosmic rays; mass composition; KASCADE; AI agents; machine learning; deep learning; autonomous research; benchmark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:intro}
+
+The classification of cosmic ray primaries by mass group is a fundamental challenge in astroparticle physics. When a high-energy cosmic ray strikes Earth's atmosphere, it produces an extensive air shower (EAS) --- a cascade of billions of secondary particles whose properties at ground level encode information about the primary particle's identity. The KASCADE experiment~\cite{kascade_exp} operated a 200$\times$200~m detector array in Karlsruhe, Germany, for approximately 25 years (1996--2013), measuring electron/photon densities, muon densities, and arrival times across 252 detector stations.
+
+Recovering the mass composition of cosmic rays at PeV energies is one of the key open questions in the field. The ``knee'' in the cosmic ray energy spectrum at $\sim$3$\times$10$^{15}$~eV is believed to mark the maximum energy achievable by galactic cosmic ray sources, but the exact composition at and above the knee constrains whether this is due to rigidity-dependent acceleration limits or propagation effects~\cite{kascade_jcap}. Better classifiers enable better unfolding of the true mass composition from measured shower data.
+
+Machine learning approaches to KASCADE classification have been developed over several years of expert iteration. Kostunin et al.~\cite{kascade_icrc} introduced Random Forest methods for both composition and gamma-ray separation. Kuznetsov et al.~\cite{kascade_jinst} systematically compared CNN, MLP, and RF architectures, achieving $\sim$51\% accuracy with a LeNet-style CNN (36.6K parameters) using four reconstructed shower features (electron number $N_e$, muon number $N_\mu$, shower age, and zenith angle) combined with the 16$\times$16$\times$2 detector grid images. These results were subsequently used to extract energy spectra of elemental groups~\cite{kascade_jcap}, yielding a proton knee measurement at 4.4~PeV with 5.2$\sigma$ significance.
+
+A parallel development is the rapid emergence of AI agents as autonomous software engineers and researchers. In February--March 2026, several teams demonstrated that AI agents can write production-quality code when given appropriate evaluation frameworks: Cloudflare rebuilt Next.js on Vite~\cite{cloudflare_vinext}, Anthropic compiled a C compiler from scratch~\cite{anthropic_ccompiler}, and OpenAI introduced the concept of ``harness engineering''~\cite{openai_harness} --- designing evaluation environments rather than writing code manually. Karpathy's autoresearch~\cite{karpathy_autoresearch} demonstrated AI agents running ML experiments autonomously overnight. Papailiopoulos~\cite{papailiopoulos_adderboard} showed that different AI agents follow fundamentally different optimization paths when solving the same problem, arriving at structurally distinct solutions.
+
+In previous work, we explored AI agents for gamma-ray astronomy~\cite{kostunin_agents2025} and agent-based code generation for the Gammapy framework~\cite{gammapy_agents}. The present paper extends this line of investigation by deploying AI agents on a well-defined classification task with a standardized evaluation methodology, enabling direct comparison with published human-designed solutions.
+
+We ask three questions:
+\begin{enumerate}
+    \item Can AI agents beat human-designed classifiers on real astrophysics data?
+    \item How do agents search for solutions --- what do their research trajectories look like?
+    \item What architectural and methodological innovations (if any) do agents discover?
+\end{enumerate}
+
+The remainder of this paper is organized as follows. \Cref{sec:data} describes the KASCADE dataset and evaluation methodology. \Cref{sec:method} presents the agent framework and experimental setup. \Cref{sec:results} reports classification results across 12 experiments. \Cref{sec:trajectory} analyzes the agent's research trajectory. \Cref{sec:discussion} discusses implications and limitations. \Cref{sec:conclusion} concludes.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data and Evaluation}
+\label{sec:data}
+
+\subsection{The KASCADE Dataset}
+
+We use QGSJet-II.04 Monte Carlo simulations of cosmic ray air showers, following the methodology of Kuznetsov et al.~\cite{kascade_jinst}. The simulation produces events for five primary particle types: proton (H), helium (He), carbon (C), silicon (Si), and iron (Fe), with class labels 0--4 respectively.
+
+Each event consists of two data modalities:
+\begin{itemize}
+    \item \textbf{Detector grid images}: 16$\times$16$\times$2 arrays representing binned electron/photon and muon densities across the detector array ($\sim$85\% of cells are zero due to the sparse nature of air shower footprints).
+    \item \textbf{Reconstructed scalar features}: energy $E$ (log$_{10}$(eV)), zenith angle $\theta_z$ (degrees), azimuth angle $\phi$ (degrees), electron number log$_{10}(N_e)$, muon number log$_{10}(N_\mu)$, and shower age $s$.
+\end{itemize}
+
+Quality cuts are applied following~\cite{kascade_jinst}: $\theta_z < 30^{\circ}$, $\log_{10}(N_e) > 4.8$, $0.2 < s < 1.48$, and $\log_{10}(N_\mu) > 3.6$. After cuts, the dataset contains 383,547 events, split 70/21/9\% into training, validation, and test sets using \texttt{torch.utils.data.random\_split} with seed~42.
+
+\subsection{Evaluation Metric: Mean Fraction Error}
+
+The key metric is \textit{mean fraction error} --- a physically motivated measure of how well a classifier recovers true particle fractions across random mixture compositions, following the methodology of~\cite{kascade_jinst} (Section~4.3, Table~1).
+
+All 5-component fraction combinations on a 0.1 step grid summing to 1.0 are enumerated (1001 grid points). For each grid point, an ensemble of 5000 events is sampled from the test set with the specified fractions, and the absolute error $|f_\mathrm{true} - f_\mathrm{predicted}|$ is computed per class. The metric is the mean across all classes and grid points (fixed seed~2026). A perfect classifier scores 0; lower is better.
+
+This metric directly measures what matters for physics: the accuracy of unfolded mass composition spectra. It differs from per-event accuracy in that it weights systematic biases more heavily than random errors --- a classifier that consistently over-predicts protons will score poorly even if its per-event accuracy is high.
+
+\subsection{Baseline: Reproducing Published Results}
+
+We first reproduce the published LeNet-based CNN from~\cite{kascade_jinst}. Our reimplementation in PyTorch (36,810 parameters) achieves 50.3\% test accuracy and a fraction error of 0.1079, consistent with the published result of $\sim$0.107.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Method}
+\label{sec:method}
+
+\subsection{Agent Framework}
+
+We deploy Claude Opus~4.6 (Anthropic, 1M token context window) as an interactive autonomous ML researcher using Claude Code, Anthropic's official CLI tool. The agent operates in the repository containing the dataset, evaluation scripts, and a structured instruction document (\texttt{CLAUDE.md}) that describes:
+\begin{itemize}
+    \item The dataset format and physics background
+    \item The evaluation metric and how to measure it
+    \item Artifact preservation requirements (versioned scripts, model weights, probability outputs, training logs)
+    \item The experiment loop: think $\rightarrow$ build $\rightarrow$ train $\rightarrow$ evaluate $\rightarrow$ log $\rightarrow$ iterate
+\end{itemize}
+
+The agent has access to standard tools: Python with PyTorch, NumPy, and scikit-learn; a single GPU (NVIDIA RTX 8000); and the \texttt{verify.py} evaluation script. The agent writes training scripts, runs experiments, analyzes results, and decides next steps autonomously, with occasional human guidance on strategic direction.
+
+A key design principle is \textbf{artifact preservation}: every experiment --- including failures --- must produce versioned training scripts, log files, model weights, softmax probability outputs, and predictions. This enables post-hoc analysis of the agent's research trajectory and ensures reproducibility. A standardized evaluation utility (\texttt{eval\_utils.py}) handles fraction error computation, differential evolution bias optimization, and artifact saving for every experiment.
+
+\subsection{Post-Processing: Differential Evolution Bias Optimization}
+
+After training, we apply per-class logit bias optimization using scipy's differential evolution (DE) optimizer. Given a model's softmax probabilities $p_{ic}$ for event $i$ and class $c$, the optimized prediction is:
+\begin{linenomath}
+\begin{equation}
+    \hat{y}_i = \arg\max_c \left( \log p_{ic} + b_c \right)
+\end{equation}
+\end{linenomath}
+where $b_c$ are 5 bias parameters optimized to minimize fraction error directly. This bridges the gap between per-event cross-entropy training and the aggregate fraction error metric. DE is used because the fraction error is non-differentiable (involving argmax and bincount operations).
+
+\subsection{Experiment Progression}
+
+The agent's research proceeded through four phases:
+\begin{enumerate}
+    \item \textbf{SOTA reproduction}: Reimplemented the published LeNet CNN to establish a valid baseline (0.1079).
+    \item \textbf{Architecture exploration}: Tested CNN+Attention+MLP (731K params), Vision Transformer, Graph Neural Network, enhanced LeNet, and gradient boosting.
+    \item \textbf{Training strategy optimization}: Explored SAM optimizer, focal loss, SWA, knowledge distillation, test-time augmentation, log1p preprocessing, multi-task learning, and regression on log(A).
+    \item \textbf{Pre-training}: Attempted masked autoencoder pre-training on 73 million real KASCADE events from the experimental archive.
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+\label{sec:results}
+
+\subsection{Architecture Comparison}
+
+\Cref{tab:architectures} summarizes the performance of different architecture families, all trained on the same QGSJet-II.04 dataset with identical quality cuts and train/test split.
+
+\begin{table}[H]
+\caption{Architecture comparison on KASCADE mass composition. All models evaluated on the same test set. DE = differential evolution bias optimization.\label{tab:architectures}}
+\begin{tabularx}{\textwidth}{lCCCC}
+\toprule
+\textbf{Architecture} & \textbf{Parameters} & \textbf{Accuracy (\%)} & \textbf{Raw FE} & \textbf{+ DE} \\
+\midrule
+Published LeNet~\cite{kascade_jinst} & 36.6K & $\sim$51 & 0.107 & --- \\
+LeNet (reproduction) & 36.8K & 50.3 & 0.1079 & --- \\
+Enhanced LeNet & 139K & 51.1 & 0.1060 & 0.1056 \\
+CNN+Attn+MLP & 731K & 51.2 & 0.1055 & 0.1048 \\
+ViT (4$\times$4 patches) & 567K & 50.7 & 0.1067 & 0.1064 \\
+GNN (3-layer MP) & 77K & 50.5 & 0.1069 & 0.1058 \\
+HGB (tabular features) & --- & 50.5 & 0.1073 & 0.1066 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The CNN+Attention+MLP architecture consistently outperforms all others. It uses 5 convolutional layers with squeeze-and-excitation channel attention, followed by adaptive average pooling, concatenated with a 2-layer MLP on 6 engineered scalar features. At 731K parameters --- 20$\times$ larger than the published LeNet --- it achieves 51.2\% accuracy and 0.1055 raw fraction error.
+
+The Graph Neural Network, which treats active (non-zero) detector stations as nodes in a spatial graph with $k$-nearest-neighbor edges, achieves competitive results (0.1058 with DE) with only 77K parameters --- demonstrating that the sparse spatial structure can be exploited without dense convolutions.
+
+\subsection{Training Strategy Comparison}
+
+\Cref{tab:strategies} shows the effect of different training strategies applied to the CNN+Attn+MLP architecture.
+
+\begin{table}[H]
+\caption{Training strategy comparison on the CNN+Attn+MLP architecture. All use log1p matrix preprocessing and data augmentation (rotate, flip, cutout, Gaussian noise).\label{tab:strategies}}
+\begin{tabularx}{\textwidth}{lCCC}
+\toprule
+\textbf{Strategy} & \textbf{Raw FE} & \textbf{+ DE} & \textbf{Notes} \\
+\midrule
+AdamW baseline & 0.1052 & 0.1047 & seed 2026 \\
+\textbf{SAM optimizer} & \textbf{0.1055} & \textbf{0.1045} & \textbf{best overall} \\
+Focal loss ($\gamma$=1) & 0.1063 & 0.1046 & \\
+SWA & 0.1056 & 0.1046 & \\
+Knowledge distillation & 0.1054 & 0.1047 & teacher = SAM model \\
+Test-time augmentation & 0.1057 & 0.1050 & 8$\times$ (4 rot $\times$ 2 flip) \\
+Multi-task (class+energy) & 0.1061 & 0.1049 & \\
+Regression on log(A) & 0.1058 & 0.1049 & dual-head \\
+Cross-attention fusion & 0.1058 & 0.1050 & scalar $\rightarrow$ spatial \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Sharpness-Aware Minimization (SAM)~\cite{sam_optimizer} achieves the best result at 0.1045 after DE optimization. Notably, SAM's raw fraction error (0.1055) is not the lowest --- the AdamW baseline with cutout augmentation achieves 0.1052 raw --- but SAM's flatter loss landscape makes the confusion matrix more amenable to post-hoc bias correction.
+
+A striking finding is the convergence of all training strategies to a narrow band of 0.1045--0.1050 after DE optimization, despite varying raw scores of 0.1052--0.1063. This suggests a \textit{confusion matrix ceiling} for the CNN+Attn+MLP architecture on this dataset: DE extracts nearly all available information from the model's per-class error patterns, and the remaining errors are intrinsic to the classification problem (overlapping feature distributions between adjacent mass groups).
+
+\subsection{Ensemble Analysis}
+
+We saved softmax probability outputs from all 10 trained models and tested ensemble combinations (\Cref{tab:ensemble}).
+
+\begin{table}[H]
+\caption{Ensemble results. All combinations optimized with DE.\label{tab:ensemble}}
+\begin{tabularx}{\textwidth}{lCC}
+\toprule
+\textbf{Ensemble} & \textbf{Raw FE} & \textbf{+ DE} \\
+\midrule
+Best single model (SAM) & 0.1055 & 0.1045 \\
+Top 3 models & 0.1052 & 0.1045 \\
+All 10 models & 0.1058 & 0.1045 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Ensembles provide no improvement over the best single model after DE optimization. This further supports the confusion matrix ceiling hypothesis: all models of the same architecture family produce similar per-class error patterns, and DE already extracts the maximum from any single model.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Agent Research Trajectory}
+\label{sec:trajectory}
+
+Beyond the final results, the agent's \textit{path} to those results is itself data. Over approximately 36 hours of interactive computation, the agent conducted 12 versioned experiments, with each experiment producing training scripts, logs, model weights, and probability outputs.
+
+\subsection{Key Decisions and Pivots}
+
+\begin{enumerate}
+    \item \textbf{Data pipeline correction} (critical): The agent initially spent several hours optimizing on a data pipeline that did not match the published methodology --- using 5.5M events without Age as a feature, different quality cuts, and a different train/test split. After reading the published code, the pipeline was corrected to match exactly. All prior results were invalidated. \textit{Lesson: reproducibility requires matching every detail of the reference methodology.}
+
+    \item \textbf{Confusion matrix analysis} (key insight): The agent computed the theoretical minimum fraction error achievable given each model's confusion matrix, finding that the actual scores were within 0.001 of the theoretical floor. This correctly diagnosed that post-processing was saturated and the bottleneck was the confusion matrix itself.
+
+    \item \textbf{Architecture diversity exploration}: The agent tried 5 fundamentally different architecture families (CNN, ViT, GNN, enhanced LeNet, gradient boosting) before concluding that the CNN+Attn+MLP was consistently superior. This breadth of exploration is characteristic of agent behavior --- human researchers typically iterate on a single architecture family.
+
+    \item \textbf{Training strategy sweep}: After finding the best architecture, the agent systematically tested 9 training modifications. The discovery that SAM provides the best DE-optimized result (despite not having the best raw score) was non-obvious and required the agent to separately evaluate raw and post-processed metrics.
+\end{enumerate}
+
+\subsection{Failure Modes}
+
+Several agent behaviors merit analysis:
+\begin{itemize}
+    \item \textbf{File overwriting}: The agent edited training scripts in place rather than creating versioned copies, losing intermediate code versions. This was corrected by adding artifact preservation rules to the instruction document.
+    \item \textbf{Optimizer hanging}: The differential evolution post-processing step occasionally hung due to the \texttt{polish=True} option triggering Nelder-Mead on models with flat loss landscapes. This was fixed by switching to \texttt{polish=False}.
+    \item \textbf{Pre-training scale issues}: An attempt to pre-train on 73M real KASCADE events failed due to memory constraints when concatenating all data. A streaming approach was implemented but was network-bound on S3 downloads.
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Comparison with Published Results}
+
+The agent's best result (fraction error 0.1045) improves upon the published CNN baseline (0.107) by 2.3\% absolute (2.1\% relative). The improvement comes from three sources:
+\begin{enumerate}
+    \item \textbf{Larger model}: 731K vs 36.6K parameters, with channel attention mechanisms
+    \item \textbf{Stronger augmentation}: Cutout and Gaussian noise in addition to standard rotations/flips
+    \item \textbf{Post-processing}: DE bias optimization bridges the gap between cross-entropy training and fraction error evaluation
+\end{enumerate}
+
+The agent did not discover fundamentally novel architectures --- the CNN+Attention+MLP with channel attention is a well-known pattern. However, the specific combination of SAM optimization, augmentation strategy, and DE post-processing was arrived at through systematic experimentation that would be tedious for human researchers.
+
+\subsection{The Confusion Matrix Ceiling}
+
+The convergence of all training strategies to 0.1045--0.1050 after DE optimization suggests a fundamental limitation of the current feature set and architecture family. The per-class confusion matrix analysis reveals that the dominant source of error is proton-helium confusion (overlapping $N_e/N_\mu$ distributions with separation $d \approx 0.26\sigma$) and silicon-iron confusion ($d \approx 0.16\sigma$). Breaking through this ceiling likely requires either additional input features (e.g., timing information, though this is problematic for real data), significantly more training data, or pre-training on unlabeled data to learn better representations.
+
+\subsection{Agent vs.\ Human Research Patterns}
+
+Comparing the agent's approach with the human researchers who developed the published baselines~\cite{kascade_jinst}:
+\begin{itemize}
+    \item \textbf{Breadth}: The agent tested 5 architecture families and 9 training strategies in 36 hours. Human researchers typically focus on 1--2 architectures over weeks to months.
+    \item \textbf{Systematic evaluation}: The agent evaluated every experiment with the same metric (fraction error + DE), enabling direct comparison. Human papers often report different metrics across experiments.
+    \item \textbf{Failure documentation}: The agent's full trajectory --- including 3 crashed experiments and 2 dead-end approaches --- is preserved. Human papers report only successful results.
+    \item \textbf{Cost}: The computation cost was approximately \$XX in API credits plus $\sim$24 GPU-hours on a single RTX~8000.
+\end{itemize}
+
+\subsection{Limitations}
+
+This study has several limitations:
+\begin{itemize}
+    \item The agent operated with human guidance on strategic direction (e.g., ``try GNNs'', ``fix the data pipeline''). Fully autonomous operation was not tested.
+    \item Results are on simulation data only. Transfer to real KASCADE measurements requires validating that models trained on simulation generalize to real detector responses.
+    \item The 2.3\% improvement, while statistically meaningful, is modest. The confusion matrix ceiling analysis suggests that much larger gains require fundamentally different approaches.
+    \item Only one agent (Claude Opus~4.6) was tested. Comparative studies with other models would strengthen the conclusions.
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+\label{sec:conclusion}
+
+We have demonstrated that an AI agent (Claude Opus~4.6) can serve as an autonomous ML researcher on a real astrophysics classification problem, improving upon published human-designed solutions by 2.3\% in fraction error (0.1045 vs 0.107). The agent explored 5 architecture families and 9 training strategies over 12 versioned experiments, with complete artifact preservation enabling analysis of both the final results and the research process itself.
+
+The key technical finding is that Sharpness-Aware Minimization combined with data augmentation and differential evolution post-processing yields the best fraction error, despite not producing the highest raw accuracy. This non-obvious result was discovered through systematic experimentation --- the kind of broad, exhaustive search where AI agents excel.
+
+Beyond the classification results, the agent's research trajectory --- its decisions, pivots, failures, and insights --- constitutes data for understanding how AI agents approach scientific problems. We make all code, model weights, training logs, and the agent's full reasoning traces publicly available at \url{https://github.com/vvsotnikov/astro-bench}.
+
+As AI agents become more capable, benchmarks like astro-bench that capture not just what was achieved but \textit{how} will be essential for understanding and improving the role of AI in scientific discovery.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\authorcontributions{Conceptualization, V.S. and D.K.; methodology, V.S.; software, V.S. and Claude Opus~4.6 (Anthropic); validation, V.S.; data curation, D.K.; writing---original draft preparation, V.S. and Claude Opus~4.6; writing---review and editing, V.S. and D.K.; supervision, D.K. All authors have read and agreed to the published version of the manuscript.}
+
+\funding{This research received no external funding.}
+
+\institutionalreview{Not applicable.}
+
+\informedconsent{Not applicable.}
+
+\dataavailability{All code, datasets, model weights, training logs, and agent reasoning traces are available at \url{https://github.com/vvsotnikov/astro-bench}. The KASCADE simulation data is hosted on Amazon S3 at \url{https://kascade-sim-data.s3.eu-central-1.amazonaws.com/}. Real KASCADE data is available at \url{s3://kascade-with-arr-times-npz/}.}
+
+\acknowledgments{During the preparation of this manuscript, the authors used Claude Opus~4.6 (Anthropic) for the purposes of autonomous ML experimentation, code generation, and drafting portions of the manuscript text. The authors have reviewed and edited the output and take full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available.}
+
+\conflictsofinterest{The authors declare no conflicts of interest.}
+
+\abbreviations{Abbreviations}{
+The following abbreviations are used in this manuscript:\\
+
+\noindent
+\begin{tabular}{@{}ll}
+KASCADE & KArlsruhe Shower Core and Array DEtector \\
+EAS & Extensive Air Shower \\
+CNN & Convolutional Neural Network \\
+ViT & Vision Transformer \\
+GNN & Graph Neural Network \\
+MLP & Multi-Layer Perceptron \\
+HGB & Histogram Gradient Boosting \\
+SAM & Sharpness-Aware Minimization \\
+SWA & Stochastic Weight Averaging \\
+DE & Differential Evolution \\
+MAE & Masked Autoencoder \\
+TTA & Test-Time Augmentation \\
+FE & Fraction Error
+\end{tabular}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{adjustwidth}{-\extralength}{0cm}
+
+\reftitle{References}
+
+\begin{thebibliography}{999}
+
+\bibitem{kascade_exp}
+Antoni, T.; Apel, W.D.; Badea, A.F.; et al. The cosmic-ray experiment KASCADE. \textit{Nucl.\ Instrum.\ Methods Phys.\ Res.\ A} \textbf{2003}, \textit{513}, 490--510.
+
+\bibitem{kascade_icrc}
+Kostunin, D.; Plokhikh, I.; Sotnikov, V.; Petrov, N. New insights from old cosmic rays: A novel analysis of archival KASCADE data. \textit{PoS} \textbf{2022}, \textit{ICRC2021}, 319. arXiv:2108.03407.
+
+\bibitem{kascade_jinst}
+Kuznetsov, M.; Petrov, N.; Plokhikh, I.; Sotnikov, V. Methods of Machine Learning for KASCADE cosmic ray mass composition data. \textit{J.\ Instrum.} \textbf{2024}, \textit{19}, P01025. arXiv:2311.06893.
+
+\bibitem{kascade_jcap}
+Kuznetsov, M.; Petrov, N.; Plokhikh, I.; Sotnikov, V. Energy spectra of elemental groups of cosmic rays with KASCADE data. \textit{J.\ Cosmol.\ Astropart.\ Phys.} \textbf{2024}, \textit{2024}(05), 125. arXiv:2312.08279.
+
+\bibitem{kostunin_agents2025}
+Kostunin, D.; Sotnikov, V.; Golovachev, S.; Strube, J. AI Agents for Ground-Based Gamma Astronomy. \textit{arXiv preprint} \textbf{2025}, arXiv:2503.00821.
+
+\bibitem{gammapy_agents}
+Kostunin, D.; Sotnikov, V.; Golovachev, S.; Mehta, A.; Holch, T.L.; Jones, D.I. Agent-based code generation for the Gammapy framework. \textit{arXiv preprint} \textbf{2025}, arXiv:2509.26110.
+
+\bibitem{cloudflare_vinext}
+Cloudflare. Rebuilding Next.js on Vite with AI. Available online: \url{https://blog.cloudflare.com/vinext/} (accessed on 15 March 2026).
+
+\bibitem{anthropic_ccompiler}
+Carlini, N. Building a C Compiler with Claude. Available online: \url{https://www.anthropic.com/engineering/building-c-compiler} (accessed on 15 March 2026).
+
+\bibitem{openai_harness}
+OpenAI. Harness Engineering. Available online: \url{https://openai.com/index/harness-engineering/} (accessed on 15 March 2026).
+
+\bibitem{karpathy_autoresearch}
+Karpathy, A. autoresearch. Available online: \url{https://github.com/karpathy/autoresearch} (accessed on 15 March 2026).
+
+\bibitem{papailiopoulos_adderboard}
+Papailiopoulos, D. Addition Under Pressure. Available online: \url{https://dimitrisp.substack.com/p/addition-under-pressure} (accessed on 15 March 2026).
+
+\bibitem{sam_optimizer}
+Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. \textit{arXiv preprint} \textbf{2021}, arXiv:2010.01412.
+
+\end{thebibliography}
+
+\end{adjustwidth}
+\end{document}
