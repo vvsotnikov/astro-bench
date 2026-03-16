@@ -164,13 +164,9 @@ def main():
                     B = batch.shape[0]
                     if B < 16: continue
 
-                    # Random patch masking
-                    mask = torch.ones(B, 1, 16, 16, device=DEVICE)
-                    for _ in range(8):
-                        cx = torch.randint(0, 4, (B,)) * 4
-                        cy = torch.randint(0, 4, (B,)) * 4
-                        for b in range(B):
-                            mask[b, :, cy[b]:cy[b]+4, cx[b]:cx[b]+4] = 0
+                    # Fast random patch masking: random binary mask on 4x4 grid, upscale to 16x16
+                    block_mask = (torch.rand(B, 1, 4, 4, device=DEVICE) > 0.5).float()
+                    mask = F.interpolate(block_mask, size=16, mode='nearest')
 
                     opt.zero_grad()
                     with autocast(device_type='cuda'):
