@@ -90,7 +90,7 @@ def fig_trajectory_composition():
                markersize=8, label='Opus 4.6', markeredgecolor='black', markeredgewidth=0.5),
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['baseline'],
                markersize=8, label='LeNet repro.', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], color='gray', linewidth=1, alpha=0.5, label='Running best'),
+        Line2D([0], [0], color='gray', linewidth=1, alpha=0.7, label='Running best'),
     ]
     ax.legend(handles=handles, loc='upper right', fontsize=8)
 
@@ -107,28 +107,23 @@ def fig_trajectory_gamma():
     """
     # v2 key results (23 experiments, correct metric)
     v2_experiments = [
-        ('v1\nreweight', 3.15e-03, 'discard'),
-        ('v2\nlonger', 1.31e-03, 'keep'),
-        ('v3\nregression', 9.05e-04, 'keep'),
-        ('v5\nens v2+v3', 7.89e-04, 'keep'),
-        ('v9\nmultiseed', 7.51e-04, 'keep'),
-        ('v14\nens opt', 6.94e-04, 'keep'),
-        ('v18\nbest ens', 6.43e-04, 'keep'),
+        ('DNN\nlonger', 1.31e-03, 'keep'),
+        ('Regression\nDNN', 9.05e-04, 'keep'),
+        ('Ensemble\nv2+v3', 7.89e-04, 'keep'),
+        ('Multi-\nseed', 7.51e-04, 'keep'),
+        ('Ensemble\nopt', 6.94e-04, 'keep'),
+        ('Best\nensemble', 6.43e-04, 'keep'),
     ]
 
     # v3 key results (41+ experiments, correct metric)
     v3_experiments = [
-        ('v1\nseeds', 6.43e-04, 'keep'),
-        ('v3\nAttnCNN', 5.84e-04, 'keep'),
-        ('v8\ndeeper', 6.13e-04, 'discard'),
-        ('v9\nAttn+feat', 3.50e-04, 'keep'),
-        ('v11\nmultiseed', 4.97e-04, 'discard'),
-        ('v16\npure CNN', 5.26e-04, 'discard'),
-        ('v20\nViT', 6.72e-04, 'discard'),
-        ('v27b\nViT tuned', 5.55e-04, 'keep'),
-        ('v34\nAE+feat', 5.55e-04, 'keep'),
-        ('v38\nResNet', 3.80e-04, 'keep'),
-        ('v41\nensemble', 3.21e-04, 'keep'),
+        ('Seed\nexplore', 6.43e-04, 'keep'),
+        ('Attn\nCNN', 5.84e-04, 'keep'),
+        ('Attn+\nfeatures', 3.50e-04, 'keep'),
+        ('ViT', 5.55e-04, 'keep'),
+        ('AE+\nfeatures', 5.55e-04, 'keep'),
+        ('ResNet', 3.80e-04, 'keep'),
+        ('Cross-arch\nensemble', 3.21e-04, 'keep'),
     ]
 
     all_exp = []
@@ -165,7 +160,7 @@ def fig_trajectory_gamma():
     # (session separators removed for clarity)
 
     # Reference
-    ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.5)
+    ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
     ax.text(0, 1.1e-3, 'Published baseline', ha='left', fontsize=7, color='gray')
 
     ax.set_xticks(range(len(all_exp)))
@@ -178,7 +173,7 @@ def fig_trajectory_gamma():
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['haiku'],
                markersize=8, label='Haiku 4.5', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], color='gray', linewidth=1, alpha=0.5, label='Running best'),
+        Line2D([0], [0], color='gray', linewidth=1, alpha=0.7, label='Running best'),
     ]
     ax.legend(handles=handles, loc='upper right', fontsize=8)
 
