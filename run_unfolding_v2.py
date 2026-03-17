@@ -88,7 +88,8 @@ def main():
     model = HybridModel(n_feat=6).to(DEVICE)
     model.load_state_dict(torch.load(f"{OUT_DIR}/model_v2_sam.pt", weights_only=True))
     model.eval()
-    biases = np.array([-0.0549, -0.1059, -0.1677, -0.2252, -0.3169])
+    # NO DE biases for real data — they were tuned on balanced simulation
+    biases = np.zeros(5)
 
     # === 2. Build energy-binned confusion matrices from simulation ===
     p("Building energy-binned confusion matrices...")
@@ -272,7 +273,7 @@ def main():
     ax2.legend(fontsize=8, ncol=2)
     ax2.grid(alpha=0.2)
 
-    plt.suptitle(f'KASCADE Real Data — CNN+Attn+MLP (SAM+DE)\n'
+    plt.suptitle(f'KASCADE Real Data — CNN+Attn+MLP (SAM, no DE bias)\n'
                  f'{total:,} events', fontsize=12)
     plt.tight_layout()
     plt.savefig('paper/fig_real_spectra.pdf', bbox_inches='tight')
