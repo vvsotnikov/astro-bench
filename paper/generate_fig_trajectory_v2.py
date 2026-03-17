@@ -76,7 +76,7 @@ def fig_trajectory_composition():
 
     # Reference lines
     ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-    ax.text(0, 0.1072, 'Published SOTA (0.107)', ha='left', fontsize=7, color='gray')
+    ax.text(0, 0.1072, 'Published baseline', ha='left', fontsize=7, color='gray')
 
     ax.set_xticks(range(len(experiments)))
     ax.set_xticklabels([e[0] for e in experiments], rotation=45, ha='right', fontsize=6)
@@ -166,7 +166,7 @@ def fig_trajectory_gamma():
 
     # Reference
     ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.5)
-    ax.text(0, 1.1e-3, 'Published ~10⁻³', ha='left', fontsize=7, color='gray')
+    ax.text(0, 1.1e-3, 'Published baseline', ha='left', fontsize=7, color='gray')
 
     ax.set_xticks(range(len(all_exp)))
     ax.set_xticklabels([e[0] for e in all_exp], rotation=45, ha='right', fontsize=6)
