@@ -395,8 +395,13 @@ On \textbf{composition}, the best agent result (fraction error 0.1045, Opus~4.6)
 To validate the composition classifier on real experimental data, we ran inference on all 1308 runs of the KASCADE archive (1,572,349 events after quality cuts with $\theta_z < 18^{\circ}$) and applied confusion matrix unfolding (\Cref{fig:real_spectra}). Importantly, the DE bias correction must \textit{not} be applied when classifying real data: the biases were optimized on balanced simulation (20\% per class) and distort predictions when the true composition differs. Using raw model predictions (without biases) produces folded spectra that already show the expected proton-dominated composition. The unfolded energy spectra show clear mass group separation consistent with published results~\cite{kascade_jcap}.
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_real_spectra.pdf}
-\caption{Energy spectra from real KASCADE data classified by our best model (CNN+Attn+MLP with SAM, without DE bias correction --- see text). Left: folded spectra (raw predicted counts). Right: unfolded spectra using energy-dependent confusion matrix inversion. Both show the expected mass group ordering: proton-dominated at lower energies with heavier elements contributing at higher energies, consistent with published results~\cite{kascade_jcap}.\label{fig:real_spectra}}
+\includegraphics[width=0.7\textwidth]{fig_real_spectra.pdf}
+\caption{Folded mass composition spectra from real KASCADE data ($\theta_z < 18^{\circ}$, 1.57M events) classified by our best model (CNN+Attn+MLP with SAM, without DE bias correction --- see text). The expected mass group ordering is clearly visible: proton-dominated at lower energies with heavier elements contributing at higher energies, consistent with published results~\cite{kascade_jcap}.\label{fig:real_spectra}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_unfolded_components.pdf}
+\caption{Unfolded energy spectra per mass component from real KASCADE data, using energy-dependent confusion matrix inversion. The proton spectrum shows the knee feature at $\sim$3--5~PeV, consistent with the published measurement of $4.4 \pm 0.7$~PeV~\cite{kascade_jcap}. Error bars reflect statistical uncertainty propagated through the unfolding procedure.\label{fig:unfolded_components}}
 \end{figure}
 
 On \textbf{gamma/hadron separation}, the best agent result ($3.21 \times 10^{-4}$ survival at 75\% gamma efficiency, Haiku~4.5) represents approximately an order-of-magnitude improvement over published baselines ($10^{-2}$--$10^{-3}$ at 30--70\% efficiency~\cite{kascade_icrc}). The improvement is both in the metric value and in the operating point (75\% vs 30--70\% gamma efficiency). This much larger relative gain suggests the gamma/hadron problem was less thoroughly optimized in prior work.

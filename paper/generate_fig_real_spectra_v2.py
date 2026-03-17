@@ -157,7 +157,7 @@ def main():
     ax.set_xlabel('Energy, [eV]')
     ax.set_ylabel(r'$\sim$ Flux $\cdot E^{2.7}$, [eV$^{1.7}$ m$^{-2}$ sr$^{-1}$ s$^{-1}$]')
     ax.set_xscale('log'); ax.set_yscale('log')
-    ax.set_ylim(1e17, None)
+    ax.set_ylim(1e18, None)
     ax.set_title(r'Folded spectra ($0° < \theta < 18°$)')
     ax.legend(fontsize=10, ncol=2)
     ax.grid(alpha=0.2)
