@@ -62,16 +62,21 @@ def fig_trajectory_composition():
         y_pts.append(fe)
         c_pts.append(COLORS[agent])
 
-    # Plot all points
+    # Plot all points: filled for agent, hollow for reproduction
     for xi, yi, ci in zip(x_pts, y_pts, c_pts):
-        ax.scatter(xi, yi, c=ci, s=60, zorder=5, edgecolors='black', linewidths=0.5)
+        if ci == COLORS['baseline']:
+            ax.scatter(xi, yi, facecolors='none', s=60, zorder=5,
+                      edgecolors=ci, linewidths=1.5)
+        else:
+            ax.scatter(xi, yi, c=ci, s=60, zorder=5, edgecolors='black', linewidths=0.5)
 
-    # Running best
+    # Running best (connect only consecutive improvements)
     running_best = 1.0
     bx, by = [], []
     for i, (_, fe, _, _) in enumerate(experiments):
-        running_best = min(running_best, fe)
-        bx.append(i); by.append(running_best)
+        if fe <= running_best:
+            running_best = fe
+            bx.append(i); by.append(running_best)
     ax.plot(bx, by, '-', color='gray', linewidth=1, alpha=0.7)
 
     # Reference lines
@@ -88,8 +93,8 @@ def fig_trajectory_composition():
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['opus'],
                markersize=8, label='Opus 4.6', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['baseline'],
-               markersize=8, label='LeNet repro.', markeredgecolor='black', markeredgewidth=0.5),
+        Line2D([0], [0], marker='o', color='w', markerfacecolor='none',
+               markersize=8, label='Reproduction', markeredgecolor=COLORS['baseline'], markeredgewidth=1.5),
         Line2D([0], [0], color='gray', linewidth=1, alpha=0.7, label='Running best'),
     ]
     ax.legend(handles=handles, loc='upper right', fontsize=8)
@@ -155,12 +160,13 @@ def fig_trajectory_gamma():
             ax.scatter(i, surv, facecolors='none', s=60, zorder=5,
                       edgecolors=COLORS[agent], linewidths=1.5)
 
-    # Running best (all experiments count)
+    # Running best (connect only improvements)
     best = 1.0
     bx, by = [], []
     for i, (_, surv, _, _) in enumerate(all_exp):
-        best = min(best, surv)
-        bx.append(i); by.append(best)
+        if surv <= best:
+            best = surv
+            bx.append(i); by.append(best)
     ax.plot(bx, by, '-', color='gray', linewidth=1, alpha=0.7)
 
     # (session separators removed for clarity)
