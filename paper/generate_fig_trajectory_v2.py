@@ -19,8 +19,7 @@ plt.rcParams.update({
 COLORS = {
     'haiku': '#FF9800',
     'opus': '#2196F3',
-    'baseline': '#F44336',
-    'published': '#999999',
+    'baseline': '#999999',
 }
 
 def fig_trajectory_composition():
@@ -73,11 +72,11 @@ def fig_trajectory_composition():
     for i, (_, fe, _, _) in enumerate(experiments):
         running_best = min(running_best, fe)
         bx.append(i); by.append(running_best)
-    ax.plot(bx, by, 'k-', linewidth=1, alpha=0.5)
+    ax.plot(bx, by, '-', color='gray', linewidth=1, alpha=0.7)
 
     # Reference lines
-    ax.axhline(y=0.107, color='red', linestyle='--', linewidth=0.8, alpha=0.5)
-    ax.text(len(experiments)-1, 0.1072, 'Published SOTA', ha='right', fontsize=7, color='red')
+    ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+    ax.text(0, 0.1072, 'Published SOTA (0.107)', ha='left', fontsize=7, color='gray')
 
     ax.set_xticks(range(len(experiments)))
     ax.set_xticklabels([e[0] for e in experiments], rotation=45, ha='right', fontsize=6)
@@ -88,12 +87,12 @@ def fig_trajectory_composition():
 
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['opus'],
-               markersize=8, label='Opus', markeredgecolor='black', markeredgewidth=0.5),
+               markersize=8, label='Opus 4.6', markeredgecolor='black', markeredgewidth=0.5),
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['baseline'],
-               markersize=8, label='Baseline', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], color='black', linewidth=1, alpha=0.5, label='Running best'),
+               markersize=8, label='LeNet repro.', markeredgecolor='black', markeredgewidth=0.5),
+        Line2D([0], [0], color='gray', linewidth=1, alpha=0.5, label='Running best'),
     ]
-    ax.legend(handles=handles, loc='upper right', fontsize=7)
+    ax.legend(handles=handles, loc='upper right', fontsize=8)
 
     plt.tight_layout()
     plt.savefig('paper/fig_trajectory.pdf', bbox_inches='tight')
@@ -161,7 +160,7 @@ def fig_trajectory_gamma():
         if status == 'keep':
             best = min(best, surv)
             bx.append(i); by.append(best)
-    ax.plot(bx, by, 'k-', linewidth=1, alpha=0.5)
+    ax.plot(bx, by, '-', color='gray', linewidth=1, alpha=0.7)
 
     # (session separators removed for clarity)
 
@@ -178,10 +177,10 @@ def fig_trajectory_gamma():
 
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['haiku'],
-               markersize=8, label='Haiku', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], color='black', linewidth=1, alpha=0.5, label='Running best'),
+               markersize=8, label='Haiku 4.5', markeredgecolor='black', markeredgewidth=0.5),
+        Line2D([0], [0], color='gray', linewidth=1, alpha=0.5, label='Running best'),
     ]
-    ax.legend(handles=handles, loc='upper right', fontsize=7)
+    ax.legend(handles=handles, loc='upper right', fontsize=8)
 
     plt.tight_layout()
     plt.savefig('paper/fig_trajectory_gamma.pdf', bbox_inches='tight')
