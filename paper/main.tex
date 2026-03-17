@@ -392,6 +392,13 @@ Agent failure modes differed by model:
 
 On \textbf{composition}, the best agent result (fraction error 0.1045, Opus~4.6) improves upon the published CNN baseline (0.107) by 2.3\% absolute (2.1\% relative). The improvement comes from three sources: (1)~a larger model (731K vs 36.6K parameters) with channel attention, (2)~stronger augmentation (cutout and Gaussian noise), and (3)~DE bias optimization that bridges the gap between cross-entropy training and fraction error evaluation. Neither agent discovered fundamentally novel architectures, but the specific combination of SAM, augmentation, and DE was arrived at through systematic experimentation.
 
+To validate the composition classifier on real experimental data, we ran inference on all 1308 runs of the KASCADE archive (1,572,349 events after quality cuts with $\theta_z < 18^{\circ}$) and applied confusion matrix unfolding (\Cref{fig:real_spectra}). The unfolded energy spectra show clear mass group separation consistent with published results~\cite{kascade_jcap}: proton-dominated at lower energies with heavier elements contributing increasingly at higher energies.
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_real_spectra.pdf}
+\caption{Energy spectra from real KASCADE data classified by our best model (CNN+Attn+MLP with SAM+DE). Left: folded spectra (raw predicted counts). Right: unfolded spectra using energy-dependent confusion matrix inversion. The unfolded spectra show physically expected mass group separation. Error bars reflect both statistical uncertainty and unfolding propagation.\label{fig:real_spectra}}
+\end{figure}
+
 On \textbf{gamma/hadron separation}, the best agent result ($3.21 \times 10^{-4}$ survival at 75\% gamma efficiency, Haiku~4.5) represents approximately an order-of-magnitude improvement over published baselines ($10^{-2}$--$10^{-3}$ at 30--70\% efficiency~\cite{kascade_icrc}). The improvement is both in the metric value and in the operating point (75\% vs 30--70\% gamma efficiency). This much larger relative gain suggests the gamma/hadron problem was less thoroughly optimized in prior work.
 
 \subsection{The Confusion Matrix Ceiling}
