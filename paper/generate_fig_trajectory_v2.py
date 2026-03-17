@@ -105,8 +105,9 @@ def fig_trajectory_gamma():
     Omits haiku-gamma-mar8 and haiku-gamma-mar9 (used wrong @99% metric).
     Only shows haiku-gamma-mar9-v2 and v3 (correct @75% metric).
     """
-    # v2 key results (23 experiments, correct metric)
+    # v2 results (correct @75% metric)
     v2_experiments = [
+        ('Reweight', 3.15e-03, 'discard'),
         ('DNN\nlonger', 1.31e-03, 'keep'),
         ('Regression\nDNN', 9.05e-04, 'keep'),
         ('Ensemble\nv2+v3', 7.89e-04, 'keep'),
@@ -115,12 +116,16 @@ def fig_trajectory_gamma():
         ('Best\nensemble', 6.43e-04, 'keep'),
     ]
 
-    # v3 key results (41+ experiments, correct metric)
+    # v3 results (correct @75% metric)
     v3_experiments = [
         ('Seed\nexplore', 6.43e-04, 'keep'),
         ('Attn\nCNN', 5.84e-04, 'keep'),
+        ('Deeper\nAttn', 6.13e-04, 'discard'),
         ('Attn+\nfeatures', 3.50e-04, 'keep'),
-        ('ViT', 5.55e-04, 'keep'),
+        ('Multi-\nseed', 4.97e-04, 'discard'),
+        ('Pure\nCNN', 5.26e-04, 'discard'),
+        ('ViT', 6.72e-04, 'discard'),
+        ('ViT\ntuned', 5.55e-04, 'keep'),
         ('AE+\nfeatures', 5.55e-04, 'keep'),
         ('ResNet', 3.80e-04, 'keep'),
         ('Cross-arch\nensemble', 3.21e-04, 'keep'),
@@ -141,20 +146,21 @@ def fig_trajectory_gamma():
 
     fig, ax = plt.subplots(figsize=(8, 3.5))
 
-    # Only plot kept experiments
-    kept_x, kept_y = [], []
+    # Plot all experiments: filled = kept, hollow = discarded
     for i, (label, surv, agent, status) in enumerate(all_exp):
         if status == 'keep':
-            ax.scatter(i, surv, c=COLORS[agent], s=60, zorder=5, edgecolors='black', linewidths=0.5)
-            kept_x.append(i); kept_y.append(surv)
+            ax.scatter(i, surv, c=COLORS[agent], s=60, zorder=5,
+                      edgecolors='black', linewidths=0.5)
+        else:
+            ax.scatter(i, surv, facecolors='none', s=60, zorder=5,
+                      edgecolors=COLORS[agent], linewidths=1.5)
 
-    # Running best (kept only)
+    # Running best (all experiments count)
     best = 1.0
     bx, by = [], []
-    for i, (_, surv, _, status) in enumerate(all_exp):
-        if status == 'keep':
-            best = min(best, surv)
-            bx.append(i); by.append(best)
+    for i, (_, surv, _, _) in enumerate(all_exp):
+        best = min(best, surv)
+        bx.append(i); by.append(best)
     ax.plot(bx, by, '-', color='gray', linewidth=1, alpha=0.7)
 
     # (session separators removed for clarity)
@@ -172,7 +178,9 @@ def fig_trajectory_gamma():
 
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['haiku'],
-               markersize=8, label='Haiku 4.5', markeredgecolor='black', markeredgewidth=0.5),
+               markersize=8, label='Haiku 4.5 (kept)', markeredgecolor='black', markeredgewidth=0.5),
+        Line2D([0], [0], marker='o', color='w', markerfacecolor='none',
+               markersize=8, label='Haiku 4.5 (discarded)', markeredgecolor=COLORS['haiku'], markeredgewidth=1.5),
         Line2D([0], [0], color='gray', linewidth=1, alpha=0.7, label='Running best'),
     ]
     ax.legend(handles=handles, loc='upper right', fontsize=8)

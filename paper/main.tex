@@ -349,13 +349,13 @@ Over approximately 36 hours, Opus conducted 12 experiments on the matched pipeli
 Over four successive sessions spanning approximately 7 hours total, Haiku conducted 77 experiments with a notably different research style:
 
 \begin{enumerate}
-    \item \textbf{Session 1} (3 experiments, 20~min): Started with Random Forest on tabular features. Achieved 0.836 survival rate. Stopped prematurely due to session timeout.
+    \item \textbf{Session 1} (3 experiments, 20~min): Started with Random Forest and MLP on tabular features. Used an incorrect evaluation metric (survival at 99\% gamma efficiency instead of 75\%), so results are not directly comparable. Stopped prematurely due to session timeout.
 
-    \item \textbf{Session 2} ($\sim$10 experiments, $\sim$1~h): Explored CNNs, SVMs, and isolation forests for anomaly-based gamma detection. First competitive result at $3.2 \times 10^{-3}$.
+    \item \textbf{Session 2} ($\sim$10 experiments, $\sim$1~h): Explored CNNs, SVMs, physics-based baselines, and isolation forests. Still using the incorrect 99\% metric. The metric was corrected mid-session, but most results are not comparable.
 
-    \item \textbf{Session 3} (23 experiments, 90~min): Focused on MLP variants with multi-seed training, contrastive learning, and autoencoders. Best result $6.43 \times 10^{-4}$ with MLP using BCE loss. Several approaches crashed (autoencoder, contrastive learning).
+    \item \textbf{Session 3} (23 experiments, 90~min): First session with the correct 75\% metric throughout. Focused on MLP variants with multi-seed training, regression losses (BCE), contrastive learning, and autoencoders. Best result $6.43 \times 10^{-4}$ with multi-seed MLP ensemble. Several approaches failed: autoencoder crashed, contrastive learning did not converge, reweighting hurt performance ($3.15 \times 10^{-3}$).
 
-    \item \textbf{Session 4} (41 experiments, $\sim$4~h): The most productive session. Introduced Attention CNN, ResNet, and ViT architectures. Discovered that cross-architecture ensembles provide gains where same-architecture ensembles do not. Final ensemble achieved $3.21 \times 10^{-4}$.
+    \item \textbf{Session 4} (41 experiments, $\sim$4~h): The most productive session. Introduced Attention CNN ($5.84 \times 10^{-4}$), then added engineered features for a breakthrough ($3.50 \times 10^{-4}$). Also tried deeper variants (worse), multi-seed ensembles (worse than single best), pure CNN without features (worse, confirming features matter), ViT ($6.72 \times 10^{-4}$, later tuned to $5.55 \times 10^{-4}$), autoencoder with features ($5.55 \times 10^{-4}$), and ResNet ($3.80 \times 10^{-4}$). Final cross-architecture ensemble (Attention CNN 0.70 + ResNet 0.10 + ViT 0.20) achieved $3.21 \times 10^{-4}$.
 \end{enumerate}
 
 A distinctive aspect of Haiku's approach was its willingness to try unconventional methods (isolation forests, contrastive learning, autoencoders) even when they were unlikely to succeed. While none of these novel approaches produced competitive results, the breadth of exploration eventually led to the key insight that architecturally diverse models produce complementary predictions.
