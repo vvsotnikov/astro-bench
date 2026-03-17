@@ -147,19 +147,35 @@ def main():
     exposure = AREA * T_EFF * np.pi * (np.cos(th_min)**2 - np.cos(th_max)**2)
     C = centers**2.7 / np.diff(10**energy_bins) / exposure
 
-    # === Figure 1: Folded spectra only (single panel, JINST style) ===
+    # === Load published CNN predictions for overlay ===
+    pub_files = ['internal/kg-nn/p_data.csv', 'internal/kg-nn/he_data.csv',
+                 'internal/kg-nn/c_data.csv', 'internal/kg-nn/si_data.csv', 'internal/kg-nn/fe_data.csv']
+    pub_E_per_cls = {}
+    for cls, f in enumerate(pub_files):
+        data = np.genfromtxt(f, delimiter=',', skip_header=1)
+        pub_E_per_cls[cls] = data[data[:, 1] < CUTS_ZE, 0]  # Ze < 18
+    print(f"  Published CNN: {sum(len(v) for v in pub_E_per_cls.values()):,} events", flush=True)
+
+    # === Figure 1: Folded spectra comparison (single panel) ===
     fig, ax = plt.subplots(figsize=(7, 5), dpi=300)
     for cls in range(5):
+        # Our model (filled circles)
         N, _ = np.histogram(real_E[real_pred == cls], bins=energy_bins)
-        ax.errorbar(centers, N * C, yerr=np.sqrt(np.maximum(N, 1)) * C,
-                    fmt='.-', color=COLORS[cls], label=PARTICLES[cls],
-                    markersize=6, linewidth=1, capsize=2)
+        ax.errorbar(centers * 1.01, N * C, yerr=np.sqrt(np.maximum(N, 1)) * C,
+                    fmt='o', color=COLORS[cls], label=f'{PARTICLES[cls]} (This work)',
+                    markersize=5, linewidth=1, capsize=2)
+        # Published CNN (hollow squares, slightly offset)
+        N_pub, _ = np.histogram(pub_E_per_cls[cls], bins=energy_bins)
+        ax.errorbar(centers * 0.99, N_pub * C, yerr=np.sqrt(np.maximum(N_pub, 1)) * C,
+                    fmt='s', markerfacecolor='none', markeredgecolor=COLORS[cls],
+                    label=f'{PARTICLES[cls]} (Published CNN)',
+                    markersize=5, linewidth=0.8, capsize=2, alpha=0.6)
     ax.set_xlabel('Energy, [eV]')
     ax.set_ylabel(r'$\sim$ Flux $\cdot E^{2.7}$, [eV$^{1.7}$ m$^{-2}$ sr$^{-1}$ s$^{-1}$]')
     ax.set_xscale('log'); ax.set_yscale('log')
     ax.set_ylim(1e18, None)
     ax.set_title(r'Folded spectra ($0° < \theta < 18°$)')
-    ax.legend(fontsize=10, ncol=2)
+    ax.legend(fontsize=7, ncol=2)
     ax.grid(alpha=0.2)
     plt.tight_layout()
     plt.savefig('paper/fig_real_spectra.pdf', bbox_inches='tight')
@@ -200,18 +216,25 @@ def main():
 
     for cls in range(5):
         ax = axes[cls]
+        # Our model (filled circles)
         N = unfolded[cls]; N_err = unfolded_err[cls]
         valid = N > 0
-        ax.errorbar(centers[valid], N[valid] * C[valid], yerr=N_err[valid] * C[valid],
+        ax.errorbar(centers[valid] * 1.01, N[valid] * C[valid], yerr=N_err[valid] * C[valid],
                     fmt='o', color=COLORS[cls], markersize=5, capsize=2, linewidth=1,
-                    label=f'{PARTICLES[cls]} (This work)')
+                    label='This work')
+        # Published CNN (hollow squares) — folded only (no unfolding for comparison)
+        N_pub, _ = np.histogram(pub_E_per_cls[cls], bins=energy_bins)
+        ax.errorbar(centers * 0.99, N_pub * C, yerr=np.sqrt(np.maximum(N_pub, 1)) * C,
+                    fmt='s', markerfacecolor='none', markeredgecolor=COLORS[cls],
+                    markersize=4, capsize=2, linewidth=0.8, alpha=0.5,
+                    label='Published CNN')
         ax.set_xscale('log'); ax.set_yscale('log')
         ax.set_ylim(1e17, None)
         ax.set_title(PARTICLES[cls], fontsize=14, fontweight='bold')
         ax.set_xlabel('Energy, [eV]')
         if cls % 3 == 0:
             ax.set_ylabel(r'$\sim$ Flux $\cdot E^{2.7}$')
-        ax.legend(fontsize=8)
+        ax.legend(fontsize=7)
         ax.grid(alpha=0.2)
 
     # Hide 6th subplot
