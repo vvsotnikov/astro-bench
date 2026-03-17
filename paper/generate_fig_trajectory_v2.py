@@ -25,18 +25,8 @@ COLORS = {
 
 def fig_trajectory_composition():
     """Chronological trajectory for mass composition task."""
-    # Chronological order of ALL composition runs (including failures)
+    # Chronological order — only valid experiments on matched pipeline
     experiments = [
-        # (label, FE or None, agent, status)
-        # --- Mar 8: Haiku composition (accuracy only, no FE) ---
-        ('Haiku\nCNN v4\n(acc only)', None, 'haiku', 'invalid'),  # best was 50.86% acc but no FE
-
-        # --- Mar 8-12: Opus on old pipeline (wrong data, no Age, different splits) ---
-        ('Opus\nRF v1\n(old pipe)', 0.1195, 'opus', 'invalid'),
-        ('Opus\nHGB v2\n(old pipe)', 0.1182, 'opus', 'invalid'),
-        ('Opus\nCNN v8\n(old pipe)', 0.1080, 'opus', 'invalid'),
-        ('Opus\nDE opt\n(old pipe)', 0.1060, 'opus', 'invalid'),
-
         # --- Mar 14: SOTA reproduction (matched pipeline) ---
         ('Repro\nLeNet', 0.1079, 'baseline', 'valid'),
 
@@ -62,76 +52,48 @@ def fig_trajectory_composition():
 
     fig, ax = plt.subplots(figsize=(8, 3.5))
 
-    x_valid = []
-    y_valid = []
-    c_valid = []
-    x_invalid = []
-    y_invalid = []
-    c_invalid = []
     labels_all = []
+    x_pts = []
+    y_pts = []
+    c_pts = []
 
     for i, (label, fe, agent, status) in enumerate(experiments):
         labels_all.append(label)
-        if status == 'invalid' or fe is None:
-            if fe is not None:
-                x_invalid.append(i)
-                y_invalid.append(fe)
-                c_invalid.append(COLORS[agent])
-            # Skip None (no FE computed)
-        else:
-            x_valid.append(i)
-            y_valid.append(fe)
-            c_valid.append(COLORS[agent])
+        x_pts.append(i)
+        y_pts.append(fe)
+        c_pts.append(COLORS[agent])
 
-    # Plot invalid runs with X markers
-    for xi, yi, ci in zip(x_invalid, y_invalid, c_invalid):
-        ax.scatter(xi, yi, c=ci, s=50, marker='x', zorder=5, linewidths=2, alpha=0.4)
-
-    # Plot valid runs with circles
-    for xi, yi, ci in zip(x_valid, y_valid, c_valid):
+    # Plot all points
+    for xi, yi, ci in zip(x_pts, y_pts, c_pts):
         ax.scatter(xi, yi, c=ci, s=60, zorder=5, edgecolors='black', linewidths=0.5)
 
-    # Running best for valid only
-    best_so_far = []
+    # Running best
     running_best = 1.0
-    for i, (_, fe, _, status) in enumerate(experiments):
-        if status == 'valid' and fe is not None:
-            running_best = min(running_best, fe)
-        if i in x_valid:
-            best_so_far.append((i, running_best))
-
-    if best_so_far:
-        bx, by = zip(*best_so_far)
-        ax.plot(bx, by, 'k-', linewidth=1, alpha=0.5)
+    bx, by = [], []
+    for i, (_, fe, _, _) in enumerate(experiments):
+        running_best = min(running_best, fe)
+        bx.append(i); by.append(running_best)
+    ax.plot(bx, by, 'k-', linewidth=1, alpha=0.5)
 
     # Reference lines
     ax.axhline(y=0.107, color='red', linestyle='--', linewidth=0.8, alpha=0.5)
     ax.text(len(experiments)-1, 0.1072, 'Published SOTA', ha='right', fontsize=7, color='red')
 
-    # Separator between phases
-    ax.axvline(x=4.5, color='gray', linestyle=':', linewidth=0.8, alpha=0.5)
-    ax.text(2, 0.121, 'Wrong pipeline', ha='center', fontsize=7, color='gray', style='italic')
-    ax.text(13, 0.121, 'Matched pipeline', ha='center', fontsize=7, color='gray', style='italic')
-
     ax.set_xticks(range(len(experiments)))
     ax.set_xticklabels([e[0] for e in experiments], rotation=45, ha='right', fontsize=6)
     ax.set_ylabel('Fraction Error (+ DE) ↓')
     ax.set_xlabel('Experiment (chronological)')
-    ax.set_ylim(0.1035, 0.123)
+    ax.set_ylim(0.1035, 0.112)
     ax.grid(axis='y', alpha=0.3)
 
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['opus'],
-               markersize=8, label='Opus (valid)', markeredgecolor='black', markeredgewidth=0.5),
+               markersize=8, label='Opus', markeredgecolor='black', markeredgewidth=0.5),
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['baseline'],
                markersize=8, label='Baseline', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], marker='x', color=COLORS['opus'], markersize=8,
-               label='Invalid metric/pipeline', linewidth=0, markeredgewidth=2, alpha=0.4),
-        Line2D([0], [0], marker='x', color=COLORS['haiku'], markersize=8,
-               label='Haiku (no FE)', linewidth=0, markeredgewidth=2, alpha=0.4),
         Line2D([0], [0], color='black', linewidth=1, alpha=0.5, label='Running best'),
     ]
-    ax.legend(handles=handles, loc='upper right', fontsize=7, ncol=2)
+    ax.legend(handles=handles, loc='upper right', fontsize=7)
 
     plt.tight_layout()
     plt.savefig('paper/fig_trajectory.pdf', bbox_inches='tight')
@@ -185,20 +147,20 @@ def fig_trajectory_gamma():
 
     fig, ax = plt.subplots(figsize=(8, 3.5))
 
+    # Only plot kept experiments
+    kept_x, kept_y = [], []
     for i, (label, surv, agent, status) in enumerate(all_exp):
-        color = COLORS[agent]
-        if status == 'discard':
-            ax.scatter(i, surv, c=color, s=40, zorder=5, edgecolors='black',
-                      linewidths=0.5, alpha=0.4)
-        else:
-            ax.scatter(i, surv, c=color, s=60, zorder=5, edgecolors='black', linewidths=0.5)
+        if status == 'keep':
+            ax.scatter(i, surv, c=COLORS[agent], s=60, zorder=5, edgecolors='black', linewidths=0.5)
+            kept_x.append(i); kept_y.append(surv)
 
-    # Running best
+    # Running best (kept only)
     best = 1.0
     bx, by = [], []
-    for i, (_, surv, _, _) in enumerate(all_exp):
-        best = min(best, surv)
-        bx.append(i); by.append(best)
+    for i, (_, surv, _, status) in enumerate(all_exp):
+        if status == 'keep':
+            best = min(best, surv)
+            bx.append(i); by.append(best)
     ax.plot(bx, by, 'k-', linewidth=1, alpha=0.5)
 
     # Session separators
@@ -220,10 +182,7 @@ def fig_trajectory_gamma():
 
     handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['haiku'],
-               markersize=8, label='Haiku (kept)', markeredgecolor='black', markeredgewidth=0.5),
-        Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['haiku'],
-               markersize=8, label='Haiku (discarded)', markeredgecolor='black',
-               markeredgewidth=0.5, alpha=0.4),
+               markersize=8, label='Haiku', markeredgecolor='black', markeredgewidth=0.5),
         Line2D([0], [0], color='black', linewidth=1, alpha=0.5, label='Running best'),
     ]
     ax.legend(handles=handles, loc='upper right', fontsize=7)
