@@ -9,3 +9,4 @@ v6_distill	0.1047	keep	KD from v2_sam teacher, T=3.0, alpha=0.7, seed=2026 (DE=0
 v7_crossattn	0.1050	keep	CrossAttention(scalar→spatial) + CNN + log1p + aug (DE=0.1050)
 v8_multitask	0.1049	keep	MultiTask(class+energy) + CNN + log1p + aug (DE=0.1049)
 v9_regression	0.1049	keep	DualHead(class+logA_regression) + CNN + log1p + aug (DE=0.1049)
+v14_pretrain_stream	0.1050	keep	Streaming MAE pretrain on 146,678,656 real events (2 passes) + SAM finetune (DE=0.1050)
