@@ -163,11 +163,7 @@ def fig_trajectory_gamma():
             bx.append(i); by.append(best)
     ax.plot(bx, by, 'k-', linewidth=1, alpha=0.5)
 
-    # Session separators
-    for name, s, e in sessions:
-        ax.axvspan(s-0.5, e+0.5, alpha=0.05, color=COLORS['haiku'])
-        ax.text((s+e)/2, ax.get_ylim()[1]*0.85 if ax.get_ylim()[1] > 0 else 3.5e-3,
-                name, ha='center', fontsize=7, color=COLORS['haiku'], style='italic')
+    # (session separators removed for clarity)
 
     # Reference
     ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.5)
