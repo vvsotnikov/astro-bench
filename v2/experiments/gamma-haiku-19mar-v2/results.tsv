@@ -1,0 +1,28 @@
+attempt	survival_75	predictions	description
+0	1.0e-02	baseline/predictions.npz	RF baseline (published, Kostunin et al. ICRC 2021)
+1	1.0506e-03	submissions/run1/predictions_v1.npz	v1: DNN on flattened matrices + features
+2	5.5447e-04	submissions/run1/predictions_v3.npz	v3: CNN + MLP fusion
+3	5.5447e-04	submissions/run1/predictions_v4.npz	v4: ResNet + MLP fusion
+4	1.4008e-03	submissions/run1/predictions_v5.npz	v5: RandomForest with engineered features
+5	3.5019e-04	submissions/run1/predictions_v6.npz	v6: CNN with channel attention + MLP
+6	2.8599e-03	submissions/run1/predictions_v7.npz	v7: Muon channel only
+7	4.0856e-04	submissions/run1/predictions_v8.npz	v8: Ensemble of v3, v4, v6
+8	3.7937e-04	submissions/run1/predictions_v9.npz	v9: Weighted ensemble (0.2 v3, 0.2 v4, 0.6 v6)
+9	6.1283e-04	submissions/run1/predictions_v10.npz	v10: CNN attention, 30 epochs
+10	3.7937e-04	submissions/run1/predictions_v11.npz	v11: CNN attention, lr=2e-3
+11	4.9610e-04	submissions/run1/predictions_v12.npz	v12: CNN attention, dropout=0.1
+12	5.5447e-04	submissions/run1/predictions_v13.npz	v13: CNN attention seed=43
+13	6.4202e-04	submissions/run1/predictions_v14.npz	v14: Larger CNN attention
+14	6.1283e-04	submissions/run1/predictions_v15.npz	v15: weight_decay=5e-5
+15	3.5019e-04	submissions/run1/predictions.npz	Final: CNN with channel attention (v6)
+16	7.2956e-04	submissions/run1/predictions_v16.npz	v16: Vision Transformer
+17	1.3716e-03	submissions/run1/predictions_v18.npz	v18: CNN + GBM ensemble
+18	5.5447e-04	submissions/run1/predictions_v19.npz	v19: CNN with CBAM (channel + spatial attention)
+19	3.5019e-04	submissions/run1/predictions.npz	Final submission: v6 CNN with channel attention
+20	3.5019e-04	submissions/run1/predictions_v22.npz	Multi-seed ensemble: v6(seed42) + v20(seed43) + v21(seed44), averaged
+21	5.5447e-04	submissions/run1/predictions_v24.npz	Engineered features (Ne-Nmu, Ne+Nmu, squared diff, Ne*Nmu interaction)
+22	4.6692e-04	submissions/run1/predictions_v26.npz	Data augmentation: 90° rotations, flips, noise on matrices during training
+23	5.2529e-04	submissions/run1/predictions_v27.npz	Focal loss (gamma=2, alpha weights), downweights easy examples
+24	6.1283e-04	submissions/run1/predictions_v29.npz	SGD optimizer with momentum=0.9, nesterov=True, lr=0.01
+25	4.9610e-04	submissions/run1/predictions_v30.npz	Wider feature branch: 5→128→128 (instead of 64→64)
+26	3.5019e-04	submissions/run1/predictions_v31.npz	Weighted ensemble: 0.1*v3 + 0.1*v4 + 0.8*v6

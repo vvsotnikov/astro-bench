@@ -1,0 +1,30 @@
+experiment	metric	status	description
+v1	1.05e-03	keep	DNN 256 hidden, batch_norm, dropout 0.2, CE loss with class weights
+v3	5.54e-04	keep	CNN + MLP fusion, 2 conv blocks + gap + fc, class weights
+v4	5.54e-04	keep	ResNet + MLP fusion (deeper, residual blocks), same metric
+v5	1.40e-03	discard	RandomForest with 22 engineered features, worse than CNN
+v6	3.50e-04	BEST	CNN with channel attention + MLP fusion, 20 epochs, lr=1e-3
+v7	2.86e-03	discard	Muon channel only (loses electron channel info)
+v8	4.09e-04	discard	Ensemble 3-model equal weights, worse than v6 alone
+v9	3.79e-04	discard	Weighted ensemble 0.2/0.2/0.6, worse than v6
+v10	6.13e-04	discard	CNN attention with 30 epochs, overfitting
+v11	3.79e-04	discard	CNN attention, lr=2e-3, too aggressive
+v12	4.96e-04	discard	CNN attention, dropout=0.1, less regularization
+v13	5.54e-04	discard	CNN attention seed=43, different split worse
+v14	6.42e-04	discard	Larger CNN (357K params), overparameterization
+v15	6.13e-04	discard	CNN attention, weight_decay=5e-5, underfitting
+v16	7.30e-04	discard	Vision Transformer on matrices (ViT 8×16d), worse spatial inductive bias
+v17	crash	crash	XGBoost gradient boosting on flattened matrices (too slow, killed)
+v18	1.37e-03	discard	CNN + GBM ensemble (incompatible, poor combo)
+v19	5.54e-04	discard	CBAM (spatial + channel attention), no improvement over v6
+v20	3.50e-04	keep	v6 architecture with seed=43 (different train/val split)
+v21	3.50e-04	keep	v6 architecture with seed=44 (another different split)
+v22	3.50e-04	discard	Multi-seed ensemble: avg(v6, v20, v21) = same as single best
+v24	5.54e-04	discard	Engineered features: Ne-Nmu, Ne+Nmu, squared diff, interaction
+v25	timeout	crash	ResNet with skip connections (proper residual blocks), 707K params — timeout at epoch 11
+v26	4.67e-04	discard	Data augmentation (rotations, flips, noise), helps slightly but not better than v6
+v27	5.25e-04	discard	Focal loss (gamma=2, alpha weights), worse than CE loss for this task
+v28	crash	crash	Mixup augmentation (soft labels KL divergence) — OSError during iterator loop
+v29	6.13e-04	discard	SGD optimizer with momentum=0.9, nesterov=True, lr=0.01
+v30	4.96e-04	discard	Wider feature branch: 5→128→128 fusion layers
+v31	3.50e-04	keep	Weighted ensemble: 0.1*v3 + 0.1*v4 + 0.8*v6 (same as v6)
