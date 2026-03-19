@@ -1,0 +1,3 @@
+experiment	metric	status	description
+v1_logistic	0.00546	keep	Logistic regression on 5 scalar features
+v2_rf	0.00432	keep	Random Forest (200 trees) on 5 scalar features
