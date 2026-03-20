@@ -41,3 +41,11 @@ v36	pending	discard	BCE+pairwise AUC loss combined - killed, AUC saturated immed
 v37	5.98e-01	discard	Muon autoencoder anomaly detection - AE reconstruction error not discriminating (gamma/hadron mean 0.181 vs 0.274)
 v38	9.05e-04	discard	Full spatial MLP 512->1024->512->256 no convolutions - worse than CNN (25ep)
 v39	7.88e-04	discard	Triple-branch CNN (muon/electron/ratio) + scalar features - ratio channel noisy, worse than CNN
+v40	4.67e-04	discard	OHEM cross-channel attention CNN 20ep hard hadron 10x weight - same as v7, no ensemble gain
+v41	4.96e-04	discard	Deeper CNN 64-128-256-256 + 12feat (ne_nmu_exp) seed=7777 20ep - no improvement over v2
+v42	6.42e-04	discard	v2 arch trained on FULL training set (1.53M, no val), 20ep batch=4096 lr=7e-4
+v43	4.21e-02	discard	Nmu regression CNN, -predicted_Nmu as score, all 8 hadrons have near-zero residuals
+v44	1.05e-03	discard	Curriculum learning: full->quality cuts->boundary focus, 25ep, best at epoch 3 (full data)
+v45	8.17e-04	discard	PointNet on non-zero detector hits (MAX_POINTS=64) + scalar features, 20ep - blending hurts
+v46	2.92e-03	discard	MC Dropout 100 samples on v2 model - hadrons have LOWER uncertainty than gammas, confirms physical limit
+v47	4.38e-04	discard	GBM stacker on 3 CNN scores + matrix stats + physics features - GBM scores 8 hadrons even higher than ens3
