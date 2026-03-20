@@ -34,3 +34,10 @@ v29	4.09e-04	discard	Knowledge distillation from v2 soft labels T=2 alpha=0.3 - 
 v30	8.46e-04	discard	CNN v2 with quality cuts Ze<30 Ne>4.8 on training 25ep - worse, overfits on smaller dataset
 v31	pending	pending	5-model diversity ensemble (v31a-e seeds/lr/aug variations) + Dirichlet - not yet run
 v32	1.05e-03	discard	HistGBM 300 trees quality-cut data (143K) - too few events, worse than CNN
+v33	7.30e-04	discard	HistGBM 500 trees all training data (400K) - better than v32 but still worse than CNN
+v34	pending	discard	Stacking meta-learner MLP - killed, too slow loading 200K training predictions
+v35	pending	discard	AUC+survival direct metric optimization - killed, AUC phase destabilized model (val 0.86)
+v36	pending	discard	BCE+pairwise AUC loss combined - killed, AUC saturated immediately (0.0 loss)
+v37	5.98e-01	discard	Muon autoencoder anomaly detection - AE reconstruction error not discriminating (gamma/hadron mean 0.181 vs 0.274)
+v38	9.05e-04	discard	Full spatial MLP 512->1024->512->256 no convolutions - worse than CNN (25ep)
+v39	7.88e-04	discard	Triple-branch CNN (muon/electron/ratio) + scalar features - ratio channel noisy, worse than CNN

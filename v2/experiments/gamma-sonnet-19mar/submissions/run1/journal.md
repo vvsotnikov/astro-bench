@@ -86,25 +86,40 @@ Binary classification: gamma (0) vs hadron (1). Metric: hadronic survival rate a
 - None improved the ensemble beyond 2.92e-04
 - Focal loss, deeper models, ViT, MTL, ranking loss, RF all tried
 
-## Current State (attempt 13/50)
-- Best: 2.92e-04 (ens2)
-- 37 attempts remaining
-- Key question: what new architecture/approach provides complementary predictions?
+## Current State (attempt 29/50, experiments through v33)
+- **Best: ens3 at 2.33e-04** (7 models: v2+v8+v21+v25+v9+v1+v7)
+- Key: Dirichlet random weight optimization (100K trials) found better weights than hand-tuning
+- All attempts since ens3 have failed to improve the ensemble
 
-## Ideas for Next Experiments
+## Physical Limit Analysis (v28-v33 phase)
+The 8 surviving hadrons at 75% gamma efficiency are genuinely gamma-like:
+- 7 events have Nmu < 3.3 (gamma mean is 3.14 ± 0.83) — physically indistinguishable
+- 1 anomalous event (#26449): E=16.26, Nmu=4.31, mu_sum=5090, but has unusual "donut" muon pattern with zero-filled center rows. CNN interprets this as gamma-like due to the spatial pattern.
+  - This event has 10^4.31 ≈ 20,000 muons but scores 0.997 gamma probability
+  - Among all hadrons with E>16.2, it's the extreme outlier (mean score 0.13, this event 0.997)
+  - Likely a pathological high-energy event with detector effects creating unusual patterns
 
-### High priority
-1. **v19**: ResNet with skip connections, heavy regularization — different from v2/v9
-2. **v20**: Multiple independent CNN v2 models with different random seeds but different ARCHITECTURES — try CNN with strided convolutions instead of maxpool
-3. **v21**: Ensemble with optimal re-weighting using held-out validation data (Nelder-Mead)
-4. **v22**: Deeper feature engineering — add energy-normalized muon features, shower age
-5. **v23**: Data augmentation — rotate 90/180/270, flip horizontally/vertically (hexagonal KASCADE grid has symmetry)
+## What DOESN'T improve the ensemble (v26-v33)
+- v26: different LR/class weight — no diversity
+- v27: wider CNN (64-128-256 ch) — same as larger v8
+- v28: spatial attention pooling — same as v9
+- v29: knowledge distillation from v2 — same as v2
+- v30: quality-cut training — WORSE (overfits smaller dataset)
+- v31: 5-model diversity (seeds/lr/aug) — pending
+- v32: HistGBM on quality-cut data — too few events
+- v33: HistGBM on all data — GBM spatial stats are weaker than CNN
 
-### Medium priority
-1. CNN with attention pooling instead of global average pooling
-2. Two-stage classifier: first identify "clearly gamma" (mu=0), then use CNN for the rest
-3. Isotonic regression calibration of ensemble scores
-4. Add more models to ensemble with larger weights
+## Key Insights
+1. **All CNN variants converge to the same information**: Different seeds, LRs, architectures of the v2 family produce essentially the same predictions
+2. **GBM on spatial statistics is weaker than CNN**: The raw 2D structure has more info than handcrafted statistics
+3. **Quality cuts on training always hurt**: Less data = worse generalization
+4. **The 8 surviving hadrons are at the physical limit**: No ML improvement can rescue them
+5. **More Dirichlet trials help marginally**: Going from 50K to 100K improved ens from 2.63e-04 to 2.33e-04
 
-### Key insight
-The ensemble works best when models have different failure modes. v2 (vanilla CNN), v7 (MLP+stats), v8 (larger CNN), v9 (cross-attn) are architecturally diverse. The next improvement needs a model that makes different errors from these 4.
+## Remaining Ideas
+- v31: 5-model diversity ensemble (running now) — might add marginal improvement
+- More aggressive Dirichlet search with all 12 models — might find better weights
+- A fundamentally different approach would be needed (GNN on detector hits, but hard without new packages)
+
+## Conclusion
+We're likely near the absolute physical limit for this problem given the current model family and available data. The ens3 at 2.33e-04 achieves ~10^3 hadron suppression while keeping 75% gammas — much better than the published baseline of 10^2-10^3 at 30-70% gamma efficiency.
