@@ -1,0 +1,29 @@
+attempt	survival_75	predictions	description
+0	1.0e-02	baseline/predictions.npz	RF baseline (published, Kostunin et al. ICRC 2021)
+1	4.5525e-03	submissions/run1/predictions_v1.npz	v1: Feature-engineered MLP, Ne/Nmu ratio, 256-256-128, 20 epochs
+2	4.0856e-04	submissions/run1/predictions_v2.npz	v2: CNN on 16x16x2 matrices + MLP on engineered features, 15 epochs
+3	5.5447e-04	submissions/run1/predictions_v3.npz	v3: Deep ResNet CNN + attention + focal loss, 25 epochs
+4	3.5019e-04	submissions/run1/predictions_v4.npz	v4: Geometric ensemble of v1+v2, alpha=0.05 (5% MLP, 95% CNN)
+5	5.5447e-04	submissions/run1/predictions_v5.npz	v5: 3-seed ensemble CNN+MLP with quality cuts on training
+6	4.0856e-04	submissions/run1/predictions_v6.npz	v6: 3-seed ensemble v2 CNN+MLP, geometric mean
+7	4.6692e-04	submissions/run1/predictions_v7.npz	v7: MLP with matrix spatial statistics + scalar features
+8	4.9610e-04	submissions/run1/predictions_v8.npz	v8: Larger CNN (48-96-192) + matrix stats in features, early stop at 6
+9	3.2101e-04	submissions/run1/predictions_ens1.npz	ensemble1: v2+v7+v8 geometric mean (0.5, 0.15, 0.35) - triple model ensemble
+10	3.7937e-04	submissions/run1/predictions_v9.npz	v9: Cross-channel attention CNN (muon attends to electron), 15 epochs
+11	2.9183e-04	submissions/run1/predictions_ens2.npz	ens2: v2+v7+v8+v9 geometric ensemble (0.45,0.15,0.15,0.25)
+12	5.2529e-04	submissions/run1/predictions_v17.npz	Pairwise ranking loss CNN v2 arch, 15 epochs
+13	9.9221e-04	submissions/run1/predictions_v18.npz	Random Forest 500 trees on 45 physics+matrix features, 400K subsample
+14	6.1283e-04	submissions/run1/predictions_v19.npz	ResNet-style CNN (3 res blocks), dropout=0.4, wd=1e-3, 12 epochs
+15	1.0506e-03	submissions/run1/predictions_v20.npz	Dilated CNN multi-scale (1,2,4) + strided downsample + feat MLP, 15 epochs
+16	4.3774e-04	submissions/run1/predictions_v21.npz	CNN v2 + data augmentation (rot90/flip), 20 epochs
+17	1.2840e-03	submissions/run1/predictions_v22.npz	Muon-channel-only CNN + scalar feat MLP, 15 epochs
+18	3.7937e-04	submissions/run1/predictions_v23.npz	v2 model with 8-fold TTA (4 rotations x 2 flips)
+19	2.6264e-04	submissions/run1/predictions_v24.npz	Optimal ensemble (50K Dirichlet trials): v2(0.51)+v8(0.18)+v21(0.12)+v1(0.07)+v7(0.06)+v9(0.06)
+20	2.3346e-04	submissions/run1/predictions_ens3.npz	Optimal ensemble v2+v8+v21+v25+v9+v1+v7 (7 models, 100K Dirichlet trials)
+21	4.6692e-04	submissions/run1/predictions_v25.npz	CNN v2 seed=123 lr=5e-4 batch=512 20ep
+22	6.4202e-04	submissions/run1/predictions_v26.npz	CNN v2 seed=200 lr=2e-3 w_gamma=40x 15 epochs
+23	4.9610e-04	submissions/run1/predictions_v27.npz	v27: Wider CNN (64-128-256) + ensemble opt (manual eval)
+24	4.9610e-04	submissions/run1/predictions_v27.npz	Wider CNN 64-128-256ch dropout=0.5/0.3 wd=1e-3 seed=99 15ep
+25	2.3346e-04	submissions/run1/predictions_ens7.npz	ens7: Latest ensemble (manual eval)
+26	2.3346e-04	submissions/run1/predictions_ens8.npz	manual eval predictions_ens8.npz
+27	2.3346e-04	submissions/run1/predictions_ens3.npz	ens3: Optimal Dirichlet ensemble v2+v8+v21+v25+v9+v1+v7 (100K trials)

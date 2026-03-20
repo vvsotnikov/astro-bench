@@ -1,0 +1,2 @@
+attempt	frac_error	accuracy	predictions	description
+0	0.1073	0.504	baseline/predictions.npz	LeNet baseline (published, Kuznetsov et al. JINST 2024)

@@ -2,74 +2,81 @@
 
 **Can AI agents build better cosmic ray classifiers than physicists?**
 
-This is a benchmark for AI agents and humans building ML classifiers on real astrophysics data from the [KASCADE experiment](https://web.ikp.kit.edu/KASCADE/) — a 200×200m detector array in Karlsruhe, Germany that measured cosmic ray air showers for ~25 years.
+A benchmark for evaluating AI agents as autonomous ML researchers on real astrophysics data from the [KASCADE experiment](https://web.ikp.kit.edu/KASCADE/).
 
-Two tasks, two leaderboards. Read the full challenge description: [challenge.md](challenge.md)
+## Two tasks, two benchmarks
 
-## Leaderboard: Mass Composition (5-class)
+| Task | Directory | Metric | Published baseline | Budget |
+|------|-----------|--------|-------------------|--------|
+| **Mass composition** (5-class) | `composition/` | Mean fraction error ↓ | 0.107 ([JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025)) | 50 attempts |
+| **Gamma/hadron** (binary) | `gamma/` | Hadron survival @ 75% γ eff ↓ | ~10⁻² ([ICRC 2021](https://arxiv.org/abs/2108.03407)) | 50 attempts |
 
-Classify cosmic ray primaries into proton, helium, carbon, silicon, iron. Key metric: mean fraction error (lower is better) — measures how accurately the classifier recovers particle fractions across random mixture compositions. Methodology matches Kuznetsov et al. ([JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025), Section 4.3): 1001 grid ensembles of 5000 events, fractions on 0.1 step grid.
+Each task is self-contained with its own data pipeline, evaluation script, and agent instructions.
 
-Data: QGSJet-II.04 simulation, quality cuts (Ze<30, Ne>4.8, 0.2<Age<1.48, Nmu>3.6), 70/30 train/test split (seed=42). Same dataset and evaluation as the published reference.
+## How it works
 
-| Rank | Frac Error ↓ | Accuracy | Author | Agent? | Architecture | Link |
-|------|-------------|----------|--------|--------|--------------|------|
-| 1 | 0.1045 | 51.34% | Claude Opus 4.6 | Yes | CNN+Attn+MLP (731K) + log1p + SAM + aug + DE | [train_v2_sam.py](submissions/opus-composition-mar14/matched_pipeline/train_v2_sam.py) |
-| ref | 0.107 | ~51% | Kuznetsov, Petrov et al. | No | CNN (LeNet, 36.6K params) | [JINST 2024](https://doi.org/10.1088/1748-0221/19/01/P01025) |
-| repro | 0.1079 | 50.3% | reproduction | — | LeNet (same as ref) | [reproduce_sota.py](submissions/opus-composition-mar14/matched_pipeline/reproduce_sota.py) |
+1. Agent gets one task directory as its project root
+2. Agent runs `download_data.py` to get the data
+3. Agent reads `CLAUDE.md` (or `AGENTS.md`) for instructions
+4. Agent builds classifiers, trains models, iterates
+5. Each call to `verify.py` counts as one attempt (max 50), auto-logged to `results.tsv`
+6. After 50 attempts, the best result is the agent's score
 
-## Leaderboard: Gamma/Hadron Separation (binary)
+## Leaderboard: Mass Composition
 
-Distinguish gamma rays from hadronic cosmic rays. Key metric: hadronic survival rate at 75% gamma efficiency (lower is better). Published suppression of 10²–10³ was measured at ~70% gamma efficiency ([ICRC 2021](https://arxiv.org/abs/2108.03407)).
+| Rank | Frac Error ↓ | Agent | Model | Attempts used |
+|------|-------------|-------|-------|---------------|
+| ref | 0.107 | — | LeNet (36.6K params) | — |
+| | | | | |
 
-> **Note**: Gamma results below use a preliminary data pipeline (v2 pre-split) and are pending re-evaluation on the matched methodology.
+## Leaderboard: Gamma/Hadron
 
-| Rank | Survival ↓ (@ 75% γ eff) | Author | Agent? | Architecture | Link |
-|------|--------------------------|--------|--------|--------------|------|
-| 1 | 3.2×10⁻⁴ | Claude Haiku 4.5 | Yes | Ensemble: Attention CNN + ResNet + ViT | [train.py](submissions/haiku-gamma-mar9-v3/train_v41_ensemble_best.py) |
-| 2 | 6.4×10⁻⁴ | Claude Haiku 4.5 | Yes | MLP ensemble (BCELoss + classification) | [train.py](submissions/haiku-gamma-mar9-v2/train_v18_multiseed.py) |
-| 3 | 3.2×10⁻³ | Claude Haiku 4.5 | Yes | DNN + physics ensemble | [train.py](submissions/haiku-gamma-mar9/train_v7_ensemble.py) |
-| 4 | 5.1×10⁻³ | Claude Opus 4.6 (supervised) | Yes | MLP (512×2, class weights) | [train.py](submissions/baselines/train_gamma_dnn.py) |
-| 5 | 7.3×10⁻³ | Claude Haiku 4.5 | Yes | MLP (517→512→512, class weights) | [train.py](submissions/haiku-gamma-mar8/train.py) |
-| ref | 10⁻² – 10⁻³ | Kostunin et al. | No | RF regressor | [ICRC 2021](https://arxiv.org/abs/2108.03407) |
+| Rank | Survival ↓ | Agent | Model | Attempts used |
+|------|-----------|-------|-------|---------------|
+| ref | ~10⁻² | — | RF regressor | — |
+| | | | | |
 
-## Quick Start
+## Quick start
 
 ```bash
+# For composition task:
+cd composition
 uv sync
-uv run python download_data.py            # ~8.6 GB from S3
-uv run python verify.py submissions/X/predictions.npz            # composition
-uv run python verify.py --task gamma submissions/X/predictions.npz  # gamma
+uv run python download_data.py
+# ... build your classifier ...
+uv run python verify.py predictions.npz "my approach description"
+
+# For gamma task:
+cd gamma
+uv sync
+uv run python download_data.py
+uv run python verify.py predictions.npz "my approach description"
 ```
 
-## How It Works
+## For AI agents
 
-1. `download_data.py` downloads pre-split, memory-mappable `.npy` files
-2. You (or your agent) build a classifier — any tools/frameworks, no constraints
-3. Produce `predictions.npz` and run `verify.py` to score
-4. Submit via Issue or PR
+Each task directory contains:
+- `CLAUDE.md` / `AGENTS.md` — full instructions, data format, physics background, strategy hints
+- `download_data.py` — downloads and prepares data from S3
+- `verify.py` — evaluates predictions, auto-logs to `results.tsv`, enforces 50-attempt limit
+- `baseline/` — published baseline reproduction (attempt 0)
 
-See [challenge.md](challenge.md) for data format, physics background, and submission details.
+Agents work within the task directory. They never need to see the parent.
 
-## What Makes This Different
+## What makes this different
 
-Most ML benchmarks ask "what's the best model?" We ask three questions:
+Most ML benchmarks ask "what's the best model?" We ask:
 
-1. **Can AI agents beat human scientists?** — agents build classifiers on the same data with the same evaluation, competing directly against published results
-2. **How do agents search for solutions?** — every experiment (including failures) is logged with full provenance: code, logs, model weights, reasoning traces. The search trajectory is data.
-3. **How do agent solutions differ from human ones?** — agents may discover architectures, feature engineering, or training strategies that humans wouldn't try, and vice versa
+1. **Can AI agents beat human scientists?** — on the same data with the same evaluation
+2. **How do agents search?** — every attempt is logged with a description
+3. **How fast do they converge?** — Best@10, Best@20, Best@50 trajectory analysis
+4. **How do different agents compare?** — Claude, GPT, Qwen, Kimi on the same tasks
 
-The leaderboard tracks both what was achieved and how — making this a benchmark for AI agents as autonomous ML researchers. Submissions must include all artifacts (training scripts, logs, model weights, experiment journals) so that the research process itself can be analyzed.
+## References
 
-## Context
-
-Related work:
-- [AI Agents for Ground-Based Gamma Astronomy](https://arxiv.org/abs/2503.00821) (Kostunin, Sotnikov et al., 2025)
-- [New insights from old cosmic rays](https://arxiv.org/abs/2108.03407) (Kostunin, Plokhikh et al., ICRC 2021) — foundational analysis: RF composition + gamma search
-- [Methods of ML for cosmic rays mass composition](https://arxiv.org/abs/2311.06893) (Kuznetsov, Petrov, Plokhikh, Sotnikov, JINST 2024) — CNN/MLP/RF comparison
-- [Energy spectra of elemental groups of cosmic rays](https://arxiv.org/abs/2312.08279) (Kuznetsov, Petrov, Plokhikh, Sotnikov, JCAP 2024) — mass spectra results
-- [autoresearch](https://github.com/karpathy/autoresearch) (Karpathy, 2026) — autonomous AI agents doing ML research overnight
-- [Addition Under Pressure](https://dimitrisp.substack.com/p/addition-under-pressure) (Papailiopoulos, 2026) — comparing agent research paths
+- [Methods of ML for cosmic rays mass composition](https://arxiv.org/abs/2311.06893) (Kuznetsov et al., JINST 2024)
+- [Energy spectra of elemental groups of cosmic rays](https://arxiv.org/abs/2312.08279) (Kuznetsov et al., JCAP 2024)
+- [New insights from old cosmic rays](https://arxiv.org/abs/2108.03407) (Kostunin et al., ICRC 2021)
 
 ## License
 
