@@ -29,3 +29,8 @@ v25	4.67e-04	keep	CNN v2 seed=123 lr=5e-4 batch=512 20ep - used in ensemble
 ens3	2.33e-04	keep	Optimal ensemble (100K Dirichlet): v2+v8+v21+v25+v9+v1+v7 - NEW BEST
 v26	6.42e-04	discard	CNN v2 seed=200 lr=2e-3 w_gamma=40x 15ep - doesn't improve ensemble
 v27	4.96e-04	discard	Wider CNN 64-128-256ch dropout=0.5/0.3 wd=1e-3 seed=99 15ep - same as v8
+v28	3.79e-04	discard	CNN with spatial attention pooling label_smooth=0.1 seed=77 - same as v9, no ensemble gain
+v29	4.09e-04	discard	Knowledge distillation from v2 soft labels T=2 alpha=0.3 - same as v2, no ensemble gain
+v30	8.46e-04	discard	CNN v2 with quality cuts Ze<30 Ne>4.8 on training 25ep - worse, overfits on smaller dataset
+v31	pending	pending	5-model diversity ensemble (v31a-e seeds/lr/aug variations) + Dirichlet - not yet run
+v32	1.05e-03	discard	HistGBM 300 trees quality-cut data (143K) - too few events, worse than CNN
