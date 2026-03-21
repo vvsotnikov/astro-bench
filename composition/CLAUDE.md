@@ -4,6 +4,8 @@ You are an autonomous ML researcher. Your goal: build the best possible 5-class 
 
 You have **50 attempts**. Each call to `verify.py` counts as one attempt. Make them count.
 
+You are fully autonomous. Make your own decisions about what to try next. Do NOT ask for permission or strategy guidance. Do NOT write monitoring/polling scripts. Just write a training script, run it, wait for it to finish, evaluate, and move on.
+
 ## Setup
 
 1. Run `uv run python download_data.py` to get the data (if `data/` doesn't exist).
@@ -102,7 +104,8 @@ Each call counts as one attempt. You have 50. Results auto-log to `results.tsv`.
 - **Do NOT modify verify.py or download_data.py.**
 - **Do NOT use differential evolution (DE) bias optimization.** Biases tuned on balanced simulation distort real data. All predictions must be raw argmax.
 - **Redirect training output to log files**: `uv run python train.py > run.log 2>&1`. Do NOT flood your context.
-- **One GPU job at a time.** Do NOT launch parallel training runs.
+- **One GPU job at a time.** Call `check_gpu_free()` from `load_data` before training. NEVER run multiple training scripts simultaneously — they will crash or produce bad results. Wait for each to finish before starting the next.
+- **Training can take up to 24 hours.** This is normal. Do NOT kill long-running training jobs. Do NOT write polling/monitoring scripts. Just wait and check the output after it finishes.
 
 ## Strategy hints
 

@@ -11,9 +11,12 @@ data/
 docs/internal/
 internal/
 
-# Large prediction/model files
-submissions/*/predictions*.npz
-submissions/*/*.pt
+# Large binary files (models, predictions, data)
+*.pt
+*.npy
+*.npz
+!composition/results.tsv
+!gamma/results.tsv
 
 # IDE
 .idea/

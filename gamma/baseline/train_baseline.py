@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 
-from load_data import load_train, load_test
+from load_data import load_train, load_test, check_gpu_free
 from verify import evaluate
 
 
@@ -69,6 +69,7 @@ class DNN(nn.Module):
 
 
 def main():
+    check_gpu_free()  # Ensure no other training is running
     device = torch.device("cuda:0")
     print(f"Device: {device}")
 

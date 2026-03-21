@@ -201,8 +201,8 @@ These lessons are documented in the agent instructions to prevent agents from re
 \midrule
 Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 \midrule
-Claude Haiku~4.5 & [TBD] & & $3.50 \times 10^{-4}$ & 26 \\
-\textbf{Claude Sonnet~4.6} & [TBD] & & $\mathbf{2.33 \times 10^{-4}}$ & \textbf{27} \\
+Claude Haiku~4.5 & [TBD] & & [in progress] & \\
+Claude Sonnet~4.6 & [TBD] & & [TBD] & \\
 Claude Opus~4.6 & [TBD] & & [TBD] & \\
 GPT Codex & [TBD] & & [TBD] & \\
 \bottomrule
@@ -211,30 +211,14 @@ GPT Codex & [TBD] & & [TBD] & \\
 
 \subsection{Gamma/Hadron Separation}
 
-Both Claude Haiku~4.5 and Claude Sonnet~4.6 were given identical starting conditions on the gamma/hadron separation task: the same dataset, baseline model, instructions, and 50-attempt budget. \Cref{fig:convergence_gamma} shows their convergence curves.
+\Cref{fig:convergence_gamma} shows the convergence curves for all agents on the gamma/hadron task. Each agent receives identical starting conditions: the same dataset, baseline model, instructions, and 50-attempt budget.
 
-Both agents beat the published baseline ($\sim 10^{-2}$) on their \textit{first} attempt --- by one to two orders of magnitude. However, their subsequent trajectories diverge significantly.
-
-\textbf{Haiku} reached its best result ($3.50 \times 10^{-4}$) at attempt~5 with a CNN featuring channel attention. It then spent 21 attempts trying to improve --- tuning hyperparameters, trying ViT, GBM, CBAM, focal loss, and multi-seed ensembles --- without beating its early result. Haiku exhibited a \textit{depth-first} strategy, exhaustively tuning the attention CNN architecture.
-
-\textbf{Sonnet} converged more slowly initially (first attempt at $4.55 \times 10^{-3}$, worse than Haiku's $1.05 \times 10^{-3}$) but achieved a stronger final result. The key breakthrough was the discovery of \textit{Dirichlet-optimized cross-architecture ensembles}: at attempt~9, Sonnet combined three architecturally diverse models using randomly sampled weight vectors (50K trials), achieving $3.21 \times 10^{-4}$. By attempt~20, with 7 models and 100K Dirichlet trials, it reached $2.33 \times 10^{-4}$ --- a 33\% improvement over Haiku's best.
+[Results to be updated as experiments complete.]
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
-\caption{Convergence curves (Best@$N$) for gamma/hadron separation. Sonnet~4.6 (blue) starts worse but converges deeper through cross-architecture ensembling. Haiku~4.5 (orange) plateaus early after finding a strong single model. Dashed line = published baseline ($\sim 10^{-2}$).\label{fig:convergence_gamma}}
+\caption{Convergence curves (Best@$N$) for gamma/hadron separation. Each line represents one agent. Dashed line = published baseline ($\sim 10^{-2}$).\label{fig:convergence_gamma}}
 \end{figure}
-
-\begin{table}[H]
-\caption{Best@$N$ comparison on gamma/hadron separation. Sonnet overtakes Haiku at $N$=9.\label{tab:bestatn}}
-\begin{tabularx}{\textwidth}{lCCCCC}
-\toprule
-\textbf{Agent} & \textbf{Best@5} & \textbf{Best@10} & \textbf{Best@15} & \textbf{Best@20} & \textbf{Final} \\
-\midrule
-Haiku~4.5 & $3.50 \times 10^{-4}$ & $3.50 \times 10^{-4}$ & $3.50 \times 10^{-4}$ & $3.50 \times 10^{-4}$ & $3.50 \times 10^{-4}$ \\
-\textbf{Sonnet~4.6} & $3.50 \times 10^{-4}$ & $\mathbf{2.92 \times 10^{-4}}$ & $\mathbf{2.92 \times 10^{-4}}$ & $\mathbf{2.33 \times 10^{-4}}$ & $\mathbf{2.33 \times 10^{-4}}$ \\
-\bottomrule
-\end{tabularx}
-\end{table}
 
 \subsection{Composition (5-class)}
 
@@ -254,63 +238,20 @@ Beyond Best@50 scores, the \textit{path} each agent takes is itself data. The at
 
 \subsection{Convergence Curves}
 
-The convergence curves (\Cref{fig:convergence_gamma}) reveal strikingly different optimization dynamics between the two agents. Haiku reaches a strong result quickly but saturates; Sonnet starts worse but achieves a better final result through systematic ensemble building.
-
-At $N$=5, both agents are tied at $3.50 \times 10^{-4}$. After that point, Haiku flatlines while Sonnet continues to improve through ensemble optimization, reaching $2.33 \times 10^{-4}$ by attempt~20.
+[Convergence analysis to be written when experiments complete.]
 
 \subsection{Detailed Research Trajectories}
 
-\Cref{fig:trajectory_haiku,fig:trajectory_sonnet} show the attempt-by-attempt trajectories for both agents. Each dot represents one \texttt{verify.py} evaluation: green dots are improvements (new running best), gray circles are attempts that did not improve.
+Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Green dots mark improvements (new running best); gray circles mark attempts that did not beat the running best.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory_gamma_haiku_45.pdf}
-\caption{Research trajectory for Haiku~4.5 on gamma/hadron separation. Three key advances: (1)~DNN on flattened matrices, (2)~CNN+MLP fusion, (3)~CNN with channel attention. Attempts 6--26 explored hyperparameter tuning, architecture variants (ViT, CBAM, ResNet, GBM), and ensembles --- none improved the best.\label{fig:trajectory_haiku}}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_gamma_sonnet_46.pdf}
-\caption{Research trajectory for Sonnet~4.6 on gamma/hadron separation. Seven improvements through a systematic strategy: (1)~MLP baseline, (2)~CNN+MLP, (3)~first ensemble, (4)~cross-architecture ensemble with geometric weighting, (5--7)~Dirichlet-optimized ensembles with increasing model diversity. The ``train diverse model $\rightarrow$ add to ensemble $\rightarrow$ re-optimize weights'' loop produced sustained gains.\label{fig:trajectory_sonnet}}
+\caption{Research trajectory for Haiku~4.5 on gamma/hadron separation. [In progress.]\label{fig:trajectory_haiku}}
 \end{figure}
 
 \subsection{Architecture Diversity}
 
-\begin{table}[H]
-\caption{Architecture families explored by each agent on gamma/hadron task. \checkmark = tried, $\star$ = best single model from this family.\label{tab:diversity}}
-\begin{tabularx}{\textwidth}{lCC}
-\toprule
-\textbf{Architecture} & \textbf{Haiku~4.5} & \textbf{Sonnet~4.6} \\
-\midrule
-Logistic regression & \checkmark & \\
-Random Forest / GBM & \checkmark & \checkmark \\
-MLP & \checkmark & \checkmark \\
-CNN + MLP & \checkmark & $\star$ \\
-CNN + Attention & $\star$ & \checkmark \\
-CNN + CBAM & \checkmark & \\
-ResNet & \checkmark & \checkmark \\
-ViT / Transformer & \checkmark & \\
-Dilated CNN & & \checkmark \\
-Muon-channel only & \checkmark & \checkmark \\
-Knowledge distillation & & \checkmark \\
-Stacking meta-learner & & \checkmark \\
-OHEM & & \checkmark \\
-Pairwise ranking loss & & \checkmark \\
-Ensemble (same-arch) & \checkmark & \checkmark \\
-Ensemble (cross-arch) & \checkmark & $\star$ \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-Sonnet explored more architecture families (12 vs 10) and more creative techniques (distillation, stacking, OHEM, ranking loss), while Haiku spent more attempts tuning fewer architectures. Sonnet's key advantage was the Dirichlet-optimized cross-architecture ensemble, which Haiku also tried but with less sophisticated weight optimization (grid search vs 100K random trials).
-
-\subsection{Failure Modes}
-
-Both agents exhibited common failure patterns:
-\begin{itemize}
-    \item \textbf{Timeout crashes} (Haiku): Early attempts used 120--300s timeouts that killed GPU training jobs. Haiku lost 3--4 attempts to this before removing timeouts.
-    \item \textbf{Bypassing verify.py} (Sonnet): After attempt~20, Sonnet stopped calling \texttt{verify.py} for individual models, computing metrics internally instead. While it still called verify.py for ensembles, many individual model results were not officially logged.
-    \item \textbf{Muon-channel experiments}: Both agents independently tested muon-only models (Haiku v7: $2.86 \times 10^{-3}$; Sonnet v22: $1.28 \times 10^{-3}$), confirming that both channels are needed.
-    \item \textbf{Diminishing returns}: Both agents spent over half their attempts without improving their best result (Haiku: 21/26, Sonnet: 7/27 logged improvements).
-\end{itemize}
+[Architecture diversity table and failure mode analysis to be completed when experiments finish.]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -319,7 +260,7 @@ Both agents exhibited common failure patterns:
 
 \subsection{Comparison with Published Results}
 
-On gamma/hadron separation, both agents significantly outperform the published baseline ($\sim 10^{-2}$ survival at 30--70\% gamma efficiency). Sonnet achieves $2.33 \times 10^{-4}$ at 75\% gamma efficiency --- approximately 40$\times$ better than the baseline, and at a higher gamma efficiency operating point. This large improvement suggests the gamma/hadron problem was previously less optimized by human researchers, leaving substantial room for automated exploration.
+[To be completed when experiments finish.]
 
 To validate that agent-built classifiers produce physically meaningful results, we ran the best composition model on all 1308 runs of the KASCADE archive (1,572,349 events after quality cuts with $\theta_z < 18^{\circ}$) and applied confusion matrix unfolding (\Cref{fig:real_spectra}).
 
@@ -341,13 +282,11 @@ Whether different agents discover this ceiling independently --- and how they re
 
 \subsection{Agent Research Strategies}
 
-The two agents exhibited distinctly different research styles on the same task:
+[Full cross-agent behavioral analysis to be completed when all experiments finish.]
 
-\textbf{Haiku~4.5} followed a \textit{depth-first} strategy. After finding CNN+Attention at attempt~5, it spent 21 attempts tuning hyperparameters (learning rate, dropout, weight decay, optimizer, epochs, seeds) without improvement. It tried ViT and GBM but did not commit to building a diverse model portfolio for ensembling.
+An early observation from the gamma task is a striking difference in \textit{research stability} between model tiers. Haiku~4.5 can execute individual experiments competently --- writing training scripts, loading data, calling the evaluation API --- but struggles with sustained iterative research over long sessions. In our experiments, Haiku frequently lost focus: launching parallel GPU jobs despite instructions to run sequentially, killing training runs prematurely (after 37 minutes, assuming they were ``hung''), writing elaborate monitoring scripts instead of waiting for results, and running the same experiment twice (wasting 2 of its 50 attempts on duplicates). The agent required 2--3 prompt repetitions to stay on track.
 
-\textbf{Sonnet~4.6} followed a \textit{breadth-then-ensemble} strategy. It trained many different architectures (CNN, ResNet, MLP, cross-attention, dilated CNN), evaluated each, then combined the best into progressively larger ensembles with Dirichlet-optimized weights. This systematic approach --- train diverse model $\rightarrow$ add to ensemble pool $\rightarrow$ re-optimize weights --- produced 7 successive improvements.
-
-A key finding is that both agents independently discovered the physics-relevant features: Haiku tried muon-only classification (v7), and Sonnet tried $N_e/N_\mu$ ratio features (v1) and muon-only (v22). Both confirmed that both channels are needed. However, only Sonnet discovered that the \textit{combination method} (Dirichlet-optimized ensembling vs.\ simple averaging) was the key to further improvement.
+This suggests that the limiting factor for smaller models is not individual task capability but \textit{context management} --- the ability to maintain a coherent research plan across dozens of experiments spanning hours. This has practical implications for benchmark design: a fixed attempt budget (Best@50) may favor larger models not because they find better architectures, but because they waste fewer attempts on operational errors.
 
 \subsection{Limitations}
 
@@ -364,9 +303,9 @@ A key finding is that both agents independently discovered the physics-relevant 
 \section{Conclusions}
 \label{sec:conclusion}
 
-We present astro-bench, a controlled benchmark for evaluating AI agents as autonomous ML researchers on real astrophysics data. By giving each agent the same dataset, baseline, and evaluation budget (50 attempts), we enable direct comparison of both outcomes and research strategies across agent models.
+We present astro-bench, a controlled benchmark for evaluating AI agents as autonomous ML researchers on real astrophysics data. By giving each agent the same dataset, baseline, and evaluation budget (50 attempts), we enable direct comparison of both outcomes and research strategies across agent models from multiple providers.
 
-On gamma/hadron separation, Claude Sonnet~4.6 achieves a hadronic survival rate of $2.33 \times 10^{-4}$ at 75\% gamma efficiency --- approximately 40$\times$ better than published baselines --- through a Dirichlet-optimized cross-architecture ensemble. Claude Haiku~4.5, given identical conditions, achieves $3.50 \times 10^{-4}$ with a single CNN+Attention model. The convergence analysis reveals that Sonnet's advantage comes not from finding better individual models but from a more sophisticated combination strategy: it systematically builds diverse models and optimizes their ensemble weights, while Haiku exhaustively tunes a single architecture.
+[Results summary to be completed when all experiments finish.]
 
 The benchmark design itself required significant iteration --- pilot experiments revealed critical issues with data precision, evaluation leakage, and post-processing artifacts that would have invalidated comparisons. These lessons are documented in the agent instructions, ensuring that the controlled experiments measure ML research ability rather than pipeline debugging skill.
 

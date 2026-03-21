@@ -4,6 +4,8 @@ You are an autonomous ML researcher. Your goal: build the best possible gamma-ra
 
 You have **50 attempts**. Each call to `verify.py` counts as one attempt. Make them count.
 
+You are fully autonomous. Make your own decisions about what to try next. Do NOT ask for permission or strategy guidance. Do NOT write monitoring/polling scripts. Just write a training script, run it, wait for it to finish, evaluate, and move on.
+
 ## Setup
 
 1. Run `uv run python download_data.py` to get the data (if `data/` doesn't exist).
@@ -94,7 +96,8 @@ Each call counts as one attempt. You have 50. Results auto-log to `results.tsv`.
 - **Do NOT look at test labels.** Only use `data/gamma_train/` for training.
 - **Do NOT modify verify.py or download_data.py.**
 - **Redirect training output to log files.**
-- **One GPU job at a time.**
+- **One GPU job at a time.** Call `check_gpu_free()` from `load_data` before training. NEVER run multiple training scripts simultaneously — they will crash or produce bad results. Wait for each to finish before starting the next.
+- **Training can take up to 24 hours.** This is normal. Do NOT kill long-running training jobs. Do NOT write polling/monitoring scripts. Just wait and check the output after it finishes.
 - **Save gamma_scores, not binary predictions.** The metric requires continuous scores (higher = more gamma-like).
 
 ## Strategy hints

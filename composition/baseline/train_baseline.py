@@ -12,7 +12,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import time
 
-from load_data import load_train, load_test
+from load_data import load_train, load_test, check_gpu_free
 from verify import evaluate
 
 DEVICE = "cuda"
@@ -85,6 +85,7 @@ class LeNet(nn.Module):
 
 
 def main():
+    check_gpu_free()  # Ensure no other training is running
     torch.manual_seed(SEED); np.random.seed(SEED)
     t0 = time.time()
 

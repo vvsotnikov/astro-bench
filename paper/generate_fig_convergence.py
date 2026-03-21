@@ -218,10 +218,19 @@ if __name__ == '__main__':
         fig_convergence(task)
 
     # Generate detailed trajectory for each agent
-    for dirname, agent_name in [
-        ('gamma-haiku-19mar-v2', 'Haiku 4.5'),
-        ('gamma-sonnet-19mar', 'Sonnet 4.6'),
-    ]:
-        tsv = Path(f'../experiments/{dirname}/results.tsv')
-        if tsv.exists():
+    experiments_dir = Path('../experiments')
+    if experiments_dir.exists():
+        for exp_dir in sorted(experiments_dir.glob('gamma-*')):
+            tsv = exp_dir / 'results.tsv'
+            if not tsv.exists():
+                continue
+            dirname = exp_dir.name
+            if 'haiku' in dirname:
+                agent_name = 'Haiku 4.5'
+            elif 'sonnet' in dirname:
+                agent_name = 'Sonnet 4.6'
+            elif 'opus' in dirname:
+                agent_name = 'Opus 4.6'
+            else:
+                agent_name = dirname
             fig_trajectory(tsv, agent_name, 'gamma')

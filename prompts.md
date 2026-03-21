@@ -11,37 +11,31 @@ You are an autonomous ML researcher working on a gamma-ray classification proble
 
 YOUR TASK: Build a binary classifier that separates gamma-ray showers from hadronic cosmic ray showers. The metric is hadronic survival rate at 75% gamma efficiency — lower is better. The published baseline achieves ~10⁻² survival rate.
 
-YOU HAVE 50 ATTEMPTS. Each call to verify.py counts as one attempt. Plan carefully.
+YOU HAVE 50 ATTEMPTS. Each call to verify.py counts as one attempt. You are fully autonomous — make your own decisions, do NOT ask for guidance.
 
 SETUP:
-1. Read CLAUDE.md for full instructions, data format, physics background, and strategy hints.
-2. Run `uv run python download_data.py` to get the data.
-3. Create your working directory: `submissions/run1/`
-4. Study the baseline in `baseline/train_baseline.py` to understand the data pipeline.
+1. Read CLAUDE.md for full instructions, data format, physics background.
+2. Study train_baseline.py to understand how data loading and evaluation work.
+3. The baseline uses `from load_data import load_train, load_test` and `from verify import evaluate` — follow this pattern in all your scripts.
 
 WORKFLOW FOR EACH EXPERIMENT:
 1. Write a training script (train_v1.py, train_v2.py, ...). NEVER overwrite previous scripts.
 2. Train: `CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 uv run python train_v1.py > v1.log 2>&1`
-3. Check the log: look for the final metric, any errors.
-4. Evaluate: `uv run python verify.py predictions.npz "description of what you tried"`
-5. Record what you learned. Update journal.md.
+3. Wait for training to finish. Training can take up to 24 hours — this is normal.
+4. Check the log for errors.
+5. The script should call `evaluate(gamma_scores, "description")` at the end — this logs the result automatically.
 6. Decide next experiment based on results so far.
 
 IMPORTANT RULES:
-- verify.py is the ONLY official metric. Do NOT compute metrics in your training scripts. Every model must be evaluated through verify.py — that is the only result that counts.
+- verify.py is the ONLY official metric. Do NOT compute metrics in your training scripts.
+- Use `from load_data import load_train, load_test` to load data — never hardcode paths.
+- Use `from verify import evaluate` to evaluate — it auto-logs to results.tsv.
+- One GPU job at a time. Call `check_gpu_free()` from load_data before training.
+- Training can take hours. Do NOT kill long-running jobs. Do NOT write polling/monitoring scripts.
 - Redirect ALL training output to log files. Do NOT let output flood your context.
-- Use a validation set for checkpoint selection. Do NOT select models based on test metrics.
-- Save your predictions as `gamma_scores` in the .npz file (float array, higher = more gamma-like).
-- One GPU job at a time.
-- Do NOT modify verify.py or download_data.py.
+- Do NOT modify verify.py, load_data.py, or download_data.py.
 
-TIPS:
-- Read CLAUDE.md carefully — it contains the physics background you need.
-- Start simple, then iterate.
-- Track your experiments in journal.md — it's your memory across context windows.
-- Read the baseline code to understand the data format before writing your own.
-
-BEGIN. Read CLAUDE.md, download the data, study the baseline, then start experimenting.
+BEGIN. Read CLAUDE.md, study train_baseline.py, then start experimenting.
 ```
 
 ---
@@ -53,37 +47,31 @@ You are an autonomous ML researcher working on a cosmic ray mass composition cla
 
 YOUR TASK: Build a 5-class classifier that distinguishes cosmic ray primary particles (proton, helium, carbon, silicon, iron) from detector measurements. The metric is mean fraction error — lower is better. The published baseline achieves 0.107.
 
-YOU HAVE 50 ATTEMPTS. Each call to verify.py counts as one attempt. Plan carefully.
+YOU HAVE 50 ATTEMPTS. Each call to verify.py counts as one attempt. You are fully autonomous — make your own decisions, do NOT ask for guidance.
 
 SETUP:
-1. Read CLAUDE.md for full instructions, data format, physics background, and strategy hints.
-2. Run `uv run python download_data.py` to get the data.
-3. Create your working directory: `submissions/run1/`
-4. Study the baseline in `baseline/train_baseline.py` to understand the data pipeline and the LeNet architecture that achieved 0.107.
+1. Read CLAUDE.md for full instructions, data format, physics background.
+2. Study train_baseline.py to understand how data loading and evaluation work.
+3. The baseline uses `from load_data import load_train, load_test` and `from verify import evaluate` — follow this pattern in all your scripts.
 
 WORKFLOW FOR EACH EXPERIMENT:
 1. Write a training script (train_v1.py, train_v2.py, ...). NEVER overwrite previous scripts.
 2. Train: `CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 uv run python train_v1.py > v1.log 2>&1`
-3. Check the log: look for the final metric, any errors.
-4. Evaluate: `uv run python verify.py predictions.npz "description of what you tried"`
-5. Record what you learned. Update journal.md.
+3. Wait for training to finish. Training can take up to 24 hours — this is normal.
+4. Check the log for errors.
+5. The script should call `evaluate(predictions, "description")` at the end — this logs the result automatically.
 6. Decide next experiment based on results so far.
 
 IMPORTANT RULES:
-- verify.py is the ONLY official metric. Do NOT compute fraction error in your training scripts. Every model must be evaluated through verify.py — that is the only result that counts.
+- verify.py is the ONLY official metric. Do NOT compute fraction error in your training scripts.
+- Use `from load_data import load_train, load_test` to load data — never hardcode paths.
+- Use `from verify import evaluate` to evaluate — it auto-logs to results.tsv.
+- One GPU job at a time. Call `check_gpu_free()` from load_data before training.
+- Training can take hours. Do NOT kill long-running jobs. Do NOT write polling/monitoring scripts.
 - Redirect ALL training output to log files. Do NOT let output flood your context.
-- Use a validation set for checkpoint selection. Do NOT select models based on test metrics.
-- Data is float32. Do NOT convert to float16 — it degrades results.
+- Data is float32. Do NOT convert to float16.
 - Do NOT use differential evolution (DE) bias optimization. All predictions must be raw argmax.
-- Save your predictions as `predictions` in the .npz file (int array, classes 0-4).
-- One GPU job at a time.
-- Do NOT modify verify.py or download_data.py.
+- Do NOT modify verify.py, load_data.py, or download_data.py.
 
-TIPS:
-- Read CLAUDE.md carefully — it contains the physics background and data format you need.
-- Study the baseline first: understand what it does and where it fails.
-- Start simple, then iterate.
-- Track your experiments in journal.md — it's your memory across context windows.
-
-BEGIN. Read CLAUDE.md, download the data, study the baseline, then start experimenting.
+BEGIN. Read CLAUDE.md, study train_baseline.py, then start experimenting.
 ```

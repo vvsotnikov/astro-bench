@@ -1,3 +1,0 @@
-attempt	survival_75	predictions	description
-1	1.1381e-03	submissions/run1/predictions_v1.npz	v1: Simple MLP baseline (30 epochs)
-2	3.7937e-04	submissions/run1/predictions_v2.npz	v2: CNN + MLP hybrid (32K params)
