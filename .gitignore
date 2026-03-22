@@ -30,3 +30,5 @@ internal/
 uv.lock
 legacy/
 *.pdf
+*.log
+*.png
