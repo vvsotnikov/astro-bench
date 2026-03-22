@@ -21,9 +21,11 @@ def check_gpu_free():
     Wait for them to finish, then start your next experiment.
     """
     try:
-        import subprocess
+        import os, subprocess
+        # Check only the GPU we'll actually use (from CUDA_VISIBLE_DEVICES)
+        gpu_id = os.environ.get("CUDA_VISIBLE_DEVICES", "0").split(",")[0]
         result = subprocess.run(
-            ["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
+            ["nvidia-smi", f"--id={gpu_id}", "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
             capture_output=True, text=True, timeout=5)
         if result.returncode == 0:
             used_mb = int(result.stdout.strip().split('\n')[0])

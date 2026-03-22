@@ -29,7 +29,7 @@ $^{2}$ \quad JetBrains Astroparticle Physics Lab}
 
 \corres{Correspondence: vladimir.sotnikov@jetbrains.com}
 
-\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with two classification problems: 5-class mass composition and binary gamma/hadron separation. Each agent receives the dataset, a published baseline, and 50 evaluation attempts. We compare agents from multiple providers --- Claude (Opus~4.6, Sonnet~4.6, Haiku~4.5), GPT Codex, Qwen, and Kimi --- measuring both final performance (Best@50) and convergence trajectories (Best@$N$ for $N = 1, \ldots, 50$). On composition, the best agent achieves a fraction error of [TBD], improving upon the published result of 0.107. On gamma/hadron separation, the best agent achieves a hadronic survival rate of [TBD] at 75\% gamma efficiency. Beyond final metrics, the controlled experimental design enables analysis of research strategies, convergence speed, architecture diversity, and failure modes across agents. All code, predictions, and evaluation logs are publicly available.}
+\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with two classification problems: 5-class mass composition and binary gamma/hadron separation. Each agent receives the dataset, a published baseline, and 50 evaluation attempts. We compare agents from multiple providers --- Claude (Opus~4.6, Sonnet~4.6), GPT Codex, Qwen, and Kimi --- measuring both final performance (Best@50) and convergence trajectories (Best@$N$ for $N = 1, \ldots, 50$). On composition, the best agent achieves a fraction error of [TBD], improving upon the published result of 0.107. On gamma/hadron separation, the best agent achieves a hadronic survival rate of [TBD] at 75\% gamma efficiency. Beyond final metrics, the controlled experimental design enables analysis of research strategies, convergence speed, architecture diversity, and failure modes across agents. All code, predictions, and evaluation logs are publicly available.}
 
 \keyword{cosmic rays; mass composition; KASCADE; AI agents; machine learning; deep learning; autonomous research; benchmark}
 
@@ -143,7 +143,6 @@ We evaluate agents from multiple providers, all given identical starting conditi
 \midrule
 Claude Opus~4.6 & Anthropic & 1M tokens & Claude Code \\
 Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code \\
-Claude Haiku~4.5 & Anthropic & 200K tokens & Claude Code \\
 GPT Codex & OpenAI & --- & Codex CLI \\
 Qwen & Alibaba & --- & AGENTS.md \\
 Kimi & Moonshot & --- & AGENTS.md \\
@@ -151,7 +150,7 @@ Kimi & Moonshot & --- & AGENTS.md \\
 \end{tabularx}
 \end{table}
 
-Each agent is run on both tasks (composition and gamma), producing up to $2 \times 6 = 12$ independent experiment runs.
+Each agent is run on both tasks (composition and gamma), with 50 evaluation attempts per task.
 
 \subsection{Metrics}
 
@@ -201,8 +200,7 @@ These lessons are documented in the agent instructions to prevent agents from re
 \midrule
 Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 \midrule
-Claude Haiku~4.5 & [TBD] & & [in progress] & \\
-Claude Sonnet~4.6 & [TBD] & & [TBD] & \\
+Claude Sonnet~4.6 & [TBD] & & [in progress] & \\
 Claude Opus~4.6 & [TBD] & & [TBD] & \\
 GPT Codex & [TBD] & & [TBD] & \\
 \bottomrule
@@ -213,7 +211,7 @@ GPT Codex & [TBD] & & [TBD] & \\
 
 \Cref{fig:convergence_gamma} shows the convergence curves for all agents on the gamma/hadron task. Each agent receives identical starting conditions: the same dataset, baseline model, instructions, and 50-attempt budget.
 
-[Results to be updated as experiments complete.]
+[Results to be updated as Sonnet experiment completes.]
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
@@ -245,8 +243,8 @@ Beyond Best@50 scores, the \textit{path} each agent takes is itself data. The at
 Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Green dots mark improvements (new running best); gray circles mark attempts that did not beat the running best.
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_gamma_haiku_45.pdf}
-\caption{Research trajectory for Haiku~4.5 on gamma/hadron separation. [In progress.]\label{fig:trajectory_haiku}}
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_sonnet_46.pdf}
+\caption{Research trajectory for Sonnet~4.6 on gamma/hadron separation. [In progress.]\label{fig:trajectory_sonnet}}
 \end{figure}
 
 \subsection{Architecture Diversity}
@@ -284,9 +282,6 @@ Whether different agents discover this ceiling independently --- and how they re
 
 [Full cross-agent behavioral analysis to be completed when all experiments finish.]
 
-An early observation from the gamma task is a striking difference in \textit{research stability} between model tiers. Haiku~4.5 can execute individual experiments competently --- writing training scripts, loading data, calling the evaluation API --- but struggles with sustained iterative research over long sessions. In our experiments, Haiku frequently lost focus: launching parallel GPU jobs despite instructions to run sequentially, killing training runs prematurely (after 37 minutes, assuming they were ``hung''), writing elaborate monitoring scripts instead of waiting for results, and running the same experiment twice (wasting 2 of its 50 attempts on duplicates). The agent required 2--3 prompt repetitions to stay on track.
-
-This suggests that the limiting factor for smaller models is not individual task capability but \textit{context management} --- the ability to maintain a coherent research plan across dozens of experiments spanning hours. This has practical implications for benchmark design: a fixed attempt budget (Best@50) may favor larger models not because they find better architectures, but because they waste fewer attempts on operational errors.
 
 \subsection{Limitations}
 
@@ -296,6 +291,7 @@ This suggests that the limiting factor for smaller models is not individual task
     \item The 50-attempt budget is somewhat arbitrary. Different budgets may favor different agent strategies (e.g., breadth-first may need more attempts to converge).
     \item Agent interfaces differ across providers (Claude Code, Codex CLI, etc.), which may introduce confounds beyond model capability.
     \item Stochastic training means the same agent on the same task may produce different results across runs. Ideally, each agent--task combination would be repeated multiple times.
+    \item Claude Haiku~4.5, the smallest model tested, proved too unstable for the 50-attempt protocol: it launched parallel GPU jobs, killed long-running training, wrote monitoring scripts instead of waiting, and corrupted its results file. This suggests a minimum model capability threshold for autonomous research that Haiku does not meet.
 \end{itemize}
 
 
@@ -323,7 +319,7 @@ We make the benchmark, all agent predictions, and evaluation logs publicly avail
 
 \dataavailability{All code, datasets, model weights, training logs, and agent reasoning traces are available at \url{https://github.com/vvsotnikov/astro-bench}. The KASCADE simulation data is hosted on Amazon S3 at \url{https://kascade-sim-data.s3.eu-central-1.amazonaws.com/}. Real KASCADE data is available at \url{s3://kascade-with-arr-times-npz/}.}
 
-\acknowledgments{During the preparation of this manuscript, the authors used Claude Opus~4.6 and Claude Haiku~4.5 (Anthropic) for the purposes of autonomous ML experimentation, code generation, and drafting portions of the manuscript text. The authors have reviewed and edited the output and take full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available.}
+\acknowledgments{During the preparation of this manuscript, the author used Claude Opus~4.6 (Anthropic) for code generation, data analysis, and drafting portions of the manuscript text. The author has reviewed and edited all output and takes full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available.}
 
 \conflictsofinterest{The authors declare no conflicts of interest.}
 

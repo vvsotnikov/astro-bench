@@ -1,0 +1,3 @@
+attempt	survival_75	predictions	description
+0	1.0e-02	baseline/predictions.npz	RF baseline (published, Kostunin et al. ICRC 2021)
+1	3.7937e-04	predictions_v1.npz	v1: CNN (5 conv layers) + engineered features (Ne/Nmu ratio, muon channel stats), log1p transform, 50 epochs cosine LR, BCELoss pos_weight

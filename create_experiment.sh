@@ -1,6 +1,11 @@
 #!/bin/bash
 # Create a new experiment directory for an agent run.
 #
+# Experiments are created OUTSIDE the git repo to ensure:
+# 1. No shared auto-memory (agents can't see prior results)
+# 2. No access to other experiments or repo files
+# 3. Complete isolation — agent only sees its own directory
+#
 # Usage:
 #   ./create_experiment.sh <task> <agent-tag>
 #
@@ -8,13 +13,12 @@
 #   ./create_experiment.sh gamma haiku-20mar
 #   ./create_experiment.sh composition opus-21mar
 #
-# Creates: experiments/<task>-<agent-tag>/
-#   - Copies: CLAUDE.md, AGENTS.md, verify.py, load_data.py, download_data.py, baseline/, pyproject.toml, uv.lock
-#   - Symlinks: data/ → shared data prepared by the task's download_data.py
+# Creates: ../astro-bench-experiments/<task>-<agent-tag>/
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+EXPERIMENTS_ROOT="$(dirname "$SCRIPT_DIR")/astro-bench-experiments"
 
 if [ $# -ne 2 ]; then
     echo "Usage: $0 <task> <agent-tag>"
@@ -25,7 +29,7 @@ fi
 
 TASK="$1"
 TAG="$2"
-EXPERIMENT_DIR="$SCRIPT_DIR/experiments/${TASK}-${TAG}"
+EXPERIMENT_DIR="$EXPERIMENTS_ROOT/${TASK}-${TAG}"
 TASK_DIR="$SCRIPT_DIR/$TASK"
 SHARED_DATA="$SCRIPT_DIR/$TASK/data"
 
@@ -53,16 +57,17 @@ if [ ! -d "$SHARED_DATA" ]; then
     exit 1
 fi
 
-# Create experiment directory
+# Create experiment directory (outside git repo)
+mkdir -p "$EXPERIMENTS_ROOT"
 echo "Creating experiment: $EXPERIMENT_DIR"
 mkdir -p "$EXPERIMENT_DIR"
 
-# Copy code files (small, should be isolated per experiment)
+# Copy code files
 cp "$TASK_DIR/CLAUDE.md" "$EXPERIMENT_DIR/"
 cp "$TASK_DIR/verify.py" "$EXPERIMENT_DIR/"
 cp "$TASK_DIR/download_data.py" "$EXPERIMENT_DIR/"
 cp "$TASK_DIR/load_data.py" "$EXPERIMENT_DIR/"
-# Baseline script at root level (same dir as load_data.py and verify.py)
+# Baseline script at root level
 cp "$TASK_DIR/baseline/"*.py "$EXPERIMENT_DIR/" 2>/dev/null || true
 
 # Create AGENTS.md symlink
@@ -72,15 +77,21 @@ ln -sf CLAUDE.md "$EXPERIMENT_DIR/AGENTS.md"
 cp "$SCRIPT_DIR/pyproject.toml" "$EXPERIMENT_DIR/"
 cp "$SCRIPT_DIR/uv.lock" "$EXPERIMENT_DIR/"
 
-# Symlink data to shared location (saves ~4-60GB per experiment)
+# Symlink data to shared location
 ln -sf "$SHARED_DATA" "$EXPERIMENT_DIR/data"
+
+# Initialize uv environment
+echo "Setting up Python environment..."
+(cd "$EXPERIMENT_DIR" && uv sync --quiet 2>/dev/null || true)
 
 echo ""
 echo "Created: $EXPERIMENT_DIR"
-echo "  Code:     copied (CLAUDE.md, verify.py, baseline/)"
+echo "  Code:     copied (CLAUDE.md, verify.py, load_data.py, train_baseline.py)"
 echo "  Data:     symlinked → $SHARED_DATA"
-echo "  Size:     ~100KB (vs ~4-60GB with copies)"
+echo "  Python:   uv environment ready"
+echo "  Isolated: outside git repo (no shared memory)"
 echo ""
 echo "To launch an agent:"
-echo "  Working directory: $EXPERIMENT_DIR"
-echo "  Prompt: see prompts.md"
+echo "  cd $EXPERIMENT_DIR"
+echo "  claude"
+echo "  Prompt: see $SCRIPT_DIR/prompts.md"

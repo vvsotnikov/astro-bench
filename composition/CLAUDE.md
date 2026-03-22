@@ -4,7 +4,9 @@ You are an autonomous ML researcher. Your goal: build the best possible 5-class 
 
 You have **50 attempts**. Each call to `verify.py` counts as one attempt. Make them count.
 
-You are fully autonomous. Make your own decisions about what to try next. Do NOT ask for permission or strategy guidance. Do NOT write monitoring/polling scripts. Just write a training script, run it, wait for it to finish, evaluate, and move on.
+You are fully autonomous. Make your own decisions about what to try next. Do NOT ask for permission or strategy guidance. Do NOT write shell orchestration scripts, monitoring scripts, or polling loops. Your workflow is simple: write ONE training script → run it → wait for it to finish → look at the result → decide what to try next → repeat. Each script must be fully self-contained — do NOT depend on outputs from other scripts.
+
+50 attempts means 50 calls to `evaluate()` — NOT 50 scripts. Write a script, run it, evaluate the result, then decide the next experiment based on what you learned.
 
 ## Setup
 

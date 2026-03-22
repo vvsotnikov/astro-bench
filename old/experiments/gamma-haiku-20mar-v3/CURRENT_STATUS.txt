@@ -1,0 +1,42 @@
+=================================================================
+GAMMA/HADRON CLASSIFICATION - WIDE EXPLORATION CAMPAIGN
+=================================================================
+
+TIME: $(date)
+BUDGET: 8/50 attempts used | 42 remaining
+
+CURRENT PHASE: Phase 1 - Architectural & Hyperparameter Diversity
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ACTIVE MODELS (4/8 training now):
+
+CPU (Parallel):
+  ✓ v15 - GradientBoosting (sklearn, flattened features)
+  ✓ v20 - MuonCNN with seed=123 (multi-seed variant)
+  ✓ v21 - ResNet with seed=456 (multi-seed variant)
+
+GPU (Sequential Pipeline):
+  ✓ v23 - Wider ResNet (80/160 filters) - ACTIVE
+  ⏳ v24 - Deeper CNN (3 conv blocks) - queued
+  ⏳ v25 - GELU activation variant - queued
+  ⏳ v26 - Lower LR (3e-4) + 50 epochs - queued
+  ⏳ v27 - Larger batch (256) - queued
+
+CURRENT BEST: v2 (ResNet) @ 4.67e-04
+TARGET: Beat 4.67e-04 OR ensemble to 3.5e-04
+
+EXPECTED COMPLETION: ~60 min from now
+  - CPU models: 20-30 min each
+  - GPU pipeline: 15-25 min per model
+
+PHASE 2 READY: v28-v32 (ensemble, SGD, UNet, regularization sweep)
+PHASE 3+ QUEUED: Channel ablation, more ensembles, refinements
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TO MONITOR:
+  tail -f results.tsv          # Watch results stream in
+  ps aux | grep train_v        # Check running processes
+  nvidia-smi                   # GPU status
+
+SYSTEM STATUS: ✓ AUTONOMOUS (no intervention needed)

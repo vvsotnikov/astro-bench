@@ -1,0 +1,15 @@
+attempt	survival_75	predictions	description
+0	1.0e-02	baseline/predictions.npz	RF baseline (published, Kostunin et al. ICRC 2021)
+1	2.0428e-03	(from python)	v4: Random Forest on engineered features (15 features)
+2	7.2956e-04	(from python)	v1: MLP with physics features (Ne/Nmu, muon stats, spatial moments)
+3	1.7510e-03	(from python)	v2: CNN on muon channel + Ne/Nmu ratio + zenith
+4	7.5875e-04	(from python)	v5: Residual MLP with log1p features + advanced engineering
+5	3.2101e-04	(from python)	v3: Dual-channel CNN (e+mu) + attention pooling + scalar features
+6	4.3774e-04	(from python)	v8: Deep MLP (5 layers, 384-256-128-64) with aggressive dropout
+7	4.3774e-04	(from python)	v13: Ensemble v3 (CNN) 70% + v1 (MLP) 30%
+8	5.5447e-04	(from python)	v15: v3 reproduction check
+9	4.3774e-04	(from python)	v25: Equal weight: 25% each
+10	4.0856e-04	(from python)	v26: v3-heavy: 70% v3, 10% each
+11	4.6692e-04	(from python)	v27: Top 2: 60% v3, 40% v8
+12	4.3774e-04	(from python)	v28: v3+v5+v1: 50/25/25
+13	4.9610e-04	(from python)	v29: v3 variant with skip connections in CNN

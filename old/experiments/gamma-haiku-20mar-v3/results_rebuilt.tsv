@@ -1,0 +1,38 @@
+attempt	survival_75	predictions	description
+0	1.0e-02	baseline/predictions.npz	RF baseline
+1	7.3000e-04	predictions_v1.npz	v1: MuonCNN (separate paths for muon/electron, 30 epochs)
+2	1.2800e-03	predictions_v5.npz	v5: RandomForest 500 trees, engineered muon features
+3	4.8700e-03	predictions_v13.npz	v13: Logistic Regression on muon + scalar features
+4	4.6700e-04	predictions_v2.npz	v2: ResNet with muon emphasis, 30 epochs
+5	1.0000e-02	predictions_v14.npz	v14: SVM RBF on 100k sample, engineered features
+6	5.8400e-04	predictions_v4.npz	v4: MuonCNN + Focal Loss (gamma=2), 30 epochs
+7	7.8800e-04	predictions_v6.npz	v6: AttentionCNN (spatial attention on muon), 30 epochs
+10	1.3100e-03	predictions_v30.npz	v30: Deeper ResNet (4 blocks, 32/64/128 muon, 16/32 electron)
+11	4.3800e-04	predictions_v31.npz	v31: Wider muon path (64/128 filters)
+13	5.5400e-04	predictions_v32.npz	v32: ResNet with lr=5e-3 (higher learning rate)
+14	1.3100e-03	predictions_v35.npz	v35: ResNet with dropout=0.1 (less regularization)
+15	3.2100e-04	predictions_v36.npz	v36: ResNet with batch_size=256
+16	7.5900e-04	predictions_v37.npz	v37: ResNet with 40 epochs (longer training)
+17	1.1400e-03	predictions_v38.npz	v38: ResNet without batch norm
+18	3.3000e-03	predictions_v39.npz	v39: Muon-only classifier (no electron path)
+19	2.8000e-03	predictions_v41.npz	v41: ResNet with L2 regularization (weight_decay=1e-4)
+20	6.4200e-04	predictions_v42.npz	v42: ResNet with RMSprop optimizer
+21	1.2800e-03	predictions_v43.npz	v43: ResNet v2 with Kaiming initialization
+22	5.5400e-04	predictions_v44.npz	v44: Simple ensemble (v30 + v31 + v32)
+23	1.4300e-02	predictions_v46.npz	v46: Logistic Regression (baseline)
+24	5.4300e-03	predictions_v47.npz	v47: RandomForest 1000 trees, max_depth=15
+25	1.3100e-03	predictions_v48.npz	v48: Conv1D on flattened input
+26	1.1100e-03	predictions_v50.npz	v50: ResNet v2 clone with ReduceLROnPlateau (early stopping)
+27	6.1300e-04	predictions_v51.npz	v51: batch_size=256 + wider muon (64/128)
+28	2.9500e-03	predictions_v52.npz	v52: v36 arch + cosine annealing LR (5e-3->1e-4)
+30	7.0000e-04	predictions_v54.npz	v54: batch_size=384
+31	1.0200e-03	predictions_v55.npz	v55: 40 epochs
+32	2.1000e-03	predictions_v56.npz	v56: dropout=0.4
+33	6.4200e-04	predictions_v57.npz	v57: Multi-seed ensemble (seeds 42/123/999)
+35	8.1700e-04	predictions_v59.npz	v59: v36 + Focal Loss (gamma=1)
+36	5.5400e-04	predictions_v60.npz	v60: v36 + label smoothing (0.1)
+37	8.7500e-04	predictions_v61.npz	v61: v36 arch (seed=999, different split)
+38	7.8800e-04	predictions_v62.npz	v62: batch_size=320
+39	1.0800e-03	predictions_v63.npz	v63: lr=5e-4
+39	1.1700e-03	predictions_v64.npz	v64: dropout=0.2
+40	7.1400e-01	predictions_v65.npz	v65: patience=3

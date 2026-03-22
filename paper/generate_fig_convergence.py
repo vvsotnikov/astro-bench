@@ -59,11 +59,11 @@ def compute_best_at_n(results):
 
 def fig_convergence(task='gamma'):
     """Fig 1: Best@N convergence curves for all agents."""
-    experiments_dir = Path(f'../experiments')
+    experiments_dir = Path(f'../../astro-bench-experiments')
     if not experiments_dir.exists():
         experiments_dir = Path('v2/experiments')
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(10, 5))
 
     # Find all results for this task
     found = False
@@ -99,18 +99,38 @@ def fig_convergence(task='gamma'):
         found = True
 
     if not found:
-        print(f"No results found for task={task}")
+        # Generate placeholder with consistent styling
+        if task == 'gamma':
+            ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+            ax.text(1, 1.1e-3, 'Human best', fontsize=8, color='gray')
+            ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
+            ax.set_yscale('log')
+        else:
+            ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+            ax.text(1, 0.1075, 'Human best', fontsize=8, color='gray')
+            ax.set_ylabel('Fraction error ↓')
+            ax.set_ylim(0.095, 0.115)
+        ax.set_xlabel('Attempt number')
+        ax.set_xlim(0.5, 50.5)
+        ax.grid(alpha=0.2)
+        ax.set_title(f'Convergence: {task.capitalize()} task (Best@N)')
+        ax.text(25, ax.get_ylim()[0] + (ax.get_ylim()[1] - ax.get_ylim()[0]) * 0.5,
+                'Experiments pending', ha='center', fontsize=14, color='#cccccc')
+        plt.tight_layout()
+        plt.savefig(f'fig_convergence_{task}.pdf', bbox_inches='tight')
+        plt.savefig(f'fig_convergence_{task}.png', bbox_inches='tight')
+        print(f"Saved fig_convergence_{task}.{{pdf,png}} (placeholder)")
         return
 
     # Baseline reference
     if task == 'gamma':
-        ax.axhline(y=1e-2, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 1.1e-2, 'Published baseline', fontsize=8, color='gray')
+        ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+        ax.text(1, 1.1e-3, 'Human best', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 0.1075, 'Published baseline (0.107)', fontsize=8, color='gray')
+        ax.text(1, 0.1075, 'Human best (0.107)', fontsize=8, color='gray')
         ax.set_ylabel('Fraction error ↓')
 
     ax.set_xlabel('Attempt number')
@@ -148,8 +168,11 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
         best_so_far = min(best_so_far, m)
         running_best.append(best_so_far)
 
+    # Clamp extreme outliers for display (keeps data, just caps visual position)
+    plot_metrics = [min(m, 5e-2) for m in metrics]
+
     # Plot all attempts
-    for i, (a, m, desc, imp) in enumerate(zip(attempts, metrics, descriptions, is_improvement)):
+    for i, (a, m, desc, imp) in enumerate(zip(attempts, plot_metrics, descriptions, is_improvement)):
         if imp:
             ax.scatter(a, m, c='#4CAF50', s=60, zorder=5, edgecolors='black', linewidths=0.5)
             # Label improvements
@@ -178,7 +201,8 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
 
     # Baseline
     if task == 'gamma':
-        ax.axhline(y=1e-2, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+        ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+        ax.text(1, 1.1e-3, 'Human best', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
     else:
@@ -186,6 +210,7 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
         ax.set_ylabel('Fraction error ↓')
 
     ax.set_xlabel('Attempt number')
+    ax.set_xlim(0.5, 50.5)
     n_attempts = len(results)
     n_improvements = sum(is_improvement)
     ax.set_title(f'{agent_name}: {n_attempts} attempts, {n_improvements} improvements')
@@ -199,7 +224,7 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
                markersize=8, label='No improvement', markeredgecolor='#999999', markeredgewidth=1),
         Line2D([0], [0], color='#4CAF50', linewidth=1.5, alpha=0.7, label='Running best'),
     ]
-    ax.legend(handles=handles, fontsize=8)
+    ax.legend(handles=handles, fontsize=9)
     ax.grid(alpha=0.2)
 
     plt.tight_layout()
@@ -218,7 +243,7 @@ if __name__ == '__main__':
         fig_convergence(task)
 
     # Generate detailed trajectory for each agent
-    experiments_dir = Path('../experiments')
+    experiments_dir = Path('../../astro-bench-experiments')
     if experiments_dir.exists():
         for exp_dir in sorted(experiments_dir.glob('gamma-*')):
             tsv = exp_dir / 'results.tsv'
