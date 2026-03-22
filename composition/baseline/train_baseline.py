@@ -127,6 +127,7 @@ def main():
     patience_counter = 0
 
     for epoch in range(MAX_EPOCHS):
+        t_epoch = time.time()
         model.train()
         tc, tt = 0, 0
         for mat, reco, y in train_loader:
@@ -155,9 +156,12 @@ def main():
         val_loss = vl / vt
         scheduler.step(val_loss)
 
+        epoch_time = time.time() - t_epoch
+        eta = epoch_time * (MAX_EPOCHS - epoch - 1)
         if epoch % 10 == 0 or epoch == MAX_EPOCHS - 1:
             p(f"  Ep {epoch+1}/{MAX_EPOCHS}: acc={tc/tt:.4f} val_loss={val_loss:.4f} "
-              f"lr={optimizer.param_groups[0]['lr']:.2e} [{time.time()-t0:.0f}s]")
+              f"lr={optimizer.param_groups[0]['lr']:.2e} "
+              f"[{epoch_time:.0f}s/epoch, {time.time()-t0:.0f}s elapsed, ~{eta:.0f}s remaining]")
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss; patience_counter = 0

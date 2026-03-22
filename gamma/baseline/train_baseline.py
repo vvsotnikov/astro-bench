@@ -103,9 +103,12 @@ def main():
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
     criterion = nn.CrossEntropyLoss(weight=class_weights)
 
+    import time
     best_scores = None
     best_val_loss = float("inf")
+    t_start = time.time()
     for epoch in range(30):
+        t_epoch = time.time()
         model.train()
         total_loss = correct = total = 0
         for x, y in train_loader:
@@ -137,8 +140,13 @@ def main():
         epoch_val_loss = val_loss / val_total
         scores = np.concatenate(all_scores)
 
+        elapsed = time.time() - t_start
+        epoch_time = time.time() - t_epoch
+        eta = epoch_time * (30 - epoch - 1)
         print(f"Epoch {epoch+1:2d}/30: train_loss={total_loss/total:.4f} "
-              f"train_acc={correct/total:.4f} val_loss={epoch_val_loss:.4f}")
+              f"train_acc={correct/total:.4f} val_loss={epoch_val_loss:.4f} "
+              f"[{epoch_time:.0f}s/epoch, {elapsed:.0f}s elapsed, ~{eta:.0f}s remaining]",
+              flush=True)
 
         if epoch_val_loss < best_val_loss:
             best_val_loss = epoch_val_loss
