@@ -230,7 +230,6 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
         ax.text(1, 1.1e-3, 'Published baseline', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
-
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
         ax.set_ylabel('Fraction error ↓')
@@ -253,10 +252,10 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
     ax.legend(handles=handles, fontsize=9)
     ax.grid(alpha=0.2)
 
-    plt.tight_layout()
+    fig.subplots_adjust(left=0.10, right=0.97, top=0.92, bottom=0.13)
     safe_name = agent_name.lower().replace(' ', '_').replace('.', '')
-    plt.savefig(f'fig_trajectory_{task}_{safe_name}.pdf', bbox_inches='tight')
-    plt.savefig(f'fig_trajectory_{task}_{safe_name}.png', bbox_inches='tight')
+    plt.savefig(f'fig_trajectory_{task}_{safe_name}.pdf')
+    plt.savefig(f'fig_trajectory_{task}_{safe_name}.png')
     print(f"Saved fig_trajectory_{task}_{safe_name}.{{pdf,png}}")
 
 
