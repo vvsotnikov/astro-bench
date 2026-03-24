@@ -231,17 +231,6 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
 
-        # Poisson noise band around best result
-        if running_best:
-            best = running_best[-1]
-            n_best = best * N_HADRON_TEST
-            n_lo = max(0, n_best - np.sqrt(n_best))
-            n_hi = n_best + np.sqrt(n_best)
-            ax.axhspan(n_lo / N_HADRON_TEST, n_hi / N_HADRON_TEST,
-                       color='#E8F5E9', alpha=0.5, zorder=0)
-            ax.text(50, n_hi / N_HADRON_TEST,
-                    f'±1σ ({int(round(n_best))} hadrons)',
-                    fontsize=7, color='#4CAF50', ha='right', va='bottom')
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
         ax.set_ylabel('Fraction error ↓')
