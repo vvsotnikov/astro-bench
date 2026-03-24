@@ -200,8 +200,8 @@ These lessons are documented in the agent instructions to prevent agents from re
 \midrule
 Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 \midrule
-Claude Sonnet~4.6 & [TBD] & & [in progress] & \\
-Claude Opus~4.6 & [TBD] & & [TBD] & \\
+Claude Sonnet~4.6 & [TBD] & & $3.79 \times 10^{-4}$ & 50 \\
+Claude Opus~4.6 & [TBD] & & $2.63 \times 10^{-4}$ & 17 \\
 GPT Codex & [TBD] & & [TBD] & \\
 \bottomrule
 \end{tabularx}
@@ -211,11 +211,13 @@ GPT Codex & [TBD] & & [TBD] & \\
 
 \Cref{fig:convergence_gamma} shows the convergence curves for all agents on the gamma/hadron task. Each agent receives identical starting conditions: the same dataset, baseline model, instructions, and 50-attempt budget.
 
-[Results to be updated as Sonnet experiment completes.]
+Sonnet~4.6 achieved $3.79 \times 10^{-4}$ hadronic survival at 75\% gamma efficiency after 50 attempts---a $26\times$ improvement over the published random forest baseline ($\sim 10^{-2}$). The agent's trajectory shows three phases: rapid initial improvement (4 improvements in 5 attempts) reaching $4.38 \times 10^{-4}$ via ensemble of three CNN variants; a long plateau broken at attempt~25 through physics-motivated consistency features (muon/electron consistency, centroid distance); and a final improvement at attempt~47 using test-time augmentation (D4 symmetry group) on the best single model. Across 50 attempts, the agent explored CNNs, ResNets, transformers, gradient boosting, stacking meta-learners, and various ensembling strategies.
+
+\paragraph{Test set saturation.} The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kuznetsov_jinst_2024}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons: Sonnet's best of $3.79 \times 10^{-4}$ corresponds to exactly 13 hadrons passing the classifier threshold out of 34{,}267. The metric is therefore quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$, and the Poisson uncertainty on 13 events is $\sqrt{13} \approx 3.6$~hadrons, giving a relative uncertainty of ${\sim}28\%$ (green band in \Cref{fig:convergence_gamma}). This means that models achieving anywhere from ${\sim}9$ to ${\sim}17$ surviving hadrons ($2.6 \times 10^{-4}$ to $5.0 \times 10^{-4}$) are statistically indistinguishable at the $1\sigma$ level. The gamma benchmark is effectively saturated at the resolution of the available Monte Carlo statistics.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
-\caption{Convergence curves (Best@$N$) for gamma/hadron separation. Each line represents one agent. Dashed line = published baseline ($\sim 10^{-2}$).\label{fig:convergence_gamma}}
+\caption{Convergence curves (Best@$N$) for gamma/hadron separation. Each line represents one agent. Dashed line = published baseline ($\sim 10^{-2}$). Green shaded band = Poisson $\pm 1\sigma$ around the best result, indicating the statistical noise floor of the test set.\label{fig:convergence_gamma}}
 \end{figure}
 
 \subsection{Composition (5-class)}
@@ -244,7 +246,12 @@ Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Gr
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory_gamma_sonnet_46.pdf}
-\caption{Research trajectory for Sonnet~4.6 on gamma/hadron separation. [In progress.]\label{fig:trajectory_sonnet}}
+\caption{Research trajectory for Sonnet~4.6 on gamma/hadron separation. Green dots mark improvements to the running best; gray circles are attempts that did not improve. The agent achieved 6 improvements in 50 attempts, with extended plateaus between attempts 5--25 and 25--47.\label{fig:trajectory_sonnet}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_opus_46.pdf}
+\caption{Research trajectory for Opus~4.6 on gamma/hadron separation. [In progress.]\label{fig:trajectory_opus}}
 \end{figure}
 
 \subsection{Architecture Diversity}

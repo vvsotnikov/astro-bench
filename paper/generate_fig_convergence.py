@@ -12,6 +12,9 @@ import csv
 
 plt.rcParams.update({'font.family': 'serif', 'font.size': 11, 'figure.dpi': 300})
 
+# Gamma test set statistics (for Poisson noise band)
+N_HADRON_TEST = 34267  # hadrons in test set after quality cuts
+
 AGENT_COLORS = {
     'Haiku 4.5': '#FF9800',
     'Sonnet 4.6': '#2196F3',
@@ -125,9 +128,31 @@ def fig_convergence(task='gamma'):
     # Baseline reference
     if task == 'gamma':
         ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 1.1e-3, 'Human best', fontsize=8, color='gray')
+        ax.text(1, 1.1e-3, 'Published baseline', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
+
+        # Poisson noise band: ±1σ around the global best
+        # Find the best metric across all agents
+        all_best = []
+        for exp_dir in sorted(experiments_dir.glob(f'{task}-*')):
+            tsv = exp_dir / 'results.tsv'
+            if not tsv.exists():
+                continue
+            results = load_results(tsv)
+            if results:
+                all_best.append(min(m for _, m, _ in results))
+        if all_best:
+            global_best = min(all_best)
+            n_best = global_best * N_HADRON_TEST  # number of surviving hadrons
+            n_lo = max(0, n_best - np.sqrt(n_best))
+            n_hi = n_best + np.sqrt(n_best)
+            surv_lo = n_lo / N_HADRON_TEST
+            surv_hi = n_hi / N_HADRON_TEST
+            ax.axhspan(surv_lo, surv_hi, color='#E8F5E9', alpha=0.5, zorder=0)
+            ax.axhline(y=global_best, color='#4CAF50', linestyle=':', linewidth=0.8, alpha=0.5)
+            ax.text(50, surv_hi, f'Poisson ±1σ ({int(round(n_best))} hadrons)',
+                    fontsize=7, color='#4CAF50', ha='right', va='bottom')
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
         ax.text(1, 0.1075, 'Human best (0.107)', fontsize=8, color='gray')
@@ -135,7 +160,7 @@ def fig_convergence(task='gamma'):
 
     ax.set_xlabel('Attempt number')
     ax.set_xlim(0.5, 50.5)
-    ax.legend(fontsize=9)
+    ax.legend(fontsize=9, loc='upper right')
     ax.grid(alpha=0.2)
     ax.set_title(f'Convergence: {task.capitalize()} task (Best@N)')
 
@@ -202,9 +227,21 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
     # Baseline
     if task == 'gamma':
         ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 1.1e-3, 'Human best', fontsize=8, color='gray')
+        ax.text(1, 1.1e-3, 'Published baseline', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
+
+        # Poisson noise band around best result
+        if running_best:
+            best = running_best[-1]
+            n_best = best * N_HADRON_TEST
+            n_lo = max(0, n_best - np.sqrt(n_best))
+            n_hi = n_best + np.sqrt(n_best)
+            ax.axhspan(n_lo / N_HADRON_TEST, n_hi / N_HADRON_TEST,
+                       color='#E8F5E9', alpha=0.5, zorder=0)
+            ax.text(50, n_hi / N_HADRON_TEST,
+                    f'±1σ ({int(round(n_best))} hadrons)',
+                    fontsize=7, color='#4CAF50', ha='right', va='bottom')
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
         ax.set_ylabel('Fraction error ↓')
