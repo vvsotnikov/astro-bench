@@ -29,7 +29,7 @@ $^{2}$ \quad JetBrains Astroparticle Physics Lab}
 
 \corres{Correspondence: vladimir.sotnikov@jetbrains.com}
 
-\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with two classification problems: 5-class mass composition and binary gamma/hadron separation. Each agent receives the dataset, a published baseline, and 50 evaluation attempts. We compare agents from multiple providers --- Claude (Opus~4.6, Sonnet~4.6), GPT Codex, Qwen, and Kimi --- measuring both final performance (Best@50) and convergence trajectories (Best@$N$ for $N = 1, \ldots, 50$). On composition, the best agent achieves a fraction error of [TBD], improving upon the published result of 0.107. On gamma/hadron separation, the best agent achieves a hadronic survival rate of [TBD] at 75\% gamma efficiency. Beyond final metrics, the controlled experimental design enables analysis of research strategies, convergence speed, architecture diversity, and failure modes across agents. All code, predictions, and evaluation logs are publicly available.}
+\abstract{We present astro-bench, an open benchmark for evaluating AI agents as autonomous machine learning researchers on real astrophysics data. Using the KASCADE cosmic ray experiment's detector array measurements, we task AI agents with two classification problems: 5-class mass composition and binary gamma/hadron separation. Each agent receives the dataset, a published baseline, and 50 evaluation attempts. We compare agents from multiple providers --- Claude (Opus~4.6, Sonnet~4.6), GPT-5.4, Qwen, and Kimi --- measuring both final performance (Best@50) and convergence trajectories (Best@$N$ for $N = 1, \ldots, 50$). On composition, the best agent achieves a fraction error of [TBD], improving upon the published result of 0.107. On gamma/hadron separation, the best agent achieves a hadronic survival rate of [TBD] at 75\% gamma efficiency. Beyond final metrics, the controlled experimental design enables analysis of research strategies, convergence speed, architecture diversity, and failure modes across agents. All code, predictions, and evaluation logs are publicly available.}
 
 \keyword{cosmic rays; mass composition; KASCADE; AI agents; machine learning; deep learning; autonomous research; benchmark}
 
@@ -137,20 +137,20 @@ We evaluate agents from multiple providers, all given identical starting conditi
 
 \begin{table}[H]
 \caption{AI agents evaluated on astro-bench.\label{tab:agents}}
-\begin{tabularx}{\textwidth}{lCCl}
+\begin{tabularx}{\textwidth}{lCClC}
 \toprule
-\textbf{Agent} & \textbf{Provider} & \textbf{Context} & \textbf{Interface} \\
+\textbf{Agent} & \textbf{Provider} & \textbf{Context} & \textbf{Interface} & \textbf{Thinking} \\
 \midrule
-Claude Opus~4.6 & Anthropic & 1M tokens & Claude Code \\
-Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code \\
-GPT Codex & OpenAI & --- & Codex CLI \\
-Qwen & Alibaba & --- & AGENTS.md \\
-Kimi & Moonshot & --- & AGENTS.md \\
+Claude Opus~4.6 & Anthropic & 1M tokens & Claude Code & medium \\
+Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code & medium \\
+GPT-5.4 & OpenAI & --- & Codex CLI & high \\
+Qwen & Alibaba & --- & AGENTS.md & --- \\
+Kimi & Moonshot & --- & AGENTS.md & --- \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Each agent is run on both tasks (composition and gamma), with 50 evaluation attempts per task.
+Each agent is run on both tasks (composition and gamma), with 50 evaluation attempts per task. All agents use the recommended default reasoning effort (second-to-highest option) for their respective provider.
 
 \subsection{Metrics}
 
@@ -201,8 +201,8 @@ These lessons are documented in the agent instructions to prevent agents from re
 Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 \midrule
 Claude Sonnet~4.6 & [TBD] & & $3.79 \times 10^{-4}$ & 50 \\
-Claude Opus~4.6 & [TBD] & & $2.63 \times 10^{-4}$ & 30 \\
-GPT Codex & [TBD] & & [TBD] & \\
+Claude Opus~4.6 & [TBD] & & $2.63 \times 10^{-4}$ & 50 \\
+GPT-5.4 & [TBD] & & $2.92 \times 10^{-4}$ & 50 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -213,7 +213,11 @@ GPT Codex & [TBD] & & [TBD] & \\
 
 Sonnet~4.6 achieved $3.79 \times 10^{-4}$ hadronic survival at 75\% gamma efficiency after 50 attempts---a $26\times$ improvement over the published random forest baseline ($\sim 10^{-2}$). The agent's trajectory shows three phases: rapid initial improvement (4 improvements in 5 attempts) reaching $4.38 \times 10^{-4}$ via ensemble of three CNN variants; a long plateau broken at attempt~25 through physics-motivated consistency features (muon/electron consistency, centroid distance); and a final improvement at attempt~47 using test-time augmentation (D4 symmetry group) on the best single model. Across 50 attempts, the agent explored CNNs, ResNets, transformers, gradient boosting, stacking meta-learners, and various ensembling strategies.
 
-\paragraph{Test set saturation.} The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kuznetsov_jinst_2024}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons: Sonnet's best of $3.79 \times 10^{-4}$ corresponds to exactly 13 hadrons passing the classifier threshold out of 34{,}267. The metric is therefore quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$, and the Poisson uncertainty on 13 events is $\sqrt{13} \approx 3.6$~hadrons, giving a relative uncertainty of ${\sim}28\%$ (green band in \Cref{fig:convergence_gamma}). This means that models achieving anywhere from ${\sim}9$ to ${\sim}17$ surviving hadrons ($2.6 \times 10^{-4}$ to $5.0 \times 10^{-4}$) are statistically indistinguishable at the $1\sigma$ level. The gamma benchmark is effectively saturated at the resolution of the available Monte Carlo statistics.
+Opus~4.6 achieved $2.63 \times 10^{-4}$ (9~hadrons) after 50 attempts---a $38\times$ improvement over the baseline. Opus converged fastest, reaching its best result by attempt~10 with a 3-seed dual-branch CNN using squeeze-and-excitation attention, focal loss, and geometric mean ensembling. The remaining 40 attempts exhaustively explored alternative architectures (Vision Transformers, muon-focused CNNs, triple-branch networks), training strategies (MixUp, SWA, distribution-matched validation), and ensembling methods (arithmetic, harmonic, trimmed mean, logit averaging, stacking GBT on CNN embeddings)---none of which improved on the initial result.
+
+GPT-5.4 achieved $2.92 \times 10^{-4}$ (10~hadrons) after 50 attempts---a $34\times$ improvement. GPT took a distinctly different path: it discovered pairwise ranking loss and asymmetric focal loss early (attempts 9 and 18), then spent the remaining budget on increasingly sophisticated gated ensembles combining full-pool and in-domain focal CNNs with feature-based routing. Its best result came at attempt~31 via a feature-gated ensemble. Notably, GPT was the only agent to explore domain-classifier-weighted ensembles and tail-specific loss functions.
+
+\paragraph{Test set saturation.} The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kuznetsov_jinst_2024}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons: Opus's best of $2.63 \times 10^{-4}$ corresponds to 9~hadrons, GPT-5.4's $2.92 \times 10^{-4}$ to 10~hadrons, and Sonnet's $3.79 \times 10^{-4}$ to 13~hadrons out of 34{,}267. The metric is quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$, and the Poisson uncertainty on 9 events is $\sqrt{9} = 3$~hadrons (green band in \Cref{fig:convergence_gamma}). All three agents' results fall within the same $\pm 1\sigma$ band and are statistically indistinguishable. The gamma benchmark is effectively saturated at the resolution of the available Monte Carlo statistics.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
@@ -251,7 +255,12 @@ Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Gr
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory_gamma_opus_46.pdf}
-\caption{Research trajectory for Opus~4.6 on gamma/hadron separation. [In progress.]\label{fig:trajectory_opus}}
+\caption{Research trajectory for Opus~4.6 on gamma/hadron separation. The agent achieved 6 improvements in 50 attempts, all within the first 10 attempts, followed by 40 attempts at the Poisson noise floor.\label{fig:trajectory_opus}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_gpt-54.pdf}
+\caption{Research trajectory for GPT-5.4 on gamma/hadron separation. The agent achieved 5 improvements in 50 attempts, with steady progress through attempts 1--31 followed by 19 attempts at the Poisson noise floor.\label{fig:trajectory_gpt}}
 \end{figure}
 
 \subsection{Architecture Diversity}
@@ -297,7 +306,7 @@ Whether different agents discover this ceiling independently --- and how they re
     \item Results are on simulation data. Transfer to real KASCADE measurements requires validating that models generalize across simulation--data differences.
     \item The 50-attempt budget is somewhat arbitrary. Different budgets may favor different agent strategies (e.g., breadth-first may need more attempts to converge).
     \item Agent interfaces differ across providers (Claude Code, Codex CLI, etc.), which may introduce confounds beyond model capability.
-    \item Stochastic training means the same agent on the same task may produce different results across runs. Ideally, each agent--task combination would be repeated multiple times.
+    \item Stochastic training means the same agent on the same task may produce different results across runs. Ideally, each agent--task combination would be repeated multiple times. More broadly, it is unclear whether a single Best@50 run is the most informative protocol: multiple shorter runs (e.g., $3 \times$ Best@16) could provide variance estimates and might yield better aggregate results by diversifying starting points. We encourage future work to investigate the optimal allocation of a fixed compute budget between run length and number of independent runs.
     \item Claude Haiku~4.5, the smallest model tested, proved too unstable for the 50-attempt protocol: it launched parallel GPU jobs, killed long-running training, wrote monitoring scripts instead of waiting, and corrupted its results file. This suggests a minimum model capability threshold for autonomous research that Haiku does not meet.
 \end{itemize}
 

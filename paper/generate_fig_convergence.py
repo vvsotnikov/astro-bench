@@ -19,7 +19,7 @@ AGENT_COLORS = {
     'Haiku 4.5': '#FF9800',
     'Sonnet 4.6': '#2196F3',
     'Opus 4.6': '#9C27B0',
-    'GPT Codex': '#4CAF50',
+    'GPT-5.4': '#4CAF50',
     'Qwen': '#F44336',
     'Kimi': '#607D8B',
 }
@@ -86,8 +86,8 @@ def fig_convergence(task='gamma'):
             agent = 'Sonnet 4.6'
         elif 'opus' in dirname:
             agent = 'Opus 4.6'
-        elif 'codex' in dirname:
-            agent = 'GPT Codex'
+        elif 'gpt' in dirname or 'codex' in dirname:
+            agent = 'GPT-5.4'
         elif 'qwen' in dirname:
             agent = 'Qwen'
         elif 'kimi' in dirname:
@@ -281,6 +281,8 @@ if __name__ == '__main__':
                 agent_name = 'Sonnet 4.6'
             elif 'opus' in dirname:
                 agent_name = 'Opus 4.6'
+            elif 'gpt' in dirname or 'codex' in dirname:
+                agent_name = 'GPT-5.4'
             else:
                 agent_name = dirname
             fig_trajectory(tsv, agent_name, 'gamma')
