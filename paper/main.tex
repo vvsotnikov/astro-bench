@@ -145,7 +145,7 @@ Claude Opus~4.6 & Anthropic & 1M tokens & Claude Code & medium \\
 Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code & medium \\
 GPT-5.4 & OpenAI & --- & Codex CLI & high \\
 Qwen & Alibaba & --- & AGENTS.md & --- \\
-Kimi & Moonshot & --- & AGENTS.md & --- \\
+Kimi K2.5 & Moonshot & --- & Kimi Code & --- \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -203,6 +203,7 @@ Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 Claude Sonnet~4.6 & [TBD] & & $3.79 \times 10^{-4}$ & 50 \\
 Claude Opus~4.6 & [TBD] & & $2.63 \times 10^{-4}$ & 50 \\
 GPT-5.4 & [TBD] & & $2.92 \times 10^{-4}$ & 50 \\
+Kimi K2.5 & [TBD] & & $4.09 \times 10^{-4}$ & 50 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -217,7 +218,9 @@ Opus~4.6 achieved $2.63 \times 10^{-4}$ (9~hadrons) after 50 attempts---a $38\ti
 
 GPT-5.4 achieved $2.92 \times 10^{-4}$ (10~hadrons) after 50 attempts---a $34\times$ improvement. GPT took a distinctly different path: it discovered pairwise ranking loss and asymmetric focal loss early (attempts 9 and 18), then spent the remaining budget on increasingly sophisticated gated ensembles combining full-pool and in-domain focal CNNs with feature-based routing. Its best result came at attempt~31 via a feature-gated ensemble. Notably, GPT was the only agent to explore domain-classifier-weighted ensembles and tail-specific loss functions.
 
-\paragraph{Test set saturation.} The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kuznetsov_jinst_2024}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons: Opus's best of $2.63 \times 10^{-4}$ corresponds to 9~hadrons, GPT-5.4's $2.92 \times 10^{-4}$ to 10~hadrons, and Sonnet's $3.79 \times 10^{-4}$ to 13~hadrons out of 34{,}267. The metric is quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$, and the Poisson uncertainty on 9 events is $\sqrt{9} = 3$~hadrons (green band in \Cref{fig:convergence_gamma}). All three agents' results fall within the same $\pm 1\sigma$ band and are statistically indistinguishable. The gamma benchmark is effectively saturated at the resolution of the available Monte Carlo statistics.
+Kimi~K2.5 achieved $4.09 \times 10^{-4}$ (14~hadrons) after 50 attempts---a $24\times$ improvement. Kimi employed a distinctive breadth-first strategy: rather than iterating on architecture or loss functions, it trained large pools of CNNs (up to 30 seeds of the same architecture) and submitted multiple top-$K$ selections per pool. This brute-force approach reached the Poisson noise band but converged more slowly than the other agents, with its best result arriving at attempt~40.
+
+\paragraph{Test set saturation.} The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kuznetsov_jinst_2024}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons: Opus's best of $2.63 \times 10^{-4}$ corresponds to 9~hadrons, GPT-5.4's $2.92 \times 10^{-4}$ to 10, Sonnet's $3.79 \times 10^{-4}$ to 13, and Kimi's $4.09 \times 10^{-4}$ to 14~hadrons out of 34{,}267. The metric is quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$, and the Poisson uncertainty on 9 events is $\sqrt{9} = 3$~hadrons (green band in \Cref{fig:convergence_gamma}). All four agents' results fall within the same $\pm 1\sigma$ band and are statistically indistinguishable. The gamma benchmark is effectively saturated at the resolution of the available Monte Carlo statistics.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
@@ -261,6 +264,11 @@ Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Gr
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory_gamma_gpt-54.pdf}
 \caption{Research trajectory for GPT-5.4 on gamma/hadron separation. The agent achieved 5 improvements in 50 attempts, with steady progress through attempts 1--31 followed by 19 attempts at the Poisson noise floor.\label{fig:trajectory_gpt}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_kimi_k25.pdf}
+\caption{Research trajectory for Kimi~K2.5 on gamma/hadron separation. The agent achieved 4 improvements in 50 attempts, using a distinctive strategy of training large CNN pools (up to 30 seeds) and submitting multiple top-$K$ selections per pool.\label{fig:trajectory_kimi}}
 \end{figure}
 
 \subsection{Architecture Diversity}
