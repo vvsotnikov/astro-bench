@@ -194,7 +194,10 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
         running_best.append(best_so_far)
 
     # Clamp extreme outliers for display (keeps data, just caps visual position)
-    plot_metrics = [min(m, 5e-2) for m in metrics]
+    if task == 'gamma':
+        plot_metrics = [min(m, 5e-2) for m in metrics]
+    else:
+        plot_metrics = list(metrics)
 
     # Plot all attempts
     for i, (a, m, desc, imp) in enumerate(zip(attempts, plot_metrics, descriptions, is_improvement)):
@@ -232,6 +235,7 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
         ax.set_yscale('log')
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+        ax.text(1, 0.1072, 'Published baseline', fontsize=8, color='gray')
         ax.set_ylabel('Fraction error ↓')
 
     ax.set_xlabel('Attempt number')
@@ -290,3 +294,24 @@ if __name__ == '__main__':
             else:
                 agent_name = dirname
             fig_trajectory(tsv, agent_name, 'gamma')
+
+        for exp_dir in sorted(experiments_dir.glob('composition-*')):
+            tsv = exp_dir / 'results.tsv'
+            if not tsv.exists():
+                continue
+            dirname = exp_dir.name
+            if 'haiku' in dirname:
+                agent_name = 'Haiku 4.5'
+            elif 'sonnet' in dirname:
+                agent_name = 'Sonnet 4.6'
+            elif 'opus' in dirname:
+                agent_name = 'Opus 4.6'
+            elif 'gpt' in dirname or 'codex' in dirname:
+                agent_name = 'GPT-5.4'
+            elif 'kimi' in dirname:
+                agent_name = 'Kimi K2.5'
+            elif 'qwen' in dirname:
+                agent_name = 'Qwen'
+            else:
+                agent_name = dirname
+            fig_trajectory(tsv, agent_name, 'composition')

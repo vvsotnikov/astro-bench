@@ -200,7 +200,7 @@ These lessons are documented in the agent instructions to prevent agents from re
 \midrule
 Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 \midrule
-Claude Sonnet~4.6 & [TBD] & & $3.79 \times 10^{-4}$ & 50 \\
+Claude Sonnet~4.6 & $0.1054$ & 50 & $3.79 \times 10^{-4}$ & 50 \\
 Claude Opus~4.6 & [TBD] & & $2.63 \times 10^{-4}$ & 50 \\
 GPT-5.4 & [TBD] & & $2.92 \times 10^{-4}$ & 50 \\
 Kimi K2.5 & [TBD] & & $4.09 \times 10^{-4}$ & 50 \\
@@ -229,11 +229,16 @@ Kimi~K2.5 achieved $4.09 \times 10^{-4}$ (14~hadrons) after 50 attempts---a $24\
 
 \subsection{Composition (5-class)}
 
-Composition experiments are pending. Pilot experiments during benchmark development (see \Cref{sec:method}) achieved 0.1057 with a CNN+Attention+MLP architecture using SAM optimization, representing a 1.5\% improvement over the published 0.107.
+Sonnet~4.6 achieved a fraction error of $0.1054$ after 50 attempts---a 1.8\% improvement over the published baseline ($0.107$). The agent's trajectory shows three phases: initial architecture search (attempts 1--4) establishing a LeNet+BN baseline at $0.1060$; a training strategy phase (attempts 10--27) where stochastic weight averaging (SWA) and FiLM conditioning on energy pushed to $0.1056$; and a prolonged plateau (attempts 27--48) broken only at attempts 49--50 through the introduction of an Earth Mover's Distance ordinal loss that penalizes predictions far apart in the mass ordering (H$\to$He$\to$C$\to$Si$\to$Fe). Unlike the gamma task, which saturated at the Poisson noise floor, the composition metric is continuous over 115{,}066 test events and improvements remain resolvable.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_composition.pdf}
-\caption{Convergence curves (Best@$N$) for composition classification. [Experiments pending.]\label{fig:convergence_comp}}
+\caption{Convergence curves (Best@$N$) for composition classification. Dashed line = published baseline ($0.107$).\label{fig:convergence_comp}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_composition_sonnet_46.pdf}
+\caption{Research trajectory for Sonnet~4.6 on composition classification. The agent achieved its best result at the final attempt (50) using an ordinal Earth Mover's Distance loss.\label{fig:trajectory_comp_sonnet}}
 \end{figure}
 
 
