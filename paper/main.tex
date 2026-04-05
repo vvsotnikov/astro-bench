@@ -146,11 +146,14 @@ Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code & medium \\
 GPT-5.4 & OpenAI & --- & Codex CLI & high \\
 Qwen & Alibaba & --- & AGENTS.md & --- \\
 Kimi K2.5 & Moonshot & --- & Kimi Code & --- \\
+Kimi K2.5$^\dagger$ & Moonshot & --- & KimiClaw & --- \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 Each agent is run on both tasks (composition and gamma), with 50 evaluation attempts per task. All agents use the recommended default reasoning effort (second-to-highest option) for their respective provider.
+
+$^\dagger$KimiClaw is a browser-based managed hosting of OpenClaw~\cite{openclaw} on kimi.com. Unlike Kimi Code (a stable CLI tool comparable to Claude Code), KimiClaw is experimental and its session crashed after 7 attempts, terminating the run early. Results are reported as-is.
 
 \subsection{Metrics}
 
@@ -201,9 +204,10 @@ These lessons are documented in the agent instructions to prevent agents from re
 Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 \midrule
 Claude Sonnet~4.6 & $0.1054$ & 50 & $3.79 \times 10^{-4}$ & 50 \\
-Claude Opus~4.6 & [TBD] & & $2.63 \times 10^{-4}$ & 50 \\
-GPT-5.4 & [TBD] & & $2.92 \times 10^{-4}$ & 50 \\
-Kimi K2.5 & [TBD] & & $4.09 \times 10^{-4}$ & 50 \\
+Claude Opus~4.6 & $0.1051$ & 50 & $2.63 \times 10^{-4}$ & 50 \\
+GPT-5.4 & $0.1052$ & 50 & $2.92 \times 10^{-4}$ & 50 \\
+Kimi K2.5 (Kimi Code) & [TBD] & & $4.09 \times 10^{-4}$ & 50 \\
+Kimi K2.5 (KimiClaw)$^\dagger$ & [TBD] & & $3.21 \times 10^{-4}$ & 7/50 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -316,6 +320,7 @@ Whether different agents discover this ceiling independently --- and how they re
 
 \begin{itemize}
     \item Agents operate fully autonomously within each run (no human guidance during experiments). However, the instruction document itself was refined based on pilot experiments --- agents benefit from lessons learned during benchmark development.
+    \item The benchmark environment reproduces the published experimental setup as closely as possible, but cannot guarantee an exact match due to the complexity of the original data pipeline. Our reproduced baselines closely match the published performance (e.g., fraction error 0.1073 vs.\ published 0.107). However, most agents outperform the human baseline from their first attempt, which may indicate subtle differences in our setup rather than a genuine improvement. Comparisons between agents remain valid regardless, since all agents start from identical conditions.
     \item Results are on simulation data. Transfer to real KASCADE measurements requires validating that models generalize across simulation--data differences.
     \item The 50-attempt budget is somewhat arbitrary. Different budgets may favor different agent strategies (e.g., breadth-first may need more attempts to converge).
     \item Agent interfaces differ across providers (Claude Code, Codex CLI, etc.), which may introduce confounds beyond model capability.
@@ -417,6 +422,9 @@ Papailiopoulos, D. Addition Under Pressure. Available online: \url{https://dimit
 
 \bibitem{sam_optimizer}
 Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. In Proceedings of the 9th International Conference on Learning Representations (ICLR), Virtual, 3--7 May 2021.
+
+\bibitem{openclaw}
+Steinberger, P. OpenClaw: Open-Source AI Agent Framework. Available online: \url{https://github.com/openclaw/openclaw} (accessed on 2 April 2026).
 
 \end{thebibliography}
 

@@ -22,6 +22,7 @@ AGENT_COLORS = {
     'GPT-5.4': '#4CAF50',
     'Qwen': '#F44336',
     'Kimi K2.5': '#607D8B',
+    'KimiClaw': '#795548',
 }
 
 
@@ -90,6 +91,8 @@ def fig_convergence(task='gamma'):
             agent = 'GPT-5.4'
         elif 'qwen' in dirname:
             agent = 'Qwen'
+        elif 'kimiclaw' in dirname:
+            agent = 'KimiClaw'
         elif 'kimi' in dirname:
             agent = 'Kimi K2.5'
         else:
@@ -287,6 +290,8 @@ if __name__ == '__main__':
                 agent_name = 'Opus 4.6'
             elif 'gpt' in dirname or 'codex' in dirname:
                 agent_name = 'GPT-5.4'
+            elif 'kimiclaw' in dirname:
+                agent_name = 'KimiClaw'
             elif 'kimi' in dirname:
                 agent_name = 'Kimi K2.5'
             elif 'qwen' in dirname:
@@ -308,6 +313,8 @@ if __name__ == '__main__':
                 agent_name = 'Opus 4.6'
             elif 'gpt' in dirname or 'codex' in dirname:
                 agent_name = 'GPT-5.4'
+            elif 'kimiclaw' in dirname:
+                agent_name = 'KimiClaw'
             elif 'kimi' in dirname:
                 agent_name = 'Kimi K2.5'
             elif 'qwen' in dirname:
