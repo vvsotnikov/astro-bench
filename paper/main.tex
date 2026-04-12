@@ -250,8 +250,8 @@ Sonnet~4.6 achieved a fraction error of $0.1054$ after 50 attempts---a 1.8\% imp
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_composition_sonnet_46.pdf}
-\caption{Research trajectory for Sonnet~4.6 on composition classification. The agent achieved its best result at the final attempt (50) using an ordinal Earth Mover's Distance loss.\label{fig:trajectory_comp_sonnet}}
+\includegraphics[width=\textwidth]{fig_trajectory_composition_opus_46.pdf}
+\caption{Research trajectory for Opus~4.6 on composition classification (best agent). The agent achieved its best result at attempt~37 using a deep feature MLP.\label{fig:trajectory_comp_opus}}
 \end{figure}
 
 
@@ -267,26 +267,11 @@ Beyond Best@50 scores, the \textit{path} each agent takes is itself data. The at
 
 \subsection{Detailed Research Trajectories}
 
-Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Green dots mark improvements (new running best); gray circles mark attempts that did not beat the running best.
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_gamma_sonnet_46.pdf}
-\caption{Research trajectory for Sonnet~4.6 on gamma/hadron separation. Green dots mark improvements to the running best; gray circles are attempts that did not improve. The agent achieved 6 improvements in 50 attempts, with extended plateaus between attempts 5--25 and 25--47.\label{fig:trajectory_sonnet}}
-\end{figure}
+Each agent's attempt-by-attempt trajectory is logged in \texttt{results.tsv}. Green dots mark improvements (new running best); gray circles mark attempts that did not beat the running best. \Cref{fig:trajectory_opus} shows the trajectory of the best-performing agent (Opus~4.6) on the gamma task; trajectories for all other agents are provided in \Cref{app:trajectories}.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory_gamma_opus_46.pdf}
-\caption{Research trajectory for Opus~4.6 on gamma/hadron separation. The agent achieved 6 improvements in 50 attempts, all within the first 10 attempts, followed by 40 attempts at the Poisson noise floor.\label{fig:trajectory_opus}}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_gamma_gpt-54.pdf}
-\caption{Research trajectory for GPT-5.4 on gamma/hadron separation. The agent achieved 5 improvements in 50 attempts, with steady progress through attempts 1--31 followed by 19 attempts at the Poisson noise floor.\label{fig:trajectory_gpt}}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_gamma_kimi_k25.pdf}
-\caption{Research trajectory for Kimi~K2.5 on gamma/hadron separation. The agent achieved 4 improvements in 50 attempts, using a distinctive strategy of training large CNN pools (up to 30 seeds) and submitting multiple top-$K$ selections per pool.\label{fig:trajectory_kimi}}
+\caption{Research trajectory for Opus~4.6 on gamma/hadron separation (best agent). The agent achieved 6 improvements in 50 attempts, all within the first 10 attempts, followed by 40 attempts at the Poisson noise floor.\label{fig:trajectory_opus}}
 \end{figure}
 
 \subsection{Architecture Diversity}
@@ -380,7 +365,9 @@ We make the benchmark, all agent predictions, and evaluation logs publicly avail
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{V.S.\ designed the benchmark, developed the evaluation framework, orchestrated all agent runs, analyzed results, and wrote the manuscript.}
+\vspace{6pt}
+
+\authorcontributions{Conceptualization, V.S.; methodology, V.S.; software, V.S.; formal analysis, V.S.; investigation, V.S.; data curation, V.S.; writing---original draft preparation, V.S.; writing---review and editing, V.S.; visualization, V.S. The author has read and agreed to the published version of the manuscript.}
 
 \funding{This research received no external funding.}
 
@@ -486,5 +473,42 @@ Steinberger, P. OpenClaw: Open-Source AI Agent Framework. Available online: \url
 
 \end{thebibliography}
 
+\appendixtitles{yes}
+\appendixstart
+\appendix
+\section[\appendixname~\thesection]{Additional Research Trajectories}
+\label{app:trajectories}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_sonnet_46.pdf}
+\caption{Research trajectory for Sonnet~4.6 on gamma/hadron separation. The agent achieved 6 improvements in 50 attempts, with extended plateaus between attempts 5--25 and 25--47.\label{fig:trajectory_sonnet}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_gpt-54.pdf}
+\caption{Research trajectory for GPT-5.4 on gamma/hadron separation. The agent achieved 5 improvements in 50 attempts, with steady progress through attempts 1--31 followed by 19 attempts at the Poisson noise floor.\label{fig:trajectory_gpt}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_kimi_k25.pdf}
+\caption{Research trajectory for Kimi~K2.5 on gamma/hadron separation. The agent achieved 4 improvements in 50 attempts, using a distinctive strategy of training large CNN pools (up to 30 seeds) and submitting multiple top-$K$ selections per pool.\label{fig:trajectory_kimi}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_composition_sonnet_46.pdf}
+\caption{Research trajectory for Sonnet~4.6 on composition classification. The agent achieved its best result at the final attempt (50) using an ordinal Earth Mover's Distance loss.\label{fig:trajectory_comp_sonnet}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_composition_gpt-54.pdf}
+\caption{Research trajectory for GPT-5.4 on composition classification.\label{fig:trajectory_comp_gpt}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_composition_kimi_k25.pdf}
+\caption{Research trajectory for Kimi~K2.5 on composition classification.\label{fig:trajectory_comp_kimi}}
+\end{figure}
+
+\PublishersNote{}
 \end{adjustwidth}
 \end{document}
