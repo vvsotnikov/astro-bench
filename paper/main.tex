@@ -144,7 +144,7 @@ We evaluate agents from multiple providers, all given identical starting conditi
 Claude Opus~4.6 & Anthropic & 1M tokens & Claude Code & medium \\
 Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code & medium \\
 GPT-5.4 & OpenAI & --- & Codex CLI & high \\
-Qwen & Alibaba & --- & AGENTS.md & --- \\
+Qwen 3.6-Plus & Alibaba & --- & Qwen Code & --- \\
 Kimi K2.5 & Moonshot & --- & Kimi Code & --- \\
 Kimi K2.5$^\dagger$ & Moonshot & --- & KimiClaw & --- \\
 \bottomrule
@@ -206,8 +206,9 @@ Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
 Claude Sonnet~4.6 & $0.1054$ & 50 & $3.79 \times 10^{-4}$ & 50 \\
 Claude Opus~4.6 & $0.1051$ & 50 & $2.63 \times 10^{-4}$ & 50 \\
 GPT-5.4 & $0.1052$ & 50 & $2.92 \times 10^{-4}$ & 50 \\
-Kimi K2.5 (Kimi Code) & [TBD] & & $4.09 \times 10^{-4}$ & 50 \\
+Kimi K2.5 (Kimi Code) & $0.1063$ & 50 & $4.09 \times 10^{-4}$ & 50 \\
 Kimi K2.5 (KimiClaw)$^\dagger$ & [TBD] & & $3.21 \times 10^{-4}$ & 7/50 \\
+Qwen 3.6-Plus & [TBD] & & $3.50 \times 10^{-4}$ & 23 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -311,9 +312,31 @@ Pilot experiments during benchmark development revealed that the composition cla
 
 Whether different agents discover this ceiling independently --- and how they respond to it --- is one of the behavioral questions this benchmark can answer.
 
-\subsection{Agent Research Strategies}
+\subsection{Cross-Agent Prediction Diversity}
 
-[Full cross-agent behavioral analysis to be completed when all experiments finish.]
+To assess whether running multiple agents adds value beyond selecting the best one, we analyzed the overlap of surviving hadrons (false positives) across the three completed gamma agents at 75\% gamma efficiency.
+
+Of the 34{,}267 test hadrons, only 17 unique hadrons survive any of the three agents' classifiers. Of these, 4~hadrons fool all three agents, 7~fool exactly two, and 6~fool only one (\Cref{tab:overlap}). The 4~irreducible hadrons share a common physical signature: high $\log_{10}(N_e/N_\mu)$ ratios (1.9--2.6), consistent with proton showers where a leading $\pi^0$ produces an electromagnetic-dominated cascade that mimics a gamma-ray shower.
+
+Despite this diversity, a na\"ive cross-agent ensemble (averaging scores from all three agents) yields 11~surviving hadrons---worse than Opus's 9 alone. Geometric mean ensembling gives 12. The agents are diverse in \textit{which} hadrons they misclassify, but combining their scores shifts the decision threshold unfavorably. The value of running multiple agents is therefore not in cross-agent ensembling but in maximizing the probability that at least one agent discovers the best architecture and training strategy.
+
+\begin{table}[H]
+\caption{Overlap of surviving hadrons across agents on the gamma task.\label{tab:overlap}}
+\begin{tabularx}{\textwidth}{CC}
+\toprule
+\textbf{Category} & \textbf{Count} \\
+\midrule
+Fool all 3 agents (irreducible core) & 4 \\
+Fool exactly 2 agents & 7 \\
+Fool exactly 1 agent & 6 \\
+\midrule
+Total unique surviving hadrons & 17 \\
+\midrule
+Cross-agent ensemble (avg) & 11 \\
+Best single agent (Opus) & 9 \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 
 \subsection{Limitations}

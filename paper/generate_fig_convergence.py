@@ -17,10 +17,10 @@ N_HADRON_TEST = 34267  # hadrons in test set after quality cuts
 
 AGENT_COLORS = {
     'Haiku 4.5': '#FF9800',
-    'Sonnet 4.6': '#2196F3',
-    'Opus 4.6': '#9C27B0',
+    'Sonnet 4.6': '#D4A27F',
+    'Opus 4.6': '#d97757',
     'GPT-5.4': '#4CAF50',
-    'Qwen': '#F44336',
+    'Qwen 3.6-Plus': '#615ced',
     'Kimi K2.5': '#607D8B',
     'KimiClaw': '#795548',
 }
@@ -90,7 +90,7 @@ def fig_convergence(task='gamma'):
         elif 'gpt' in dirname or 'codex' in dirname:
             agent = 'GPT-5.4'
         elif 'qwen' in dirname:
-            agent = 'Qwen'
+            agent = 'Qwen 3.6-Plus'
         elif 'kimiclaw' in dirname:
             agent = 'KimiClaw'
         elif 'kimi' in dirname:
@@ -295,7 +295,7 @@ if __name__ == '__main__':
             elif 'kimi' in dirname:
                 agent_name = 'Kimi K2.5'
             elif 'qwen' in dirname:
-                agent_name = 'Qwen'
+                agent_name = 'Qwen 3.6-Plus'
             else:
                 agent_name = dirname
             fig_trajectory(tsv, agent_name, 'gamma')
@@ -318,7 +318,7 @@ if __name__ == '__main__':
             elif 'kimi' in dirname:
                 agent_name = 'Kimi K2.5'
             elif 'qwen' in dirname:
-                agent_name = 'Qwen'
+                agent_name = 'Qwen 3.6-Plus'
             else:
                 agent_name = dirname
             fig_trajectory(tsv, agent_name, 'composition')
