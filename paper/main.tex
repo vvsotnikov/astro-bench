@@ -349,19 +349,29 @@ The conclusion is consistent across both tasks: the value of running multiple ag
 \section{Conclusions}
 \label{sec:conclusion}
 
-We present astro-bench, a controlled benchmark for evaluating AI agents as autonomous ML researchers on real astrophysics data. By giving each agent the same dataset, baseline, and evaluation budget (50 attempts), we enable direct comparison of both outcomes and research strategies across agent models from multiple providers.
+We present astro-bench, a controlled benchmark for evaluating AI agents as autonomous ML researchers on real astrophysics data. We summarize our findings along three axes.
 
-Returning to our three questions:
+\subsection{Findings for the KASCADE Experiment}
 
-\textit{Can AI agents beat human-designed classifiers?} Yes. All agents improved upon the published baselines on both tasks, typically within the first few attempts. On gamma/hadron separation, the best agent (Opus~4.6) achieved a $38\times$ improvement over the published result. On composition, agents achieved fraction errors of 0.1051--0.1054, improving upon the published 0.107.
+All agents improved upon the published classification baselines on both tasks. On gamma/hadron separation, the best agent achieved a $38\times$ improvement over the published random forest. On composition, agents achieved fraction errors of 0.1051--0.1054, modestly improving upon the published 0.107. However, we found that the KASCADE Monte Carlo simulation dataset --- generated ${\sim}20$ years ago --- is at least an order of magnitude smaller than what is needed to resolve the performance level achieved by modern classifiers. The gamma metric is quantized to individual hadron counts (9--14 out of 34{,}267), and all agents converge to statistically indistinguishable results within the Poisson noise floor. This limits both the ability to discriminate between agents and the confidence with which agent-built classifiers can be applied to real data.
 
-\textit{How fast do agents converge?} Rapidly. On the gamma task, agents reached the statistical noise floor of the test set within 10--30 attempts, after which the metric became limited by Monte Carlo statistics rather than model quality. On composition, agents reached the confusion matrix ceiling within 10--20 attempts, with only marginal gains from the remaining budget.
+\subsection{Findings for Astrophysics}
 
-\textit{How do strategies differ?} Substantially in approach but not in outcome. Agents explored fundamentally different architectures (dual-branch CNNs, ResNets, transformers, feature MLPs), loss functions (focal, ranking, ordinal EMD), and ensembling strategies (geometric mean, feature-gated, knowledge distillation). Yet all converged to statistically indistinguishable performance, suggesting that the ceiling is determined by the data and physics rather than by modeling choices. Cross-agent ensembling does not improve upon the best single agent.
+This work demonstrates that existing AI agents can autonomously produce competitive classifiers for astrophysical data. This is encouraging: a researcher with local GPU compute could launch an agent overnight and obtain results comparable to years of expert iteration. However, the benchmark also reveals tensions between competitive evaluation and scientific exploration. Our protocol --- isolated agents, fixed budget, single metric --- was designed for fair comparison, but real scientific discovery requires a different paradigm: agents aware of each other's results, able to perform wide and deep exploration, and optimizing for metrics that faithfully reflect downstream scientific goals. We found that metric design is nontrivial: our evaluation evolved from naive accuracy to task-specific metrics (hadronic survival rate, fraction error) as we discovered that simpler proxies did not align with the actual goals of hadron filtering and spectral unfolding. Reward design must also guard against agents exploiting simulation-specific features that do not transfer to real data --- a risk we encountered with differential evolution bias optimization, which improved the benchmark metric by overfitting to the training distribution.
 
-The benchmark design itself required significant iteration --- pilot experiments revealed critical issues with data precision, evaluation leakage, and post-processing artifacts that would have invalidated comparisons. These lessons are documented in the agent instructions, ensuring that the controlled experiments measure ML research ability rather than pipeline debugging skill.
+\subsection{Findings for AI-Automated Science}
 
-We make the benchmark, all agent predictions, and evaluation logs publicly available at \url{https://github.com/vvsotnikov/astro-bench}. As AI agents become more capable, benchmarks grounded in real scientific domains --- where evaluation requires domain expertise and solutions cannot be looked up --- will be essential for understanding the role of AI in scientific discovery.
+All frontier models --- both closed-source and open-source --- quickly saturated the benchmark, which is good news for the scientific community: the choice of model matters less than the choice of task and evaluation design. Several open questions remain, which we document as directions for future work:
+
+\begin{itemize}
+    \item \textit{Variance}: How much does the random starting point define subsequent results? A single Best@50 run cannot distinguish genuine model differences from run-to-run noise. Multiple shorter runs (e.g., $3 \times$ Best@16) could provide variance estimates at similar total cost.
+    \item \textit{Prior knowledge}: We provided agents with physics-informed instructions (e.g., ``$N_e/N_\mu$ ratio is the strongest discriminant''). How much of the performance comes from these priors versus genuine scientific reasoning from the data? The published KASCADE papers are likely in the models' pretraining data, further confounding this question.
+    \item \textit{Cross-agent collaboration}: Our protocol isolates agents. Would cross-pollination --- letting agents see each other's results or code --- improve outcomes? This is a known unknown that requires careful experimental design.
+    \item \textit{Harness quality}: Current agentic harnesses (Claude Code, Codex CLI, Qwen Code, Kimi Code) are all suboptimal for autonomous research, particularly for long training loops. Harness reliability appears to be a practical bottleneck: the smallest model tested (Haiku~4.5) failed due to harness instability, not model capability, and KimiClaw crashed mid-experiment. We expect rapid improvement in this area.
+    \item \textit{Benchmark design for AI}: Our benchmark was originally designed for human researchers and adapted for agents. Future benchmarks should be designed with AI-in-the-loop from the start: larger datasets, fast iteration cycles, robust single-metric evaluation, and guardrails against reward hacking.
+\end{itemize}
+
+We make the benchmark, all agent predictions, and evaluation logs publicly available at \url{https://github.com/vvsotnikov/astro-bench}. We share these findings and footguns not as definitive recommendations but as early observations from a rapidly evolving field. We encourage the community to build on this work, particularly in domains where more data is available and where the gap between benchmark metrics and scientific utility can be more carefully controlled.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -377,7 +387,7 @@ We make the benchmark, all agent predictions, and evaluation logs publicly avail
 
 \dataavailability{All code, datasets, model weights, training logs, and agent reasoning traces are available at \url{https://github.com/vvsotnikov/astro-bench}. The KASCADE simulation data is hosted on Amazon S3 at \url{https://kascade-sim-data.s3.eu-central-1.amazonaws.com/}. Real KASCADE data is available at \url{s3://kascade-with-arr-times-npz/}.}
 
-\acknowledgments{During the preparation of this manuscript, the author used Claude Opus~4.6 (Anthropic) for code generation, data analysis, and drafting portions of the manuscript text. The author has reviewed and edited all output and takes full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available.}
+\acknowledgments{During the preparation of this manuscript, the author used Claude Opus~4.6 (Anthropic) for code generation, data analysis, and drafting portions of the manuscript text. The author has reviewed and edited all output and takes full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available. We thank Moonshot AI for sponsoring compute for the Kimi~K2.5 experiments.}
 
 \conflictsofinterest{The authors declare no conflicts of interest.}
 
@@ -445,28 +455,28 @@ Karpathy, A. autoresearch. Available online: \url{https://github.com/karpathy/au
 Papailiopoulos, D. Addition Under Pressure. Available online: \url{https://dimitrisp.substack.com/p/addition-under-pressure} (accessed on 15 March 2026).
 
 \bibitem{sam_optimizer}
-Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. In Proceedings of the 9th International Conference on Learning Representations (ICLR), Virtual, 3--7 May 2021.
+Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. In Proceedings of the 9th International Conference on Learning Representations (ICLR), Virtual, 3--7 May 2021; arXiv:2010.01412.
 
 \bibitem{mlagentbench}
-Huang, Q.; Vora, J.; Liang, P.; Leskovec, J. MLAgentBench: Evaluating Language Agents on Machine Learning Experimentation. In Proceedings of the 41st International Conference on Machine Learning (ICML), Vienna, Austria, 21--27 July 2024. arXiv:2310.03302.
+Huang, Q.; Vora, J.; Liang, P.; Leskovec, J. MLAgentBench: Evaluating Language Agents on Machine Learning Experimentation. In Proceedings of the 41st International Conference on Machine Learning (ICML), Vienna, Austria, 21--27 July 2024; arXiv:2310.03302.
 
 \bibitem{mlebench}
-Chan, J.S.; Chowdhury, N.; Jaffe, O.; et al. MLE-bench: Evaluating Machine Learning Agents on Machine Learning Engineering. In Proceedings of the 13th International Conference on Learning Representations (ICLR), Singapore, 24--28 April 2025. arXiv:2410.07095.
+Chan, J.S.; Chowdhury, N.; Jaffe, O.; et al. MLE-bench: Evaluating Machine Learning Agents on Machine Learning Engineering. In Proceedings of the 13th International Conference on Learning Representations (ICLR), Singapore, 24--28 April 2025; arXiv:2410.07095.
 
 \bibitem{mlgym}
-Nathani, D.; Madaan, L.; Roberts, N.; et al. MLGym: A New Framework and Benchmark for Advancing AI Research Agents. arXiv preprint 2025, arXiv:2502.14499.
+Nathani, D.; Madaan, L.; Roberts, N.; et al. MLGym: A New Framework and Benchmark for Advancing AI Research Agents. \textit{arXiv preprint} \textbf{2025}, arXiv:2502.14499.
 
 \bibitem{rebench}
-Wijk, H.; Lin, T.; Becker, J.; et al. RE-Bench: Evaluating Frontier AI R\&D Capabilities of Language Model Agents against Human Experts. In Proceedings of the 42nd International Conference on Machine Learning (ICML), Vancouver, Canada, 2025. arXiv:2411.15114.
+Wijk, H.; Lin, T.; Becker, J.; et al. RE-Bench: Evaluating Frontier AI R\&D Capabilities of Language Model Agents against Human Experts. In Proceedings of the 42nd International Conference on Machine Learning (ICML), Vancouver, Canada, 2025; arXiv:2411.15114.
 
 \bibitem{scienceagentbench}
-Chen, Z.; Chen, S.; Ning, Y.; et al. ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery. In Proceedings of the 13th International Conference on Learning Representations (ICLR), Singapore, 24--28 April 2025. arXiv:2410.05080.
+Chen, Z.; Chen, S.; Ning, Y.; et al. ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery. In Proceedings of the 13th International Conference on Learning Representations (ICLR), Singapore, 24--28 April 2025; arXiv:2410.05080.
 
 \bibitem{aiscientist}
-Lu, C.; Lu, C.; Lange, R.T.; Foerster, J.; Clune, J.; Ha, D. The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery. arXiv preprint 2024, arXiv:2408.06292.
+Lu, C.; Lu, C.; Lange, R.T.; Foerster, J.; Clune, J.; Ha, D. The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery. \textit{arXiv preprint} \textbf{2024}, arXiv:2408.06292.
 
 \bibitem{paperbench}
-Starace, G.; Jaffe, O.; Sherburn, D.; et al. PaperBench: Evaluating AI's Ability to Replicate AI Research. In Proceedings of the 42nd International Conference on Machine Learning (ICML), Vancouver, Canada, 2025. arXiv:2504.01848.
+Starace, G.; Jaffe, O.; Sherburn, D.; et al. PaperBench: Evaluating AI's Ability to Replicate AI Research. In Proceedings of the 42nd International Conference on Machine Learning (ICML), Vancouver, Canada, 2025; arXiv:2504.01848.
 
 \bibitem{openclaw}
 Steinberger, P. OpenClaw: Open-Source AI Agent Framework. Available online: \url{https://github.com/openclaw/openclaw} (accessed on 2 April 2026).
