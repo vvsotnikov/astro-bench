@@ -330,6 +330,21 @@ The composition task shows a similar pattern: agents agree on 89\% of prediction
 
 The conclusion is consistent across both tasks: the value of running multiple agents lies not in cross-agent ensembling but in maximizing the probability that at least one agent discovers the best architecture and training strategy.
 
+\subsection{Lessons on Metric and Reward Design}
+
+The benchmark's evaluation methodology evolved significantly during development. Early pilot experiments used classification accuracy as the primary metric, which proved poorly aligned with the downstream scientific goals: hadron filtering for gamma-ray astronomy and spectral unfolding for composition. We replaced accuracy with task-specific metrics --- hadronic survival rate at fixed gamma efficiency, and fraction error over random mixture compositions --- that directly reflect scientific utility.
+
+Even with task-specific metrics, we encountered subtle reward design pitfalls. Differential evolution (DE) optimization of per-class logit biases improved the benchmark metric by adapting predictions to the training simulation's class distribution. However, this adaptation is a form of overfitting to the Monte Carlo data: the biases tuned on balanced simulation distorted predictions when applied to real experimental data, where the true composition differs. The benchmark now prohibits post-processing to ensure models are directly applicable to real data. This illustrates a broader risk: AI agents will exploit any gap between the evaluation metric and the true scientific objective, and metric design must anticipate this.
+
+\subsection{The Simulation--Data Gap}
+
+When applying agent-built classifiers to 73 million real KASCADE events, we observed that the classifiers reject real hadrons approximately $2\times$ more efficiently than predicted by Monte Carlo simulations (820 events passing the gamma threshold versus ${\sim}1{,}450$ expected from the simulation-calibrated survival rate). This suggests that Monte Carlo simulations overrepresent ambiguous, hard-to-classify events relative to real data --- or equivalently, that classifiers trained on simulation generalize conservatively when applied to real measurements. While a favorable bias for background rejection, this simulation--data gap means that benchmark performance on Monte Carlo does not directly predict real-data performance, and limits the confidence with which agent-built models can be deployed for gamma-ray searches.
+
+\subsection{From Benchmarking to Scientific Exploration}
+
+This benchmark was designed for controlled agent comparison: identical starting conditions, isolated runs, competitive evaluation against a fixed metric. While this protocol enables fair comparison, it is fundamentally different from the workflow needed for AI-assisted scientific discovery. In practice, one would want agents to be aware of each other's results, to cross-pollinate successful techniques, and to explore broadly before optimizing deeply. The 50-attempt budget, while sufficient for saturation in our setting, may be too short for tasks that require agents to formulate and test genuine scientific hypotheses rather than iterate on known deep learning recipes.
+
+We also found that the benchmark infrastructure itself required substantial engineering. The evaluation metric, data pipeline, quality cuts, and instruction document all underwent multiple revisions as we discovered edge cases, data precision issues, and evaluation leakage. These ``harness engineering'' challenges --- designing robust evaluation environments for autonomous agents --- are not specific to astrophysics and are likely to recur in any scientific domain where AI agents are deployed.
 
 \subsection{Limitations}
 
