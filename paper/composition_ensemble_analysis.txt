@@ -1,0 +1,38 @@
+Test set: 115064 events
+     Opus: composition-opus-2apr/predictions_v34.npz  shape=(115064,)
+      GPT: composition-gpt-2apr/predictions_v47.npz  shape=(115064,)
+   Sonnet: composition-sonnet-27mar/predictions_v44.npz  shape=(115064,)
+
+=== Per-agent mean fraction error (full precision) ===
+     Opus: 0.10507357  (rounded: 0.1051)
+      GPT: 0.10521191  (rounded: 0.1052)
+   Sonnet: 0.10543920  (rounded: 0.1054)
+
+  Majority vote: 0.10506086  (rounded: 0.1051)
+  Opus vs MV: DIFFERENT
+  |Opus - MV| = 1.271e-05
+
+=== Agreement structure ===
+  All 3 agree:             102480  (89.06%)
+  Any disagreement:         12584  (10.94%)
+    3-way disagreement:        11  (0.01%)
+    2-vs-1 disagreement:    12573  (10.93%)
+
+=== Opus dominance in majority vote ===
+  MV == Opus (on all events):               112036 / 115064  (97.37%)
+  On disagreement events, Opus in winning side:    9556 / 12584  (75.94%)
+  On disagreement events, GPT in winning side:     8851 / 12584  (70.34%)
+  On disagreement events, Sonnet in winning:       6750 / 12584  (53.64%)
+
+=== Sensitivity to tie-breaker on 3-way disagreements ===
+  Tie-broken by    Opus: FE = 0.10506086  (rounded: 0.1051)
+  Tie-broken by     GPT: FE = 0.10505742  (rounded: 0.1051)
+  Tie-broken by  Sonnet: FE = 0.10505758  (rounded: 0.1051)
+
+=== Per-class prediction counts (summary) ===
+       Agent        p       He        C       Si       Fe
+        Opus    28539    25056    22810    19483    19176
+         GPT    28666    25414    22343    19958    18683
+      Sonnet    28312    24471    22593    19149    20539
+     MajVote    28519    25007    22592    19655    19291
+       Truth    31362    26109    21430    18792    17371

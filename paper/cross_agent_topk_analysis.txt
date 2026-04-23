@@ -1,0 +1,67 @@
+Opus:   3,337,366 events
+Sonnet: 3,337,366 events
+Event alignment: identical order (no remapping needed).
+
+Opus   score stats: min=0.132, med=0.203, max=0.946
+Sonnet score stats: min=0.339, med=0.360, max=1.000
+
+Pearson correlation (all events): 0.8375
+
+=== All events (E >= 14.5): 3,337,366 events ===
+       K |Op top-K| |So top-K|  overlap  expected  enrichment
+       5          5          5        2      0.00    266989.3x
+      10         10         10        5      0.00    166868.3x
+      20         20         20        7      0.00     58403.9x
+      50         50         50       28      0.00     37378.5x
+     100        100        100       61      0.00     20357.9x
+     200        200        200      112      0.01      9344.6x
+     500        500        500      303      0.07      4044.9x
+    1000       1000       1000      644      0.30      2149.3x
+
+=== E >= 15.0: 2,400,321 events ===
+       K |Op top-K| |So top-K|  overlap  expected  enrichment
+       5          5          5        1      0.00     96012.8x
+      10         10         10        3      0.00     72009.6x
+      20         20         20        7      0.00     42005.6x
+      50         50         50       21      0.00     20162.7x
+     100        100        100       40      0.00      9601.3x
+     200        200        200       94      0.02      5640.8x
+     500        500        500      254      0.10      2438.7x
+    1000       1000       1000      540      0.42      1296.2x
+
+=== E >= 15.5: 383,241 events ===
+       K |Op top-K| |So top-K|  overlap  expected  enrichment
+       5          5          5        1      0.00     15329.6x
+      10         10         10        3      0.00     11497.2x
+      20         20         20        8      0.00      7664.8x
+      50         50         50       22      0.01      3372.5x
+     100        100        100       39      0.03      1494.6x
+     200        200        200       85      0.10       814.4x
+     500        500        500      234      0.65       358.7x
+    1000       1000       1000      513      2.61       196.6x
+
+=== E >= 16.0 (PeV regime): 38,299 events ===
+       K |Op top-K| |So top-K|  overlap  expected  enrichment
+       5          5          5        3      0.00      4595.9x
+      10         10         10        4      0.00      1532.0x
+      20         20         20        9      0.01       861.7x
+      50         50         50       30      0.07       459.6x
+     100        100        100       56      0.26       214.5x
+     200        200        200      121      1.04       115.9x
+     500        500        500      290      6.53        44.4x
+    1000       1000       1000      547     26.11        20.9x
+
+=== E >= 16.5: 4,176 events ===
+       K |Op top-K| |So top-K|  overlap  expected  enrichment
+       5          5          5        3      0.01       501.1x
+      10         10         10        5      0.02       208.8x
+      20         20         20       10      0.10       104.4x
+      50         50         50       18      0.60        30.1x
+     100        100        100       41      2.39        17.1x
+     200        200        200       79      9.58         8.2x
+     500        500        500      225     59.87         3.8x
+    1000       1000       1000      496    239.46         2.1x
+
+=== Named events at E >= 16 ===
+  run1971: Opus rank 0, Sonnet rank 1 (out of 38299 events at E>=16)
+  run4281: Opus rank 2, Sonnet rank 0 (out of 38299 events at E>=16)
