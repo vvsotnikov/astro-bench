@@ -15,7 +15,7 @@
 \datepublished{ }
 
 %=================================================================
-\Title{AI Agents for Autonomous Scientific Research: A Systematic Study on KASCADE Cosmic Ray Classification}
+\Title{AI Agents for Autonomous Scientific Research: Cross-Agent Error Correlations on KASCADE Cosmic Ray Classification}
 
 \newcommand{\orcidauthorA}{0000-0001-5912-388X}
 
@@ -29,7 +29,7 @@ $^{2}$ \quad Astroparticle Physics Lab, JetBrains Research, Paphos 8015, Cyprus}
 
 \corres{Correspondence: vladimir.sotnikov@jetbrains.com}
 
-\abstract{AI coding agents are increasingly capable of autonomous ML experimentation, but their ability to conduct open-ended scientific research --- where evaluation requires domain expertise and results must transfer from simulation to real measurements --- remains poorly mapped. We design a controlled environment around cosmic ray classification tasks from the KASCADE experiment, with domain-specific metrics, and run multiple proprietary and open-weight frontier agents under identical conditions. All agents surpass published baselines within their first few attempts and converge to the same performance ceiling, determined by the available simulation statistics and physical overlap between particle classes. We systematically analyze where AI agents succeed and where they encounter limitations --- in model capability, in harness reliability, and in the experimental infrastructure itself --- and derive practical lessons for designing scientific workflows around autonomous agents. All code, data, agent logs, and results are publicly available at \url{https://github.com/vvsotnikov/astro-bench}.}
+\abstract{Autonomous AI coding agents are a candidate substrate for automated scientific research, but their behavior on ML benchmarks embedded in scientific domains is poorly characterized. We run five frontier coding agents from four independent providers under identical conditions on two cosmic-ray classification tasks from the KASCADE experiment --- 5-class mass composition and binary gamma/hadron separation --- each with a 50-attempt budget, and isolate a structural ceiling on cross-agent aggregation. A per-event oracle selector across the three best composition agents reaches fraction error more than $22\sigma$ below any single agent (where $\sigma$ is the training-recipe noise floor), yet none of eight tested aggregators (including MLPs trained directly against the fraction-error metric) extracts any of that signal. The bottleneck is correlated errors, not just objective mismatch: the measured oracle gain is only ${\sim}12\%$ of the class-conditional-independence ceiling --- most of the cross-agent diversity an ideal pool would yield has already been destroyed by shared architectural and training-data priors. The broader setting is well-behaved: all agents surpass the published baselines within at most 11 attempts, gamma/hadron separation saturates the Poisson noise floor of the simulation test set (\emph{data-determined}), and composition converges to a narrow aggregation-bottlenecked band. Deployed on real KASCADE archival data, the best agent-built models reproduce features of the published folded composition spectra and, at PeV energies, produce hadron-tail outliers consistent with the prior KASCADE null result on gamma-ray point sources, with two top candidates independently flagged by agents of different architectures --- to our knowledge, the first KASCADE analyses built on models assembled autonomously by AI agents. All code, data, agent logs, and results are publicly available at \url{https://github.com/vvsotnikov/astro-bench}.}
 
 \keyword{cosmic rays; mass composition; KASCADE; AI agents; machine learning; deep learning; autonomous research; benchmark}
 
@@ -40,11 +40,13 @@ $^{2}$ \quad Astroparticle Physics Lab, JetBrains Research, Paphos 8015, Cyprus}
 \section{Introduction}
 \label{sec:intro}
 
-AI coding agents are becoming increasingly autonomous as both the underlying models and the harnesses that orchestrate them improve. This capability is being applied to increasingly open-ended tasks: from software engineering with mechanical verification~\cite{cloudflare_vinext,anthropic_ccompiler,openai_harness} to autonomous ML experimentation on well-studied benchmarks~\cite{karpathy_autoresearch,papailiopoulos_adderboard}. Yet AI capabilities are unevenly distributed --- the frontier is jagged across tasks, domains, and tooling~\cite{jagged_frontier}. Agents that excel at optimizing standard ML benchmarks may struggle with scientific domains where evaluation requires domain expertise, training data has known biases, and results must transfer from simulation to real measurements. The shape of this uneven frontier in scientific research is largely unexplored.
+The behavior of autonomous AI coding agents on ML benchmarks embedded in scientific domains is poorly characterized. The setting is distinctive relative to standard ML benchmarks: metrics are domain-specific, and results must transfer from simulation to real measurements. AI coding agents have been deployed on software engineering with mechanical verification~\cite{cloudflare_vinext,anthropic_ccompiler,openai_harness} and on well-studied ML benchmarks~\cite{karpathy_autoresearch,papailiopoulos_adderboard}, but the frontier is jagged across tasks, domains, and tooling~\cite{jagged_frontier,mlebench}. The regime closest to current real-world deployment of automated scientific research --- agents accelerating well-defined ML work on archival scientific datasets --- has not been systematically mapped. We characterize it here under controlled conditions: each agent receives a starter pack (baseline script, physics context, evaluation metric) and iterates fully autonomously within a 50-attempt budget, choosing architectures, training schedules, and ensembling strategies without human intervention.
 
-In this paper, we map a portion of this frontier by deploying multiple frontier AI agents on cosmic ray classification tasks from the KASCADE experiment~\cite{kascade_exp}. KASCADE operated a 200$\times$200~m detector array in Karlsruhe, Germany, for approximately 25 years (1996--2013), measuring electron/photon densities, muon densities, and arrival times from extensive air showers (EAS) produced by cosmic rays. Machine learning approaches to KASCADE classification have been developed over several years of expert iteration: Kostunin et al.~\cite{kascade_icrc} introduced Random Forest methods for composition and gamma-ray separation; Kuznetsov et al.~\cite{kascade_jinst} systematically compared CNN, MLP, and RF architectures, achieving $\sim$51\% accuracy with a LeNet-style CNN; these results were used to measure the proton knee at 4.4~PeV with 5.2$\sigma$ significance~\cite{kascade_jcap}. In previous work, we explored AI agents for gamma-ray astronomy~\cite{kostunin_agents2025} and agent-based code generation for the Gammapy framework~\cite{gammapy_agents}.
+Running five frontier agents from four independent providers (Anthropic Claude Opus~4.6 and Sonnet~4.6, OpenAI GPT-5.4, Alibaba Qwen 3.6-Plus, Moonshot Kimi K2.5) on two archival KASCADE cosmic-ray tasks --- 5-class mass composition and binary gamma/hadron separation --- we find the two plateaus reflect structurally different limits: gamma is data-determined, while composition is aggregation-bottlenecked by correlated agent errors (the more generalizable contribution); agent-built models are then deployed on real KASCADE archival data (\Cref{sec:real_data}).
 
-We design a controlled environment with two classification tasks --- 5-class mass composition and binary gamma/hadron separation --- each with a single domain-specific metric, a published human baseline, and a budget of 50 evaluation attempts. We run multiple proprietary and open-weight frontier agents under identical conditions and systematically analyze the results to answer:
+In this paper, we map a portion of this frontier by deploying multiple frontier AI agents on cosmic ray classification tasks from the KASCADE experiment~\cite{kascade_exp}. KASCADE operated a $200~\mathrm{m} \times 200~\mathrm{m}$ detector array in Karlsruhe, Germany, for approximately 25 years (1996--2013), measuring electron/photon densities, muon densities, and arrival times from extensive air showers (EAS) produced by cosmic rays. Machine learning approaches to KASCADE classification have been developed over several years of expert iteration in work the present author co-authored: Random Forest methods for composition and gamma-ray separation~\cite{kascade_icrc}, and a systematic comparison of CNN, MLP, and RF architectures that achieved $\sim$51\% accuracy with a LeNet-style CNN~\cite{kascade_jinst}. These results were used to measure the proton knee at 4.4~PeV with 5.2$\sigma$ significance~\cite{kascade_jcap}. In further previous work, we explored AI agents for gamma-ray astronomy~\cite{kostunin_agents2025} and agent-based code generation for the Gammapy framework~\cite{gammapy_agents}. The implication for the present paper --- that the agents are evaluated against baselines whose methodology and pipeline the author knows in detail --- is addressed by the information-barrier disclosure of \Cref{sec:method}.
+
+Each task has a single domain-specific metric and a published human baseline. We systematically analyze the agent runs to answer:
 \begin{enumerate}
     \item Where do AI agents succeed and where do they encounter limitations --- in model capability, in harness reliability, or in the experimental infrastructure itself?
     \item Do agents from different providers converge to the same solutions, and does cross-agent diversity produce better results than any individual agent?
@@ -52,30 +54,42 @@ We design a controlled environment with two classification tasks --- 5-class mas
     \item What practical lessons emerge for designing scientific experiments and evaluation environments that can leverage autonomous AI agents effectively?
 \end{enumerate}
 
-We report both final performance (Best@50) and attempt-by-attempt research trajectories across agents from Anthropic, OpenAI, Alibaba, and Moonshot. Beyond the classification results, we document the challenges encountered and derive practical conclusions for multiple audiences: astrophysicists evaluating AI-assisted workflows, harness engineers building tools for autonomous research, and researchers designing the next generation of AI-ready scientific experiments.
+We report both final performance (Best@50) and attempt-by-attempt research trajectories. Beyond the classification results, we document the challenges encountered and derive practical conclusions for multiple audiences: astrophysicists evaluating AI-assisted workflows, harness engineers building tools for autonomous research, and researchers designing the next generation of AI-ready scientific experiments.
 
-The remainder of this paper is organized as follows. \Cref{sec:related} surveys related work. \Cref{sec:data} describes the KASCADE dataset and evaluation methodology. \Cref{sec:method} presents the experimental protocol. \Cref{sec:results} reports results and convergence trajectories across all agents and tasks. \Cref{sec:real_data} applies the best agent-built classifiers to real KASCADE measurements. \Cref{sec:discussion} discusses findings, implications, and limitations. \Cref{sec:conclusion} concludes.
+The remainder of this paper is organized as follows. \Cref{sec:related} surveys related work. \Cref{sec:data} describes the KASCADE dataset, task metrics, baselines, agent protocol, and benchmark-design rationale. \Cref{sec:results} reports results and convergence trajectories across all agents and tasks. \Cref{sec:real_data} applies the best agent-built classifiers to real KASCADE measurements. \Cref{sec:discussion} discusses findings, implications, and limitations. \Cref{sec:conclusion} concludes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}
 \label{sec:related}
 
-Autonomous AI agents have been applied to software engineering~\cite{cloudflare_vinext,anthropic_ccompiler}, where humans design verification environments and agents write code (``harness engineering''~\cite{openai_harness}); to ML experimentation via iterative keep/discard loops~\cite{karpathy_autoresearch}; and to end-to-end automated research~\cite{aiscientist}. Papailiopoulos~\cite{papailiopoulos_adderboard} showed that different agents develop structurally distinct solutions to the same problem.
+Beyond the software-engineering and ML-iteration deployments cited in \Cref{sec:intro}, AI agents have been pushed toward end-to-end automated research~\cite{aiscientist}, and Papailiopoulos~\cite{papailiopoulos_adderboard} observed that different agents develop structurally distinct solutions to the same problem.
 
-Several benchmarks evaluate agent capabilities in controlled settings: MLAgentBench~\cite{mlagentbench}, MLE-Bench~\cite{mlebench}, and MLGym~\cite{mlgym} on standard ML tasks; RE-Bench~\cite{rebench} against human experts across time horizons; ScienceAgentBench~\cite{scienceagentbench} on scientific code generation; PaperBench~\cite{paperbench} on replication of published ML research. These operate primarily in ML engineering, where verification is mechanical. In scientific domains, the evaluation metric must reflect scientific utility, the data pipeline must match published methodology, and results must transfer from simulation to real measurements. This paper maps part of this less-explored territory.
+Several benchmarks evaluate agent capabilities in controlled settings: MLAgentBench~\cite{mlagentbench}, MLE-Bench~\cite{mlebench}, and MLGym~\cite{mlgym} on standard ML tasks; RE-Bench~\cite{rebench} against human experts across time horizons; ScienceAgentBench~\cite{scienceagentbench} on scientific code generation; PaperBench~\cite{paperbench} on replication of published ML research. These operate primarily in ML engineering, where verification is mechanical.
+
+A parallel line of work targets AI systems for scientific discovery. FunSearch~\cite{funsearch} couples an LLM to a programmatic evaluator in an evolutionary loop and produces novel constructions in extremal combinatorics and bin-packing heuristics. AlphaEvolve~\cite{alphaevolve} generalizes this mechanism to autonomous edits of entire codebases scored by user-supplied evaluators, with reported improvements in matrix multiplication, data-center scheduling, and open mathematical problems. AI co-scientist~\cite{ai_coscientist} implements a generate--debate--evolve multi-agent loop for autonomous hypothesis generation, validated biomedically including independent recovery of a published phage-tail-interaction mechanism. Our work shares their LLM-agent-plus-programmatic-evaluator structure. The benchmark itself is mechanically verifiable in the same sense (fraction error and hadronic survival rate on a fixed simulation test set with a deterministic metric, analogous to the combinatorial settings of FunSearch/AlphaEvolve), but two layers around it are not. The metric \emph{choice} reflects judgment about what correlates with scientific utility downstream (\Cref{sec:metric_lessons}), and the agent-built models are then deployed on real KASCADE archival data, where simulation-to-data transfer behaviour, the validity of MC-calibrated thresholds at the high-energy end, and physical plausibility of candidate events all require judgment that no programmatic evaluator settles (\Cref{sec:real_data}).
+
+Within astronomy specifically, several LLM-agent systems have been deployed on domain tasks. cmbagent~\cite{cmbagent} is an AutoGen-based multi-agent planner that autonomously executes cosmological parameter inference from supernova data. Mephisto~\cite{mephisto} wraps the CIGALE SED-fitting codebase in a tree-search self-play loop to iteratively refine galaxy spectral models on JWST observations. StarWhisper Telescope~\cite{starwhisper} operates an end-to-end LLM-agent stack (Qwen-2.5 with function-calling) for observation planning, telescope control, and real-time transient follow-up across a 10-telescope network. Our own prior work on AI agents for gamma-ray astronomy~\cite{kostunin_agents2025} and agent-based code generation for Gammapy~\cite{gammapy_agents} falls in the same line; the present paper extends it to direct ML research tasks on a cosmic-ray measurement archive.
+
+The ML methods the agents build in this paper draw on a well-established literature in extensive-air-shower reconstruction. The Pierre Auger Observatory uses an LSTM with hexagonal convolutions to reconstruct the composition-sensitive observable $X_\mathrm{max}$ from water-Cherenkov detector traces at EeV energies~\cite{auger_dl_xmax}. The IceTop--IceCube analysis of~\cite{icetop_composition} infers four-group mass composition from PeV to EeV using a feed-forward network on combined surface and in-ice observables. For imaging atmospheric Cherenkov telescopes, CNN-based $\gamma$/hadron separation was demonstrated on H.E.S.S.\ data by~\cite{hess_cnn_sep}. The KASCADE-specific literature against which our agents are benchmarked~\cite{kascade_icrc,kascade_jinst,kascade_jcap} fits within this broader methodology, and many of these architectural choices --- CNN backbones, feed-forward networks on reconstructed features, multi-model ensembling --- reappear in the agents' own search trajectories (\Cref{sec:results}).
+
+The astronomy systems above are end-to-end workflow wrappers (cmbagent, StarWhisper) or single-model self-play refiners (Mephisto) built around a single agent stack. The present paper instead runs five frontier coding agents from independent providers under identical conditions on KASCADE, with published-pipeline-matched metrics and end-to-end deployment of the resulting models on real measurements --- a controlled cross-agent comparison on an archival astroparticle dataset, complementary to the single-stack workflow papers cited above.
+
+The correlated-errors finding of \Cref{sec:agg_headroom} connects to a long tradition on ensemble diversity. Krogh and Vedelsby's ambiguity decomposition~\cite{krogh_ambiguity} makes the relationship quantitative --- ensemble gains are bounded by average pairwise ambiguity --- and Kuncheva and Whitaker~\cite{kuncheva_diversity} surveyed pairwise diversity measures for classical ensembles. For deep models, Lakshminarayanan et al.~\cite{deep_ensembles} and Fort et al.~\cite{fort_loss_landscape} showed that independently-seeded deep ensembles produce useful per-event diversity via distinct loss-landscape modes discovered by different random initializations.
+
+A more recent line on foundation-model homogenization predicts the mechanism we observe. Bommasani et al.~\cite{bommasani_picking}, Gontijo-Lopes et al.~\cite{gontijo_lopes}, and Saxena et al.~\cite{saxena_agreement} showed that downstream models built from shared pretrained backbones inherit correlated failure modes, with Gontijo-Lopes et al.\ specifically demonstrating that fine-tunes of a shared backbone yield negligible ensemble gains unless the training methodology itself differs. Two 2025 ICML papers sharpen this at the LLM level: Goel et al.~\cite{goel_think_alike} introduce Chance-Adjusted Probabilistic Agreement and show that LLM mistakes grow \emph{more} similar as capability increases; Kim et al.~\cite{kim_correlated} evaluate 349 LLMs and find error correlation grows with shared provider, shared architecture, and (conditional on those) with higher individual accuracy. Our contribution operates one level removed: we measure error correlation not across LLMs directly but across the downstream classifiers produced by LLM-driven coding agents tasked with domain-specific supervised learning on a shared scientific dataset. The class-conditional-independence null analysis of \Cref{sec:agg_headroom} sharpens the qualitative homogenization prediction into a concrete quantitative ceiling --- the realized oracle gain across five independently-developed agents is only ${\sim}12\%$ of what class-conditionally independent classifiers would yield, even with deliberate architectural diversity across providers and harnesses.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Data and Evaluation}
+\section{Benchmark Setup}
 \label{sec:data}
 
 \subsection{The KASCADE Dataset}
 
-We use KASCADE Monte Carlo simulations~\cite{kcdc_sim_manual} with two different dataset configurations to match the respective published baselines. For composition (Task~1), we use QGSJet-II.04 simulations of five primary particle types --- proton (H), helium (He), carbon (C), silicon (Si), and iron (Fe) --- following Kuznetsov et al.~\cite{kascade_jinst}. For gamma/hadron separation (Task~2), we combine QGSJet-II, EPOS-LHC, and SIBYLL simulations of gamma and proton primaries, following Kostunin et al.~\cite{kascade_icrc}.
+We use KASCADE Monte Carlo simulations~\cite{kcdc_sim_manual} with two different dataset configurations to match the respective published baselines. For composition (Task~1), we use QGSJet-II.04 simulations of five primary particle types --- proton (H), helium (He), carbon (C), silicon (Si), and iron (Fe) --- following Kuznetsov et al.~\cite{kascade_jinst}. For gamma/hadron separation (Task~2), we combine QGSJet-II.04, EPOS-LHC, and SIBYLL simulations of gamma and proton primaries, following Kostunin et al.~\cite{kascade_icrc}.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_detector.pdf}
-\caption{KASCADE detector grid representation. (\textbf{a})~Schematic of the 16$\times$16 binned grid, with active stations shown in blue ($\sim$85\% of cells are zero). (\textbf{b})~Example electron/photon channel (log1p-transformed). (\textbf{c})~Example muon channel, which is sparser than the electron channel. Iron primaries produce relatively more muons; protons produce more electrons.\label{fig:detector}}
+\caption{KASCADE detector grid representation. (\textbf{a})~Schematic of the 16$\times$16 binned grid, with active stations shown in blue ($\sim$85\% of cells are zero). (\textbf{b})~Example electron/photon channel (log1p-transformed). (\textbf{c})~Example muon channel, which is sparser than the electron channel. Iron primaries produce more muons per shower; protons produce more electrons per shower.\label{fig:detector}}
 \end{figure}
 
 The full simulation output includes 16$\times$16$\times$3 detector grid images (electron/photon, muon, and hadron channels), reconstructed shower parameters ($E$, $\theta_z$, $\phi$, $N_e$, $N_\mu$, shower age $s$, core position $X_c$, $Y_c$, core distance), and arrival time information~\cite{kcdc_sim_manual}. Following the published methodology~\cite{kascade_jinst}, we provide agents with a subset:
@@ -86,10 +100,10 @@ The full simulation output includes 16$\times$16$\times$3 detector grid images (
 
 \begin{figure}[H]
 \includegraphics[width=0.7\textwidth]{fig_separation.pdf}
-\caption{Distribution of $\log_{10}(N_e/N_\mu)$ for the five mass groups in the test set. The $N_e/N_\mu$ ratio is the single strongest discriminant: heavier nuclei produce more muons relative to electrons. Adjacent mass groups overlap significantly, particularly H--He ($d \approx 0.54\sigma$) and Si--Fe ($d \approx 0.22\sigma$).\label{fig:separation}}
+\caption{Distribution of $\log_{10}(N_e/N_\mu)$ for the five mass groups in the test set. The $N_e/N_\mu$ ratio is the single strongest discriminant: heavier nuclei produce more muons relative to electrons. Adjacent mass groups overlap substantially: H--He has Cohen's $d \approx 0.54$ (moderate separation) and Si--Fe has $d \approx 0.22$ (weak separation); Cohen's $d$ is the class-mean separation measured in pooled-standard-deviation units.\label{fig:separation}}
 \end{figure}
 
-Quality cuts are applied following~\cite{kascade_jinst}: $\theta_z < 30^{\circ}$, $\log_{10}(N_e) > 4.8$, $0.2 < s < 1.48$, and $\log_{10}(N_\mu) > 3.6$. After cuts, the dataset contains 383,547 events, split 70/21/9\% into training, validation, and test sets using \texttt{torch.utils.data.random\_split} with seed~42.
+Quality cuts are applied following~\cite{kascade_jinst}: $\theta_z < 30^{\circ}$, $\log_{10}(N_e) > 4.8$, $0.2 < s < 1.48$, and $\log_{10}(N_\mu) > 3.6$. After cuts, the dataset contains 383{,}547 events, split 70/30 into training and test sets (268{,}483 / 115{,}064 events) using \texttt{torch.utils.data.random\_split} with seed~42, matching the pipeline of~\cite{kascade_jinst}. Agents further partition the training set into train/val for checkpoint selection as they see fit.
 
 We define two tasks on this data, each with a single metric that agents optimize autonomously. \textbf{Task~1} (composition) is a 5-class classification problem: assign each event to one of five primary particle types. \textbf{Task~2} (gamma/hadron) is a binary classification problem: separate rare gamma-ray showers from the hadronic background. Each task has a domain-specific evaluation metric described below.
 
@@ -97,7 +111,7 @@ We define two tasks on this data, each with a single metric that agents optimize
 
 The composition metric is \textit{mean fraction error} --- a physically motivated measure of how well a classifier recovers true particle fractions across random mixture compositions, following the methodology of~\cite{kascade_jinst} (Section~4.3, Table~1).
 
-All 5-component fraction combinations on a 0.1 step grid summing to 1.0 are enumerated (1001 grid points). For each grid point, an ensemble of 5000 events is sampled from the test set with the specified fractions, and the absolute error $|f_\mathrm{true} - f_\mathrm{predicted}|$ is computed per class. The metric is the mean across all classes and grid points (fixed seed~2026). A perfect classifier scores 0; lower is better.
+All 5-component fraction combinations on a 0.1 step grid summing to 1.0 are enumerated ($\binom{14}{4} = 1001$ grid points). For each grid point, an ensemble of 5{,}000 events is sampled from the test set with the specified fractions, and the absolute error $|f_\mathrm{true} - f_\mathrm{predicted}|$ is computed per class. The metric is the mean across all classes and grid points (fixed seed~2026). A perfect classifier scores 0; lower is better.
 
 Unlike per-event accuracy, fraction error is sensitive to systematic biases in class predictions --- a classifier that consistently over-predicts protons will score poorly even if its per-event accuracy is high. This makes it a more reliable proxy for the quality of unfolded mass composition spectra.
 
@@ -107,20 +121,33 @@ For the gamma/hadron binary classification task (Task~2), the metric is the \tex
 
 This metric is standard in gamma-ray astronomy, where the goal is to identify rare gamma-ray showers (signal) against an overwhelming background of hadronic cosmic ray showers. The test set contains 1{,}579 gamma events and 34{,}267 hadron events; agents must produce a continuous ``gamma score'' (higher = more gamma-like) rather than binary labels. At the threshold where 75\% of gammas are retained, a perfect classifier would have zero hadronic survival.
 
-The published baseline from Kostunin et al.~\cite{kascade_icrc} achieves hadronic suppression factors of $10^2$--$10^3$ (survival rates of $10^{-2}$--$10^{-3}$) at 30--70\% gamma efficiency using Random Forest regressors on reconstructed features.
+Our prior RF baseline~\cite{kascade_icrc} achieves hadronic survival rates of $10^{-2}$--$10^{-3}$ (suppression factors of $10^2$--$10^3$) using Random Forest regressors on reconstructed features, reported as the achievable trade-off across threshold choices without fixing a specific gamma-efficiency operating point. For the 75\% gamma-efficiency point used in this benchmark, we measure a matched-protocol RF reference of $5.17 \times 10^{-3}$ (\Cref{sec:baselines}).
 
 \subsection{Baselines: Reproducing Published Results}
+\label{sec:baselines}
 
-For composition, we reproduce the published LeNet-based CNN from~\cite{kascade_jinst}. Our reimplementation in PyTorch (36,810 parameters) achieves $\sim$50.4\% test accuracy and a fraction error of $\sim$0.107, consistent with the published result (individual runs range from 0.1069 to 0.1085 due to training stochasticity).
+For composition, we reproduce the LeNet-based CNN from our prior work~\cite{kascade_jinst}. Our reimplementation in PyTorch (36{,}810 parameters) achieves $\sim$50.4\% test accuracy and a fraction error of $\sim$0.107, consistent with the published result (individual runs range from 0.1069 to 0.1085 due to training stochasticity). All five agents' Best@50 (0.1051--0.1063) lies strictly below this 8-run baseline range, so the improvement over baseline reported in \Cref{sec:results} is not an artifact of baseline seed selection.
 
-For gamma/hadron separation, the published baseline~\cite{kascade_icrc} uses a Random Forest regressor on reconstructed shower parameters, achieving suppression factors of $10^2$--$10^3$ at 30--70\% gamma efficiency.
+For gamma/hadron separation, our prior baseline~\cite{kascade_icrc} uses a 1000-tree Random Forest regressor on reconstructed shower parameters, reporting hadronic suppression factors in the range $10^2$--$10^3$ (equivalent survival $10^{-2}$--$10^{-3}$); that baseline does not specify a single gamma-efficiency operating point for this range, reporting it as the achievable trade-off across threshold choices. For a directly comparable measurement at the 75\% gamma efficiency used in this benchmark, we trained a Random Forest regressor ($n_\mathrm{estimators}=1000$, \texttt{sklearn}) on the five reconstructed features available to the agents ($E$, $\theta_z$, $\phi$, $\log_{10} N_e$, $\log_{10} N_\mu$) following the Kostunin et al.\ recipe. At 75\% gamma efficiency the reference RF achieves hadronic survival $5.17 \times 10^{-3}$ (suppression 194$\times$); at 50\% and 70\% gamma efficiency it achieves $1.17 \times 10^{-4}$ and $3.39 \times 10^{-3}$ respectively, consistent with the published range. We use the 75\%-efficiency value as the reference baseline for improvement factors reported in \Cref{sec:results}. The dominance is not specific to that operating point: \Cref{tab:roc_comparison} compares the best gamma model from each agent against the RF reference at gamma efficiencies from 30\% to 90\%, and the best agent consistently survives fewer hadrons than RF at every tested efficiency. At 50\% gamma efficiency four of the five agents reach \emph{zero} surviving hadrons against RF's four. The low-$\varepsilon_\gamma$ comparisons are noise-limited --- $\varepsilon_\gamma = 0.30$ is a tie at zero for both classifiers, and RF's four survivors at $\varepsilon_\gamma = 0.50$ versus the agents' zero is a Poisson $z \approx 2$; robust separation begins at $\varepsilon_\gamma \geq 0.70$, where RF counts reach ${\sim}10^2$ surviving hadrons and the agent advantage is $10\times$--$20\times$.
 
+\begin{table}[H]
+\caption{Hadronic survival rate vs.\ gamma efficiency, RF reference vs.\ best gamma model from each agent (lower is better; bold marks the best at each efficiency). Agents dominate RF at every operating point tested.\label{tab:roc_comparison}}
+\begin{tabularx}{\textwidth}{cCCCCCC}
+\toprule
+$\varepsilon_\gamma$ & RF & Opus 4.6 & GPT-5.4 & Sonnet 4.6 & Kimi K2.5 & Qwen 3.6 \\
+\midrule
+0.30 & $\mathbf{0}$         & $\mathbf{0}$         & $\mathbf{0}$         & $\mathbf{0}$         & $\mathbf{0}$         & $\mathbf{0}$         \\
+0.50 & $1.17\!\times\!10^{-4}$ & $\mathbf{0}$         & $\mathbf{0}$         & $2.92\!\times\!10^{-5}$ & $\mathbf{0}$         & $\mathbf{0}$         \\
+0.70 & $3.39\!\times\!10^{-3}$ & $\mathbf{1.75\!\times\!10^{-4}}$ & $2.34\!\times\!10^{-4}$ & $2.04\!\times\!10^{-4}$ & $2.63\!\times\!10^{-4}$ & $2.34\!\times\!10^{-4}$ \\
+0.75 & $5.17\!\times\!10^{-3}$ & $\mathbf{2.63\!\times\!10^{-4}}$ & $2.92\!\times\!10^{-4}$ & $3.79\!\times\!10^{-4}$ & $4.09\!\times\!10^{-4}$ & $3.50\!\times\!10^{-4}$ \\
+0.90 & $3.30\!\times\!10^{-2}$ & $2.14\!\times\!10^{-2}$ & $2.38\!\times\!10^{-2}$ & $\mathbf{1.94\!\times\!10^{-2}}$ & $2.09\!\times\!10^{-2}$ & $2.27\!\times\!10^{-2}$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Benchmark Design}
-\label{sec:method}
 
 \subsection{Experimental Protocol}
+\label{sec:method}
 
 Each agent receives an isolated task directory containing:
 \begin{itemize}
@@ -132,7 +159,6 @@ Each agent receives an isolated task directory containing:
 \end{itemize}
 
 The agent is given no architecture-specific suggestions --- only physics background (what the features mean, why the task is hard) and generic advice (``feel free to try everything, from linear regression to diffusion models and transformers''). The agent must discover effective architectures, training strategies, and feature engineering on its own.
-% TODO: Ablation study — run agents with minimal instructions (no physics background, no feature hints) to measure how much prior knowledge contributes to performance.
 
 \textbf{Attempt budget}: Each call to \texttt{verify.py} counts as one attempt, with a maximum of 50. The agent must provide a text description of each attempt (logged automatically to \texttt{results.tsv}). The baseline is pre-loaded as attempt~0, so the agent's first evaluation is attempt~1.
 
@@ -140,32 +166,34 @@ The agent is given no architecture-specific suggestions --- only physics backgro
 
 \textbf{Isolation}: Each agent run operates in its own copy of the task directory. Agents cannot see other agents' work or the benchmark infrastructure. The instruction document is compatible with multiple agent frameworks (Claude Code via \texttt{CLAUDE.md}, Codex and others via \texttt{AGENTS.md}).
 
+\textbf{Benchmark rules} (informed by pilot experiments): The data pipeline matches the published baseline~\cite{kascade_jinst} exactly (QGSJet-II.04, same quality cuts, same train/test split seed). Data storage is float32 (float16 storage degraded composition fraction error by $\sim 0.5\%$ in pilot runs). Post-processing of predictions is prohibited --- motivated by an early pilot exploit where an agent tuned per-class logit biases against the verifier grid (\Cref{sec:de_exploit}). Model-checkpoint selection must use a validation split, not the test set; pilot runs with test-set-based selection inflated results by $\sim 1\%$. These rules are documented in the agent instructions.
+
 \subsection{Agents Under Evaluation}
 
-We evaluate agents from multiple providers, all given identical starting conditions:
+We evaluate five distinct agents from four independent providers (Anthropic, OpenAI, Alibaba, Moonshot), all given identical starting conditions. One of these (Kimi K2.5) is evaluated under two harnesses, Kimi Code and KimiClaw, for a total of six agent runs on the gamma task; the convention used throughout this paper is ``five agents'' for distinct models and ``six runs'' when counting harness instances separately. \Cref{tab:agents} lists each.
 
 \begin{table}[H]
-\caption{AI agents evaluated on astro-bench.\label{tab:agents}}
-\begin{tabularx}{\textwidth}{lCClC}
+\caption{AI agents evaluated on astro-bench. Best@1 and Best@50 reporting are defined in \Cref{sec:metrics_reporting}. Agents marked with $^\dagger$ or $^\ddagger$ did not complete the full 50-attempt budget; details in the text below. A dash (---) in the Thinking column indicates that Qwen and Kimi do not expose a reasoning-effort knob; their runs use the provider's default behaviour.\label{tab:agents}}
+\begin{tabularx}{\textwidth}{lCCClC}
 \toprule
-\textbf{Agent} & \textbf{Provider} & \textbf{Context} & \textbf{Interface} & \textbf{Thinking} \\
+\textbf{Agent} & \textbf{Provider} & \textbf{Weights} & \textbf{Context} & \textbf{Interface} & \textbf{Thinking} \\
 \midrule
-Claude Opus~4.6 & Anthropic & 1M tokens & Claude Code & medium \\
-Claude Sonnet~4.6 & Anthropic & 200K tokens & Claude Code & medium \\
-GPT-5.4 & OpenAI & 262K tokens & Codex CLI & high \\
-Qwen 3.6-Plus & Alibaba & 1M tokens & Qwen Code & --- \\
-Kimi K2.5 & Moonshot & 1M tokens & Kimi Code & --- \\
-Kimi K2.5$^\dagger$ & Moonshot & 1M tokens & KimiClaw & --- \\
+Claude Opus~4.6 & Anthropic & Proprietary & 1M tokens & Claude Code & medium \\
+Claude Sonnet~4.6 & Anthropic & Proprietary & 200K tokens & Claude Code & medium \\
+GPT-5.4 & OpenAI & Proprietary & 262K tokens & Codex CLI & high \\
+Qwen 3.6-Plus$^\ddagger$ & Alibaba & Proprietary & 1M tokens & Qwen Code & --- \\
+Kimi K2.5 & Moonshot & Open & 1M tokens & Kimi Code & --- \\
+Kimi K2.5$^\dagger$ & Moonshot & Open & 1M tokens & KimiClaw & --- \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Each agent is run on both tasks (composition and gamma), with 50 evaluation attempts per task. All agents use the recommended default reasoning effort for their respective provider.
+Two runs did not complete the full 50-attempt budget. The KimiClaw$^\dagger$ session crashed after 7 attempts on gamma; KimiClaw is a browser-based managed hosting of OpenClaw~\cite{openclaw} on kimi.com and, unlike the stable Kimi Code CLI, is experimental. The Qwen$^\ddagger$ run was terminated at 32 (composition) and 27 (gamma) attempts and was not resumed; to confirm that Qwen's Best@50 ranking is not an artifact of the early termination, the other agents' metrics at Qwen's truncation points are: Opus Best@32 $0.1051$ / Best@27 $2.63 \times 10^{-4}$, GPT $0.1053$ / $3.21 \times 10^{-4}$, Sonnet $0.1056$ / $4.09 \times 10^{-4}$, Kimi $0.1063$ / $4.96 \times 10^{-4}$ --- the ranking is unchanged from Best@50.
 
-% TODO: Re-evaluate KimiClaw with a newer OpenClaw version to see if the crash is patched.
-$^\dagger$KimiClaw is a browser-based managed hosting of OpenClaw~\cite{openclaw} on kimi.com. Unlike Kimi Code (a stable CLI tool comparable to Claude Code), KimiClaw is experimental and its session crashed after 7 attempts, terminating the run early. Results are reported as-is.
+Each agent is run on both tasks (composition and gamma/hadron separation), with 50 evaluation attempts per task. We use each provider's recommended default reasoning effort, which differs across providers (GPT-5.4 at ``high'', Claude models at ``medium''; Qwen and Kimi do not expose an equivalent knob) and is a known confound for cross-agent comparison.
 
 \subsection{Metrics}
+\label{sec:metrics_reporting}
 
 For each agent run, we report:
 \begin{itemize}
@@ -176,21 +204,9 @@ For each agent run, we report:
 
 The primary comparison metric is \textbf{Best@50} --- the best result achievable within the fixed budget.
 
-\subsection{Benchmark Design Rationale}
+\subsection{Information-Barrier Disclosure}
 
-The benchmark design was informed by extensive pilot experiments conducted during development. Initial pilot runs revealed several critical issues that shaped the final protocol:
-
-\begin{enumerate}
-    \item \textbf{Data pipeline alignment}: Early experiments used a different data pipeline (combined QGSJet-II + EPOS-LHC, different feature set, different train/test split) than the published baseline. This made results incomparable. The final benchmark uses exactly the published pipeline: QGSJet-II.04 only, same quality cuts, same split seed.
-
-    \item \textbf{Float precision}: Storing data as float16 (for space efficiency) degraded composition fraction error by $\sim$0.5\%. The benchmark uses float32.
-
-    \item \textbf{Post-processing pitfalls}: The benchmark prohibits post-processing (e.g., per-class bias optimization) to ensure models are directly applicable to real data (see \Cref{sec:discussion} for details).
-
-    \item \textbf{Evaluation leakage}: Selecting model checkpoints based on test set performance inflated results by $\sim$1\%. The benchmark instructions require validation-based checkpoint selection.
-\end{enumerate}
-
-These lessons are documented in the agent instructions to prevent agents from repeating the same mistakes.
+The author of this paper is a co-author of the published KASCADE machine-learning studies that serve as baselines (\Cref{sec:baselines}). The benchmark setup --- data pipeline, quality cuts, evaluation metric, test-set definition, and the instruction document given to agents --- relies only on information published in~\cite{kascade_icrc,kascade_jinst,kascade_jcap} and publicly available KASCADE Cosmic-ray Data Centre (KCDC) documentation~\cite{kcdc_sim_manual}. No unpublished findings, test-set observations, or undocumented architectural insights from the prior KASCADE ML work were incorporated into the benchmark or its starter pack; agents have access to the same information any external researcher reading those papers would have. The instruction document, included verbatim in the public repository, contains no architecture-specific suggestions: no mention of CNNs, ResNets, transformers, gradient boosting, MLPs, or any other family by name; the only modeling guidance is the generic ``feel free to try everything, from linear regression to diffusion models and transformers''. As a complementary check, we re-ran two of the main agents (Opus and Sonnet) on composition with a stripped instruction document (data + metric + basic physics only; all architecture and feature-engineering hints removed) and recorded the architecture families each explored. \textbf{The result: architectural choices are agent-driven, not instruction-driven.} Both stripped-instruction runs recovered the same architecture families as the main runs within their first few attempts --- CNN backbones, ResNets, ensembling, TTA, tree models --- confirming that the architectural diversity across agents (\Cref{sec:overlap}) comes from the agents' pretraining priors rather than from hints in the starter pack. Full family-by-family comparison is in \Cref{tab:minimal_overlap} (\Cref{app:minimal}); the architectural-family overlap claim is qualitative only, since the stripped-instruction runs use newer Claude Code harness versions than the main runs (and Opus-min uses 4.7 vs 4.6 in the main runs), so Best@$N$ is not directly comparable across regimes. This is also noted in the Conflicts of Interest statement.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -199,83 +215,176 @@ These lessons are documented in the agent instructions to prevent agents from re
 
 \subsection{Overview}
 
-\Cref{tab:results_overview} summarizes results across all agents and tasks.
+\Cref{tab:results_overview} summarizes results across all agents and tasks. Every agent reaches better-than-baseline performance early: on composition, three of five surpass the $0.107$ reference on attempt~1 (bolded in \Cref{tab:results_overview}), four of five within two attempts, and the fifth (Qwen) by attempt~11; on gamma/hadron separation, all five surpass the $5.17 \times 10^{-3}$ Random Forest reference on attempt~1, with first-attempt improvements of $2.7$--$11\times$ (\Cref{tab:results_overview}). From these strong starting points, every agent continues to improve under iteration and plateaus at the dataset-imposed limits characterized in the rest of this section. The two plateaus reflect structurally different limits: gamma is \emph{data-determined} (the test set is information-exhausted at the level the agents reach, \Cref{sec:test_saturation}), while composition is \emph{aggregation-bottlenecked, not data-determined} (the oracle analysis of \Cref{sec:agg_headroom} shows per-event signal that no aggregator we tested extracts).
 
 \begin{table}[H]
-\caption{Results across agents. Composition metric is fraction error (lower is better); gamma metric is hadronic survival rate at 75\% gamma efficiency (lower is better). Attempts = number of \texttt{verify.py} calls used.\label{tab:results_overview}}
-\begin{tabularx}{\textwidth}{lCCCC}
+\caption{Results across agents. Composition metric is fraction error (lower is better); gamma metric is hadronic survival rate at 75\% gamma efficiency (lower is better). Best@1 = metric on first attempt; Best@50 = best metric achieved in the full budget; ``Attempts'' = total \texttt{verify.py} calls used (out of the 50-attempt budget; runs that terminated earlier are shown as $n$/50). \textbf{Bold} composition Best@1 marks agents that beat the $0.107$ baseline on attempt~1 (3 of 5). Per-agent ensemble noise on the composition Best@50 column ($\sigma_{\rm ensemble}$ from three independent retrains of each agent's final recipe) is reported separately in \Cref{tab:ensemble_sigma}; for gamma/hadron, the metric is quantized at $1/34{,}267 \approx 2.9 \times 10^{-5}$ per surviving hadron, and the Poisson $\sigma$ on a count of $N$ surviving hadrons is $\sqrt{N}/34{,}267$ ($\approx 8.7 \times 10^{-5}$ at $N=9$, the best agent's result; pairwise $z$ for count pairs is in \Cref{sec:test_saturation}).\label{tab:results_overview}}
+\begin{tabularx}{\textwidth}{lCCCCCC}
 \toprule
-\textbf{Agent} & \multicolumn{2}{c}{\textbf{Composition}} & \multicolumn{2}{c}{\textbf{Gamma/Hadron}} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5}
-& Best & Attempts & Best & Attempts \\
+\textbf{Agent} & \multicolumn{3}{c}{\textbf{Composition}} & \multicolumn{3}{c}{\textbf{Gamma/Hadron}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+& Best@1 & Best@50 & Attempts & Best@1 & Best@50 & Attempts \\
 \midrule
-Published baseline & 0.107 & --- & $\sim 10^{-2}$ & --- \\
+RF reference (this work) & --- & 0.107 & --- & --- & $5.17 \times 10^{-3}$ & --- \\
 \midrule
-Claude Sonnet~4.6 & $0.1054$ & 50 & $3.79 \times 10^{-4}$ & 50 \\
-Claude Opus~4.6 & $0.1051$ & 50 & $2.63 \times 10^{-4}$ & 50 \\
-GPT-5.4 & $0.1052$ & 50 & $2.92 \times 10^{-4}$ & 50 \\
-Kimi K2.5 (Kimi Code) & $0.1063$ & 50 & $4.09 \times 10^{-4}$ & 50 \\
-Kimi K2.5 (KimiClaw)$^\dagger$ & --- & --- & $3.21 \times 10^{-4}$ & 7/50 \\
-Qwen 3.6-Plus & $0.1060$ & 20 & $3.50 \times 10^{-4}$ & 23 \\
+Claude Sonnet~4.6 & $\mathbf{0.1063}$ & $0.1054$ & 50 & $6.4 \times 10^{-4}$ & $3.79 \times 10^{-4}$ & 50 \\
+Claude Opus~4.6   & $0.1098$ & $0.1051$ & 50 & $7.0 \times 10^{-4}$ & $2.63 \times 10^{-4}$ & 50 \\
+GPT-5.4           & $\mathbf{0.1063}$ & $0.1052$ & 50 & $4.7 \times 10^{-4}$ & $2.92 \times 10^{-4}$ & 50 \\
+Kimi K2.5 (Kimi Code)         & $\mathbf{0.1066}$ & $0.1063$ & 50 & $6.1 \times 10^{-4}$ & $4.09 \times 10^{-4}$ & 50 \\
+Kimi K2.5 (KimiClaw)$^\dagger$ & ---      & ---      & --- & $5.8 \times 10^{-4}$ & $3.21 \times 10^{-4}$ & 7/50 \\
+Qwen 3.6-Plus$^\ddagger$ & $0.1088$ & $0.1060$ & 32/50 & $1.9 \times 10^{-3}$ & $3.50 \times 10^{-4}$ & 27/50 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\subsection{Gamma/Hadron Separation}
-
-\Cref{fig:convergence_gamma} shows the convergence curves for all agents on the gamma/hadron task. Each agent receives identical starting conditions: the same dataset, baseline model, instructions, and 50-attempt budget.
-
-Sonnet~4.6 achieved $3.79 \times 10^{-4}$ hadronic survival at 75\% gamma efficiency after 50 attempts---a $26\times$ improvement over the published random forest baseline ($\sim 10^{-2}$). The agent's trajectory shows three phases: rapid initial improvement (4 improvements in 5 attempts) reaching $4.38 \times 10^{-4}$ via ensemble of three CNN variants; a long plateau broken at attempt~25 through physics-motivated consistency features (muon/electron consistency, centroid distance); and a final improvement at attempt~47 using test-time augmentation (D4 symmetry group) on the best single model. Across 50 attempts, the agent explored CNNs, ResNets, transformers, gradient boosting, stacking meta-learners, and various ensembling strategies.
-
-Opus~4.6 achieved $2.63 \times 10^{-4}$ (9~hadrons) after 50 attempts---a $38\times$ improvement over the baseline. Opus converged fastest, reaching its best result by attempt~10 with a 3-seed dual-branch CNN using squeeze-and-excitation attention, focal loss, and geometric mean ensembling. The remaining 40 attempts exhaustively explored alternative architectures (Vision Transformers, muon-focused CNNs, triple-branch networks), training strategies (MixUp, SWA, distribution-matched validation), and ensembling methods (arithmetic, harmonic, trimmed mean, logit averaging, stacking GBT on CNN embeddings)---none of which improved on the initial result.
-
-GPT-5.4 achieved $2.92 \times 10^{-4}$ (10~hadrons) after 50 attempts---a $34\times$ improvement. GPT took a distinctly different path: it discovered pairwise ranking loss and asymmetric focal loss early (attempts 9 and 18), then spent the remaining budget on increasingly sophisticated gated ensembles combining full-pool and in-domain focal CNNs with feature-based routing. Its best result came at attempt~31 via a feature-gated ensemble. Notably, GPT was the only agent to explore domain-classifier-weighted ensembles and tail-specific loss functions.
-
-Kimi~K2.5 achieved $4.09 \times 10^{-4}$ (14~hadrons) after 50 attempts---a $24\times$ improvement. Kimi employed a distinctive breadth-first strategy: rather than iterating on architecture or loss functions, it trained large pools of CNNs (up to 30 seeds of the same architecture) and submitted multiple top-$K$ selections per pool. This brute-force approach reached the Poisson noise band but converged more slowly than the other agents, with its best result arriving at attempt~40. In a separate run using the experimental KimiClaw harness (OpenClaw-based, browser-hosted), the same Kimi~K2.5 model achieved $3.21 \times 10^{-4}$ (11~hadrons) in only 7 attempts before the session crashed, reaching this level through test-time augmentation on a deeper CNN.
-
-% TODO: Update Qwen gamma results when experiment completes (currently 23/50 attempts)
-Qwen~3.6-Plus achieved $3.50 \times 10^{-4}$ (12~hadrons) after 23 attempts. Qwen built diverse ResNet ensembles with varied hyperparameters (weight decay, focal loss gamma), discovering that asymmetric loss functions and architectural diversity within the ensemble were more effective than increasing ensemble size.
-
-\subsubsection{Test Set Saturation}
-
-The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kascade_jinst}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons: % TODO: Update Qwen hadron count when experiment completes
-Opus's best of $2.63 \times 10^{-4}$ corresponds to 9~hadrons, GPT-5.4's $2.92 \times 10^{-4}$ to 10, KimiClaw's $3.21 \times 10^{-4}$ to 11, Qwen's $3.50 \times 10^{-4}$ to 12, Sonnet's $3.79 \times 10^{-4}$ to 13, and Kimi's $4.09 \times 10^{-4}$ to 14~hadrons out of 34{,}267. The metric is quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$, and the Poisson uncertainty on 9 events is $\sqrt{9} = 3$~hadrons (green band in \Cref{fig:convergence_gamma}). All agents' results fall within the same $\pm 1\sigma$ band and are statistically indistinguishable. The gamma benchmark is effectively saturated at the resolution of the available Monte Carlo statistics.
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
-\caption{Convergence curves (Best@$N$) for gamma/hadron separation. Each line represents one agent. Dashed line = published baseline ($\sim 10^{-2}$). Green shaded band = Poisson $\pm 1\sigma$ around the best result, indicating the statistical noise floor of the test set.\label{fig:convergence_gamma}}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_trajectory_gamma_opus_46.pdf}
-\caption{Research trajectory for Opus~4.6 on gamma/hadron separation (best agent). The agent achieved 6 improvements in 50 attempts, all within the first 10 attempts, followed by 40 attempts at the Poisson noise floor. Trajectories for all other agents are provided in \Cref{app:trajectories}.\label{fig:trajectory_opus}}
-\end{figure}
-
 \subsection{Composition (5-class)}
 
-Unlike the gamma task, which saturated at the Poisson noise floor, the composition metric is continuous over 115{,}066 test events and improvements remain resolvable. All agents converged to fraction errors of 0.1051--0.1063, a narrow band that appears to reflect a confusion matrix ceiling driven by overlapping $N_e/N_\mu$ distributions between adjacent mass groups.
+The composition metric is continuous over 115{,}064 test events, but all five agents converged to a narrow band of fraction errors (0.1051--0.1063), within the single-recipe training-noise floor of $\sigma \approx 4 \times 10^{-4}$ (\Cref{sec:comp_noise_floor}); agent ordering at the 4-decimal level is not statistically resolvable, and Best@50 itself samples the lower tail of per-recipe stochasticity (\Cref{tab:ensemble_sigma}), so the reported numbers slightly underestimate the recipe mean. The narrow band is consistent with either a hard data-imposed ceiling or a softer plateau set by aggregation. We test this directly: an oracle selector across the three best agents reaches fraction error $0.0958$, a ${\sim}9 \times 10^{-3}$ headroom (${>}20\sigma_{\rm noise}$) that majority voting and score-averaging both fail to recover (\Cref{sec:agg_headroom}, \Cref{fig:oracle_headroom}) --- evidence for the soft-plateau reading.
 
-Opus~4.6 achieved the best composition result ($0.1051$) after 50 attempts (\Cref{fig:trajectory_comp_opus}). Its key innovation was a differentiable batch fraction matching loss that penalizes discrepancies between predicted and true class fractions within each training batch. Combined with a ResNet+MLP fusion architecture, 11 engineered features, and 12-way TTA, this recipe plateaued at $0.1053$ by attempt~8. Opus then explored broadly --- ViT, ConvNeXt, knowledge distillation, stacking with GBT, snapshot ensembles --- before breaking through at attempt~37 with a deep feature MLP using BatchNorm that matched the ensemble performance as a single model.
+Opus~4.6 achieved the best composition result ($0.1051$) after 50 attempts (\Cref{fig:trajectory_comp_opus}). Its key innovation was a differentiable batch fraction matching loss that penalizes discrepancies between predicted and true class fractions within each training batch. Combined with a ResNet+MLP fusion architecture, 11 engineered features, and 12-way TTA, this recipe plateaued at $0.1053$ by attempt~8. Opus then explored broadly --- ViT, ConvNeXt, knowledge distillation, stacking with GBT, snapshot ensembles --- before breaking through at attempt~37 with a deep feature MLP using BatchNorm that matched the ensemble performance as a single model. (Throughout this paper, ``v$N$'' is the agent's trajectory-log shorthand for the recipe/checkpoint produced at attempt $N$; e.g.\ ``v8'' is the attempt-8 recipe analyzed in \Cref{sec:comp_noise_floor} and ``v34'' is Opus's final 5-model ensemble assembled at attempt 34.)
 
 GPT-5.4 achieved $0.1052$ after 50 attempts using a single CNN+MLP fusion architecture for all 50 attempts, never changing the backbone. Its strategy was extreme depth-first optimization: an ordinal auxiliary head encoding the mass ordering (H$<$He$<$C$<$Si$<$Fe), a batch composition penalty, and full inverse-frequency class-balanced sampling (the single most impactful change, at attempt~12). The remaining 38 attempts were spent on fine-grained one-variable-at-a-time hyperparameter ablation. The final improvement at attempt~47 came from adding a composition regularizer specifically to the image auxiliary branch at weight 0.03.
 
 Sonnet~4.6 achieved $0.1054$ after 50 attempts with three distinct phases: initial architecture search (attempts 1--4) establishing a LeNet+BN baseline at $0.1060$; a training strategy phase (attempts 10--27) where SWA and FiLM conditioning on energy pushed to $0.1056$; and a prolonged plateau broken only at attempts 49--50 through an Earth Mover's Distance ordinal loss that penalizes predictions far apart in the mass ordering.
 
-% TODO: Update Qwen composition results when experiment completes (currently 20/50 attempts)
-% TODO: Update Qwen gamma results when experiment completes (currently 23/50 attempts)
-% TODO: Update Table 2 attempt counts for Qwen on both tasks
-Qwen~3.6-Plus achieved $0.1060$ after 20 attempts. Qwen's main contribution was identifying that ResNet-18 (${\sim}2.9$M parameters) significantly outperforms the LeNet baseline ($36$K parameters) on this task, a finding the other agents also reached but from different starting architectures. Qwen explored temperature scaling and SWA but did not discover the loss-function innovations (fraction matching, EMD, ordinal heads) that other agents used to push below $0.106$.
+Qwen~3.6-Plus achieved $0.1060$ after 32 attempts (run terminated early at 32/50, see \Cref{tab:agents}). Qwen's main contribution was identifying that ResNet-18 (${\sim}2.9$M parameters) significantly outperforms the LeNet baseline ($36$K parameters) on this task, a finding the other agents also reached but from different starting architectures. Qwen explored temperature scaling and SWA but did not discover the loss-function innovations (fraction matching, EMD, ordinal heads) that other agents used to push below $0.106$.
 
-Kimi~K2.5 achieved $0.1063$ after 50 attempts --- the weakest composition result. Kimi trained 10 distinct models in the first 10 attempts (CNNs, ResNets, hierarchical classifiers, feature-only MLPs), then spent 35 of the remaining 40 attempts on a combinatorial search over ensemble weight combinations using the same pre-trained models, submitting each combination as a separate evaluation. This exhausted the attempt budget without training new models or discovering the loss-function innovations (fraction matching, EMD, ordinal heads) that the other agents used to push below $0.106$.
+Kimi~K2.5 achieved $0.1063$ after 50 attempts --- the weakest composition result. Kimi trained 10 distinct models in the first 10 attempts (CNNs, ResNets, hierarchical classifiers, feature-only MLPs), then spent 35 of the remaining 40 attempts on a combinatorial search over ensemble weight combinations using the same pre-trained models, submitting each combination as a separate evaluation. This exhausted the attempt budget without training new models or discovering the loss-function innovations that drove Qwen and the top three agents below $0.106$.
+
+\subsubsection{Training-Recipe Noise Floor}
+\label{sec:comp_noise_floor}
+
+To bound the noise floor imposed by training stochasticity (CUDA kernel selection, DataLoader worker randomness, and initialization), we retrained v8 --- a single-model component of Opus's v34 ensemble that reaches 0.1053 on its own --- under four random seeds ($\{1, 7, 42, 100\}$) and two schedules (MAX\_EPOCHS $\in \{150, 200\}$, cosine-annealed over the full schedule, no early stopping). The eight repetitions yield fraction errors in the range 0.1051--0.1064 (\Cref{tab:noise_floor}), with sample $\sigma \approx 4 \times 10^{-4}$ around a mean of $0.1056$.
+
+\begin{table}[H]
+\caption{v8-recipe fraction error across four seeds and two training schedules (single-model, 605~K parameters).\label{tab:noise_floor}}
+\begin{tabularx}{0.6\textwidth}{CCC}
+\toprule
+\textbf{Seed} & \textbf{150 epochs} & \textbf{200 epochs} \\
+\midrule
+1 & 0.1058 & 0.1064 \\
+7 & 0.1051 & 0.1052 \\
+42 & 0.1056 & 0.1055 \\
+100 & 0.1054 & 0.1058 \\
+\bottomrule
+\multicolumn{3}{l}{\textit{Mean} 0.1056, \textit{std} $\approx 4 \times 10^{-4}$} \\
+\end{tabularx}
+\end{table}
+
+This $\sigma$ is a \emph{single-model} measurement. To bound the ensemble-vs-ensemble noise directly, we retrained each of the three top agents' final submissions (Opus v34, GPT v47, Sonnet v44) end-to-end under three independent random seeds and recomputed the fraction error on the same 115{,}064-event test set. The per-agent ensemble means and standard deviations are summarized in \Cref{tab:ensemble_sigma}.
+
+\begin{table}[H]
+\caption{Per-agent ensemble means and standard deviations from three independent retrains of each agent's final v34/v47/v44 recipe. Means are slightly above each agent's originally reported Best@50 because Best@50 selects the best of multiple training attempts and therefore samples the lower tail; the $\sigma$ values quantify the per-recipe stochasticity around that mean.\label{tab:ensemble_sigma}}
+\begin{tabularx}{\textwidth}{lCCC}
+\toprule
+\textbf{Agent (recipe)} & \textbf{mean FE (n=3 seeds)} & $\boldsymbol{\sigma_{\rm ensemble}}$ & \textbf{originally reported Best@50} \\
+\midrule
+Opus 4.6 (v34, 5-model ensemble + TTA16)            & $0.10542$ & $3.3 \times 10^{-4}$ & $0.10507$ \\
+GPT-5.4 (v47, single FusionNet + TTA8)              & $0.10589$ & $4.8 \times 10^{-4}$ & $0.10524$ \\
+Sonnet 4.6 (v44, 5x LeNetFiLM + SWA + TTA8)         & $0.10560$ & $5.1 \times 10^{-5}$ & $0.10540$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Two observations. First, $\sigma_{\rm ensemble}$ for Opus and GPT is comparable to $\sigma_{\rm single}$ rather than reduced by the naive $1/\sqrt{N}$ factor expected for independently-seeded ensembles: the components within each recipe share architectures, training pipelines, and validation procedures, and the resulting per-recipe stochasticity does not average out the way uncorrelated replicates would. Second, Sonnet's $\sigma$ is anomalously low because its 5 internal LeNetFiLM models are SWA-averaged within each seed; SWA over a long training tail collapses the per-seed variance, leaving very little noise across outer-seed restarts. Kimi's submission is a weight search over pre-trained models (selection over a validation metric) rather than independently-seeded replicates and was not retrained; we use the single-model $\sigma$ as a placeholder for Kimi-vs-others below.
+
+Pairwise $z = (x_i - x_j) / \sqrt{\sigma_i^2 + \sigma_j^2}$ using the measured per-agent $\sigma_{\rm ensemble}$ and the originally reported Best@50 numbers for the means (since those are what \Cref{tab:results_overview} reports): Opus (0.1051) vs.\ GPT (0.1052) $|z| \approx 0.17$; Opus vs.\ Sonnet (0.1054) $|z| \approx 0.90$; GPT vs.\ Sonnet $|z| \approx 0.41$. Because Sonnet's $\sigma_{\rm ensemble}$ is a lower bound on comparable-protocol noise (SWA-collapsed --- a non-SWA same-recipe retrain would likely yield a $\sigma$ closer to Opus/GPT's), the Opus--Sonnet and GPT--Sonnet $z$ values slightly overstate the separation; an apples-to-apples comparison using a common non-SWA $\sigma$ would yield smaller $|z|$ and strengthen, not weaken, the within-$1\sigma$ claim. The top three agents are within $1\sigma$ of each other and their ordering is unresolved at measured ensemble noise. Kimi's submission is a selection-over-validation weight search whose $\sigma$ we have not measured, so we do not compute Opus--Kimi or Sonnet--Kimi $z$ values and do not make a claim about agent ordering involving Kimi.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_convergence_composition.pdf}
-\caption{Convergence curves (Best@$N$) for composition classification. Dashed line = published baseline ($0.107$).\label{fig:convergence_comp}}
+\caption{Convergence curves (Best@$N$) for composition classification. Dashed line = published baseline ($0.107$). Green band = $\pm 1\sigma$ training-recipe noise floor ($\sigma \approx 4 \times 10^{-4}$, \Cref{tab:noise_floor}) around the best reported result, used as a generic yardstick consistent with the rest of the paper. Per-agent $\sigma_{\rm ensemble}$ from 3-seed retrains (\Cref{tab:ensemble_sigma}: Opus $3.3 \times 10^{-4}$, GPT $4.8 \times 10^{-4}$, Sonnet $5.1 \times 10^{-5}$) is comparable to or smaller than this band.\label{fig:convergence_comp}}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{fig_trajectory_composition_opus_46.pdf}
-\caption{Research trajectory for Opus~4.6 on composition classification (best agent). The agent achieved its best result at attempt~37 using a deep feature MLP.\label{fig:trajectory_comp_opus}}
+\caption{Research trajectory for Opus~4.6 on composition classification (best-performing agent on this task). The agent achieved its best result at attempt~37 using a deep feature MLP.\label{fig:trajectory_comp_opus}}
+\end{figure}
+
+\subsubsection{Aggregation Headroom}
+\label{sec:agg_headroom}
+
+The narrow Best@50 band (\Cref{tab:results_overview}) is consistent with two distinct scenarios: (i)~a hard data-imposed ceiling, where the metric is bounded by the information content of the inputs and no classifier --- agent or otherwise --- can do better; or (ii)~a soft plateau, where each individual agent has roughly matched the others to within noise but per-event diversity is unexploited. We distinguish them by directly aggregating the per-event class probabilities from the three top agents (Opus, GPT, Sonnet) on the 115{,}064-event test set --- chosen as the three with statistically indistinguishable Best@50 bands and measured $\sigma_{\rm ensemble}$ values (\Cref{sec:comp_noise_floor}), so the oracle and the realized aggregators below operate on a common 15-dim softmax stack. Qwen and Kimi are discussed separately at the end of this subsection. The reference points are:
+
+\begin{itemize}
+    \item Best single agent (Opus): fraction error $0.10507$, accuracy $51.5\%$.
+    \item Per-event oracle selector across the same three agents: for each test event, if \emph{any} of the three agents predicts the true class, the oracle outputs that class; otherwise the event is counted wrong. This is an upper bound on what any aggregation rule over the three agents' predictions could achieve --- not a realizable algorithm, since constructing it requires access to the ground-truth labels. Fraction error: $0.09583$, accuracy $55.5\%$.
+\end{itemize}
+
+The oracle headroom is $\Delta \approx 9 \times 10^{-3}$ in fraction error and $+4.0$ percentage points in accuracy --- $>20\sigma_{\rm noise}$ (where $\sigma_{\rm noise}$ is the single-recipe training noise floor of \Cref{tab:noise_floor}; the precise multiple is $22.78\sigma$, see \Cref{tab:stackers}) and $8\times$ the full inter-agent Best@50 spread.
+
+\emph{How much of this is genuine cross-agent diversity?} A useful sanity check is the null oracle under class-conditional independence of errors: if each agent's per-class accuracy (taken from its confusion matrix) were preserved but errors were uncorrelated across agents conditional on the true class, the oracle accuracy would be $86.3\%$\footnote{For the three best agents $i \in \{\mathrm{Opus}, \mathrm{GPT}, \mathrm{Sonnet}\}$, the class-conditional-independence oracle accuracy is $\sum_c \pi(c) \cdot [1 - \prod_{i} (1 - p_i(c))]$, where $\pi(c)$ is the true-class prior on the test set and $p_i(c)$ is the diagonal of agent $i$'s confusion matrix for class $c$. This assumes agent errors are mutually independent conditional on the true class --- the null a Kuncheva--Whitaker-style diversity analysis~\cite{kuncheva_diversity} would use --- and ignores event-level difficulty correlations within each true class, which would further depress the independence-null ceiling. Per-agent confusion matrices are available alongside the prediction arrays in the public repository.} --- a $34.8$ pp lift over the best single agent ($51.5\%$), nearly an order of magnitude larger than the actual oracle's $4.0$ pp lift to $55.5\%$. The agents' errors are therefore heavily correlated (most events one agent gets wrong, the other two also get wrong), and the measured oracle gain is only ${\sim}12\%$ of the independence-null gain. This ratio is computed in accuracy space ($4.0$~pp actual vs.\ $34.8$~pp independence-null); we use it as a qualitative measure of how much of the independence-pool diversity survives in the actual agent pool, distinct from the ${\sim}9 \times 10^{-3}$ fraction-error headroom discussed above. This tightens, rather than weakens, the aggregation-bottleneck claim: even an ideal per-event aggregator over these three agents could not extract much more than the ${\sim}9 \times 10^{-3}$ we report, because shared architectural and training-data priors have already destroyed most of the cross-agent diversity that an ideal pool would have available.
+
+Whether the headroom is recoverable by any realizable aggregator is the next question. We tested eight aggregators in two families: per-event aggregators that operate directly on the agents' hard predictions or softmaxes (hard-label majority voting; uniform score-averaging; per-agent temperature-calibrated soft voting; supervised logistic regression on the concatenated 15-dimensional softmax vector, vanilla and class-balanced; and a small MLP stacker, vanilla and class-balanced), and metric-aware MLP stackers that incorporate the fraction-error metric into the training objective (a CE + batch-fraction-matching loss with weight sweep, and a verifier-style mixture-sampling training; both described below). All stackers were fit on a stratified random half of the test set and evaluated on the held-out half (5 random splits, mean reported). The protocol does not use a separate held-out validation pool because the benchmark elicited only test-set predictions from each agent --- no validation predictions were solicited as part of the run --- so the test-set 50/50 split is the only available source of out-of-fold meta-learner training data. The test-set leakage caveat that follows is that each agent's best submission was already selected by Best@50 on the full test set, so input selection bias enters the meta-learner's inputs even though the meta-learner itself is trained on a clean half-split. This caveat is symmetric: the oracle selector and the best-single-agent reference both operate on the same Best@50-selected softmaxes as the stackers, so the oracle--stacker gap (the central observation of this subsection) is not explained by input-selection bias --- all three share it. A cleaner test would solicit held-out validation predictions never used for Best@50 selection, which the current benchmark protocol does not include and which we leave to future work. Because stacker evaluations use this 50/50 split, the oracle value in \Cref{tab:stackers} ($0.09597$) differs slightly from the full-test-set oracle quoted above ($0.09583$); the ${\sim}9 \times 10^{-3}$ headroom is unchanged at this precision. Results (mean fraction error on the eval half, $\Delta$ vs.\ Opus alone in $\sigma_{\rm noise}$ units):
+
+\begin{table}[H]
+\caption{Realized aggregators on the composition test set (50/50 stratified split, 5-seed mean).\label{tab:stackers}}
+\begin{tabularx}{\textwidth}{lCC}
+\toprule
+\textbf{Aggregator} & \textbf{Fraction error} & $\boldsymbol{\Delta}$ \textbf{vs.\ Opus} ($\sigma_{\rm noise}$) \\
+\midrule
+Opus alone (best single agent)             & $0.10509$ & --- \\
+Majority vote                              & $0.10509$ & $+0.00\sigma$ \\
+Score average (uniform softmax)            & $0.10514$ & $-0.13\sigma$ \\
+Calibrated soft-vote                       & $0.10516$ & $-0.18\sigma$ \\
+Stacker (LR, class-balanced)               & $0.10542$ & $-0.84\sigma$ \\
+Stacker (LR)                               & $0.10567$ & $-1.46\sigma$ \\
+Stacker (MLP, class-balanced)              & $0.10663$ & $-3.86\sigma$ \\
+Stacker (MLP)                              & $0.10696$ & $-4.69\sigma$ \\
+\midrule
+\multicolumn{3}{l}{\emph{Metric-aware variants:}} \\
+Stacker (MLP, CE + batch-fraction loss, $\alpha=100$) & $0.10643$ & $-3.36\sigma$ \\
+Stacker (MLP, verifier-style mixture training)        & $0.10566$ & $-1.43\sigma$ \\
+\midrule
+Oracle selector (upper bound)              & $0.09597$ & $+22.78\sigma$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\emph{None} of the eight realized aggregators recovers any of the oracle headroom; all are within $\pm 5\sigma_{\rm noise}$ of Opus alone, with most slightly worse. Uniform score-averaging and calibrated soft-voting are essentially no-ops; supervised per-event stackers (which optimize log-likelihood) actively hurt the metric, because the fraction-error objective is a \emph{mixture-marginal} statistic sensitive to systematic class biases that per-event log-likelihood does not penalize.
+
+\emph{Direct evidence of the objective--metric mismatch.} On the eval half (5-seed mean), the LR stacker achieves NLL $= 1.056$ against Opus alone's $1.058$: strictly better on the per-event log-likelihood objective it is trained against, yet its fraction error is $5.8 \times 10^{-4}$ worse. The MLP stacker shows the same pattern. A stacker doing better on the objective it optimizes while losing on the target metric is the sharpest evidence that the bottleneck is an objective--metric mismatch --- not a statistical fluke over correlated agent errors, and not a failure of the stackers on their own training loss.
+
+The two metric-aware variants test whether matching the loss to the metric helps. The first adds an auxiliary batch-fraction-matching MSE term to the per-event cross-entropy (the technique used by Opus's v8 base classifier, transposed to operate over the meta-learner's output) and sweeps the weight $\alpha$ over $\{1, 10, 100, 1000\}$; $\alpha=100$ is reported (full sweep: $-4.47\sigma, -4.21\sigma, -3.36\sigma, -3.95\sigma$ at $\alpha=1,10,100,1000$). The second trains the meta-learner with verifier-style mixture sampling: each step draws a random 5-class mixture from a Dirichlet prior, samples events from the train half according to that mixture, and minimizes MSE between predicted and target soft fractions --- a near-direct analog of the verifier's metric. Both reduce the gap relative to the per-event LR/MLP stackers (verifier-style sits at $-1.43\sigma$, comparable to the best per-event stackers and substantially better than vanilla MLP at $-4.69\sigma$), but neither beats Opus alone; the verifier-style variant sits within training-recipe noise of the best single agent.
+
+Interpreting this null result requires the independence-null analysis above. Objective mismatch (per-event log-likelihood vs.\ mixture-marginal fraction error) alone would predict that a metric-matched objective should help; the verifier-style variant --- which closely mirrors the verifier's mixture-sampling structure, though it samples Dirichlet mixtures rather than the fixed grid used at evaluation --- does not beat Opus. The correlated-errors analysis supplies the missing piece: most of the cross-agent diversity an ideal independent pool would contribute has been collapsed upstream by shared architectural and training-data priors, so the softmax stack the meta-learner operates on contains only a small residual of unshared diversity. Matching the meta-learner objective to the metric is thus not sufficient in isolation; three classes of aggregators we have not tested --- shower-feature-conditioned routers, mixture-density meta-learners, and oracle distillation --- are discussed as the most direct ML follow-ups in \Cref{sec:future_work}, though the correlated-errors observation suggests they face the same structural obstacle, and exhausting the design space is an ML-methodology question beyond the scope of this benchmark paper.
+
+The picture in \Cref{fig:oracle_headroom} is therefore: the oracle headroom is real ($>20\sigma_{\rm noise}$), the agents' per-event diversity encodes genuine signal, but no aggregator we tested --- including ones explicitly trained against the metric --- extracts any of it. The bottleneck is stronger than ``standard stackers fail'': its structural origin is correlated agent errors, and closing the gap likely requires breaking that correlation (e.g.\ by including agents trained with deliberately different inductive biases, by adding non-classifier signals to the meta-learner, or by routing on shower features rather than agent softmaxes alone). \Cref{sec:overlap} decomposes the underlying agreement structure.
+
+\emph{Extending the oracle to all five agents.} Including Qwen and Kimi alongside Opus/GPT/Sonnet moves the per-event oracle to fraction error $0.0877$ (a further ${\sim}8 \times 10^{-3}$ below the 3-agent oracle), with oracle accuracy $59.2\%$ and an independence-null-oracle accuracy of $95.5\%$; the realized/independence-null gain ratio is ${\sim}18\%$ at five agents versus ${\sim}12\%$ at three. Qwen and Kimi therefore contribute some uncorrelated error structure not captured by the top three, but remain heavily correlated with them --- the overall picture does not change. We report the 3-agent version as primary because it matches the protocol of the stacker comparisons (matched 15-dim softmax input; Kimi's submission is a weight search over pre-trained models without a cleanly measured $\sigma_{\rm ensemble}$, and Qwen's run was truncated at 32/50 attempts, so both are less suitable as stacker inputs than as oracle contributors).
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_oracle_headroom.pdf}
+\caption{Best-single-agent vs.\ realized aggregators vs.\ per-event oracle on composition. Five frontier agents (blue) converge to a narrow ${\sim}0.105$ band on the dataset's mean fraction error metric. Eight realized aggregators over the three best agents (orange: hard-label majority vote, score-average, calibrated soft-vote, vanilla and class-balanced LR/MLP stackers, plus two metric-aware MLP variants in \Cref{tab:stackers}) all sit within $\pm 5\sigma_{\rm noise}$ of the best single agent --- none recovers any of the oracle headroom. The per-event oracle selector (green) reaches $0.0960$, a ${\sim}9 \times 10^{-3}$ headroom (${>}20\sigma_{\rm noise}$, gray band $=$ \Cref{tab:noise_floor} $\sigma$) that no tested aggregator extracts.\label{fig:oracle_headroom}}
+\end{figure}
+
+\subsection{Gamma/Hadron Separation}
+
+\Cref{fig:convergence_gamma} shows the convergence curves for all agents on the gamma/hadron task.
+
+Sonnet~4.6 achieved $3.79 \times 10^{-4}$ hadronic survival at 75\% gamma efficiency after 50 attempts --- a $14\times$ improvement over the $5.17 \times 10^{-3}$ Random Forest reference measured at the same operating point (\Cref{sec:baselines}). All per-agent improvement factors below use this same reference. The agent's trajectory shows three phases: rapid initial improvement (4 improvements in 5 attempts) reaching $4.38 \times 10^{-4}$ via ensemble of three CNN variants; a long plateau broken at attempt~25 through physics-motivated consistency features (muon/electron consistency, centroid distance); and a final improvement at attempt~47 using test-time augmentation (D4 symmetry group) on the best single model. Across 50 attempts, the agent explored CNNs, ResNets, transformers, gradient boosting, stacking meta-learners, and various ensembling strategies.
+
+Opus~4.6 achieved $2.63 \times 10^{-4}$ (9~hadrons) after 50 attempts---a $20\times$ improvement. Opus converged fastest, reaching its best result by attempt~10 with a 3-seed dual-branch CNN using squeeze-and-excitation attention, focal loss, and geometric mean ensembling. The remaining 40 attempts exhaustively explored alternative architectures (Vision Transformers, muon-focused CNNs, triple-branch networks), training strategies (MixUp, SWA, distribution-matched validation), and ensembling methods (arithmetic, harmonic, trimmed mean, logit averaging, stacking GBT on CNN embeddings)---none of which improved on the initial result.
+
+GPT-5.4 achieved $2.92 \times 10^{-4}$ (10~hadrons) after 50 attempts---an $18\times$ improvement. GPT took a distinctly different path: it discovered pairwise ranking loss and asymmetric focal loss early (attempts 9 and 18), then spent the remaining budget on increasingly sophisticated gated ensembles combining full-pool and in-domain focal CNNs with feature-based routing. Its best result came at attempt~31 via a feature-gated ensemble. Notably, GPT was the only agent to explore domain-classifier-weighted ensembles and tail-specific loss functions.
+
+Kimi~K2.5 achieved $4.09 \times 10^{-4}$ (14~hadrons) after 50 attempts---a $13\times$ improvement. Kimi employed a distinctive breadth-first strategy: rather than iterating on architecture or loss functions, it trained large pools of CNNs (up to 30 seeds of the same architecture) and submitted multiple top-$K$ selections per pool. This brute-force approach reached the Poisson noise band but converged more slowly than the other agents, with its best result arriving at attempt~40. In a separate run using the experimental KimiClaw harness (OpenClaw-based, browser-hosted), the same Kimi~K2.5 model achieved $3.21 \times 10^{-4}$ (11~hadrons) in only 7 attempts before the session crashed, reaching this level through test-time augmentation on a deeper CNN.
+
+Qwen~3.6-Plus achieved $3.50 \times 10^{-4}$ (12~hadrons) after 27 attempts (run terminated early at 27/50, see \Cref{tab:agents}). Qwen built diverse ResNet ensembles with varied hyperparameters (weight decay, focal loss gamma), discovering that asymmetric loss functions and architectural diversity within the ensemble were more effective than increasing ensemble size.
+
+\subsubsection{Test Set Saturation}
+\label{sec:test_saturation}
+
+The gamma test set contains 34{,}267 hadrons after quality cuts (zenith angle $\theta < 30^\circ$, $\log_{10} N_e > 4.8$, $0.2 < s < 1.48$, following~\cite{kascade_jinst}). At the performance level reached by the agents, the metric is determined by the count of individual surviving hadrons:
+Opus's best of $2.63 \times 10^{-4}$ corresponds to 9~hadrons, GPT-5.4's $2.92 \times 10^{-4}$ to 10, KimiClaw's $3.21 \times 10^{-4}$ to 11, Qwen's $3.50 \times 10^{-4}$ to 12, Sonnet's $3.79 \times 10^{-4}$ to 13, and Kimi's $4.09 \times 10^{-4}$ to 14~hadrons out of 34{,}267. The metric is quantized in steps of $1/34{,}267 \approx 2.9 \times 10^{-5}$. For two Poisson counts $N_i, N_j$, the pairwise significance is $z = (N_i - N_j) / \sqrt{N_i + N_j}$; the largest separation (Opus vs.\ Kimi) gives $\Delta = 5$, $\sigma_\Delta = \sqrt{23} \approx 4.80$, $z = 5/\sqrt{23} \approx 1.04$ --- so all pairs satisfy $z \lesssim 1$. The agents' results are statistically consistent with a common underlying rate, and the benchmark is effectively saturated at the resolution of the available Monte Carlo statistics. Kimi K2.5, the only open-weight model in the evaluation (\Cref{tab:agents}), reaches the same Poisson-consistent band as the four proprietary agents at both its Kimi Code run (14 hadrons) and the KimiClaw run (11 hadrons).
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_convergence_gamma.pdf}
+\caption{Convergence curves (Best@$N$) for gamma/hadron separation. Each line represents one agent. Dashed line = Random Forest reference at 75\% gamma efficiency ($5.17 \times 10^{-3}$, \Cref{sec:baselines}). Green shaded band = Poisson $\pm 1\sigma$ around the best result, indicating the statistical noise floor of the test set.\label{fig:convergence_gamma}}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{fig_trajectory_gamma_opus_46.pdf}
+\caption{Research trajectory for Opus~4.6 on gamma/hadron separation (best-performing agent on this task). The agent achieved 6 improvements in 50 attempts, all within the first 10 attempts, followed by 40 attempts at the Poisson noise floor. Trajectories for all other agents are provided in \Cref{app:trajectories}.\label{fig:trajectory_opus}}
 \end{figure}
 
 
@@ -283,41 +392,71 @@ Kimi~K2.5 achieved $0.1063$ after 50 attempts --- the weakest composition result
 \section{Application to Real KASCADE Data}
 \label{sec:real_data}
 
-The benchmark agents produced classifiers that substantially outperform published baselines on Monte Carlo data. A natural next step is to apply these classifiers to real KASCADE measurements and examine whether the improvements on simulation translate to new insights about the actual data.
+We apply the best agent-built classifiers to real KASCADE archival data to verify consistency with published results and to characterize how the classifiers behave outside the simulation environment they were trained on. \emph{This section is the primary contact between agent-built models and real KASCADE measurements; astrophysics-oriented readers may read it largely in isolation, and ML readers focused on agent behavior may skim it for the sim/data gap discussion in \Cref{sec:real_gamma} that motivates the metric-design lessons of \Cref{sec:metric_lessons}.}
 
 \subsection{Composition: Spectral Reproduction}
 
-% TODO: Run the best composition model (Opus v34) on real KASCADE data and update this section.
-% Current figures use an earlier pilot model, not the best agent-built model.
-To validate that agent-built classifiers produce physically meaningful results, we ran a composition classifier on all 1308 runs of the KASCADE archive (1,572,349 events after quality cuts with $\theta_z < 18^{\circ}$) and applied confusion matrix unfolding (\Cref{fig:real_spectra,fig:unfolded_components}).
+\paragraph{The deployed model.} All real-data composition analyses below use \emph{Opus v34}: a 5-model softmax-averaged ensemble with 16-way test-time augmentation per component, comprising two NetV8 networks (a CNN backbone fused with scalar features) trained with AdamW under different schedules (150-epoch with validation early stopping; 100-epoch full schedule), two NetV26 networks (deep feature MLP on 11 engineered shower features) trained with AdamW and SGD+Nesterov respectively, and one NetConvNeXt. Component training scripts and trained weights are in the public repository (\Cref{tab:ensemble_sigma} reports the per-recipe stochasticity of this ensemble across three independent retrains). The same model is used in the cross-agent oracle and stacker analyses of \Cref{sec:agg_headroom} and the overlap analysis of \Cref{sec:overlap}, so all composition analyses throughout the paper are traceable to this single ensemble.
+
+We applied this model to 1{,}308 KASCADE runs released through KCDC~\cite{kcdc_sim_manual}, spanning May~1998 -- November~2012. Applying the quality cuts matching the published CNN analysis~\cite{kascade_jinst} ($\theta_z < 18^{\circ}$, fiducial core-position cut $\sqrt{x^2 + y^2} < 91$~m, $\log_{10} N_e > 4.8$, $\log_{10} N_\mu > 3.6$, $0.2 < \mathrm{Age} < 1.48$, and $\log_{10}(E/\mathrm{eV}) > 15.15$), 653{,}232 events remain --- consistent with the ${\sim}0.7$~M events in the unblind 20\% subset used by~\cite{kascade_jinst} for its Fig.~17 diagnostic. We reproduce two of its diagnostics: the simulation-derived confusion matrix (\Cref{fig:opus_confmat}) and the folded per-species energy spectra (\Cref{fig:opus_folded}).
+
+\subsubsection{Confusion Matrix}
+
+On the QGSJet-II.04 simulation test set (115{,}064 events), the ensemble reaches an overall accuracy of 0.5146 (mean per-class diagonal 0.5118). Per-class confusion-matrix diagonals (published CNN~\cite{kascade_jinst} $\to$ Opus v34): $p$ $0.60 \to 0.64$, He $0.41 \to 0.41$, C $0.44 \to 0.40$, Si $0.44 \to 0.42$, Fe $0.57 \to 0.69$; mean diagonal $0.49 \to 0.51$.
 
 \begin{figure}[H]
-\includegraphics[width=0.7\textwidth]{fig_real_spectra.pdf}
-\caption{Folded mass composition spectra from real KASCADE data ($\theta_z < 18^{\circ}$, 1.57M events) classified by an agent-built model. The expected mass group ordering is visible: proton-dominated at lower energies with heavier elements contributing at higher energies, consistent with published results~\cite{kascade_jcap}.\label{fig:real_spectra}}
+\includegraphics[width=0.55\textwidth]{fig_confusion_matrix.pdf}
+\caption{Row-normalized confusion matrix of the Opus v34 ensemble on the QGSJet-II.04 simulation test set (115{,}064 events; overall accuracy 0.5146, mean per-class diagonal 0.5118). Directly comparable to Figure~10(a) of~\cite{kascade_jinst}.\label{fig:opus_confmat}}
 \end{figure}
 
+\Cref{fig:opus_confmat} is averaged over all simulation energies; the energy-dependent confusion of~\cite[Sec.~4.3]{kascade_jinst} and the uniform- and grid-mixture bias diagnostic of~\cite[Fig.~7]{kascade_jinst} are not reproduced here. Both are deferred to a dedicated composition paper alongside the full unfolded-spectrum reproduction (\Cref{sec:future_work}).
+
+\subsubsection{Folded Energy Spectra}
+
+\Cref{fig:opus_folded} reproduces the features of~\cite[Fig.~17]{kascade_jinst}: proton dominance below $\sim 10^{16}$~eV with a knee-like feature at $\sim 3$--$5$~PeV, species crossover between $2$--$3 \times 10^{16}$~eV, and iron dominance above $\sim 10^{16.7}$~eV.
+
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{fig_unfolded_components.pdf}
-\caption{Unfolded energy spectra per mass component from real KASCADE data, using energy-dependent confusion matrix inversion. The proton spectrum shows the knee feature at $\sim$3--5~PeV, consistent with the published measurement of $4.4 \pm 0.7$~PeV~\cite{kascade_jcap}. Error bars reflect statistical uncertainty propagated through the unfolding procedure.\label{fig:unfolded_components}}
+\includegraphics[width=0.75\textwidth]{fig_folded_spectra.pdf}
+\caption{Folded mass composition spectra on real KASCADE data, $\theta_z < 18^{\circ}$, 1{,}308 runs, classified by the Opus v34 ensemble. Directly comparable to Figure~17 of~\cite{kascade_jinst}. Error bars are statistical only.\label{fig:opus_folded}}
 \end{figure}
+
+The curves are folded: each per-species turn-over is a convolution of the true flux with the confusion matrix of \Cref{fig:opus_confmat}. The feature in the proton curve at $\sim 3$--$5$~PeV is therefore not directly comparable to the $4.4 \pm 0.7$~PeV proton knee of~\cite{kascade_jcap}, which requires per-energy-bin matrix inversion (deferred to a dedicated composition paper, \Cref{sec:future_work}). Training uses QGSJet-II.04 only; EPOS-LHC and SIBYLL systematics are not bounded. At $\log_{10}(E/\mathrm{eV}) > 16.5$ statistics are thin and the sim/data feature discrepancy documented for the gamma task (\Cref{sec:real_gamma}) places the ensemble on out-of-distribution inputs.
 
 \subsection{Gamma/Hadron: Candidate Search}
+\label{sec:real_gamma}
 
-We applied the best gamma classifier (Opus~4.6, v5b: 3-seed DualBranch CNN geometric mean ensemble, $p_\mathrm{survival} = 2.63 \times 10^{-4}$ on simulation) to 3,337,366 real KASCADE events passing quality cuts. The threshold was calibrated at 75\% gamma efficiency on the simulation test set.
+We applied the best gamma classifier (Opus~4.6 v5b, a variant of the attempt-5 recipe: a 3-seed DualBranch CNN geometric mean ensemble, $p_\mathrm{survival} = 2.63 \times 10^{-4}$ on simulation) to $3{,}337{,}366$ real KASCADE events passing quality cuts. The threshold was calibrated at 75\% gamma efficiency on the simulation test set --- a \emph{global} sim-averaged efficiency, not a uniform operating point.
 
-Two caveats are important. First, the per-bin gamma efficiency at this global threshold varies from 50\% (at $E = 15.0$--$15.5$) to 97\% (at $E > 17$), and the per-bin hadronic survival rate varies by two orders of magnitude. The global 75\% gamma efficiency is a weighted average dominated by low-energy bins, not a uniform operating point. Second, the training data is dominated by low-energy events (following the steeply falling cosmic ray spectrum), so the classifier received far more optimization pressure at low energies than at high energies.
+Per energy bin, the same global threshold corresponds to a gamma efficiency that varies substantially: from 50\% (at $E = 15.0$--$15.5$) to 97\% (at $E > 17$), and the per-bin hadronic survival rate varies by two orders of magnitude. The global 75\% gamma efficiency is a weighted average dominated by low-energy bins, not a uniform operating point. Additionally, the training data is dominated by low-energy events (following the steeply falling cosmic ray spectrum), so the classifier received far more optimization pressure at low energies than at high energies.
 
 \subsubsection{Global Results}
 
-At the simulation-calibrated threshold, 763 real events pass the classifier out of 3,337,366 --- compared to 877 expected from the MC-calibrated survival rate. The ratio of 0.87 indicates that real hadrons are rejected ${\sim}13\%$ more efficiently than MC hadrons at this threshold.
+At the simulation-calibrated threshold, the per-bin real/expected ratios (\Cref{tab:sim_data_perbin}) are strongly energy-dependent and \emph{change sign}. At $\log_{10}(E/\mathrm{eV}) \in [14.0, 14.5]$ the classifier admits $26\%$ \emph{more} real events than MC predicts (ratio 1.26); at $\log_{10}(E/\mathrm{eV}) \in [14.5, 15.5]$ it admits $45$--$80\%$ fewer (ratio 0.20--0.55); and at $\log_{10}(E/\mathrm{eV}) > 16$ it passes \emph{zero} real events against ${\sim}21$ expected from MC (ratio 0.00, full suppression below MC). The corresponding global counts (763 real events passing out of 3{,}337{,}366 vs.\ 877 MC-calibrated predicted) are dominated by the low-energy bulk and not informative about the high-energy regime relevant to the candidate search.
 
-\subsubsection{Kostunin's Walk-Up-The-Ladder}
+\begin{table}[H]
+\caption{Per-energy-bin sim/data calibration at the global 75\%-gamma-efficiency threshold. $N_\mathrm{real}$: real events passing quality cuts in the bin. Real pass: real events above threshold. Expected: predicted from MC-calibrated hadron survival in the same bin. Ratio: real/expected; a dash indicates a bin where the MC-calibrated expected count rounds to zero, leaving the ratio undefined.\label{tab:sim_data_perbin}}
+\begin{tabularx}{0.85\textwidth}{lCCCC}
+\toprule
+\textbf{E bin} & $N_\mathrm{real}$ & \textbf{real pass} & \textbf{MC expected} & \textbf{real/expected} \\
+\midrule
+14.0--14.5 & 24{,}571     & 266 & 211.8 & 1.26 \\
+14.5--15.0 & 912{,}474    & 475 & 871.3 & 0.55 \\
+15.0--15.5 & 2{,}017{,}080 & 22  & 108.2 & 0.20 \\
+15.5--16.0 & 344{,}942    & 0   & 0.0   & --- \\
+16.0--16.5 & 34{,}123     & 0   & 15.7  & 0.00 \\
+16.5--17.0 & 3{,}743      & 0   & 5.5   & 0.00 \\
+17.0--18.0 & 433          & 0   & 0.0   & --- \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-Following the methodology of~\cite{kascade_icrc}, we tighten the energy cut until the expected hadronic background drops below 1 event. At $E > 16.5$ (3,743 real events, ${\sim}1$ expected background) and $E > 17.0$ (433 events, ${\sim}0.1$ expected), zero events pass the classifier. This is consistent with the prior KASCADE gamma-ray point source search~\cite{kascade_icrc} and with the ICRC~2015 analysis by Kang et al., which found no significant point sources.
+\subsubsection{Energy-Dependent Background Estimation}
+
+Following our prior search methodology~\cite{kascade_icrc}, we tighten the energy cut until the expected hadronic background drops below 1 event. At $E > 16.5$ (3,743 real events, ${\sim}1$ expected background) and $E > 17.0$ (433 events, ${\sim}0.1$ expected), zero events pass the classifier. This is consistent with the prior KASCADE gamma-ray point source search~\cite{kascade_icrc} and with the ICRC~2015 point source search by Kang et al.~\cite{kang_icrc2015}, which found no significant excess apart from a single $5.5\sigma$ hotspot at RA~$= 77.75^\circ$, Dec~$= 70.85^\circ$.
 
 \subsubsection{Per-Bin Score Distributions}
 
-Examining the classifier's score distributions per energy bin reveals a more nuanced picture (\Cref{tab:real_scores}).
+\Cref{tab:real_scores} shows the classifier's score distributions per energy bin on real data, compared to the sim gamma median.
 
 \begin{table}[H]
 \caption{Real data score distributions per energy bin compared to simulation. Scores represent $P(\mathrm{gamma})$ from the Opus v5b 3-seed ensemble.\label{tab:real_scores}}
@@ -336,16 +475,16 @@ Examining the classifier's score distributions per energy bin reveals a more nua
 \end{tabularx}
 \end{table}
 
-Two patterns emerge. First, the bulk median is roughly constant across energy (${\sim}0.20$--$0.28$), as expected for a predominantly hadronic sample. Second, the score distribution tail compresses sharply at high energy: the max/median ratio drops from $4.4\times$ at $E = 14.5$--$15.0$ to $1.6\times$ at $E > 17$. At low energies ($E < 15.5$), real data produces outlier events with scores comparable to the sim gamma median ($0.83$--$0.90$). At high energies ($E > 15.5$), no real event reaches even half the sim gamma median ($0.97$).
+The bulk median is roughly constant across energy (${\sim}0.20$--$0.28$), as expected for a predominantly hadronic sample. However, the score distribution tail compresses sharply at high energy: the max/median ratio drops from $4.4\times$ at $E = 14.5$--$15.0$ to $1.6\times$ at $E > 17$. At low energies ($E < 15.5$), real data produces outlier events with scores comparable to the sim gamma median ($0.83$--$0.90$). At high energies ($E > 15.5$), no real event reaches even half the sim gamma median ($0.97$).
 
-This compression is observed despite the high-energy bins having sufficient statistics (34K events at $E = 16.0$--$16.5$) where, under a stationary score distribution, more extreme tail events would be expected. The likely explanation is a combination of two factors: (1)~the classifier received less training signal at high energies due to the steeply falling energy spectrum, and (2)~the known discrepancies between hadronic interaction models (QGSJet-II, EPOS-LHC, SIBYLL) and real data~\cite{kcdc_sim_manual} affect the classifier's feature space at high energy.
+The compression is not a small-sample artifact of the real data: the real sample contains $3.4 \times 10^4$ events at $E = 16.0$--$16.5$, enough that, under a score distribution stationary in energy, tail draws approaching the sim gamma median would be expected. The sim training set is also not numerically sparse at this energy --- it contains ${\sim}1.6 \times 10^4$ hadrons and ${\sim}2 \times 10^3$ gammas in the $16.0$--$16.5$ bin. Sim statistics do begin to thin out above $10^{16.5}$~eV (a few thousand hadrons and ${\sim}10^3$ gammas per half-decade), and both the training set and the test set follow the steeply falling cosmic-ray spectrum. The compression therefore points to a qualitative shift in the feature-to-score mapping at high energy rather than a pure sample-size effect: consistent with the known discrepancies between hadronic interaction models (QGSJet-II, EPOS-LHC, SIBYLL) and real data~\cite{kcdc_sim_manual}, which act most strongly at high energy, and with the classifier's decision surface being calibrated on a feature distribution that does not match the real one there.
 
 \subsubsection{Top Candidates at PeV Energies}
 
 The five highest-scoring real events at $E > 16$ are:
 
 \begin{table}[H]
-\caption{Top-5 highest-scoring real events at $\log_{10}(E/\mathrm{eV}) > 16$. None are within 16$^\circ$ of any LHAASO catalog source.\label{tab:pev_candidates}}
+\caption{Top-5 highest-scoring real events at $\log_{10}(E/\mathrm{eV}) > 16$, scored by the Opus v34 ensemble. ``had pct'' = percentile rank within the simulated hadron score distribution at $E > 16$ (higher = rarer among hadrons); ``$\gamma$ pct'' = percentile within the simulated gamma distribution at $E > 16$ (lower = less gamma-like). LHAASO catalog~\cite{lhaaso_catalog} separation analysis in the text below.\label{tab:pev_candidates}}
 \begin{tabularx}{\textwidth}{CCCCCCC}
 \toprule
 \textbf{Score} & $\log_{10}(E)$ & $\theta_z$ & $\log_{10}(N_e/N_\mu)$ & \textbf{had pct} & \textbf{$\gamma$ pct} & \textbf{Run} \\
@@ -359,15 +498,9 @@ The five highest-scoring real events at $E > 16$ are:
 \end{tabularx}
 \end{table}
 
-The ``had pct'' column gives the percentile rank within the sim hadron score distribution at $E > 16$ (higher = rarer among hadrons). The ``$\gamma$ pct'' column gives the percentile within the sim gamma distribution (lower = less gamma-like). The top event (run~1971, $E = 16.114$, score~0.752) sits above 99.94\% of sim hadrons but below 91\% of sim gammas at this energy. Run~1971 was independently identified by a different agent (Sonnet~4.6) using a different architecture, and was also flagged in a prior analysis using a Keras MLP from a 2023 workshop. Run~4281 ($E = 16.020$) was likewise flagged by Sonnet. Neither event is spatially associated with any known gamma-ray source (angular distance $> 18^\circ$ to nearest LHAASO catalog entry).
+The top event (Run~1971, $E = 16.114$, score~0.752) sits at the 99.94th percentile of the sim hadron score distribution at this energy --- rare for a hadron --- but only at the 8.6th percentile of the sim gamma distribution. Two of the top five candidates --- Run~1971 and Run~4281 --- were independently identified by Sonnet~4.6 using a different architecture, indicating the candidate set is not an artifact of one model class. LHAASO-source separations across the five candidates range from $5.3^\circ$ (Run~7231 to 1LHAASO~J0056+6346) to $27.7^\circ$ (Run~1471 to 1LHAASO~J0703+1405); the two cross-agent corroborated candidates have separations of $20.0^\circ$ (Run~1971 to 1LHAASO~J2108+5153) and $11.0^\circ$ (Run~4281 to 1LHAASO~J0206+4302). All five separations are at least $5\times$ larger than KASCADE's ${\sim}1^\circ$ angular resolution at PeV energies; they are also consistent with the ${\sim}10^\circ$ scale expected for the nearest-source distance of a random position under a uniform null over KASCADE's declination-restricted FoV ($19^\circ < \delta < 79^\circ$, ${\sim}4$~sr, against the 90-source 1LHAASO catalog~\cite{lhaaso_catalog}). No event is therefore spatially associated with a catalog source.
 
-These events are consistent with the prior KASCADE null result on PeV gamma-ray point sources~\cite{kascade_icrc}. Their scores place them in the extreme tail of the hadronic distribution but well below the simulated gamma bulk, and the observed score compression at high energy means that the MC-calibrated thresholds cannot be straightforwardly applied to real data at these energies.
-
-\subsubsection{Future Work: Energy-Aware Metrics and Distribution Shift}
-
-The global 75\% gamma efficiency metric, while matching the published methodology and enabling fair agent comparison, averages over energy bins where the classifier's behavior differs qualitatively. Because the training set follows the steeply falling cosmic ray spectrum, agents naturally optimize for the abundant low-energy regime at the expense of high-energy performance --- precisely where the physics is most interesting for gamma-ray searches.
-
-For future benchmarks targeting specific energy ranges, we recommend: (1)~energy-weighted or energy-binned evaluation metrics that direct optimization pressure toward the scientifically relevant regime; and (2)~metrics that explicitly penalize sensitivity to simulation-specific features, incentivizing classifiers that are robust to the known discrepancies between Monte Carlo and real measurements.
+\emph{Rate comparison.} The MC-calibrated hadronic background at $\log_{10}(E/\mathrm{eV}) > 16$ is 21 events at the 75\%-gamma-efficiency threshold (\Cref{tab:sim_data_perbin}), where zero real events pass --- MC over-predicts at high energy. At the lower score $> 0.5$ threshold used for \Cref{tab:pev_candidates}, 5 real candidates out of 38{,}299 events above $E > 16$ ($1.3 \times 10^{-4}$) sit in the extreme tail of the real hadron score distribution ($p_{99.9} = 0.373$ at $\log_{10}(E/\mathrm{eV}) \in [16.0, 16.5]$, \Cref{tab:real_scores}), not at the sim-calibrated gamma score bulk at ${\sim}0.97$. The candidate list is therefore consistent with the prior KASCADE null result on PeV gamma-ray point sources~\cite{kascade_icrc}; the observed sim--real score compression at high energy (\Cref{tab:real_scores}) means that MC-calibrated thresholds cannot be straightforwardly applied to real data at these energies, so an absolute-rate gamma-ray search from these classifiers would require a calibration protocol robust to that mismatch, which we leave to future work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
@@ -375,100 +508,95 @@ For future benchmarks targeting specific energy ranges, we recommend: (1)~energy
 
 \subsection{Architecture Diversity}
 
-Despite arriving at similar final performance, agents explored markedly different architectures and training strategies. On the gamma task, Opus discovered dual-branch CNNs with squeeze-and-excitation attention and geometric mean ensembling; GPT developed pairwise ranking losses and feature-gated domain-expert ensembles; Sonnet introduced physics-motivated consistency features and test-time augmentation using the detector's D4 symmetry; Kimi trained large pools of identical CNNs and searched over top-$K$ selections; and Qwen built diverse ResNet ensembles with varied hyperparameters. On the composition task, Opus used knowledge distillation from multi-model teacher ensembles and a pure feature MLP; GPT explored ordinal auxiliary heads with batch composition losses; and Sonnet discovered FiLM conditioning on energy and Earth Mover's Distance ordinal loss. The convergence of diverse approaches to a narrow performance band --- despite fundamentally different architectures and loss functions --- provides evidence that the performance ceiling is determined by the data rather than by any particular modeling choice.
+Agents explored markedly different architectures and training strategies across the two tasks (per-agent details in \Cref{sec:results}), yet converged to narrow performance bands on both. The two plateaus are structurally asymmetric: gamma convergence reflects an information-exhausted simulation test set (\Cref{sec:test_saturation}), while composition convergence is a soft plateau rooted in heavily correlated agent errors that no tested aggregator recovers (\Cref{sec:agg_headroom}) --- the architectural diversity is present but not extractable at the metric level. Closing the composition gap likely requires diversifying the agent pool upstream (different inductive biases, non-classifier signals routed on shower features) rather than refining the meta-learner alone.
 
-\subsection{Comparison with Published Results}
+\subsection{Improvement over Published Baselines and the Composition Ceiling}
 
-% TODO: Update Qwen composition result when experiment completes
-On the composition task, all agents improved upon the published fraction error of 0.107~\cite{kascade_jinst}, with best results of 0.1051 (Opus), 0.1052 (GPT), 0.1054 (Sonnet), 0.1060 (Qwen), and 0.1063 (Kimi). On the gamma task, agents achieved hadronic survival rates of $2.6$--$4.1 \times 10^{-4}$ at 75\% gamma efficiency, representing a $24$--$38\times$ improvement over the published random forest baseline of $\sim 10^{-2}$~\cite{kascade_icrc}. These improvements come from standard deep learning techniques (CNNs, ensembling, augmentation, focal loss) that were not explored in the original publications, which used simpler architectures (LeNet, Random Forest) without modern training recipes.
+On the composition task, all agents improved upon the published fraction error of 0.107~\cite{kascade_jinst}, with best results of 0.1051 (Opus), 0.1052 (GPT), 0.1054 (Sonnet), 0.1060 (Qwen), and 0.1063 (Kimi). On the gamma task, agents achieved hadronic survival rates of $2.6$--$4.1 \times 10^{-4}$ at 75\% gamma efficiency, a $13$--$20\times$ improvement over a Random Forest reference baseline measured on the same data at the same operating point ($5.17 \times 10^{-3}$, see \Cref{sec:baselines}). These gains come from standard deep learning techniques (CNNs, ensembling, augmentation, focal loss) that were not explored in the original publications, which used simpler architectures (LeNet, Random Forest) with simpler training procedures.
 
-\subsection{The Confusion Matrix Ceiling}
+The composition improvement bottoms out at a ceiling visible already in pilot experiments during benchmark development: all training strategies applied to the same CNN+Attention architecture converged to fraction errors of 0.1057--0.1068. The agents confirmed this ceiling and pushed it slightly lower (0.1051--0.1063) through loss-function innovations (batch fraction matching, EMD ordinal loss, class-balanced sampling), but the fundamental limit persists. The dominant sources of error are proton--helium and silicon--iron confusion, driven by overlapping $N_e/N_\mu$ distributions (\Cref{fig:separation}). Breaking through this ceiling likely requires additional input features (e.g., timing information, core position) or fundamentally different representations. The per-agent strategies for working against the ceiling are described in \Cref{sec:results}.
 
-Pilot experiments during benchmark development revealed a performance ceiling: all training strategies applied to the same CNN+Attention architecture converged to fraction errors of 0.1057--0.1068. The agents confirmed this ceiling and pushed it slightly lower (0.1051--0.1063) through loss-function innovations (batch fraction matching, EMD ordinal loss, class-balanced sampling), but the fundamental limit persists. The dominant sources of error are proton--helium and silicon--iron confusion, driven by overlapping $N_e/N_\mu$ distributions. Breaking through this ceiling likely requires additional input features (e.g., timing information, core position) or fundamentally different representations.
+\subsection{Cross-Agent Prediction Overlap}
+\label{sec:overlap}
 
-All agents discovered this ceiling independently and responded differently: Opus explored broadly across architectures before finding a deep MLP that matched its ensemble; GPT performed exhaustive single-variable hyperparameter ablation; Sonnet persisted through a 20-attempt plateau before discovering EMD loss at attempt~49; Kimi exhausted its budget on combinatorial ensemble search without finding loss-function innovations.
+Cross-agent prediction overlap reveals how much of the diversity across agents (\Cref{sec:results}) sits at the event level.
 
-\subsection{Cross-Agent Prediction Diversity}
+\textit{Gamma survivors.} Of the 17 unique hadrons that survive any of the three best gamma classifiers (Opus, GPT, Sonnet) at 75\% gamma efficiency, 4 survive all three, 7 survive exactly two, and 6 survive only one (reconciling with the individual counts: $4 \times 3 + 7 \times 2 + 6 \times 1 = 32 =$ Opus's 9 + GPT's 10 + Sonnet's 13; \Cref{tab:overlap}). The 4 irreducible events share a physical signature: high $\log_{10}(N_e/N_\mu)$ ratios (1.9--2.6), consistent with proton showers where a leading $\pi^0$ produces an electromagnetic-dominated cascade mimicking a gamma-ray shower. Score combinations at the same 75\% threshold are worse than Opus alone (9 surviving hadrons): arithmetic-mean yields 11, geometric-mean 12 --- the same diversity-present-but-unhelpful pattern documented for composition in \Cref{sec:agg_headroom}.
 
-To assess whether running multiple agents adds value beyond selecting the best one, we analyzed the overlap of surviving hadrons (false positives) across the three best-performing gamma agents (Opus, GPT, Sonnet) at 75\% gamma efficiency.
-
-Of the 34{,}267 test hadrons, only 17 unique hadrons survive any of the three agents' classifiers. Of these, 4~hadrons survive all three agents' classifiers, 7~survive exactly two, and 6~survive only one (\Cref{tab:overlap}). The 4~irreducible events share a common physical signature: high $\log_{10}(N_e/N_\mu)$ ratios (1.9--2.6), consistent with proton showers where a leading $\pi^0$ produces an electromagnetic-dominated cascade that mimics a gamma-ray shower.
-
-Despite this diversity, a na\"ive cross-agent ensemble (averaging scores from all three agents) yields 11~surviving hadrons---worse than Opus's 9 alone. Geometric mean ensembling gives 12. The agents are diverse in \textit{which} hadrons they misclassify, but combining their scores shifts the decision threshold unfavorably.
+\textit{Composition agreement decomposition.} On composition, the 89.1\% agreement rate of \Cref{tab:overlap} decomposes into 47.2\% of events where all three agents agree \emph{and are correct}, and 41.9\% where all three converge on the same \emph{wrong} class. The 41.9\% agree-wrong fraction quantifies pool-level shared failure: on those events, three architecturally diverse classifiers all fail to the same class, evidence that the error is not agent-specific. The failure pattern tracks mass-ordering overlap: the agreement-wrong rate is 31\% for proton and 25\% for iron (the extreme classes) but 52\%, 51\%, and 51\% for helium, carbon, and silicon (the mass-adjacent classes with strongest feature overlap, \Cref{fig:separation}).
 
 \begin{table}[H]
-\caption{Cross-agent prediction diversity on both tasks.\label{tab:overlap}}
+\caption{Cross-agent prediction diversity on both tasks. The ``Cross-agent ensemble'' row uses task-appropriate operations: hard-label majority voting (argmax per agent, then mode) for composition, and arithmetic-mean score averaging for gamma. Composition fraction errors are reported to 5 decimals to show that the cross-agent ensemble and the best single agent differ by only $1 \times 10^{-5}$ --- essentially identical at the 4-decimal reporting precision of \Cref{tab:results_overview}, not improved.\label{tab:overlap}}
 \begin{tabularx}{\textwidth}{lCC}
 \toprule
-& \textbf{Gamma} & \textbf{Composition} \\
+& \textbf{Composition} & \textbf{Gamma} \\
 \midrule
-Survive/match all 3 classifiers & 4 hadrons & 89.1\% agreement \\
-Cross-agent ensemble & 11 hadrons & 0.1051 frac.\ error \\
-Best single agent & 9 hadrons (Opus) & 0.1051 (Opus) \\
+Survive/match all 3 classifiers & 89.1\% agreement & 4 hadrons \\
+Cross-agent ensemble & 0.10506 frac.\ error & 11 hadrons \\
+Best single agent & 0.10507 (Opus) & 9 hadrons (Opus) \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The composition task shows a similar pattern: agents agree on 89\% of predictions, and majority voting achieves a fraction error of 0.1051---matching the best single agent but not improving on it. When agents disagree (11\% of events), each is correct ${\sim}38\%$ of the time, and in 24\% of disagreements none of the three agents predicts correctly. Per-class analysis reveals complementary strengths (e.g., Sonnet is strongest on iron classification at 71.7\% vs.\ 68.7\% for Opus, while GPT leads on silicon at 42.8\%), but these do not translate to ensemble gains on the fraction error metric.
-
-The pattern is consistent across both tasks: despite exploring different architectures and training strategies, agents converge to similar performance, and na\"ive cross-agent ensembling does not improve over the best individual agent.
-
 \subsection{Lessons on Metric and Reward Design}
+\label{sec:metric_lessons}
 
-The benchmark's evaluation methodology evolved significantly during development. Early pilot experiments used classification accuracy as the primary metric, which proved poorly aligned with the downstream scientific goals: hadron filtering for gamma-ray astronomy and spectral unfolding for composition. We replaced accuracy with task-specific metrics --- hadronic survival rate at fixed gamma efficiency, and fraction error over random mixture compositions --- that directly reflect scientific utility.
+\emph{This subsection and \Cref{sec:de_exploit} target an AI/ML and benchmark-design audience: the lesson generalizes beyond astrophysics.}
 
-Even with task-specific metrics, we encountered subtle reward design pitfalls. Differential evolution (DE) optimization of per-class logit biases improved the benchmark metric by adapting predictions to the training simulation's class distribution. However, this adaptation is a form of overfitting to the Monte Carlo data: the biases tuned on balanced simulation distorted predictions when applied to real experimental data, where the true composition differs. The benchmark now prohibits post-processing to ensure models are directly applicable to real data. This illustrates a broader risk: AI agents will exploit any gap between the evaluation metric and the true scientific objective, and metric design must anticipate this.
+The evaluation methodology changed during development as we identified misalignments between proxy metrics and downstream scientific goals. Early pilot experiments used classification accuracy, which proved poorly aligned with hadron filtering for gamma-ray astronomy and spectral unfolding for composition. We replaced accuracy with task-specific metrics --- hadronic survival rate at fixed gamma efficiency, and fraction error over random mixture compositions --- that directly reflect scientific utility. The harder lesson, illustrated by the case study below, was that even task-specific metrics are necessary but not sufficient.
+
+\subsubsection{Case study: an early post-processing exploit}
+\label{sec:de_exploit}
+
+In an early Opus~4.6 pilot on composition (March~2026, predating the runs reported here), the agent applied differential-evolution optimization of per-class logit biases against the verifier grid, reducing the benchmark metric by adapting predictions to the training simulation's class distribution. Post-processing was not prohibited under the rules in force at that time. The biases, tuned against the verifier's uniform fraction-mixture grid (where every 5-class composition on a 0.1 step is equally weighted), do not transfer to real data: the real cosmic-ray composition is sharply energy-dependent --- protonic-dominant at low energies, iron-enhanced above the knee --- so corrections that maximize the simulation metric on uniform mixtures over-predict the heavy classes at low energy and under-predict them at high energy. The simulation metric gain therefore inverts, in part, on real data. The current benchmark prohibits post-processing. The lesson generalizes: closing paths from metric to scientific objective requires explicit negative specifications, not just well-aligned positive ones --- a metric specifies what to optimize, but a robust evaluation environment also has to specify what \emph{not} to optimize against.
 
 \subsection{The Simulation--Data Gap}
 
-% TODO: Re-run real-data analysis with best gamma model from each agent (current results use an intermediate model).
-When applying agent-built classifiers to 73 million real KASCADE events, we observed that the classifiers reject real hadrons approximately $2\times$ more efficiently than predicted by Monte Carlo simulations (820 events passing the gamma threshold versus ${\sim}1{,}450$ expected from the simulation-calibrated survival rate). This suggests that Monte Carlo simulations overrepresent ambiguous, hard-to-classify events relative to real data --- or equivalently, that classifiers trained on simulation generalize conservatively when applied to real measurements. While Monte Carlo performance remains a useful relative proxy (better MC scores correlate with better real-data rejection), the absolute survival rates differ by a factor of ${\sim}2$, which affects confidence estimates for gamma-ray searches.
+The per-bin sim/data discrepancy documented in \Cref{sec:real_gamma} (\Cref{tab:sim_data_perbin}, \Cref{tab:real_scores}) carries two cross-cutting implications. First, Monte Carlo performance remains a useful \emph{relative} proxy --- better MC scores correlate with better real-data rejection --- but absolute rates differ bin-by-bin and the discrepancy changes sign with energy, so confidence estimates for real-data deployment at the scientifically relevant high-energy end cannot be inherited from sim performance and a single global summary statistic should not be used. Second, benchmarks that score agents exclusively on simulation metrics risk selecting for classifiers that exploit simulation-specific features; explicit real-data validation of Best@$N$ submissions, and metrics that penalize simulation-feature sensitivity, are natural directions (\Cref{sec:future_work}).
 
 \subsection{From Benchmarking to Scientific Exploration}
 
-This benchmark was designed for controlled agent comparison: identical starting conditions, isolated runs, competitive evaluation against a fixed metric. While this protocol enables fair comparison, it is fundamentally different from the workflow needed for AI-assisted scientific discovery. In practice, one would want agents to be aware of each other's results, to cross-pollinate successful techniques, and to explore broadly before optimizing deeply. The 50-attempt budget, while sufficient for saturation in our setting, may be too short for tasks that require agents to formulate and test genuine scientific hypotheses rather than iterate on known deep learning recipes. We also note that fully autonomous operation, while necessary for controlled comparison, is not the expected mode of use: in a realistic scientific workflow, human researchers would provide periodic oversight --- redirecting agents when stuck, correcting misunderstandings about the domain, and pruning unproductive directions. Such human-in-the-loop guidance would likely improve stability and reduce wasted attempts. At the same time, fully autonomous agents may explore counter-intuitive directions that human researchers would dismiss prematurely --- the optimal balance between human oversight and agent autonomy remains an open question.
+\emph{This subsection targets harness-engineering and AI-deployment readers: the discussion is not specific to astrophysics.}
 
-We also found that the benchmark infrastructure itself required substantial engineering. The evaluation metric, data pipeline, quality cuts, and instruction document all underwent multiple revisions as we discovered edge cases, data precision issues, and evaluation leakage. These ``harness engineering'' challenges --- designing robust evaluation environments for autonomous agents --- are not specific to astrophysics and are likely to recur in any scientific domain where AI agents are deployed.
+This benchmark was designed for controlled agent comparison: identical starting conditions, isolated runs, competitive evaluation against a fixed metric. While this protocol enables fair comparison, it differs from the workflow needed for AI-assisted scientific discovery. A production deployment would benefit from agents that share results, cross-pollinate successful techniques, and explore broadly before optimizing deeply. The 50-attempt budget, while sufficient for saturation in our setting, may be too short for tasks that require agents to formulate and test genuine scientific hypotheses rather than iterate on known deep learning recipes. We also note that fully autonomous operation, while necessary for controlled comparison, is not the expected mode of use: in a realistic scientific workflow, human researchers would provide periodic oversight --- redirecting agents when stuck, correcting misunderstandings about the domain, and pruning unproductive directions. Such human-in-the-loop guidance would likely improve stability and reduce wasted attempts. At the same time, fully autonomous agents may explore counter-intuitive directions that human researchers would dismiss prematurely --- the optimal balance between human oversight and agent autonomy remains an open question.
+
+The benchmark infrastructure required substantial engineering. The evaluation metric, data pipeline, quality cuts, and instruction document all underwent multiple revisions as we discovered edge cases, data precision issues, and evaluation leakage. These ``harness engineering'' challenges --- designing robust evaluation environments for autonomous agents --- are not specific to astrophysics and are likely to recur in any scientific domain where AI agents are deployed.
 
 \subsection{Limitations}
+\label{sec:limitations}
 
 \begin{itemize}
-    \item Agents operate fully autonomously within each run (no human guidance during experiments). However, the instruction document itself was refined based on pilot experiments --- agents benefit from lessons learned during benchmark development.
-    \item The benchmark environment reproduces the published experimental setup as closely as possible, but cannot guarantee an exact match due to the complexity of the original data pipeline. Our reproduced baselines closely match the published performance (e.g., fraction error 0.1073 vs.\ published 0.107). However, most agents outperform the human baseline from their first attempt, which may indicate subtle differences in our setup rather than a genuine improvement. Comparisons between agents remain valid regardless, since all agents start from identical conditions.
-    \item The benchmark evaluates agents on simulation data. Preliminary validation on real KASCADE measurements is presented in \Cref{sec:discussion}; systematic cross-agent validation on real data remains future work.
-    \item The 50-attempt budget is somewhat arbitrary. Different budgets may favor different agent strategies (e.g., breadth-first may need more attempts to converge).
-    \item Agent interfaces differ across providers (Claude Code, Codex CLI, Qwen Code, Kimi Code), which may introduce confounds beyond model capability.
-    \item Agents were run under heterogeneous billing arrangements (paid subscriptions, sponsored credits, free tiers), and the harnesses do not expose consistent per-token cost data. Fair cost comparison across providers is not feasible with this setup and is left for future work.
-    \item Stochastic training means the same agent on the same task may produce different results across runs. Ideally, each agent--task combination would be repeated multiple times. More broadly, it is unclear whether a single Best@50 run is the most informative protocol: multiple shorter runs (e.g., $3 \times$ Best@16) could provide variance estimates and might yield better aggregate results by diversifying starting points. We encourage future work to investigate the optimal allocation of a fixed compute budget between run length and number of independent runs.
-    \item Claude Haiku~4.5, the smallest model tested, proved too unstable for the 50-attempt protocol: it launched parallel GPU jobs, killed long-running training, wrote monitoring scripts instead of waiting, and corrupted its results file. Whether this reflects insufficient model capability, harness limitations, or both remains unclear.
+    \item The benchmark environment reproduces the published experimental setup as closely as possible, but cannot guarantee an exact match due to the complexity of the original data pipeline. Our reproduced baselines closely match the published performance (e.g., fraction error $0.1073$ vs.\ $0.107$ reported by~\cite{kascade_jinst} to 3-decimal precision --- within rounding). However, most agents outperform the human baseline from their first attempt, which may indicate subtle differences in our setup rather than a genuine improvement. Comparisons between agents remain valid regardless, since all agents start from identical conditions.
+    \item Each agent--task combination was run once with a fixed 50-attempt budget. Per-recipe stochasticity of the final submission is measured directly (\Cref{sec:comp_noise_floor} for composition; Poisson count analysis in \Cref{sec:test_saturation} for gamma), but session-level variance (whether a repeated 50-attempt run would discover a different best recipe) and budget-sensitivity (whether a larger or smaller budget would favor different agent strategies, e.g.\ breadth-first convergence at higher $N$) are not tested. We expect Best@50 to fluctuate by $O(\sigma_{\rm ensemble})$ across sessions of the same agent under the same conditions; a substantially larger effect would indicate budget-sensitivity or harness-state dependence we have not characterized. The ranking among the top three composition agents (Opus/GPT/Sonnet) is already not resolved at measured $\sigma_{\rm ensemble}$ (\Cref{sec:comp_noise_floor}); the Kimi/Qwen gap to that top band (${\sim}1.5$--$3\sigma_{\rm noise}$) is the ordering claim most vulnerable to session-level variance.
 \end{itemize}
+
+\subsection{Future Work}
+\label{sec:future_work}
+
+Two directions are the natural follow-ups to this benchmark.
+
+\textit{Under-explored metric-aware aggregators for the oracle headroom.} The composition oracle headroom of \Cref{sec:agg_headroom} leaves ${\sim}9 \times 10^{-3}$ in fraction error available to a per-event aggregator that none of the eight aggregators tested in \Cref{tab:stackers} --- including two metric-aware MLPs trained directly against fraction-error analogs (batch-fraction-matching loss and verifier-style mixture sampling) --- extracts. Standard supervised stacking optimizes per-event log-likelihood, which does not penalize the systematic class biases that the mixture-marginal fraction-error metric punishes, and the two metric-aware variants tested here do not exhaust the design space. Three classes of aggregators have not been tried and are the most direct ML follow-ups: (i)~a learned per-event router conditioned on shower features (energy, $N_e/N_\mu$ ratio, shower age) rather than on agent softmaxes alone, regularized to preserve the marginal class distribution --- the agreement-wrong patterns of \Cref{sec:overlap} suggest real physical handles a router could exploit; (ii)~a mixture-density meta-learner that outputs a full distribution over the test-ensemble composition rather than per-event class probabilities, fitting the mixture-marginal metric more natively; (iii)~soft-label distillation from the oracle selector, which trades the unrealizable ground-truth dependence of the oracle for a learned approximation with access only to agent outputs and training labels. The structural-correlation finding of \Cref{sec:agg_headroom} tempers expectations that any of these will close the full gap, but they would sharpen which fraction of the remaining headroom is recoverable in principle versus bounded by shared agent priors, and are the most direct ML payoff of the cross-agent comparison setup.
+
+\textit{Additional directions.} A dedicated composition paper would reproduce the unfolded spectra of~\cite[Figs.~2--3]{kascade_jcap} and the uniform/grid-mixture validation of~\cite[Fig.~7]{kascade_jinst}, and bracket post-LHC hadronic-model systematics by re-training on EPOS-LHC and SIBYLL samples. Future benchmarks targeting specific gamma-ray energy ranges would benefit from energy-binned or energy-weighted metrics, and from metrics that explicitly penalize sensitivity to simulation-specific features (\Cref{sec:real_gamma}). Systematic cross-agent validation on real data --- the same oracle and stacking analyses applied to real-data scores rather than simulation --- would clarify whether the aggregation gains transfer. Finally, the optimal allocation of a fixed compute budget between a single long run and multiple shorter runs (e.g., three Best@16 runs versus one Best@50 run), and a like-for-like cost/efficiency comparison across providers, remain open.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions}
 \label{sec:conclusion}
 
+The composition bottleneck is structural, not just an objective mismatch. A per-event oracle across the three best agents reaches fraction error more than $22\sigma$ below any single agent (where $\sigma$ is the training-recipe noise floor), yet neither standard per-event stackers (which optimize log-likelihood rather than the mixture-marginal fraction-error metric) nor MLPs trained directly against an analog of the fraction-error metric extract any of that headroom. The deeper constraint is shared pretraining priors: even deliberate cross-provider diversity (five agents, four providers, different harnesses) does not yield class-conditionally independent errors, and the measured oracle gain sits well below the independence ceiling quantified in \Cref{sec:agg_headroom}. Closing the gap likely requires deliberately diversifying the agent pool (different inductive biases, non-classifier signals routed on shower features), not just matching the meta-learner objective to the metric.
+
 Returning to the questions posed in \Cref{sec:intro}:
 
-\textit{Where do agents succeed and where do they encounter limitations?} All agents surpassed the published baselines on both tasks within their first few attempts, achieving $24$--$38\times$ improvement on gamma/hadron separation and fraction errors of 0.1051--0.1063 on composition (vs.\ published 0.107). The limitations we encountered were primarily in the experimental infrastructure, not in the agents themselves: the gamma task saturated at the Poisson noise floor (9--14 hadrons out of 34{,}267), the composition task hit a confusion matrix ceiling driven by overlapping physical distributions, and harness instabilities (KimiClaw crash, Haiku~4.5 protocol violations) terminated some runs prematurely.
+\textit{Where do agents succeed and where do they encounter limitations?} All five agents surpassed the published baselines within 11 attempts on composition and on their first attempt on gamma, and saturated the dataset-imposed limits in both cases: the Poisson noise floor of the gamma test set, and (see Q2 below) a soft plateau set by correlated agent errors on composition rather than a hard data-imposed ceiling. The only run-terminating failure observed across six agent runs was a harness crash (KimiClaw), not a modeling failure.
 
-% TODO: Update Qwen results when experiments complete
-\textit{Do agents converge, and does diversity help?} Despite exploring markedly different architectures and training strategies, all agents converged to statistically indistinguishable performance on both tasks. Cross-agent ensembling did not improve over the best individual agent. Preliminary validation on real KASCADE data --- folded and unfolded mass composition spectra, and a gamma-ray candidate search across 73 million archival events --- confirmed that agent-built classifiers produce physically meaningful results.
+\textit{Do agents converge, and does diversity help?} The top three composition agents (Opus, GPT, Sonnet) converged to Best@50 bands within $1\sigma_{\rm ensemble}$ of each other (\Cref{sec:comp_noise_floor}); Qwen ($0.1060$) and Kimi ($0.1063$) sit ${\sim}1.5$--$3\sigma_{\rm noise}$ above the top band, still within a narrow spread relative to the $0.107$ baseline. This aggregate convergence hides a per-event oracle gap that none of eight tested aggregators recovers, as quantified in the opening paragraph above: diversity is structurally genuine but unrealized, and closing the gap likely requires diversifying the agent pool upstream rather than refining the meta-learner alone.
 
-% TODO: Re-run real-data validation with the best gamma model from each agent (current results use an intermediate model).
-\textit{What do the results reveal about the KASCADE data?} The KASCADE Monte Carlo dataset, generated ${\sim}20$ years ago, is at least an order of magnitude smaller than what modern classifiers need for meaningful performance discrimination. Preliminary application of agent-built classifiers to real data showed a ${\sim}2\times$ simulation--data gap in hadronic rejection efficiency. While Monte Carlo performance remains a useful proxy (better MC performance correlates with better real-data performance), the absolute survival rates differ, and future KASCADE analyses could benefit from larger simulation campaigns.
+\textit{What do the results reveal about the KASCADE data?} The gamma test set is information-exhausted on agent-scale classifiers, and the simulation-to-real-data transfer gap has strong, energy-dependent, sign-changing structure that no global summary statistic captures. Future KASCADE analyses benefit from larger simulation campaigns and energy-bin-resolved calibration.
 
-\textit{What practical lessons emerge for AI-assisted scientific research?} We identify several:
-\begin{itemize}
-    \item \textit{Metric design}: Evaluation metrics must align with downstream scientific goals. Our metrics evolved from naive accuracy to domain-specific measures (hadronic survival rate, fraction error) as we discovered that simpler proxies led agents to solutions that did not transfer to real data.
-    \item \textit{Reward robustness}: Agents exploit any gap between the evaluation metric and the true scientific objective. Post-processing optimizations that improved benchmark scores distorted predictions on real data; the benchmark prohibits them.
-    \item \textit{Run-to-run variance}: A single Best@50 run cannot distinguish genuine model differences from stochastic variation. Multiple shorter runs or repeated experiments are needed.
-    \item \textit{Prior knowledge}: Physics-informed instructions and published baselines likely in pretraining data confound the question of whether agents reason scientifically or follow encoded priors.
-    \item \textit{Harness reliability}: Current agentic harnesses are suboptimal for autonomous research, particularly for long training loops. Harness stability is a practical bottleneck alongside model capability.
-    \item \textit{Experiment design for AI}: This benchmark was adapted from a human-designed experiment. Future scientific experiments intended for AI-assisted analysis should be designed with autonomous agents in mind: larger datasets, fast iteration cycles, robust single-metric evaluation, and guardrails against overfitting to simulation-specific features.
-\end{itemize}
+\textit{What practical lessons emerge?} Task-specific metrics are necessary but not sufficient: specification completeness requires explicit negative constraints (the benchmark now prohibits post-processing after an early agent tuned logit biases against the verifier). Single-run variance is large enough that repeated or shorter runs with variance reporting are often more informative than a single Best@50. Harness reliability is a practical bottleneck alongside model capability. Experiments intended for AI-assisted analysis should be designed for autonomous agents: larger datasets, fast iteration, robust single-metric evaluation, and guardrails against simulation-feature overfitting.
 
-We make all code, data, agent logs, and evaluation results publicly available at \url{https://github.com/vvsotnikov/astro-bench}. We present these findings as systematic observations from a rapidly evolving field and encourage the community to build on this work --- particularly in domains with larger datasets where the gap between benchmark metrics and scientific utility can be more carefully controlled.
+We present these findings as systematic observations from a rapidly evolving field and encourage the community to build on this work, particularly in domains with larger datasets where the gap between benchmark metrics and scientific utility can be more carefully controlled.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -482,11 +610,13 @@ We make all code, data, agent logs, and evaluation results publicly available at
 
 \informedconsent{Not applicable.}
 
-\dataavailability{All code, datasets, model weights, training logs, and agent reasoning traces are available at \url{https://github.com/vvsotnikov/astro-bench}. The KASCADE simulation data is hosted on Amazon S3 at \url{https://kascade-sim-data.s3.eu-central-1.amazonaws.com/}. Real KASCADE data is available at \url{s3://kascade-with-arr-times-npz/}.}
+\dataavailability{All code, datasets, model weights, training logs, and agent reasoning traces are available at \url{https://github.com/vvsotnikov/astro-bench}. The KASCADE simulation data is hosted on Amazon S3 at \url{https://kascade-sim-data.s3.eu-central-1.amazonaws.com/}. Real KASCADE archival data used for \Cref{sec:real_data} is publicly available at \url{https://kascade-with-arr-times-npz.s3.eu-central-1.amazonaws.com/}; retrieval scripts are included in the repository (see \texttt{paper/run\_real\_*.py}).}
 
-\acknowledgments{The author is a co-author of the published KASCADE classification studies~\cite{kascade_icrc,kascade_jinst,kascade_jcap} that serve as baselines in this work, and thanks his co-authors --- D.~Kostunin, M.~Kuznetsov, N.~Petrov, I.~Plokhikh, and others --- for their contributions to the original methods and data pipeline. During the preparation of this manuscript, the author used Claude Opus~4.6 (Anthropic) for code generation, data analysis, and drafting portions of the manuscript text. The author has reviewed and edited all output and takes full responsibility for the content of this publication. We thank the KASCADE-Grande collaboration for making their experimental data publicly available. We thank Moonshot AI for sponsoring compute for the Kimi~K2.5 experiments.}
+\acknowledgments{The author thanks his co-authors on the cited KASCADE classification studies~\cite{kascade_icrc,kascade_jinst,kascade_jcap} --- D.~Kostunin, M.~Kuznetsov, N.~Petrov, I.~Plokhikh, and others --- for their contributions to the original methods and data pipeline. The author thanks the KASCADE-Grande collaboration for making their experimental data publicly available, and Moonshot AI for sponsoring compute for the Kimi~K2.5 experiments.
 
-\conflictsofinterest{The authors declare no conflicts of interest.}
+\textit{AI use disclosure.} The author used Claude Opus~4.6 and Claude Opus~4.7 (Anthropic) during manuscript preparation for drafting, analysis and figure-generation code, and literature search, and reviewed and edited all output. This is distinct from the evaluated agent runs of \Cref{sec:results} (\Cref{tab:agents}), where the author intervened only at the orchestration boundary.}
+
+\conflictsofinterest{The author's co-authorship of the published KASCADE classification studies~\cite{kascade_icrc,kascade_jinst,kascade_jcap} that serve as baselines in this work is addressed in the Information-Barrier Disclosure (\Cref{sec:method}) and Acknowledgments. The author declares no financial or commercial conflicts of interest.}
 
 \abbreviations{Abbreviations}{
 The following abbreviations are used in this manuscript:\\
@@ -494,20 +624,18 @@ The following abbreviations are used in this manuscript:\\
 \noindent
 \begin{tabular}{@{}ll}
 KASCADE & KArlsruhe Shower Core and Array DEtector \\
+KCDC & KASCADE Cosmic-ray Data Centre \\
 EAS & Extensive Air Shower \\
 CNN & Convolutional Neural Network \\
 ViT & Vision Transformer \\
-GNN & Graph Neural Network \\
 MLP & Multi-Layer Perceptron \\
-HGB & Histogram Gradient Boosting \\
-SAM & Sharpness-Aware Minimization \\
-SWA & Stochastic Weight Averaging \\
-DE & Differential Evolution \\
-MAE & Masked Autoencoder \\
-TTA & Test-Time Augmentation \\
-FE & Fraction Error \\
+GBT & Gradient-Boosted Trees \\
 RF & Random Forest \\
-BCE & Binary Cross-Entropy
+SWA & Stochastic Weight Averaging \\
+TTA & Test-Time Augmentation \\
+DE & Differential Evolution \\
+EMD & Earth Mover's Distance (loss) \\
+FiLM & Feature-wise Linear Modulation
 \end{tabular}
 }
 
@@ -522,19 +650,49 @@ BCE & Binary Cross-Entropy
 Antoni, T.; Apel, W.D.; Badea, A.F.; et al. The cosmic-ray experiment KASCADE. \textit{Nucl.\ Instrum.\ Methods Phys.\ Res.\ A} \textbf{2003}, \textit{513}, 490--510.
 
 \bibitem{kascade_icrc}
-Kostunin, D.; Plokhikh, I.; Sotnikov, V.; Petrov, N. New insights from old cosmic rays: A novel analysis of archival KASCADE data. \textit{PoS} \textbf{2022}, \textit{ICRC2021}, 319. arXiv:2108.03407.
+Kostunin, D.; Plokhikh, I.; Sotnikov, V.; Petrov, N. New insights from old cosmic rays: A novel analysis of archival KASCADE data. \textit{PoS} \textbf{2022}, \textit{ICRC2021}, 319. DOI:10.22323/1.395.0319. arXiv:2108.03407.
 
 \bibitem{kascade_jinst}
-Kuznetsov, M.; Petrov, N.; Plokhikh, I.; Sotnikov, V. Methods of Machine Learning for KASCADE cosmic ray mass composition data. \textit{J.\ Instrum.} \textbf{2024}, \textit{19}, P01025. arXiv:2311.06893.
+Kuznetsov, M.; Petrov, N.; Plokhikh, I.; Sotnikov, V. Methods of Machine Learning for KASCADE cosmic ray mass composition data. \textit{J.\ Instrum.} \textbf{2024}, \textit{19}, P01025. DOI:10.1088/1748-0221/19/01/P01025. arXiv:2311.06893.
 
 \bibitem{kascade_jcap}
-Kuznetsov, M.; Petrov, N.; Plokhikh, I.; Sotnikov, V. Energy spectra of elemental groups of cosmic rays with KASCADE data. \textit{J.\ Cosmol.\ Astropart.\ Phys.} \textbf{2024}, \textit{2024}(05), 125. arXiv:2312.08279.
+Kuznetsov, M.; Petrov, N.; Plokhikh, I.; Sotnikov, V. Energy spectra of elemental groups of cosmic rays with KASCADE data. \textit{J.\ Cosmol.\ Astropart.\ Phys.} \textbf{2024}, \textit{2024}(05), 125. DOI:10.1088/1475-7516/2024/05/125. arXiv:2312.08279.
+
+\bibitem{lhaaso_catalog}
+Cao, Z.; Aharonian, F.; An, Q.; et al. (LHAASO Collaboration). The First LHAASO Catalog of Gamma-Ray Sources. \textit{Astrophys.\ J.\ Suppl.\ Ser.} \textbf{2024}, \textit{271}, 25. DOI:10.3847/1538-4365/acfd29. arXiv:2305.17030.
 
 \bibitem{kostunin_agents2025}
 Kostunin, D.; Sotnikov, V.; Golovachev, S.; Strube, J. AI Agents for Ground-Based Gamma Astronomy. \textit{arXiv preprint} \textbf{2025}, arXiv:2503.00821.
 
 \bibitem{gammapy_agents}
 Kostunin, D.; Sotnikov, V.; Golovachev, S.; Mehta, A.; Holch, T.L.; Jones, D.I. Agent-based code generation for the Gammapy framework. \textit{arXiv preprint} \textbf{2025}, arXiv:2509.26110.
+
+\bibitem{cmbagent}
+Xu, L.; Sarkar, M.; Lonappan, A.I.; Zubeldia, \'I.; Villanueva-Domingo, P.; Casas, S.; Fidler, C.; et al. Open Source Planning \& Control System with Language Agents for Autonomous Scientific Discovery. \textit{arXiv preprint} \textbf{2025}, arXiv:2507.07257. (ICML 2025 Workshop on Machine Learning for Astrophysics.)
+
+\bibitem{mephisto}
+Sun, Z.; Ting, Y.-S.; Liang, Y.; Duan, N.; Huang, S.; Cai, Z. Mephisto: Self-Improving Large Language Model-Based Agents for Automated Interpretation of Multi-band Galaxy Observations. \textit{arXiv preprint} \textbf{2025}, arXiv:2510.08354.
+
+\bibitem{starwhisper}
+Wang, C.; Zhang, Y.; Li, Y.; Hu, X.; et al. StarWhisper Telescope: An AI framework for automating end-to-end astronomical observations. \textit{Commun.\ Eng.} \textbf{2025}, \textit{4}, 184. DOI:10.1038/s44172-025-00520-4. arXiv:2412.06412.
+
+\bibitem{auger_dl_xmax}
+The Pierre Auger Collaboration (Aab, A.; Abreu, P.; Aglietta, M.; et al.). Deep-learning based reconstruction of the shower maximum $X_\mathrm{max}$ using the water-Cherenkov detectors of the Pierre Auger Observatory. \textit{J.\ Instrum.} \textbf{2021}, \textit{16}, P07019. DOI:10.1088/1748-0221/16/07/P07019. arXiv:2101.02946.
+
+\bibitem{hess_cnn_sep}
+Shilon, I.; Kraus, M.; B\"uchele, M.; Egberts, K.; Fischer, T.; Holch, T.L.; Lohse, T.; Schwanke, U.; Steppa, C.; Funk, S. Application of deep learning methods to analysis of imaging atmospheric Cherenkov telescopes data. \textit{Astropart.\ Phys.} \textbf{2019}, \textit{105}, 44--53. DOI:10.1016/j.astropartphys.2018.10.003. arXiv:1803.10698.
+
+\bibitem{icetop_composition}
+IceCube Collaboration (Aartsen, M.G.; et al.). Cosmic ray spectrum and composition from PeV to EeV using 3 years of data from the IceTop and IceCube detectors. \textit{Phys.\ Rev.\ D} \textbf{2019}, \textit{100}, 082002. DOI:10.1103/PhysRevD.100.082002. arXiv:1906.04317.
+
+\bibitem{funsearch}
+Romera-Paredes, B.; Barekatain, M.; Novikov, A.; Balog, M.; Kumar, M.P.; Dupont, E.; Ruiz, F.J.R.; Ellenberg, J.S.; Wang, P.; Fawzi, O.; Kohli, P.; Fawzi, A. Mathematical discoveries from program search with large language models. \textit{Nature} \textbf{2024}, \textit{625}, 468--475. DOI:10.1038/s41586-023-06924-6.
+
+\bibitem{alphaevolve}
+Novikov, A.; V\~u, N.; Eisenberger, M.; Dupont, E.; Huang, P.-S.; Wagner, A.Z.; Shirobokov, S.; Kozlovskii, B.; Ruiz, F.J.R.; Mehrabian, A.; Kumar, M.P.; See, A.; Chaudhuri, S.; Holland, G.; Davies, A.; Nowozin, S.; Kohli, P.; Balog, M. AlphaEvolve: A coding agent for scientific and algorithmic discovery. \textit{arXiv preprint / Google DeepMind technical report} \textbf{2025}, arXiv:2506.13131.
+
+\bibitem{ai_coscientist}
+Gottweis, J.; Weng, W.-H.; Daryin, A.; Tu, T.; Palepu, A.; Sirkovic, P.; et al.\ (Google Research / DeepMind and collaborators). Towards an AI co-scientist. \textit{arXiv preprint} \textbf{2025}, arXiv:2502.18864.
 
 \bibitem{cloudflare_vinext}
 Cloudflare. Rebuilding Next.js on Vite with AI. Available online: \url{https://blog.cloudflare.com/vinext/} (accessed on 15 March 2026).
@@ -549,10 +707,7 @@ OpenAI. Harness Engineering. Available online: \url{https://openai.com/index/har
 Karpathy, A. autoresearch. Available online: \url{https://github.com/karpathy/autoresearch} (accessed on 15 March 2026).
 
 \bibitem{papailiopoulos_adderboard}
-Papailiopoulos, D. Addition Under Pressure. Available online: \url{https://dimitrisp.substack.com/p/addition-under-pressure} (accessed on 15 March 2026).
-
-\bibitem{sam_optimizer}
-Foret, P.; Kleiner, A.; Mobahi, H.; Neyshabur, B. Sharpness-Aware Minimization for Efficiently Improving Generalization. In Proceedings of the 9th International Conference on Learning Representations (ICLR), Virtual, 3--7 May 2021; arXiv:2010.01412.
+Papailiopoulos, D. AdderBoard: A Community Challenge for Tiny Arithmetic Transformers. GitHub repository, 2026. Available online: \url{https://github.com/anadim/AdderBoard} (accessed on 23 April 2026).
 
 \bibitem{mlagentbench}
 Huang, Q.; Vora, J.; Liang, P.; Leskovec, J. MLAgentBench: Evaluating Language Agents on Machine Learning Experimentation. In Proceedings of the 41st International Conference on Machine Learning (ICML), Vienna, Austria, 21--27 July 2024; arXiv:2310.03302.
@@ -575,6 +730,9 @@ Lu, C.; Lu, C.; Lange, R.T.; Foerster, J.; Clune, J.; Ha, D. The AI Scientist: T
 \bibitem{paperbench}
 Starace, G.; Jaffe, O.; Sherburn, D.; et al. PaperBench: Evaluating AI's Ability to Replicate AI Research. In Proceedings of the 42nd International Conference on Machine Learning (ICML), Vancouver, Canada, 2025; arXiv:2504.01848.
 
+\bibitem{kang_icrc2015}
+Kang, D.; Feng, Z.; Apel, W.D.; et al. Search for gamma-ray point sources with KASCADE. In Proceedings of the 34th International Cosmic Ray Conference (ICRC), The Hague, The Netherlands, 30 July--6 August 2015; \textit{PoS} \textbf{2016}, \textit{ICRC2015}, 812. DOI:10.22323/1.236.0812.
+
 \bibitem{kcdc_sim_manual}
 Wochele, J.; Kang, D.; Wochele, D.; Haungs, A. KCDC Simulation Manual --- KASCADE, GRANDE and CALORIMETER Simulations, V.02.3; Karlsruhe Institute of Technology: Eggenstein-Leopoldshafen, Germany, 2025. Available online: \url{https://kcdc.iap.kit.edu/static/pdf/kcdc_mainpage/kcdc-Simulation-Manual.pdf} (accessed on 13 April 2026).
 
@@ -583,6 +741,33 @@ Dell'Acqua, F.; McFowland, E.; Mollick, E.R.; et al. Navigating the Jagged Techn
 
 \bibitem{openclaw}
 Steinberger, P. OpenClaw: Open-Source AI Agent Framework. Available online: \url{https://github.com/openclaw/openclaw} (accessed on 2 April 2026).
+
+\bibitem{krogh_ambiguity}
+Krogh, A.; Vedelsby, J. Neural Network Ensembles, Cross Validation, and Active Learning. In \textit{Advances in Neural Information Processing Systems 7} (NIPS 7), Denver, CO, USA, 28 November--1 December 1994; Tesauro, G., Touretzky, D.S., Leen, T.K., Eds.; MIT Press: Cambridge, MA, USA, 1995; pp. 231--238.
+
+\bibitem{kuncheva_diversity}
+Kuncheva, L.I.; Whitaker, C.J. Measures of Diversity in Classifier Ensembles and Their Relationship with the Ensemble Accuracy. \textit{Mach.\ Learn.} \textbf{2003}, \textit{51}(2), 181--207. DOI:10.1023/A:1022859003006.
+
+\bibitem{deep_ensembles}
+Lakshminarayanan, B.; Pritzel, A.; Blundell, C. Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles. In \textit{Advances in Neural Information Processing Systems 30} (NIPS 2017), Long Beach, CA, USA, 4--9 December 2017; Curran Associates, Inc.; pp. 6402--6413. arXiv:1612.01474.
+
+\bibitem{fort_loss_landscape}
+Fort, S.; Hu, H.; Lakshminarayanan, B. Deep Ensembles: A Loss Landscape Perspective. \textit{arXiv preprint} \textbf{2019}, arXiv:1912.02757. Contributed oral talk, NeurIPS 2019 Workshop on Bayesian Deep Learning.
+
+\bibitem{bommasani_picking}
+Bommasani, R.; Creel, K.A.; Kumar, A.; Jurafsky, D.; Liang, P. Picking on the Same Person: Does Algorithmic Monoculture lead to Outcome Homogenization? In \textit{Advances in Neural Information Processing Systems 35} (NeurIPS 2022), New Orleans, LA, USA, 28 November--9 December 2022; pp. 3663--3678. arXiv:2211.13972.
+
+\bibitem{gontijo_lopes}
+Gontijo-Lopes, R.; Dauphin, Y.; Cubuk, E.D. No One Representation to Rule Them All: Overlapping Features of Training Methods. In Proceedings of the 10th International Conference on Learning Representations (ICLR 2022), 25--29 April 2022; arXiv:2110.12899.
+
+\bibitem{saxena_agreement}
+Saxena, S.; Kim, T.; Mehra, A.; Baek, C.; Kolter, J.Z.; Raghunathan, A. Predicting the Performance of Foundation Models via Agreement-on-the-Line. In \textit{Advances in Neural Information Processing Systems 37} (NeurIPS 2024), Vancouver, Canada, 10--15 December 2024; arXiv:2404.01542.
+
+\bibitem{goel_think_alike}
+Goel, S.; Str\"uber, J.; Auzina, I.A.; Chandra, K.K.; Kumaraguru, P.; Kiela, D.; Prabhu, A.; Bethge, M.; Geiping, J. Great Models Think Alike and this Undermines AI Oversight. In Proceedings of the 42nd International Conference on Machine Learning (ICML 2025); PMLR: Vol. 267. arXiv:2502.04313.
+
+\bibitem{kim_correlated}
+Kim, E.; Garg, A.; Peng, K.; Garg, N. Correlated Errors in Large Language Models. In Proceedings of the 42nd International Conference on Machine Learning (ICML 2025); PMLR: Vol. 267. arXiv:2506.07962.
 
 \end{thebibliography}
 
@@ -636,6 +821,35 @@ Steinberger, P. OpenClaw: Open-Source AI Agent Framework. Available online: \url
 \includegraphics[width=\textwidth]{fig_trajectory_composition_qwen_36-plus.pdf}
 \caption{Research trajectory for Qwen~3.6-Plus on composition classification.\label{fig:trajectory_comp_qwen}}
 \end{figure}
+
+\section[\appendixname~\thesection]{Stripped-Instructions Ablation: Architecture-Family Overlap}
+\label{app:minimal}
+
+This appendix supports the qualitative claim of \Cref{sec:method} that the architectural diversity reported in the main runs is driven by the agents themselves rather than by the instruction document. We re-ran two of the main agents (Opus and Sonnet) on the composition task with a stripped CLAUDE.md: only data shapes, the metric, and basic physics; all architecture suggestions, feature-engineering hints, and references to specific model families removed. \Cref{tab:minimal_overlap} compares the architecture families and techniques each agent explored under the two regimes.
+
+\begin{table}[H]
+\caption{Architecture families and techniques explored by each agent under full-instruction and stripped-instruction conditions, on the composition task. ``Full'' = the main runs reported in this paper; ``min.'' = the stripped-instruction follow-up. Sonnet-min stopped at attempt 7 and Opus-min at attempt 16 once the architecture-family pattern was clear; the runs are qualitative observations only since the stripped-instruction runs use newer Claude Code harness versions than the main runs (Opus 4.6 main vs.\ 4.7 min.; same Sonnet 4.6 model but different harness build).\label{tab:minimal_overlap}}
+\begin{tabularx}{\textwidth}{lCCCC}
+\toprule
+\textbf{Family / technique} & \textbf{Opus 4.6 (full, n=50)} & \textbf{Opus 4.7 (min., n=16)} & \textbf{Sonnet 4.6 (full, n=50)} & \textbf{Sonnet 4.6 (min., n=7)} \\
+\midrule
+CNN backbone (basic / LeNet)         & \checkmark & \checkmark & \checkmark & \checkmark \\
+ResNet / SE-ResNet                   & \checkmark & \checkmark & --- & \checkmark \\
+Deep-feature MLP                     & \checkmark & \checkmark & --- & --- \\
+ConvNeXt / ViT                       & \checkmark & --- & --- & --- \\
+FiLM / conditioning                  & --- & --- & \checkmark & --- \\
+Tree models (RF / HGB)               & (RF baseline) & \checkmark (HGB) & --- & \checkmark (RF) \\
+Multi-model ensembling               & \checkmark (5-model v34) & \checkmark (17-model) & \checkmark (5x LeNetFiLM) & \checkmark (2-model) \\
+Test-time augmentation               & \checkmark (16-way) & \checkmark (rotation) & \checkmark (8-way D4) & \checkmark (8-way) \\
+Class-balance / loss innovation      & batch-fraction matching & per-class log-prob bias, frac-err loss & EMD ordinal, SWA & label smoothing \\
+Best fraction error reached          & $0.1051$ & $0.1057$ & $0.1054$ & $0.1055$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The pattern is consistent across all four cells of the table: agents from the same model family explore the same broad architectural territory regardless of whether the instruction document mentions specific architectures. Sonnet (full and minimal) discovers CNN backbones, ensembling, and TTA in both regimes; Opus (full and minimal) discovers CNN backbones, deep-feature MLPs, ensembling, TTA, tree models, and bias/loss innovations in both regimes. This is consistent with the architectural territory being driven by the agent itself rather than by the instruction document, though the $n=2$ agents and $\leq 16$ attempts per minimal run limit the claim to a qualitative pattern.
+
+We do not report attempt-by-attempt or quantitative comparisons because the stripped-instruction runs use newer Claude Code harness versions than the main runs, and Opus-min uses Opus~4.7 while the main Opus run uses 4.6 --- harness improvements and model-version effects could compensate for stripped instructions in either direction, so Best@$N$ values are not directly comparable. The architecture-family overlap is robust to this confound (the agent picks the architecture, not the harness or model-version software-stack); the absolute Best@$N$ values are not.
 
 \PublishersNote{}
 \end{adjustwidth}

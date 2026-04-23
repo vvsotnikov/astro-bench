@@ -15,6 +15,11 @@ plt.rcParams.update({'font.family': 'serif', 'font.size': 11, 'figure.dpi': 300}
 # Gamma test set statistics (for Poisson noise band)
 N_HADRON_TEST = 34267  # hadrons in test set after quality cuts
 
+# Experiment directories to exclude from agent figures (ablations, side experiments)
+EXCLUDE_DIRS = {
+    "composition-opus-minimal-21apr",  # minimal-instructions ablation, not a primary agent run
+}
+
 AGENT_COLORS = {
     'Haiku 4.5': '#FF9800',
     'Sonnet 4.6': '#D4A27F',
@@ -72,6 +77,8 @@ def fig_convergence(task='gamma'):
     # Find all results for this task
     found = False
     for exp_dir in sorted(experiments_dir.glob(f'{task}-*')):
+        if exp_dir.name in EXCLUDE_DIRS:
+            continue
         tsv = exp_dir / 'results.tsv'
         if not tsv.exists():
             continue
@@ -107,13 +114,13 @@ def fig_convergence(task='gamma'):
     if not found:
         # Generate placeholder with consistent styling
         if task == 'gamma':
-            ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-            ax.text(1, 1.1e-3, 'Human best', fontsize=8, color='gray')
+            ax.axhline(y=5.17e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+            ax.text(1, 5.7e-3, 'RF reference at 75% γ eff', fontsize=8, color='gray')
             ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
             ax.set_yscale('log')
         else:
             ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-            ax.text(1, 0.1075, 'Human best', fontsize=8, color='gray')
+            ax.text(1, 0.1075, 'Published baseline', fontsize=8, color='gray')
             ax.set_ylabel('Fraction error ↓')
             ax.set_ylim(0.095, 0.115)
         ax.set_xlabel('Attempt number')
@@ -130,8 +137,8 @@ def fig_convergence(task='gamma'):
 
     # Baseline reference
     if task == 'gamma':
-        ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 1.1e-3, 'Published baseline', fontsize=8, color='gray')
+        ax.axhline(y=5.17e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+        ax.text(1, 5.7e-3, 'RF reference at 75% γ eff', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
 
@@ -139,6 +146,8 @@ def fig_convergence(task='gamma'):
         # Find the best metric across all agents
         all_best = []
         for exp_dir in sorted(experiments_dir.glob(f'{task}-*')):
+            if exp_dir.name in EXCLUDE_DIRS:
+                continue
             tsv = exp_dir / 'results.tsv'
             if not tsv.exists():
                 continue
@@ -158,8 +167,34 @@ def fig_convergence(task='gamma'):
                     fontsize=7, color='#4CAF50', ha='right', va='bottom')
     else:
         ax.axhline(y=0.107, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 0.1075, 'Human best (0.107)', fontsize=8, color='gray')
+        ax.text(1, 0.1075, 'Published baseline', fontsize=8, color='gray')
         ax.set_ylabel('Fraction error ↓')
+
+        # Training-recipe noise floor: ±1σ around the best agent.
+        # Use the single-recipe σ ≈ 4e-4 from the v8 retraining experiment
+        # (paper/retrain_v8_*.py, Table tab:noise_floor) as a generic noise
+        # yardstick — same value the rest of the paper anchors on. Per-agent
+        # σ_ensemble values from 3-seed retrains are reported separately in
+        # Table tab:ensemble_sigma (Opus 3.3e-4, GPT 4.8e-4, Sonnet 5.1e-5).
+        SIGMA_ENSEMBLE = 4e-4
+        all_best_comp = []
+        for exp_dir in sorted(experiments_dir.glob(f'{task}-*')):
+            if exp_dir.name in EXCLUDE_DIRS:
+                continue
+            tsv = exp_dir / 'results.tsv'
+            if not tsv.exists():
+                continue
+            results = load_results(tsv)
+            if results:
+                all_best_comp.append(min(m for _, m, _ in results))
+        if all_best_comp:
+            global_best = min(all_best_comp)
+            ax.axhspan(global_best - SIGMA_ENSEMBLE, global_best + SIGMA_ENSEMBLE,
+                       color='#E8F5E9', alpha=0.5, zorder=0)
+            ax.axhline(y=global_best, color='#4CAF50', linestyle=':', linewidth=0.8, alpha=0.5)
+            ax.text(50, global_best + SIGMA_ENSEMBLE,
+                    f'Training-recipe ±1σ (σ ≈ 4×10⁻⁴)',
+                    fontsize=7, color='#4CAF50', ha='right', va='bottom')
 
     ax.set_xlabel('Attempt number')
     ax.set_xlim(0.5, 50.5)
@@ -232,8 +267,8 @@ def fig_trajectory(tsv_path, agent_name='Agent', task='gamma'):
 
     # Baseline
     if task == 'gamma':
-        ax.axhline(y=1e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
-        ax.text(1, 1.1e-3, 'Published baseline', fontsize=8, color='gray')
+        ax.axhline(y=5.17e-3, color='gray', linestyle='--', linewidth=0.8, alpha=0.7)
+        ax.text(1, 5.7e-3, 'RF reference at 75% γ eff', fontsize=8, color='gray')
         ax.set_ylabel('Hadronic survival @ 75% γ eff ↓')
         ax.set_yscale('log')
     else:
@@ -278,6 +313,8 @@ if __name__ == '__main__':
     experiments_dir = Path('../../astro-bench-experiments')
     if experiments_dir.exists():
         for exp_dir in sorted(experiments_dir.glob('gamma-*')):
+            if exp_dir.name in EXCLUDE_DIRS:
+                continue
             tsv = exp_dir / 'results.tsv'
             if not tsv.exists():
                 continue
@@ -301,6 +338,8 @@ if __name__ == '__main__':
             fig_trajectory(tsv, agent_name, 'gamma')
 
         for exp_dir in sorted(experiments_dir.glob('composition-*')):
+            if exp_dir.name in EXCLUDE_DIRS:
+                continue
             tsv = exp_dir / 'results.tsv'
             if not tsv.exists():
                 continue
