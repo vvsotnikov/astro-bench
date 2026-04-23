@@ -35,4 +35,6 @@ legacy/
 paper/Definitions/
 paper/main.aux
 paper/main.out
+paper/main.bbl
+paper/main.blg
 *.eps
